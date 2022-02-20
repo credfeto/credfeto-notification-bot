@@ -47,6 +47,7 @@ public sealed class TwitchBot : ITwitchBot
         this._client.OnWhisperReceived += this.Client_OnWhisperReceived;
         this._client.OnNewSubscriber += this.Client_OnNewSubscriber;
         this._client.OnConnected += this.Client_OnConnected;
+        this._client.OnRaidNotification += this.Client_OnRaided;
 
         this._client.Connect();
     }
@@ -59,6 +60,18 @@ public sealed class TwitchBot : ITwitchBot
     private void Client_OnConnected(object? sender, OnConnectedArgs e)
     {
         this._logger.LogInformation($"Connected to {e.AutoJoinChannel}");
+    }
+
+    private void Client_OnRaided(object? sender, OnRaidNotificationArgs e)
+    {
+        this._logger.LogInformation($"Raided by {e.Channel}");
+        const string raidWelcome = @"
+♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
+GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
+♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
+
+        this._client.SendMessage(channel: e.Channel, message: raidWelcome);
+        this._client.SendMessage(channel: e.Channel, $"Check out https://www.twitch.tv/{e.Channel}");
     }
 
     private void Client_OnJoinedChannel(object? sender, OnJoinedChannelArgs e)
