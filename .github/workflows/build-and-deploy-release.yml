@@ -13,7 +13,7 @@ jobs:
       OCTOPUS_DEPLOY_PACKAGE: ${{ secrets.OCTOPUS_DEPLOY_PACKAGE }}
       OCTOPUS_PROJECT: ${{ secrets.OCTOPUS_PROJECT }}
       OCTOPUS_CHANNEL: ${{ secrets.OCTOPUS_RELEASE_CHANNEL }}
-      OCTOPUS_SERVER: ${{ sectets.OCTOPUS_SERVER }}
+      OCTOPUS_SERVER: ${{ secrets.OCTOPUS_SERVER }}
       OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_API_KEY }}
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       NUGET_FEED: ${{ secrets.NUGET_FEED }}
