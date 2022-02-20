@@ -51,7 +51,7 @@ jobs:
       run: dotnet tool install --local Credfeto.Package.Push
     - name: Install Changelog Tool
       run: dotnet tool install --local Credfeto.Changelog.Cmd
-    - if: ${{ $secrets.OCTOPUS_DEPLOY_PACKAGE != '' }}
+    - if: ${{ env.OCTOPUS_DEPLOY_PACKAGE != '' }}
       name: install Octopus Deploy CLI
       uses: OctopusDeploy/install-octocli@v1.1.8
       with:
@@ -91,7 +91,7 @@ jobs:
     - if: ${{ env.OCTOPUS_DEPLOY_PACKAGE != '' }}
       name: Push package to octopus 
       run: octo push --package *.zip  --server="${{ env.OCTOPUS_SERVER }}" --apiKey="${{ env.OCTOPUS_API_KEY}}" --enableServiceMessages --debug --overwrite-mode=IgnoreIfExists    
-    - if: ${{ env.OCTOPUS_DEPLOY_PACKAGE != '' && secrets.OCTOPUS_RELEASE_CHANNEL != '' }}
+    - if: ${{ env.OCTOPUS_DEPLOY_PACKAGE != '' && env.OCTOPUS_CHANNEL != '' }}
       name: Deploy 
       run: octo create-release --project=${{ env.OCTOPUS_PROJECT }} --version=${{env.BUILD_VERSION}} --channel=${{ env.OCTOPUS_CHANNEL }} --package=${{ secrets.OCTOPUS_DEPLOY_PACKAGE }}:${{env.DOWNLOADED_VERSION}} --deployTo=Work --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_API_KEY}}" --enableServiceMessages --debug
 
