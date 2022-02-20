@@ -75,7 +75,7 @@ jobs:
       run: dotnet pack --configuration Release /p:Version=${{ env.BUILD_VERSION }} --no-restore --output ../dist
       env:
         ReleaseNotes: ${{ steps.release-notes.outputs.content }}
-    - if: ${{ && env.NUGET_API_KEY != '' }}
+    - if: ${{ env.NUGET_API_KEY != '' }}
       name: Publish Packages to Nuget
       run: dotnet pushpackages -folder dist --api-key ${{ env.NUGET_API_KEY }} --source ${{ env.NUGET_FEED }}
 
