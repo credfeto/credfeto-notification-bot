@@ -43,7 +43,7 @@ jobs:
       run: dotnet tool install --local Credfeto.Package.Push
     - name: Install Changelog Tool
       run: dotnet tool install --local Credfeto.Changelog.Cmd
-    - if: ${{ secrets.OCTOPUS_DEPLOY_PACKAGE != '' }}
+    - if: ${{ $secrets.OCTOPUS_DEPLOY_PACKAGE != '' }}
       name: install Octopus Deploy CLI
       uses: OctopusDeploy/install-octocli@v1.1.8
       with:
@@ -61,7 +61,7 @@ jobs:
       run: dotnet build --configuration Release /p:Version=${{ env.BUILD_VERSION }}
 
     ## NUGET PACKAGES
-    - if: ${{ && secrets.NUGET_API_KEY != '' }}
+    - if: ${{ secrets.NUGET_API_KEY != '' }}
       name: Pack tool
       working-directory: ./src
       run: dotnet pack --configuration Release /p:Version=${{ env.BUILD_VERSION }} --no-restore --output ../dist
