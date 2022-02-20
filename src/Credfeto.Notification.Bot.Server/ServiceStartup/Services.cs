@@ -1,4 +1,5 @@
 ﻿using Credfeto.Notification.Bot.Server.Workers;
+using Credfeto.Notification.Bot.Twitch;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -8,6 +9,8 @@ internal static class Services
 {
     public static void Configure(HostBuilderContext hostContext, IServiceCollection services)
     {
+        TwitchSetup.Configure(services);
+
         services.AddHostedService<RetrieveStatusWorker>();
     }
 }
