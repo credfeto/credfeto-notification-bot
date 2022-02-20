@@ -1,9 +1,10 @@
-name: .NET Core XXX [Release]
+name: .NET Core XX [Release]
 
 on:
   push:
      branches:
-       - 'master'
+       - 'release/*'
+       - 'hotfix/*'
 
 jobs:
   build:
@@ -92,18 +93,18 @@ jobs:
       name: Push package to octopus 
       run: octo push --package *.zip  --server="${{ env.OCTOPUS_SERVER }}" --apiKey="${{ env.OCTOPUS_API_KEY}}" --enableServiceMessages --debug --overwrite-mode=IgnoreIfExists    
     - if: ${{ env.OCTOPUS_DEPLOY_PACKAGE != '' && env.OCTOPUS_CHANNEL != '' }}
-      name: Deploy 
+      name: Deploy to Octopus
       run: octo create-release --project=${{ env.OCTOPUS_PROJECT }} --version=${{env.BUILD_VERSION}} --channel=${{ env.OCTOPUS_CHANNEL }} --package=${{ secrets.OCTOPUS_DEPLOY_PACKAGE }}:${{env.DOWNLOADED_VERSION}} --deployTo=Work --server="${{ secrets.OCTOPUS_SERVER }}" --apiKey="${{ secrets.OCTOPUS_API_KEY}}" --enableServiceMessages --debug
 
     # Create Github Release      
-#    - name: Create Release
-#      id: create_release
-#      uses: actions/create-release@v1.1.4
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        tag_name: v${{ env.BUILD_VERSION }}
-#        release_name: Release ${{ env.BUILD_VERSION }}
-#        body_path: RELEASE_NOTES.md
-#        draft: false
-#        prerelease: false
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ env.BUILD_VERSION }}
+        release_name: Release ${{ env.BUILD_VERSION }}
+        body_path: RELEASE_NOTES.md
+        draft: false
+        prerelease: false
