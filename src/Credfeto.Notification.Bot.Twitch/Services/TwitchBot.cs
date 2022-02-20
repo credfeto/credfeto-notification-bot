@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Resources;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TwitchLib.Client;
@@ -16,11 +17,13 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 public sealed class TwitchBot : ITwitchBot
 {
     private readonly TwitchClient _client;
+    private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ILogger<TwitchBot> _logger;
     private readonly TwitchBotOptions _options;
 
-    public TwitchBot(IOptions<TwitchBotOptions> options, ILogger<TwitchBot> logger)
+    public TwitchBot(IOptions<TwitchBotOptions> options, ICurrentTimeSource currentTimeSource, ILogger<TwitchBot> logger)
     {
+        this._currentTimeSource = currentTimeSource;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -67,9 +70,9 @@ public sealed class TwitchBot : ITwitchBot
 
     private void Client_OnMessageReceived(object? sender, OnMessageReceivedArgs e)
     {
-        if (e.ChatMessage.Username == "credfeto")
+        if (e.ChatMessage.Username.ToLowerInvariant() is "credfeto" or "steveforward")
         {
-            this._client.SendReply(channel: e.ChatMessage.Channel, replyToId: e.ChatMessage.Username, $"Hello @{e.ChatMessage.Username}");
+            this._client.SendReply(channel: e.ChatMessage.Channel, replyToId: e.ChatMessage.Username, $"Hello @{e.ChatMessage.Username} it's {this._currentTimeSource.UtcNow()}");
         }
 
         // if (e.ChatMessage.Message.Contains("badword"))
