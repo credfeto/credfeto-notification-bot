@@ -7,20 +7,22 @@ using Microsoft.Extensions.Logging;
 namespace Credfeto.Notification.Bot.Server.Workers;
 
 /// <summary>
-/// Background service.
+///     Background service.
 /// </summary>
 public sealed class RetrieveStatusWorker : BackgroundService
 {
     private readonly ILogger<RetrieveStatusWorker> _logger;
 
     /// <summary>
+    ///     Constructor
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Logging</returns>
     public RetrieveStatusWorker(ILogger<RetrieveStatusWorker> logger)
     {
         this._logger = logger;
     }
 
+    /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
@@ -30,7 +32,7 @@ public sealed class RetrieveStatusWorker : BackgroundService
         }
     }
 
-    private Task UpdateStatusAsync(CancellationToken cancellationToken)
+    private Task UpdateStatusAsync(in CancellationToken cancellationToken)
     {
         this._logger.LogInformation("Tick");
 
