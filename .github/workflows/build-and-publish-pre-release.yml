@@ -44,7 +44,7 @@ jobs:
         if [[ -f global.json && $(compgen -G "*.sln") && $(compgen -G "**/*.csproj") ]]; then echo '::set-output name=files_exist::true'; else echo '::set-output name=files_exist::false'; fi
         if [[ -f global.json && $(compgen -G "*.sln") && $(compgen -G "**/*.csproj") ]]; then echo 'Exists: true'; else echo 'Exists: false'; fi
     - name: Status
-      run: echo "Exists: ${{ steps.check_files.outputs.files_exists }}" 
+      run: echo Exists: ${{ steps.check_files.outputs.files_exists }}
     - if: steps.check_files.outputs.files_exists == 'true'
       name: Determine .net core version
       uses: credfeto/action-dotnet-version-detect@v1.2.0
