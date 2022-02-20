@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Credfeto.Notification.Bot.Twitch.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Credfeto.Notification.Bot.Twitch;
 
@@ -13,6 +14,6 @@ public static class TwitchSetup
     /// <param name="services"></param>
     public static void Configure(IServiceCollection services)
     {
-        // TODO
+        services.AddSingleton<ITwitchBot, TwitchBot>();
     }
 }
