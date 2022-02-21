@@ -32,15 +32,24 @@ public sealed class RetrieveStatusWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            await this.UpdateStatusAsync(stoppingToken);
+            await this.UpdateStatusAsync();
             await Task.Delay(TimeSpan.FromSeconds(value: 30), cancellationToken: stoppingToken);
         }
     }
 
-    private Task UpdateStatusAsync(in CancellationToken cancellationToken)
+    private async Task UpdateStatusAsync()
     {
         this._logger.LogInformation("Tick");
 
-        return Task.Delay(TimeSpan.FromMilliseconds(1), cancellationToken: cancellationToken);
+        try
+        {
+            await this._twitchBot.UpdateAsync();
+        }
+        catch (Exception e)
+        {
+            this._logger.LogError(new(e.HResult), exception: e, message: "Failed to update twitch status");
+
+            throw;
+        }
     }
 }
