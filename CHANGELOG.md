@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-3881 - Updated DotNet SDK to 6.0.102
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.36.0.43782
 ### Removed
 ### Deployment Changes
 
