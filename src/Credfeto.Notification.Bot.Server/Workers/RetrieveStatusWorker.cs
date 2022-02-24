@@ -39,8 +39,6 @@ public sealed class RetrieveStatusWorker : BackgroundService
 
     private async Task UpdateStatusAsync()
     {
-        this._logger.LogInformation("Tick");
-
         try
         {
             await this._twitchBot.UpdateAsync();

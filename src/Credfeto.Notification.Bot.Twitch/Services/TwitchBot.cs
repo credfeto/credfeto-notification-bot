@@ -12,7 +12,6 @@ using TwitchLib.Api.Interfaces;
 using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Events.LiveStreamMonitor;
 using TwitchLib.Client;
-using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
@@ -196,14 +195,18 @@ public sealed class TwitchBot : ITwitchBot
     private void Client_OnRaided(OnRaidNotificationArgs e)
     {
         this._logger.LogInformation($"Raided by {e.RaidNotification.DisplayName}");
-        const string raidWelcome = @"
+
+        if (this._options.Raids.Contains(e.Channel))
+        {
+            const string raidWelcome = @"
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
 GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
 
-        this._client.SendMessage(channel: e.Channel, message: raidWelcome);
-        this._client.SendMessage(channel: e.Channel, $"Thanks @{e.RaidNotification.DisplayName} for the raid");
-        this._client.SendMessage(channel: e.Channel, $"Check out https://www.twitch.tv/{e.RaidNotification.DisplayName}");
+            this._client.SendMessage(channel: e.Channel, message: raidWelcome);
+            this._client.SendMessage(channel: e.Channel, $"Thanks @{e.RaidNotification.DisplayName} for the raid");
+            this._client.SendMessage(channel: e.Channel, $"Check out https://www.twitch.tv/{e.RaidNotification.DisplayName}");
+        }
     }
 
     private void Client_OnJoinedChannel(OnJoinedChannelArgs e)
@@ -215,10 +218,26 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 
     private void Client_OnMessageReceived(OnMessageReceivedArgs e)
     {
-        if (e.ChatMessage.Username.ToLowerInvariant() is "credfeto" or "steveforward")
+        this._logger.LogInformation($"{e.ChatMessage.Channel}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
+
+        if (this._options.Heists.Contains(e.ChatMessage.Channel))
         {
-            this._client.SendReply(channel: e.ChatMessage.Channel, replyToId: e.ChatMessage.Username, $"Hello @{e.ChatMessage.Username} it's {this._currentTimeSource.UtcNow()}");
+            //:streamlabs!streamlabs@streamlabs.tmi.twitch.tv PRIVMSG #emilyisfun :Ahoy! Captain reckless_fury is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.
+
+            if (StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
+                e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
+                e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal))
+            {
+                this._logger.LogInformation($"{e.ChatMessage.Channel}: Heist Starting!");
+
+                //this._client.SendMessage(channel: e.ChatMessage.Channel, message: "!heist all");
+            }
         }
+
+        // if (e.ChatMessage.Username.ToLowerInvariant() is "credfeto" or "steveforward")
+        // {
+        //     this._client.SendReply(channel: e.ChatMessage.Channel, replyToId: e.ChatMessage.Username, $"Hello @{e.ChatMessage.Username} it's {this._currentTimeSource.UtcNow()}");
+        // }
 
         // if (e.ChatMessage.Message.Contains("badword"))
         // {
@@ -228,21 +247,23 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 
     private void Client_OnWhisperReceived(OnWhisperReceivedArgs e)
     {
-        if (e.WhisperMessage.Username == "my_friend")
-        {
-            this._client.SendWhisper(receiver: e.WhisperMessage.Username, message: "Hey! Whispers are so cool!!");
-        }
+        // if (e.WhisperMessage.Username == "my_friend")
+        // {
+        //     this._client.SendWhisper(receiver: e.WhisperMessage.Username, message: "Hey! Whispers are so cool!!");
+        // }
     }
 
     private void Client_OnNewSubscriber(OnNewSubscriberArgs e)
     {
-        if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
-        {
-            this._client.SendMessage(channel: e.Channel, $"Welcome {e.Subscriber.DisplayName} to the substers! You just earned 500 points! So kind of you to use your Twitch Prime on this channel!");
-        }
-        else
-        {
-            this._client.SendMessage(channel: e.Channel, $"Welcome {e.Subscriber.DisplayName} to the substers! You just earned 500 points!");
-        }
+        this._logger.LogInformation($"{e.Channel}: New Subscriber {e.Subscriber.DisplayName}");
+
+        // if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
+        // {
+        //     this._client.SendMessage(channel: e.Channel, $"Welcome {e.Subscriber.DisplayName} to the substers! You just earned 500 points! So kind of you to use your Twitch Prime on this channel!");
+        // }
+        // else
+        // {
+        //     this._client.SendMessage(channel: e.Channel, $"Welcome {e.Subscriber.DisplayName} to the substers! You just earned 500 points!");
+        // }
     }
 }
