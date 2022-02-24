@@ -211,7 +211,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 
     private void Client_OnJoinedChannel(OnJoinedChannelArgs e)
     {
-        this._logger.LogInformation("Hey guys! I am a bot connected via TwitchLib!");
+        this._logger.LogInformation($"{e.Channel} Joining channel as {e.BotUsername}");
 
         //this._client.SendMessage(channel: e.Channel, message: "Hey guys! I am a bot connected via TwitchLib!");
     }
