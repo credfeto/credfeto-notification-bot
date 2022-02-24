@@ -56,7 +56,8 @@ public sealed class TwitchBot : ITwitchBot
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
         ClientOptions clientOptions = new() { MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30) };
         WebSocketClient customClient = new(clientOptions);
-        TwitchClient client = new(customClient);
+        TwitchClient client = new(customClient) { OverrideBeingHostedCheck = true };
+
         client.Initialize(credentials: credentials, channels: channels);
         this._client = client;
 
