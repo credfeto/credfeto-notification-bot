@@ -189,7 +189,7 @@ public sealed class TwitchBot : ITwitchBot
 
     private void Client_OnConnected(OnConnectedArgs e)
     {
-        this._logger.LogInformation($"Connected to {e.AutoJoinChannel}");
+        this._logger.LogInformation($"Connected to {e.AutoJoinChannel} by {e.BotUsername}");
     }
 
     private void Client_OnRaided(OnRaidNotificationArgs e)
