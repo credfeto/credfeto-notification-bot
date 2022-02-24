@@ -31,6 +31,10 @@ public sealed class TwitchBot : ITwitchBot
 
     public TwitchBot(IOptions<TwitchBotOptions> options, ICurrentTimeSource currentTimeSource, ILogger<TwitchBot> logger)
     {
+#if FALSE
+        // TODO
+        Unaccounted for: msg-id = host_target_went_offline :tmi.twitch.tv NOTICE #credfeto :karenwarbis has gone offline. Exiting host mode. (please create a TwitchLib GitHub issue :P)
+#endif
         this._currentTimeSource = currentTimeSource;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -44,19 +48,15 @@ public sealed class TwitchBot : ITwitchBot
                                  .ToList();
 
         this._api = new TwitchAPI();
-        this._api.Settings.ClientId = "TODO";
-        this._api.Settings.AccessToken = "TODO";
+        this._api.Settings.ClientId = this._options.Authentication.ClientId;
+        this._api.Settings.Secret = this._options.Authentication.ClientSecret;
         this._lsm = new(this._api);
-        this._lsm.SetChannelsByName(channels.Concat(new[]
-                                                    {
-                                                        "steveforward"
-                                                    })
-                                            .ToList());
+        this._lsm.SetChannelsByName(channels);
 
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
         ClientOptions clientOptions = new() { MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30) };
         WebSocketClient customClient = new(clientOptions);
-        TwitchClient client = new(customClient) { OverrideBeingHostedCheck = true };
+        TwitchClient client = new(customClient) { OverrideBeingHostedCheck = true, AutoReListenOnException = true };
 
         client.Initialize(credentials: credentials, channels: channels);
         this._client = client;
@@ -133,8 +133,9 @@ public sealed class TwitchBot : ITwitchBot
     {
         this._logger.LogDebug("Tick...");
 
-        //return this._lsm.UpdateLiveStreamersAsync();
-        return Task.CompletedTask;
+        return this._lsm.UpdateLiveStreamersAsync();
+
+        //return Task.CompletedTask;
     }
 
     private void Client_OnBeingHosted(OnBeingHostedArgs e)
