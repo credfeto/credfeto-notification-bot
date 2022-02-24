@@ -7,6 +7,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Resources;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NonBlocking;
 using TwitchLib.Api;
 using TwitchLib.Api.Interfaces;
 using TwitchLib.Api.Services;
@@ -29,6 +30,8 @@ public sealed class TwitchBot : ITwitchBot
     private readonly LiveStreamMonitorService _lsm;
     private readonly TwitchBotOptions _options;
 
+    private readonly ConcurrentDictionary<string, StreamState> _streamStates;
+
     public TwitchBot(IOptions<TwitchBotOptions> options, ICurrentTimeSource currentTimeSource, ILogger<TwitchBot> logger)
     {
 #if FALSE
@@ -46,6 +49,8 @@ public sealed class TwitchBot : ITwitchBot
                                  .Select(c => c.ToLowerInvariant())
                                  .Distinct()
                                  .ToList();
+
+        this._streamStates = new(channels.Select(channel => new KeyValuePair<string, StreamState>(key: channel, new())), comparer: StringComparer.OrdinalIgnoreCase);
 
         this._api = new TwitchAPI();
         this._api.Settings.ClientId = this._options.Authentication.ClientId;
@@ -147,6 +152,10 @@ public sealed class TwitchBot : ITwitchBot
     private void Client_OnChatCleared(OnChatClearedArgs e)
     {
         this._logger.LogInformation($"{e.Channel}: Chat Cleared");
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        state.ClearChat();
     }
 
     private void Client_OnCommunitySubscription(OnCommunitySubscriptionArgs e)
@@ -176,12 +185,30 @@ public sealed class TwitchBot : ITwitchBot
 
     private void Client_OnStreamOnline(OnStreamOnlineArgs e)
     {
-        this._logger.LogInformation($"{e.Channel}: Started streaming {e.Stream.Title} ({e.Stream.GameName}");
+        this._logger.LogWarning($"{e.Channel}: Started streaming \"{e.Stream.Title} ({e.Stream.GameName}) at {e.Stream.StartedAt}");
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        state.Online(gameName: e.Stream.GameName, startDate: e.Stream.StartedAt);
+    }
+
+    private StreamState GetStateForChannel(string channel)
+    {
+        if (this._streamStates.TryGetValue(key: channel, out StreamState? state))
+        {
+            return state;
+        }
+
+        return this._streamStates.GetOrAdd(key: channel, new StreamState());
     }
 
     private void Client_OnStreamOffline(OnStreamOfflineArgs e)
     {
-        this._logger.LogInformation($"{e.Channel}: Stopped streaming {e.Stream.Title} ({e.Stream.GameName}");
+        this._logger.LogWarning($"{e.Channel}: Stopped streaming {e.Stream.Title} ({e.Stream.GameName}");
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        state.Offline();
     }
 
     private void Client_OnLog(OnLogArgs e)
@@ -209,6 +236,10 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
             this._client.SendMessage(channel: e.Channel, $"Thanks @{e.RaidNotification.DisplayName} for the raid");
             this._client.SendMessage(channel: e.Channel, $"Check out https://www.twitch.tv/{e.RaidNotification.DisplayName}");
         }
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        state.Raided(e.RaidNotification.DisplayName);
     }
 
     private void Client_OnJoinedChannel(OnJoinedChannelArgs e)
@@ -235,6 +266,20 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
                 //this._client.SendMessage(channel: e.ChatMessage.Channel, message: "!heist all");
             }
         }
+
+        if (e.ChatMessage.IsBroadcaster || e.ChatMessage.IsModerator || e.ChatMessage.IsMe)
+        {
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(e.ChatMessage.BotUsername))
+        {
+            return;
+        }
+
+        StreamState state = this.GetStateForChannel(e.ChatMessage.Channel);
+
+        state.ChatMessage(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits);
 
         // if (e.ChatMessage.Username.ToLowerInvariant() is "credfeto" or "steveforward")
         // {
