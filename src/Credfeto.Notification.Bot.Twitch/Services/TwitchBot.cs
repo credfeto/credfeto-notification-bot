@@ -13,6 +13,7 @@ using TwitchLib.Api.Interfaces;
 using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Events.LiveStreamMonitor;
 using TwitchLib.Client;
+using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
@@ -85,6 +86,10 @@ public sealed class TwitchBot : ITwitchBot
         Observable.FromEventPattern<OnNewSubscriberArgs>(addHandler: h => this._client.OnNewSubscriber += h, removeHandler: h => this._client.OnNewSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnNewSubscriber);
+
+        Observable.FromEventPattern<OnReSubscriberArgs>(addHandler: h => this._client.OnReSubscriber += h, removeHandler: h => this._client.OnReSubscriber -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnReSubscriber);
 
         Observable.FromEventPattern<OnConnectedArgs>(addHandler: h => this._client.OnConnected += h, removeHandler: h => this._client.OnConnected -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
@@ -161,11 +166,29 @@ public sealed class TwitchBot : ITwitchBot
     private void Client_OnCommunitySubscription(OnCommunitySubscriptionArgs e)
     {
         this._logger.LogInformation($"{e.Channel}: Community Sub: {e.GiftedSubscription.DisplayName}");
+
+        if (e.GiftedSubscription.IsAnonymous)
+        {
+            return;
+        }
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        state.GiftedMultiple(giftedBy: e.GiftedSubscription.DisplayName, count: e.GiftedSubscription.MsgParamMassGiftCount, months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration);
     }
 
     private void Client_OnGiftedSubscription(OnGiftedSubscriptionArgs e)
     {
         this._logger.LogInformation($"{e.Channel}: Community Sub: {e.GiftedSubscription.DisplayName}");
+
+        if (e.GiftedSubscription.IsAnonymous)
+        {
+            return;
+        }
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        state.GiftedSub(giftedBy: e.GiftedSubscription.DisplayName, months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration);
     }
 
     private void Client_OnChannelStateChanged(OnChannelStateChangedArgs e)
@@ -176,11 +199,19 @@ public sealed class TwitchBot : ITwitchBot
     private void Client_OnContinuedGiftedSubscription(OnContinuedGiftedSubscriptionArgs e)
     {
         this._logger.LogInformation($"{e.Channel}: {e.ContinuedGiftedSubscription.DisplayName} continued sub gifted by {e.ContinuedGiftedSubscription.MsgParamSenderLogin}");
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        state.ContinuedSub(e.ContinuedGiftedSubscription.DisplayName);
     }
 
     private void Client_OnPrimePaidSubscriber(OnPrimePaidSubscriberArgs e)
     {
-        this._logger.LogInformation($"{e.Channel}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid {e.PrimePaidSubscriber}");
+        this._logger.LogInformation($"{e.Channel}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid");
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        state.PrimeToPaid(e.PrimePaidSubscriber.DisplayName);
     }
 
     private void Client_OnStreamOnline(OnStreamOnlineArgs e)
@@ -213,7 +244,7 @@ public sealed class TwitchBot : ITwitchBot
 
     private void Client_OnLog(OnLogArgs e)
     {
-        this._logger.LogInformation($"{e.DateTime}: {e.BotUsername} - {e.Data}");
+        this._logger.LogDebug($"{e.DateTime}: {e.BotUsername} - {e.Data}");
     }
 
     private void Client_OnConnected(OnConnectedArgs e)
@@ -267,7 +298,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
             }
         }
 
-        if (e.ChatMessage.IsBroadcaster || e.ChatMessage.IsModerator || e.ChatMessage.IsMe)
+        if (e.ChatMessage.IsBroadcaster || e.ChatMessage.IsModerator)
         {
             return;
         }
@@ -279,7 +310,11 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 
         StreamState state = this.GetStateForChannel(e.ChatMessage.Channel);
 
-        state.ChatMessage(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits);
+        if (state.ChatMessage(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits))
+        {
+            // first time chatted in channel
+            this.IssueShoutOut(channel: e.ChatMessage.Channel, user: e.ChatMessage.Username);
+        }
 
         // if (e.ChatMessage.Username.ToLowerInvariant() is "credfeto" or "steveforward")
         // {
@@ -290,6 +325,33 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
         // {
         //     this._client.TimeoutUser(channel: e.ChatMessage.Channel, viewer: e.ChatMessage.Username, TimeSpan.FromMinutes(30), message: "Bad word! 30 minute timeout!");
         // }
+    }
+
+    private void IssueShoutOut(string channel, string user)
+    {
+        this._logger.LogInformation($"{channel}: Checking if need to shoutout {user}");
+        TwitchChannelShoutout? soChannel = this._options.Shoutouts.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: channel));
+
+        if (soChannel == null)
+        {
+            return;
+        }
+
+        TwitchFriendChannel? streamer = soChannel.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: user));
+
+        if (streamer == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(streamer.Message))
+        {
+            this._client.SendMessage(channel: streamer.Channel, $"Check out https://www.twitch.tv/{user}");
+        }
+        else
+        {
+            this._client.SendMessage(channel: streamer.Channel, message: streamer.Message);
+        }
     }
 
     private void Client_OnWhisperReceived(OnWhisperReceivedArgs e)
@@ -304,6 +366,17 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
     {
         this._logger.LogInformation($"{e.Channel}: New Subscriber {e.Subscriber.DisplayName}");
 
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
+        {
+            state.NewSubscriberPaid(e.Subscriber.DisplayName);
+        }
+        else
+        {
+            state.NewSubscriberPrime(e.Subscriber.DisplayName);
+        }
+
         // if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         // {
         //     this._client.SendMessage(channel: e.Channel, $"Welcome {e.Subscriber.DisplayName} to the substers! You just earned 500 points! So kind of you to use your Twitch Prime on this channel!");
@@ -312,5 +385,21 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
         // {
         //     this._client.SendMessage(channel: e.Channel, $"Welcome {e.Subscriber.DisplayName} to the substers! You just earned 500 points!");
         // }
+    }
+
+    private void Client_OnReSubscriber(OnReSubscriberArgs e)
+    {
+        this._logger.LogInformation($"{e.Channel}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
+
+        StreamState state = this.GetStateForChannel(e.Channel);
+
+        if (e.ReSubscriber.SubscriptionPlan == SubscriptionPlan.Prime)
+        {
+            state.ResubscribePaid(user: e.ReSubscriber.DisplayName, months: e.ReSubscriber.Months);
+        }
+        else
+        {
+            state.ResubscribePrime(user: e.ReSubscriber.DisplayName, months: e.ReSubscriber.Months);
+        }
     }
 }

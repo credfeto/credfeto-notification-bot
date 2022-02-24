@@ -30,9 +30,49 @@ internal sealed class StreamState
         this._stream?.AddRaider(raider);
     }
 
-    public void ChatMessage(string user, string message, int bits)
+    public bool ChatMessage(string user, string message, int bits)
     {
         // TODO: Implement
-        this._stream?.AddChatter(user);
+        return this._stream?.AddChatter(user) == true;
+    }
+
+    public void GiftedMultiple(string giftedBy, int count, string months)
+    {
+        this._stream?.GiftedSub(giftedBy: giftedBy, count: count);
+    }
+
+    public void GiftedSub(string giftedBy, string months)
+    {
+        this._stream?.GiftedSub(giftedBy: giftedBy, count: 1);
+    }
+
+    public void ContinuedSub(string user)
+    {
+        this._stream?.ContinuedSub(user);
+    }
+
+    public void PrimeToPaid(string user)
+    {
+        this._stream?.PrimeToPaid(user);
+    }
+
+    public void NewSubscriberPaid(string user)
+    {
+        this._stream?.NewSubscriberPaid(user);
+    }
+
+    public void NewSubscriberPrime(string user)
+    {
+        this._stream?.NewSubscriberPrime(user);
+    }
+
+    public void ResubscribePaid(string user, int months)
+    {
+        this._stream?.ResubscribePaid(user);
+    }
+
+    public void ResubscribePrime(string user, int months)
+    {
+        this._stream?.ResubscribePrime(user);
     }
 }
