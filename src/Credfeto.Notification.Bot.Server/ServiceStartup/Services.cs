@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Credfeto.Notification.Bot.Server.Helpers;
 using Credfeto.Notification.Bot.Server.Workers;
 using Credfeto.Notification.Bot.Twitch;
@@ -79,7 +78,7 @@ internal static class Logging
                                         .Enrich.WithProcessId()
                                         .Enrich.WithThreadId()
                                         .Enrich.WithProperty(name: @"ProcessName", typeof(Program).Namespace!)
-                                        .WriteToDebuggerAwareOutput()
+                                        .WriteTo.Console()
                                         .CreateLogger();
     }
 
@@ -88,19 +87,5 @@ internal static class Logging
         builder.AddFilter(category: @"Microsoft", level: LogLevel.Warning)
                .AddFilter(category: @"System.Net.Http.HttpClient", level: LogLevel.Warning)
                .AddFilter(category: @"Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware", level: LogLevel.Error);
-    }
-
-    private static LoggerConfiguration WriteToDebuggerAwareOutput(this LoggerConfiguration configuration)
-    {
-        if (Debugger.IsAttached)
-        {
-            configuration = configuration.WriteTo.Debug();
-        }
-        else
-        {
-            configuration = configuration.WriteTo.Console();
-        }
-
-        return configuration;
     }
 }
