@@ -193,7 +193,7 @@ public sealed class TwitchBot : ITwitchBot
 
     private void Client_OnChannelStateChanged(OnChannelStateChangedArgs e)
     {
-        this._logger.LogInformation($"{e.Channel}: Emote Only: {e.ChannelState.EmoteOnly} Follower Only: {e.ChannelState.FollowersOnly} Sub Only {e.ChannelState.SubOnly}");
+        this._logger.LogInformation($"{e.Channel}: Emote Only: {e.ChannelState.EmoteOnly} Follower Only: {e.ChannelState.FollowersOnly} Sub Only: {e.ChannelState.SubOnly}");
     }
 
     private void Client_OnContinuedGiftedSubscription(OnContinuedGiftedSubscriptionArgs e)
