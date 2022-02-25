@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
-using Credfeto.Notification.Bot.Twitch.Resources;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NonBlocking;
@@ -25,7 +24,6 @@ public sealed class TwitchBot : ITwitchBot
 {
     private readonly ITwitchAPI _api;
     private readonly TwitchClient _client;
-    private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ILogger<TwitchBot> _logger;
 
     private readonly LiveStreamMonitorService _lsm;
@@ -33,13 +31,12 @@ public sealed class TwitchBot : ITwitchBot
 
     private readonly ConcurrentDictionary<string, StreamState> _streamStates;
 
-    public TwitchBot(IOptions<TwitchBotOptions> options, ICurrentTimeSource currentTimeSource, ILogger<TwitchBot> logger)
+    public TwitchBot(IOptions<TwitchBotOptions> options, ILogger<TwitchBot> logger)
     {
 #if FALSE
         // TODO
         Unaccounted for: msg-id = host_target_went_offline :tmi.twitch.tv NOTICE #credfeto :karenwarbis has gone offline. Exiting host mode. (please create a TwitchLib GitHub issue :P)
 #endif
-        this._currentTimeSource = currentTimeSource;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
