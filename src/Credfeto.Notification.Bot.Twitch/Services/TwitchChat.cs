@@ -21,18 +21,18 @@ using TwitchLib.Communication.Models;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
-public sealed class TwitchBot : ITwitchBot
+public sealed class TwitchChat : ITwitchChat
 {
     private readonly ITwitchAPI _api;
     private readonly TwitchClient _client;
-    private readonly ILogger<TwitchBot> _logger;
+    private readonly ILogger<TwitchChat> _logger;
 
     private readonly LiveStreamMonitorService _lsm;
     private readonly TwitchBotOptions _options;
 
     private readonly ConcurrentDictionary<string, StreamState> _streamStates;
 
-    public TwitchBot(IOptions<TwitchBotOptions> options, ILogger<TwitchBot> logger)
+    public TwitchChat(IOptions<TwitchBotOptions> options, ILogger<TwitchChat> logger)
     {
 #if FALSE
         // TODO

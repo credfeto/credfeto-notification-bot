@@ -12,17 +12,17 @@ namespace Credfeto.Notification.Bot.Twitch.BackgroundServices;
 public sealed class UpdateLiveStatusWorker : BackgroundService
 {
     private readonly ILogger<UpdateLiveStatusWorker> _logger;
-    private readonly ITwitchBot _twitchBot;
+    private readonly ITwitchChat _twitchChat;
 
     /// <summary>
     ///     Constructor
     /// </summary>
-    /// <param name="twitchBot">Twitch Bot</param>
+    /// <param name="twitchChat">Twitch Chat</param>
     /// <param name="logger">Logging.</param>
     /// <returns>Logging</returns>
-    public UpdateLiveStatusWorker(ITwitchBot twitchBot, ILogger<UpdateLiveStatusWorker> logger)
+    public UpdateLiveStatusWorker(ITwitchChat twitchChat, ILogger<UpdateLiveStatusWorker> logger)
     {
-        this._twitchBot = twitchBot ?? throw new ArgumentNullException(nameof(twitchBot));
+        this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -40,7 +40,7 @@ public sealed class UpdateLiveStatusWorker : BackgroundService
     {
         try
         {
-            await this._twitchBot.UpdateAsync();
+            await this._twitchChat.UpdateAsync();
         }
         catch (Exception e)
         {

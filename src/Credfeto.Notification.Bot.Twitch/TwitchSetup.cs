@@ -18,6 +18,6 @@ public static class TwitchSetup
     {
         services.AddSingleton<ICurrentTimeSource, CurrentTimeSource>();
 
-        services.AddSingleton<ITwitchBot, TwitchBot>();
+        services.AddSingleton<ITwitchChat, TwitchChat>();
     }
 }

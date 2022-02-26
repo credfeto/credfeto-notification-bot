@@ -5,7 +5,7 @@ namespace Credfeto.Notification.Bot.Twitch;
 /// <summary>
 ///     Twitch bot.
 /// </summary>
-public interface ITwitchBot
+public interface ITwitchChat
 {
     /// <summary>
     ///     Updates the status.
