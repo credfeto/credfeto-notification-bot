@@ -1,18 +1,17 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Credfeto.Notification.Bot.Twitch;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Credfeto.Notification.Bot.Server.Workers;
+namespace Credfeto.Notification.Bot.Twitch.BackgroundServices;
 
 /// <summary>
 ///     Background service.
 /// </summary>
-public sealed class RetrieveStatusWorker : BackgroundService
+public sealed class UpdateLiveStatusWorker : BackgroundService
 {
-    private readonly ILogger<RetrieveStatusWorker> _logger;
+    private readonly ILogger<UpdateLiveStatusWorker> _logger;
     private readonly ITwitchBot _twitchBot;
 
     /// <summary>
@@ -21,7 +20,7 @@ public sealed class RetrieveStatusWorker : BackgroundService
     /// <param name="twitchBot">Twitch Bot</param>
     /// <param name="logger">Logging.</param>
     /// <returns>Logging</returns>
-    public RetrieveStatusWorker(ITwitchBot twitchBot, ILogger<RetrieveStatusWorker> logger)
+    public UpdateLiveStatusWorker(ITwitchBot twitchBot, ILogger<UpdateLiveStatusWorker> logger)
     {
         this._twitchBot = twitchBot ?? throw new ArgumentNullException(nameof(twitchBot));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));

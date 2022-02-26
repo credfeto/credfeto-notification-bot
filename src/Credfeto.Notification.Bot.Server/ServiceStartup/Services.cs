@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Credfeto.Notification.Bot.Server.Helpers;
-using Credfeto.Notification.Bot.Server.Workers;
 using Credfeto.Notification.Bot.Twitch;
+using Credfeto.Notification.Bot.Twitch.BackgroundServices;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +30,7 @@ internal static class Services
         services.Configure<TwitchBotOptions>(configurationRoot.GetSection("Twitch"));
         TwitchSetup.Configure(services);
 
-        services.AddHostedService<RetrieveStatusWorker>();
+        services.AddHostedService<UpdateLiveStatusWorker>();
     }
 
     private static IConfigurationRoot LoadConfigFile()

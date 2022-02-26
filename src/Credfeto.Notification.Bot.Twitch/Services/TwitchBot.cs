@@ -16,6 +16,7 @@ using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
+using TwitchLib.Communication.Events;
 using TwitchLib.Communication.Models;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
@@ -91,6 +92,10 @@ public sealed class TwitchBot : ITwitchBot
         Observable.FromEventPattern<OnConnectedArgs>(addHandler: h => this._client.OnConnected += h, removeHandler: h => this._client.OnConnected -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnConnected);
+
+        Observable.FromEventPattern<OnDisconnectedEventArgs>(addHandler: h => this._client.OnDisconnected += h, removeHandler: h => this._client.OnDisconnected -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnDisconnected);
 
         Observable.FromEventPattern<OnRaidNotificationArgs>(addHandler: h => this._client.OnRaidNotification += h, removeHandler: h => this._client.OnRaidNotification -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
@@ -246,7 +251,12 @@ public sealed class TwitchBot : ITwitchBot
 
     private void Client_OnConnected(OnConnectedArgs e)
     {
-        this._logger.LogInformation($"Connected to {e.AutoJoinChannel} by {e.BotUsername}");
+        this._logger.LogWarning($"Connected to {e.BotUsername} {e.AutoJoinChannel}");
+    }
+
+    private void Client_OnDisconnected(OnDisconnectedEventArgs e)
+    {
+        this._logger.LogWarning("Disconnected");
     }
 
     private void Client_OnRaided(OnRaidNotificationArgs e)
