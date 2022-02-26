@@ -39,6 +39,14 @@ internal sealed class ActiveStream
         }
     }
 
+    public void AddBitGifter(string user, int bits)
+    {
+        if (this._bitGifters.TryAdd(key: user, value: true))
+        {
+            // New Raider found
+        }
+    }
+
     public bool AddChatter(string chatter)
     {
         if (this._chatters.TryAdd(key: chatter, value: true))

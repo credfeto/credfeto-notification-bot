@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NonBlocking;
-using TwitchLib.Api;
-using TwitchLib.Api.Interfaces;
-using TwitchLib.Api.Services;
-using TwitchLib.Api.Services.Events.LiveStreamMonitor;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
@@ -23,21 +18,16 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChat : ITwitchChat
 {
-    private readonly ITwitchAPI _api;
     private readonly TwitchClient _client;
     private readonly ILogger<TwitchChat> _logger;
 
-    private readonly LiveStreamMonitorService _lsm;
     private readonly TwitchBotOptions _options;
+    private readonly ITwitchChannelManager _twitchChannelManager;
+    private bool _connected;
 
-    private readonly ConcurrentDictionary<string, StreamState> _streamStates;
-
-    public TwitchChat(IOptions<TwitchBotOptions> options, ILogger<TwitchChat> logger)
+    public TwitchChat(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, ILogger<TwitchChat> logger)
     {
-#if FALSE
-        // TODO
-        Unaccounted for: msg-id = host_target_went_offline :tmi.twitch.tv NOTICE #credfeto :karenwarbis has gone offline. Exiting host mode. (please create a TwitchLib GitHub issue :P)
-#endif
+        this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -49,18 +39,13 @@ public sealed class TwitchChat : ITwitchChat
                                  .Distinct()
                                  .ToList();
 
-        this._streamStates = new(channels.Select(channel => new KeyValuePair<string, StreamState>(key: channel, new())), comparer: StringComparer.OrdinalIgnoreCase);
-
-        this._api = new TwitchAPI();
-        this._api.Settings.ClientId = this._options.Authentication.ClientId;
-        this._api.Settings.Secret = this._options.Authentication.ClientSecret;
-        this._lsm = new(this._api);
-        this._lsm.SetChannelsByName(channels);
-
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
-        ClientOptions clientOptions = new() { MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30) };
-        WebSocketClient customClient = new(clientOptions);
-        TwitchClient client = new(customClient) { OverrideBeingHostedCheck = true, AutoReListenOnException = true };
+        TwitchClient client = new(new WebSocketClient(new ClientOptions
+                                                      {
+                                                          MessagesAllowedInPeriod = 750,
+                                                          ThrottlingPeriod = TimeSpan.FromSeconds(30),
+                                                          ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
+                                                      })) { OverrideBeingHostedCheck = true, AutoReListenOnException = false };
 
         client.Initialize(credentials: credentials, channels: channels);
         this._client = client;
@@ -130,22 +115,20 @@ public sealed class TwitchChat : ITwitchChat
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnPrimePaidSubscriber);
 
-        Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnStreamOnline);
-
-        Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnStreamOffline);
-
         this._client.Connect();
+        this._connected = true;
     }
 
     public Task UpdateAsync()
     {
-        this._logger.LogDebug("Tick...");
+        if (!this._connected)
+        {
+            this._logger.LogDebug("Reconnecting");
+            this._client.Connect();
+            this._connected = true;
+        }
 
-        return this._lsm.UpdateLiveStreamersAsync();
+        return Task.CompletedTask;
 
         //return Task.CompletedTask;
     }
@@ -160,7 +143,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.Channel}: Chat Cleared");
 
-        StreamState state = this.GetStateForChannel(e.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.ClearChat();
     }
@@ -174,7 +157,7 @@ public sealed class TwitchChat : ITwitchChat
             return;
         }
 
-        StreamState state = this.GetStateForChannel(e.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.GiftedMultiple(giftedBy: e.GiftedSubscription.DisplayName, count: e.GiftedSubscription.MsgParamMassGiftCount, months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration);
     }
@@ -188,7 +171,7 @@ public sealed class TwitchChat : ITwitchChat
             return;
         }
 
-        StreamState state = this.GetStateForChannel(e.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.GiftedSub(giftedBy: e.GiftedSubscription.DisplayName, months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration);
     }
@@ -202,7 +185,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.Channel}: {e.ContinuedGiftedSubscription.DisplayName} continued sub gifted by {e.ContinuedGiftedSubscription.MsgParamSenderLogin}");
 
-        StreamState state = this.GetStateForChannel(e.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.ContinuedSub(e.ContinuedGiftedSubscription.DisplayName);
     }
@@ -211,37 +194,9 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.Channel}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid");
 
-        StreamState state = this.GetStateForChannel(e.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.PrimeToPaid(e.PrimePaidSubscriber.DisplayName);
-    }
-
-    private void Client_OnStreamOnline(OnStreamOnlineArgs e)
-    {
-        this._logger.LogWarning($"{e.Channel}: Started streaming \"{e.Stream.Title} ({e.Stream.GameName}) at {e.Stream.StartedAt}");
-
-        StreamState state = this.GetStateForChannel(e.Channel);
-
-        state.Online(gameName: e.Stream.GameName, startDate: e.Stream.StartedAt);
-    }
-
-    private StreamState GetStateForChannel(string channel)
-    {
-        if (this._streamStates.TryGetValue(key: channel, out StreamState? state))
-        {
-            return state;
-        }
-
-        return this._streamStates.GetOrAdd(key: channel, new StreamState());
-    }
-
-    private void Client_OnStreamOffline(OnStreamOfflineArgs e)
-    {
-        this._logger.LogWarning($"{e.Channel}: Stopped streaming {e.Stream.Title} ({e.Stream.GameName}");
-
-        StreamState state = this.GetStateForChannel(e.Channel);
-
-        state.Offline();
     }
 
     private void Client_OnLog(OnLogArgs e)
@@ -275,7 +230,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
             this._client.SendMessage(channel: e.Channel, $"Check out https://www.twitch.tv/{e.RaidNotification.DisplayName}");
         }
 
-        StreamState state = this.GetStateForChannel(e.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.Raided(e.RaidNotification.DisplayName);
     }
@@ -315,7 +270,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
             return;
         }
 
-        StreamState state = this.GetStateForChannel(e.ChatMessage.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
 
         if (state.ChatMessage(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits))
         {
@@ -373,7 +328,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
     {
         this._logger.LogInformation($"{e.Channel}: New Subscriber {e.Subscriber.DisplayName}");
 
-        StreamState state = this.GetStateForChannel(e.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {
@@ -398,7 +353,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
     {
         this._logger.LogInformation($"{e.Channel}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
 
-        StreamState state = this.GetStateForChannel(e.Channel);
+        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         if (e.ReSubscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {

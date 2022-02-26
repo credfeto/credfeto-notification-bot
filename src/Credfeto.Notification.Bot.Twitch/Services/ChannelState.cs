@@ -2,7 +2,7 @@ using System;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
-internal sealed class StreamState
+public sealed class ChannelState
 {
     private ActiveStream? _stream;
 
@@ -32,6 +32,11 @@ internal sealed class StreamState
 
     public bool ChatMessage(string user, string message, int bits)
     {
+        if (bits != 0)
+        {
+            this._stream?.AddBitGifter(user: user, bits: bits);
+        }
+
         // TODO: Implement
         return this._stream?.AddChatter(user) == true;
     }

@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 namespace Credfeto.Notification.Bot.Twitch;
 
 /// <summary>
-///     Twitch Chat
+///     Stream Status
 /// </summary>
-public interface ITwitchChat
+public interface ITwitchStreamStatus
 {
     /// <summary>
     ///     Updates the status.

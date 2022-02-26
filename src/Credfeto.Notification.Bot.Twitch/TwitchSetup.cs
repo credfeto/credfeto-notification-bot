@@ -1,4 +1,5 @@
-﻿using Credfeto.Notification.Bot.Twitch.Resources;
+﻿using Credfeto.Notification.Bot.Twitch.BackgroundServices;
+using Credfeto.Notification.Bot.Twitch.Resources;
 using Credfeto.Notification.Bot.Twitch.Resources.Services;
 using Credfeto.Notification.Bot.Twitch.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,10 +15,27 @@ public static class TwitchSetup
     ///     Configures twitch integration.
     /// </summary>
     /// <param name="services"></param>
-    public static void Configure(IServiceCollection services)
+    public static IServiceCollection Configure(IServiceCollection services)
     {
-        services.AddSingleton<ICurrentTimeSource, CurrentTimeSource>();
+        return AddResources(services)
+               .AddServices()
+               .AddBackgroundServices();
+    }
 
-        services.AddSingleton<ITwitchChat, TwitchChat>();
+    private static IServiceCollection AddResources(this IServiceCollection services)
+    {
+        return services.AddSingleton<ICurrentTimeSource, CurrentTimeSource>();
+    }
+
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        return services.AddSingleton<ITwitchChannelManager, TwitchChannelManager>()
+                       .AddSingleton<ITwitchChat, TwitchChat>()
+                       .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>();
+    }
+
+    private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
+    {
+        return services.AddHostedService<UpdateLiveStatusWorker>();
     }
 }
