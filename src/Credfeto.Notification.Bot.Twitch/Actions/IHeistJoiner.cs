@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Credfeto.Notification.Bot.Twitch;
+namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface IHeistJoiner
 {

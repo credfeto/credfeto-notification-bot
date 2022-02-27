@@ -7,7 +7,7 @@ using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Credfeto.Notification.Bot.Twitch.Services;
+namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
 public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 {

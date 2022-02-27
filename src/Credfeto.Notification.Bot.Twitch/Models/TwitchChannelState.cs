@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 public sealed class TwitchChannelState
 {
     private readonly string _channelName;
+    private readonly IContributionThanks _contributionThanks;
     private readonly ILogger _logger;
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
@@ -21,12 +23,14 @@ public sealed class TwitchChannelState
                               TwitchBotOptions options,
                               IRaidWelcome raidWelcome,
                               IShoutoutJoiner shoutoutJoiner,
+                              IContributionThanks contributionThanks,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._channelName = channelName;
         this._options = options ?? throw new ArgumentNullException(nameof(options));
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
+        this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -50,63 +54,122 @@ public sealed class TwitchChannelState
 
     public async Task RaidedAsync(string raider, string viewerCount, CancellationToken cancellationToken)
     {
-        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true)
+        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this._channelName))
         {
-            if (this._options.RaidWelcomeEnabled(this._channelName))
-            {
-                await this._raidWelcome.IssueRaidWelcomeAsync(channel: this._channelName, raider: raider, cancellationToken: cancellationToken);
-            }
+            await this._raidWelcome.IssueRaidWelcomeAsync(channel: this._channelName, raider: raider, cancellationToken: cancellationToken);
         }
     }
 
-    public bool ChatMessage(string user, string message, int bits)
+    public async Task ChatMessageAsync(string user, string message, int bits, CancellationToken cancellationToken)
     {
+        if (this._stream == null)
+        {
+            return;
+        }
+
         if (bits != 0)
         {
-            this._stream?.AddBitGifter(user: user, bits: bits);
+            this._stream.AddBitGifter(user: user, bits: bits);
+
+            if (this._options.IsModChannel(this._channelName))
+            {
+                await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
+            }
         }
 
-        // TODO: Implement
-        return this._stream?.AddChatter(user) == true;
+        // TODO: Implement detection for other streamers
+        if (this._stream.AddChatter(user) && this._options.IsModChannel(this._channelName))
+        {
+            // first time chatted in channel
+            await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: user, cancellationToken: cancellationToken);
+
+            // TODO: Add new chat welcome.
+        }
     }
 
-    public void GiftedMultiple(string giftedBy, int count, string months)
+    public Task GiftedMultipleAsync(string giftedBy, int count, string months, in CancellationToken cancellationToken)
     {
-        this._stream?.GiftedSub(giftedBy: giftedBy, count: count);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        this._stream.GiftedSub(giftedBy: giftedBy, count: count);
+
+        return this._contributionThanks.ThankForMultipleGiftSubsAsync(channelName: this._channelName, giftedBy: giftedBy, count: count, cancellationToken: cancellationToken);
     }
 
-    public void GiftedSub(string giftedBy, string months)
+    public Task GiftedSubAsync(string giftedBy, string months, in CancellationToken cancellationToken)
     {
-        this._stream?.GiftedSub(giftedBy: giftedBy, count: 1);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        this._stream.GiftedSub(giftedBy: giftedBy, count: 1);
+
+        return this._contributionThanks.ThankForGiftingSubAsync(channelName: this._channelName, giftedBy: giftedBy, cancellationToken: cancellationToken);
     }
 
-    public void ContinuedSub(string user)
+    public Task ContinuedSubAsync(string user, in CancellationToken cancellationToken)
     {
         this._stream?.ContinuedSub(user);
+
+        return Task.CompletedTask;
     }
 
-    public void PrimeToPaid(string user)
+    public Task PrimeToPaidAsync(string user, in CancellationToken cancellationToken)
     {
         this._stream?.PrimeToPaid(user);
+
+        return Task.CompletedTask;
     }
 
-    public void NewSubscriberPaid(string user)
+    public Task NewSubscriberPaidAsync(string user, in CancellationToken cancellationToken)
     {
-        this._stream?.NewSubscriberPaid(user);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        this._stream.NewSubscriberPaid(user);
+
+        return this._contributionThanks.ThankForPaidSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
-    public void NewSubscriberPrime(string user)
+    public Task NewSubscriberPrimeAsync(string user, in CancellationToken cancellationToken)
     {
-        this._stream?.NewSubscriberPrime(user);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        this._stream.NewSubscriberPrime(user);
+
+        return this._contributionThanks.ThankForPrimeSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
-    public void ResubscribePaid(string user, int months)
+    public Task ResubscribePaidAsync(string user, int months, in CancellationToken cancellationToken)
     {
-        this._stream?.ResubscribePaid(user);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        this._stream.ResubscribePaid(user);
+
+        return this._contributionThanks.ThankForPaidReSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
-    public void ResubscribePrime(string user, int months)
+    public Task ResubscribePrimeAsync(string user, int months, in CancellationToken cancellationToken)
     {
-        this._stream?.ResubscribePrime(user);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        this._stream.ResubscribePrime(user);
+
+        return this._contributionThanks.ThankForPrimeReSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 }
