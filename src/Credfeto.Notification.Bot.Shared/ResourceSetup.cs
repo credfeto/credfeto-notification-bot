@@ -1,5 +1,4 @@
-﻿using Credfeto.Notification.Bot.Twitch.Resources;
-using Credfeto.Notification.Bot.Twitch.Resources.Services;
+﻿using Credfeto.Notification.Bot.Shared.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Credfeto.Notification.Bot.Shared;

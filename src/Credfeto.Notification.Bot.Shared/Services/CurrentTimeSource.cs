@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Credfeto.Notification.Bot.Twitch.Resources.Services;
+namespace Credfeto.Notification.Bot.Shared.Services;
 
 public sealed class CurrentTimeSource : ICurrentTimeSource
 {

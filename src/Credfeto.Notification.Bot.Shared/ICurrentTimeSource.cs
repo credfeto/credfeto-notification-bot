@@ -1,6 +1,6 @@
 using System;
 
-namespace Credfeto.Notification.Bot.Twitch.Resources;
+namespace Credfeto.Notification.Bot.Shared;
 
 public interface ICurrentTimeSource
 {

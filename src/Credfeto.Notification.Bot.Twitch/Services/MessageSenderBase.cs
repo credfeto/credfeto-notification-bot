@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Models;
-using Credfeto.Notification.Bot.Twitch.Resources;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 

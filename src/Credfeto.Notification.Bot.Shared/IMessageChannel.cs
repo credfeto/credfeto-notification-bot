@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Credfeto.Notification.Bot.Twitch.Resources;
+namespace Credfeto.Notification.Bot.Shared;
 
 /// <summary>
 ///     A Message channel.
