@@ -36,6 +36,7 @@ public sealed class TwitchChat : ITwitchChat
                                 {
                                     this._options.Authentication.UserName
                                 }.Concat(this._options.Channels)
+                                 .Concat(this._options.Heists)
                                  .Select(c => c.ToLowerInvariant())
                                  .Distinct()
                                  .ToList();
@@ -142,12 +143,22 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnBeingHosted(OnBeingHostedArgs e)
     {
+        if (!this._options.Heists.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: e.BeingHostedNotification.Channel)))
+        {
+            return;
+        }
+
         this._logger.LogInformation(
             $"{e.BeingHostedNotification.Channel}: Being hosted by {e.BeingHostedNotification.HostedByChannel} Viewers: {e.BeingHostedNotification.Viewers}, AutoHost: {e.BeingHostedNotification.IsAutoHosted}");
     }
 
     private void Client_OnChatCleared(OnChatClearedArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.Channel}: Chat Cleared");
 
         ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
@@ -157,6 +168,11 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnCommunitySubscription(OnCommunitySubscriptionArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.Channel}: Community Sub: {e.GiftedSubscription.DisplayName}");
 
         if (e.GiftedSubscription.IsAnonymous)
@@ -171,6 +187,11 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnGiftedSubscription(OnGiftedSubscriptionArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.Channel}: Community Sub: {e.GiftedSubscription.DisplayName}");
 
         if (e.GiftedSubscription.IsAnonymous)
@@ -183,13 +204,28 @@ public sealed class TwitchChat : ITwitchChat
         state.GiftedSub(giftedBy: e.GiftedSubscription.DisplayName, months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration);
     }
 
+    private bool IsModChannel(string channel)
+    {
+        return this._options.Channels.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: channel));
+    }
+
     private void Client_OnChannelStateChanged(OnChannelStateChangedArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.Channel}: Emote Only: {e.ChannelState.EmoteOnly} Follower Only: {e.ChannelState.FollowersOnly} Sub Only: {e.ChannelState.SubOnly}");
     }
 
     private void Client_OnContinuedGiftedSubscription(OnContinuedGiftedSubscriptionArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.Channel}: {e.ContinuedGiftedSubscription.DisplayName} continued sub gifted by {e.ContinuedGiftedSubscription.MsgParamSenderLogin}");
 
         ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
@@ -199,6 +235,11 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnPrimePaidSubscriber(OnPrimePaidSubscriberArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.Channel}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid");
 
         ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
@@ -231,23 +272,33 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnRaided(OnRaidNotificationArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"Raided by {e.RaidNotification.DisplayName}");
 
         if (this._options.Raids.Contains(e.Channel))
         {
-            const string raidWelcome = @"
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
-GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
-
-            this._client.SendMessage(channel: e.Channel, message: raidWelcome);
-            this._client.SendMessage(channel: e.Channel, $"Thanks @{e.RaidNotification.DisplayName} for the raid");
-            this._client.SendMessage(channel: e.Channel, $"Check out https://www.twitch.tv/{e.RaidNotification.DisplayName}");
+            this.IssueRaidWelcome(channel: e.Channel, raider: e.RaidNotification.DisplayName);
         }
 
         ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.Raided(e.RaidNotification.DisplayName);
+    }
+
+    private void IssueRaidWelcome(string channel, string raider)
+    {
+        const string raidWelcome = @"
+♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
+GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
+♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
+
+        this._client.SendMessage(channel: channel, message: raidWelcome);
+        this._client.SendMessage(channel: channel, $"Thanks @{raider} for the raid");
+        this._client.SendMessage(channel: channel, $"Check out https://www.twitch.tv/{raider}");
     }
 
     private void Client_OnJoinedChannel(OnJoinedChannelArgs e)
@@ -259,21 +310,17 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
     {
         this._logger.LogInformation($"{e.ChatMessage.Channel}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
 
-        if (this._options.Heists.Contains(e.ChatMessage.Channel))
+        if (e.ChatMessage.IsBroadcaster || e.ChatMessage.IsModerator)
         {
-            //:streamlabs!streamlabs@streamlabs.tmi.twitch.tv PRIVMSG #emilyisfun :Ahoy! Captain reckless_fury is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.
-
-            if (StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
-                e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
-                e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal))
-            {
-                this._logger.LogInformation($"{e.ChatMessage.Channel}: Heist Starting!");
-
-                //this._client.SendMessage(channel: e.ChatMessage.Channel, message: "!heist all");
-            }
+            return;
         }
 
-        if (e.ChatMessage.IsBroadcaster || e.ChatMessage.IsModerator)
+        if (this._options.Heists.Contains(e.ChatMessage.Channel))
+        {
+            this.JoinHeist(e);
+        }
+
+        if (!this.IsModChannel(e.ChatMessage.Channel))
         {
             return;
         }
@@ -290,16 +337,18 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
             // first time chatted in channel
             this.IssueShoutOut(channel: e.ChatMessage.Channel, user: e.ChatMessage.Username);
         }
+    }
 
-        // if (e.ChatMessage.Username.ToLowerInvariant() is "credfeto" or "steveforward")
-        // {
-        //     this._client.SendReply(channel: e.ChatMessage.Channel, replyToId: e.ChatMessage.Username, $"Hello @{e.ChatMessage.Username} it's {this._currentTimeSource.UtcNow()}");
-        // }
+    private void JoinHeist(OnMessageReceivedArgs e)
+    {
+        //:streamlabs!streamlabs@streamlabs.tmi.twitch.tv PRIVMSG #emilyisfun :Ahoy! Captain reckless_fury is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.
+        if (StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") && e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
+            e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal))
+        {
+            this._logger.LogInformation($"{e.ChatMessage.Channel}: Heist Starting!");
 
-        // if (e.ChatMessage.Message.Contains("badword"))
-        // {
-        //     this._client.TimeoutUser(channel: e.ChatMessage.Channel, viewer: e.ChatMessage.Username, TimeSpan.FromMinutes(30), message: "Bad word! 30 minute timeout!");
-        // }
+            //this._client.SendMessage(channel: e.ChatMessage.Channel, message: "!heist all");
+        }
     }
 
     private void IssueShoutOut(string channel, string user)
@@ -331,6 +380,11 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 
     private void Client_OnNewSubscriber(OnNewSubscriberArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.Channel}: New Subscriber {e.Subscriber.DisplayName}");
 
         ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
@@ -343,19 +397,15 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
         {
             state.NewSubscriberPrime(e.Subscriber.DisplayName);
         }
-
-        // if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
-        // {
-        //     this._client.SendMessage(channel: e.Channel, $"Welcome {e.Subscriber.DisplayName} to the substers! You just earned 500 points! So kind of you to use your Twitch Prime on this channel!");
-        // }
-        // else
-        // {
-        //     this._client.SendMessage(channel: e.Channel, $"Welcome {e.Subscriber.DisplayName} to the substers! You just earned 500 points!");
-        // }
     }
 
     private void Client_OnReSubscriber(OnReSubscriberArgs e)
     {
+        if (!this.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.Channel}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
 
         ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
