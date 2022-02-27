@@ -28,6 +28,7 @@ public sealed class TwitchChat : ITwitchChat
 
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
+    private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ITwitchChannelManager _twitchChannelManager;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
     private bool _connected;
@@ -37,12 +38,14 @@ public sealed class TwitchChat : ITwitchChat
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IRaidWelcome raidWelcome,
                       IHeistJoiner heistJoiner,
+                      IShoutoutJoiner shoutoutJoiner,
                       ILogger<TwitchChat> logger)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
+        this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -354,7 +357,7 @@ public sealed class TwitchChat : ITwitchChat
         if (state.ChatMessage(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits))
         {
             // first time chatted in channel
-            await this.IssueShoutOutAsync(channel: e.ChatMessage.Channel, user: e.ChatMessage.Username, cancellationToken: cancellationToken);
+            await this._shoutoutJoiner.IssueShoutoutAsync(channel: e.ChatMessage.Channel, visitingStreamer: e.ChatMessage.Username, cancellationToken: cancellationToken);
         }
     }
 
@@ -366,35 +369,6 @@ public sealed class TwitchChat : ITwitchChat
         {
             this._logger.LogInformation($"{e.ChatMessage.Channel}: Heist Starting!");
             await this._heistJoiner.JoinHeistAsync(channel: e.ChatMessage.Channel, cancellationToken: cancellationToken);
-        }
-    }
-
-    private async Task IssueShoutOutAsync(string channel, string user, CancellationToken cancellationToken)
-    {
-        this._logger.LogInformation($"{channel}: Checking if need to shoutout {user}");
-        TwitchChannelShoutout? soChannel = this._options.Shoutouts.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: channel));
-
-        if (soChannel == null)
-        {
-            return;
-        }
-
-        TwitchFriendChannel? streamer = soChannel.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: user));
-
-        if (streamer == null)
-        {
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(streamer.Message))
-        {
-            TwitchChatMessage message = new(channel: channel, $"Check out https://www.twitch.tv/{user}");
-            await this._twitchChatMessageChannel.PublishAsync(message: message, cancellationToken: cancellationToken);
-        }
-        else
-        {
-            TwitchChatMessage message = new(channel: channel, message: streamer.Message);
-            await this._twitchChatMessageChannel.PublishAsync(message: message, cancellationToken: cancellationToken);
         }
     }
 

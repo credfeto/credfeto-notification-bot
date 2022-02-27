@@ -34,7 +34,8 @@ public static class TwitchSetup
                        .AddSingleton<ITwitchChat, TwitchChat>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
                        .AddSingleton<IRaidWelcome, RaidWelcome>()
-                       .AddSingleton<IHeistJoiner, HeistJoiner>();
+                       .AddSingleton<IHeistJoiner, HeistJoiner>()
+                       .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)

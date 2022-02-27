@@ -7,8 +7,3 @@ public interface IRaidWelcome
 {
     Task IssueRaidWelcomeAsync(string channel, string raider, CancellationToken cancellationToken);
 }
-
-public interface IHeistJoiner
-{
-    Task JoinHeistAsync(string channel, CancellationToken cancellationToken);
-}
