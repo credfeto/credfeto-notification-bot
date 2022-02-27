@@ -35,6 +35,8 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
         if (streamer == null)
         {
+            // TODO: Check to see if the user has streamed recently using API
+            // TODO: Can mod comments be read?
             return;
         }
 
