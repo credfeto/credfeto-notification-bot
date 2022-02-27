@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Credfeto.Notification.Bot.Server.Helpers;
+using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Microsoft.Extensions.Configuration;
@@ -16,8 +17,6 @@ internal static class Services
 {
     public static void Configure(HostBuilderContext hostContext, IServiceCollection services)
     {
-        services.AddOptions();
-
         hostContext.HostingEnvironment.ContentRootFileProvider = new NullFileProvider();
 
         Log.Logger = new LoggerConfiguration().Enrich.FromLogContext()
@@ -26,8 +25,10 @@ internal static class Services
 
         IConfigurationRoot configurationRoot = LoadConfigFile();
 
-        services.Configure<TwitchBotOptions>(configurationRoot.GetSection("Twitch"));
-        TwitchSetup.Configure(services);
+        services.AddOptions()
+                .ConfigureResources()
+                .Configure<TwitchBotOptions>(configurationRoot.GetSection("Twitch"))
+                .ConfigureTwitch();
     }
 
     private static IConfigurationRoot LoadConfigFile()
