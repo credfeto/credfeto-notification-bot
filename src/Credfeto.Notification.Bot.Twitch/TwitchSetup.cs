@@ -40,6 +40,7 @@ public static class TwitchSetup
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
     {
-        return services.AddHostedService<UpdateLiveStatusWorker>();
+        return services.AddHostedService<UpdateTwitchLiveStatusWorker>()
+                       .AddHostedService<RestoreTwitchChatConnectionWorker>();
     }
 }

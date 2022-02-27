@@ -9,20 +9,22 @@ namespace Credfeto.Notification.Bot.Twitch.BackgroundServices;
 /// <summary>
 ///     Background service.
 /// </summary>
-public sealed class UpdateLiveStatusWorker : BackgroundService
+public sealed class UpdateTwitchLiveStatusWorker : BackgroundService
 {
-    private readonly ILogger<UpdateLiveStatusWorker> _logger;
-    private readonly ITwitchChat _twitchChat;
+    private static readonly TimeSpan Interval = TimeSpan.FromSeconds(30);
+
+    private readonly ILogger<UpdateTwitchLiveStatusWorker> _logger;
+    private readonly ITwitchStreamStatus _twitchStreamStatus;
 
     /// <summary>
     ///     Constructor
     /// </summary>
-    /// <param name="twitchChat">Twitch Chat</param>
+    /// <param name="twitchStreamStatus">Twitch Live status checks</param>
     /// <param name="logger">Logging.</param>
     /// <returns>Logging</returns>
-    public UpdateLiveStatusWorker(ITwitchChat twitchChat, ILogger<UpdateLiveStatusWorker> logger)
+    public UpdateTwitchLiveStatusWorker(ITwitchStreamStatus twitchStreamStatus, ILogger<UpdateTwitchLiveStatusWorker> logger)
     {
-        this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
+        this._twitchStreamStatus = twitchStreamStatus ?? throw new ArgumentNullException(nameof(twitchStreamStatus));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -32,7 +34,7 @@ public sealed class UpdateLiveStatusWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             await this.UpdateStatusAsync();
-            await Task.Delay(TimeSpan.FromSeconds(value: 30), cancellationToken: stoppingToken);
+            await Task.Delay(delay: Interval, cancellationToken: stoppingToken);
         }
     }
 
@@ -40,7 +42,7 @@ public sealed class UpdateLiveStatusWorker : BackgroundService
     {
         try
         {
-            await this._twitchChat.UpdateAsync();
+            await this._twitchStreamStatus.UpdateAsync();
         }
         catch (Exception e)
         {
