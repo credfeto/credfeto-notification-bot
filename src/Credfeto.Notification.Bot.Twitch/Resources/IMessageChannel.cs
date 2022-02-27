@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,4 +23,6 @@ public interface IMessageChannel<T>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The message.</returns>
     ValueTask<T> ReceiveAsync(CancellationToken cancellationToken);
+
+    IAsyncEnumerable<T> ReadAllAsync(in CancellationToken cancellationToken);
 }

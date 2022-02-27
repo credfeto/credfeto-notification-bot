@@ -137,6 +137,10 @@ public sealed class TwitchChat : ITwitchChat
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnPrimePaidSubscriber);
 
+        this._twitchChatMessageChannel.ReadAllAsync(CancellationToken.None)
+            .ToObservable()
+            .Subscribe(this.PublishChatMessage);
+
         this._client.Connect();
         this._connected = true;
     }
@@ -153,6 +157,18 @@ public sealed class TwitchChat : ITwitchChat
         return Task.CompletedTask;
 
         //return Task.CompletedTask;
+    }
+
+    private void PublishChatMessage(TwitchChatMessage twitchChatMessage)
+    {
+        try
+        {
+            this._client.SendMessage(channel: twitchChatMessage.Channel, message: twitchChatMessage.Message);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{twitchChatMessage.Channel}: Failed to publish message : {exception.Message}");
+        }
     }
 
     private void Client_OnBeingHosted(OnBeingHostedArgs e)

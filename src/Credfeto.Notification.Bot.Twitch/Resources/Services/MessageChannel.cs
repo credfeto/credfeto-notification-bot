@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -30,5 +31,10 @@ public sealed class MessageChannel<T> : IMessageChannel<T>
     public ValueTask<T> ReceiveAsync(CancellationToken cancellationToken)
     {
         return this._channel.Reader.ReadAsync(cancellationToken);
+    }
+
+    public IAsyncEnumerable<T> ReadAllAsync(in CancellationToken cancellationToken)
+    {
+        return this._channel.Reader.ReadAllAsync(cancellationToken);
     }
 }
