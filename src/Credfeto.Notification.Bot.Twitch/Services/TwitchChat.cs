@@ -332,7 +332,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.ChatMessage.Channel}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
 
-        if (e.ChatMessage.IsBroadcaster || e.ChatMessage.IsModerator)
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: e.ChatMessage.Username, y: this._options.Authentication.UserName))
         {
             return;
         }
@@ -343,11 +343,6 @@ public sealed class TwitchChat : ITwitchChat
         }
 
         if (!this.IsModChannel(e.ChatMessage.Channel))
-        {
-            return;
-        }
-
-        if (!string.IsNullOrWhiteSpace(e.ChatMessage.BotUsername))
         {
             return;
         }

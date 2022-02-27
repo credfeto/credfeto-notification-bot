@@ -60,7 +60,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
 
     private void Client_OnStreamOnline(OnStreamOnlineArgs e)
     {
-        this._logger.LogWarning($"{e.Channel}: Started streaming \"{e.Stream.Title} ({e.Stream.GameName}) at {e.Stream.StartedAt}");
+        this._logger.LogWarning($"{e.Channel}: Started streaming \"{e.Stream.Title}\" ({e.Stream.GameName}) at {e.Stream.StartedAt}");
 
         ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
