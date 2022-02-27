@@ -118,6 +118,10 @@
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Server project"
 
+ - name: "Shared"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Shared project"
+
  - name: "Twitch"
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Twitch project"
