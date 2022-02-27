@@ -33,7 +33,8 @@ public static class TwitchSetup
         return services.AddSingleton<ITwitchChannelManager, TwitchChannelManager>()
                        .AddSingleton<ITwitchChat, TwitchChat>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
-                       .AddSingleton<IRaidWelcome, RaidWelcome>();
+                       .AddSingleton<IRaidWelcome, RaidWelcome>()
+                       .AddSingleton<IHeistJoiner, HeistJoiner>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)

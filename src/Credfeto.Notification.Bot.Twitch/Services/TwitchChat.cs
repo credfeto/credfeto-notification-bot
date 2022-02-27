@@ -23,6 +23,7 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 public sealed class TwitchChat : ITwitchChat
 {
     private readonly TwitchClient _client;
+    private readonly IHeistJoiner _heistJoiner;
     private readonly ILogger<TwitchChat> _logger;
 
     private readonly TwitchBotOptions _options;
@@ -35,11 +36,13 @@ public sealed class TwitchChat : ITwitchChat
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IRaidWelcome raidWelcome,
+                      IHeistJoiner heistJoiner,
                       ILogger<TwitchChat> logger)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
+        this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -93,7 +96,9 @@ public sealed class TwitchChat : ITwitchChat
         // CHAT
         Observable.FromEventPattern<OnMessageReceivedArgs>(addHandler: h => this._client.OnMessageReceived += h, removeHandler: h => this._client.OnMessageReceived -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnMessageReceived);
+                  .Select(e => Observable.FromAsync(cancellationToken => this.OnMessageReceivedAsync(e: e, cancellationToken: cancellationToken)))
+                  .Concat()
+                  .Subscribe();
 
         Observable.FromEventPattern<OnChatClearedArgs>(addHandler: h => this._client.OnChatCleared += h, removeHandler: h => this._client.OnChatCleared -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
@@ -319,7 +324,7 @@ public sealed class TwitchChat : ITwitchChat
         this._logger.LogInformation($"{e.Channel} Joining channel as {e.BotUsername}");
     }
 
-    private void Client_OnMessageReceived(OnMessageReceivedArgs e)
+    private async Task OnMessageReceivedAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{e.ChatMessage.Channel}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
 
@@ -330,7 +335,7 @@ public sealed class TwitchChat : ITwitchChat
 
         if (this._options.Heists.Contains(e.ChatMessage.Channel))
         {
-            this.JoinHeist(e);
+            await this.JoinHeistAsync(e: e, cancellationToken: cancellationToken);
         }
 
         if (!this.IsModChannel(e.ChatMessage.Channel))
@@ -348,23 +353,22 @@ public sealed class TwitchChat : ITwitchChat
         if (state.ChatMessage(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits))
         {
             // first time chatted in channel
-            this.IssueShoutOut(channel: e.ChatMessage.Channel, user: e.ChatMessage.Username);
+            await this.IssueShoutOutAsync(channel: e.ChatMessage.Channel, user: e.ChatMessage.Username, cancellationToken: cancellationToken);
         }
     }
 
-    private void JoinHeist(OnMessageReceivedArgs e)
+    private async Task JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
     {
         //:streamlabs!streamlabs@streamlabs.tmi.twitch.tv PRIVMSG #emilyisfun :Ahoy! Captain reckless_fury is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.
         if (StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") && e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
             e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal))
         {
             this._logger.LogInformation($"{e.ChatMessage.Channel}: Heist Starting!");
-
-            //this._client.SendMessage(channel: e.ChatMessage.Channel, message: "!heist all");
+            await this._heistJoiner.JoinHeistAsync(channel: e.ChatMessage.Channel, cancellationToken: cancellationToken);
         }
     }
 
-    private void IssueShoutOut(string channel, string user)
+    private async Task IssueShoutOutAsync(string channel, string user, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{channel}: Checking if need to shoutout {user}");
         TwitchChannelShoutout? soChannel = this._options.Shoutouts.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: channel));
@@ -383,11 +387,13 @@ public sealed class TwitchChat : ITwitchChat
 
         if (string.IsNullOrWhiteSpace(streamer.Message))
         {
-            this._client.SendMessage(channel: streamer.Channel, $"Check out https://www.twitch.tv/{user}");
+            TwitchChatMessage message = new(channel: channel, $"Check out https://www.twitch.tv/{user}");
+            await this._twitchChatMessageChannel.PublishAsync(message: message, cancellationToken: cancellationToken);
         }
         else
         {
-            this._client.SendMessage(channel: streamer.Channel, message: streamer.Message);
+            TwitchChatMessage message = new(channel: channel, message: streamer.Message);
+            await this._twitchChatMessageChannel.PublishAsync(message: message, cancellationToken: cancellationToken);
         }
     }
 
