@@ -10,16 +10,22 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChannelManager : ITwitchChannelManager
 {
+    private readonly IContributionThanks _contributionThanks;
     private readonly ILogger<TwitchChannelManager> _logger;
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ConcurrentDictionary<string, TwitchChannelState> _streamStates;
 
-    public TwitchChannelManager(IOptions<TwitchBotOptions> options, IRaidWelcome raidWelcome, IShoutoutJoiner shoutoutJoiner, ILogger<TwitchChannelManager> logger)
+    public TwitchChannelManager(IOptions<TwitchBotOptions> options,
+                                IRaidWelcome raidWelcome,
+                                IShoutoutJoiner shoutoutJoiner,
+                                IContributionThanks contributionThanks,
+                                ILogger<TwitchChannelManager> logger)
     {
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
+        this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._streamStates = new(comparer: StringComparer.OrdinalIgnoreCase);
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -38,6 +44,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                                                   options: this._options,
                                                                   raidWelcome: this._raidWelcome,
                                                                   shoutoutJoiner: this._shoutoutJoiner,
+                                                                  contributionThanks: this._contributionThanks,
                                                                   logger: this._logger));
     }
 }

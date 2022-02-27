@@ -12,6 +12,7 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 public sealed class TwitchChannelState
 {
     private readonly string _channelName;
+    private readonly IContributionThanks _contributionThanks;
     private readonly ILogger _logger;
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
@@ -22,12 +23,14 @@ public sealed class TwitchChannelState
                               TwitchBotOptions options,
                               IRaidWelcome raidWelcome,
                               IShoutoutJoiner shoutoutJoiner,
+                              IContributionThanks contributionThanks,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._channelName = channelName;
         this._options = options ?? throw new ArgumentNullException(nameof(options));
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
+        this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -59,16 +62,28 @@ public sealed class TwitchChannelState
 
     public async Task ChatMessageAsync(string user, string message, int bits, CancellationToken cancellationToken)
     {
+        if (this._stream == null)
+        {
+            return;
+        }
+
         if (bits != 0)
         {
-            this._stream?.AddBitGifter(user: user, bits: bits);
+            this._stream.AddBitGifter(user: user, bits: bits);
+
+            if (this._options.IsModChannel(this._channelName))
+            {
+                await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
+            }
         }
 
         // TODO: Implement detection for other streamers
-        if (this._stream?.AddChatter(user) == true && this._options.IsModChannel(this._channelName))
+        if (this._stream.AddChatter(user) && this._options.IsModChannel(this._channelName))
         {
             // first time chatted in channel
             await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: user, cancellationToken: cancellationToken);
+
+            // TODO: Add new chat welcome.
         }
     }
 
@@ -92,14 +107,34 @@ public sealed class TwitchChannelState
         this._stream?.PrimeToPaid(user);
     }
 
-    public void NewSubscriberPaid(string user)
+    public async Task NewSubscriberPaidAsync(string user, CancellationToken cancellationToken)
     {
-        this._stream?.NewSubscriberPaid(user);
+        if (this._stream == null)
+        {
+            return;
+        }
+
+        this._stream.NewSubscriberPaid(user);
+
+        if (this._options.IsModChannel(this._channelName))
+        {
+            await this._contributionThanks.ThankForPaidSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
+        }
     }
 
-    public void NewSubscriberPrime(string user)
+    public async Task NewSubscriberPrimeAsync(string user, CancellationToken cancellationToken)
     {
-        this._stream?.NewSubscriberPrime(user);
+        if (this._stream == null)
+        {
+            return;
+        }
+
+        this._stream.NewSubscriberPrime(user);
+
+        if (this._options.IsModChannel(this._channelName))
+        {
+            await this._contributionThanks.ThankForPrimeSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
+        }
     }
 
     public void ResubscribePaid(string user, int months)
