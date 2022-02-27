@@ -27,7 +27,6 @@ public sealed class TwitchChat : ITwitchChat
     private readonly ILogger<TwitchChat> _logger;
 
     private readonly TwitchBotOptions _options;
-    private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ITwitchChannelManager _twitchChannelManager;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
     private bool _connected;
@@ -36,13 +35,11 @@ public sealed class TwitchChat : ITwitchChat
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IHeistJoiner heistJoiner,
-                      IShoutoutJoiner shoutoutJoiner,
                       ILogger<TwitchChat> logger)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
-        this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
