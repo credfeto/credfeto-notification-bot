@@ -50,24 +50,25 @@ public sealed class TwitchChannelState
 
     public async Task RaidedAsync(string raider, string viewerCount, CancellationToken cancellationToken)
     {
-        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true)
+        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this._channelName))
         {
-            if (this._options.RaidWelcomeEnabled(this._channelName))
-            {
-                await this._raidWelcome.IssueRaidWelcomeAsync(channel: this._channelName, raider: raider, cancellationToken: cancellationToken);
-            }
+            await this._raidWelcome.IssueRaidWelcomeAsync(channel: this._channelName, raider: raider, cancellationToken: cancellationToken);
         }
     }
 
-    public bool ChatMessage(string user, string message, int bits)
+    public async Task ChatMessageAsync(string user, string message, int bits, CancellationToken cancellationToken)
     {
         if (bits != 0)
         {
             this._stream?.AddBitGifter(user: user, bits: bits);
         }
 
-        // TODO: Implement
-        return this._stream?.AddChatter(user) == true;
+        // TODO: Implement detection for other streamers
+        if (this._stream?.AddChatter(user) == true && this._options.IsModChannel(this._channelName))
+        {
+            // first time chatted in channel
+            await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: user, cancellationToken: cancellationToken);
+        }
     }
 
     public void GiftedMultiple(string giftedBy, int count, string months)

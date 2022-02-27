@@ -329,18 +329,9 @@ public sealed class TwitchChat : ITwitchChat
             await this.JoinHeistAsync(e: e, cancellationToken: cancellationToken);
         }
 
-        if (!this._options.IsModChannel(e.ChatMessage.Channel))
-        {
-            return;
-        }
-
         TwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
 
-        if (state.ChatMessage(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits))
-        {
-            // first time chatted in channel
-            await this._shoutoutJoiner.IssueShoutoutAsync(channel: e.ChatMessage.Channel, visitingStreamer: e.ChatMessage.Username, cancellationToken: cancellationToken);
-        }
+        await state.ChatMessageAsync(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
     }
 
     private async Task JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
