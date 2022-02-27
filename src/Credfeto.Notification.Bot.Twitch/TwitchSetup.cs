@@ -24,14 +24,16 @@ public static class TwitchSetup
 
     private static IServiceCollection AddResources(this IServiceCollection services)
     {
-        return services.AddSingleton<ICurrentTimeSource, CurrentTimeSource>();
+        return services.AddSingleton<ICurrentTimeSource, CurrentTimeSource>()
+                       .AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>));
     }
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         return services.AddSingleton<ITwitchChannelManager, TwitchChannelManager>()
                        .AddSingleton<ITwitchChat, TwitchChat>()
-                       .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>();
+                       .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
+                       .AddSingleton<IRaidWelcome, RaidWelcome>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)

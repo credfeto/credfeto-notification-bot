@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Resources;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TwitchLib.Client;
@@ -23,12 +26,20 @@ public sealed class TwitchChat : ITwitchChat
     private readonly ILogger<TwitchChat> _logger;
 
     private readonly TwitchBotOptions _options;
+    private readonly IRaidWelcome _raidWelcome;
     private readonly ITwitchChannelManager _twitchChannelManager;
+    private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
     private bool _connected;
 
-    public TwitchChat(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, ILogger<TwitchChat> logger)
+    public TwitchChat(IOptions<TwitchBotOptions> options,
+                      ITwitchChannelManager twitchChannelManager,
+                      IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                      IRaidWelcome raidWelcome,
+                      ILogger<TwitchChat> logger)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
+        this._twitchChatMessageChannel = twitchChatMessageChannel;
+        this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -91,7 +102,10 @@ public sealed class TwitchChat : ITwitchChat
         // RAID HOST
         Observable.FromEventPattern<OnRaidNotificationArgs>(addHandler: h => this._client.OnRaidNotification += h, removeHandler: h => this._client.OnRaidNotification -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnRaided);
+                  .Where(e => this.IsModChannel(e.Channel))
+                  .Select(e => Observable.FromAsync(cancellationToken => this.OnRaidAsync(e: e, cancellationToken: cancellationToken)))
+                  .Concat()
+                  .Subscribe();
 
         Observable.FromEventPattern<OnBeingHostedArgs>(addHandler: h => this._client.OnBeingHosted += h, removeHandler: h => this._client.OnBeingHosted -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
@@ -270,35 +284,18 @@ public sealed class TwitchChat : ITwitchChat
         this._connected = true;
     }
 
-    private void Client_OnRaided(OnRaidNotificationArgs e)
+    private async Task OnRaidAsync(OnRaidNotificationArgs e, CancellationToken cancellationToken)
     {
-        if (!this.IsModChannel(e.Channel))
-        {
-            return;
-        }
-
         this._logger.LogInformation($"Raided by {e.RaidNotification.DisplayName}");
 
         if (this._options.Raids.Contains(e.Channel))
         {
-            this.IssueRaidWelcome(channel: e.Channel, raider: e.RaidNotification.DisplayName);
+            await this._raidWelcome.IssueRaidWelcomeAsync(channel: e.Channel, raider: e.RaidNotification.DisplayName, cancellationToken: cancellationToken);
         }
 
         ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.Raided(e.RaidNotification.DisplayName);
-    }
-
-    private void IssueRaidWelcome(string channel, string raider)
-    {
-        const string raidWelcome = @"
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
-GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
-
-        this._client.SendMessage(channel: channel, message: raidWelcome);
-        this._client.SendMessage(channel: channel, $"Thanks @{raider} for the raid");
-        this._client.SendMessage(channel: channel, $"Check out https://www.twitch.tv/{raider}");
     }
 
     private void Client_OnJoinedChannel(OnJoinedChannelArgs e)
