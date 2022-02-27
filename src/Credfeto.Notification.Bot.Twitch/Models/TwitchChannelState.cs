@@ -87,24 +87,32 @@ public sealed class TwitchChannelState
         }
     }
 
-    public void GiftedMultiple(string giftedBy, int count, string months)
+    public Task GiftedMultipleAsync(string giftedBy, int count, string months, in CancellationToken cancellationToken)
     {
         this._stream?.GiftedSub(giftedBy: giftedBy, count: count);
+
+        return Task.CompletedTask;
     }
 
-    public void GiftedSub(string giftedBy, string months)
+    public Task GiftedSubAsync(string giftedBy, string months, in CancellationToken cancellationToken)
     {
         this._stream?.GiftedSub(giftedBy: giftedBy, count: 1);
+
+        return Task.CompletedTask;
     }
 
-    public void ContinuedSub(string user)
+    public Task ContinuedSubAsync(string user, in CancellationToken cancellationToken)
     {
         this._stream?.ContinuedSub(user);
+
+        return Task.CompletedTask;
     }
 
-    public void PrimeToPaid(string user)
+    public Task PrimeToPaidAsync(string user, in CancellationToken cancellationToken)
     {
         this._stream?.PrimeToPaid(user);
+
+        return Task.CompletedTask;
     }
 
     public async Task NewSubscriberPaidAsync(string user, CancellationToken cancellationToken)
@@ -137,13 +145,17 @@ public sealed class TwitchChannelState
         }
     }
 
-    public void ResubscribePaid(string user, int months)
+    public Task ResubscribePaidAsync(string user, int months, in CancellationToken cancellationToken)
     {
         this._stream?.ResubscribePaid(user);
+
+        return Task.CompletedTask;
     }
 
-    public void ResubscribePrime(string user, int months)
+    public Task ResubscribePrimeAsync(string user, int months, in CancellationToken cancellationToken)
     {
         this._stream?.ResubscribePrime(user);
+
+        return Task.CompletedTask;
     }
 }
