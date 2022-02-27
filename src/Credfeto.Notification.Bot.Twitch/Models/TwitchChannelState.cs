@@ -89,16 +89,26 @@ public sealed class TwitchChannelState
 
     public Task GiftedMultipleAsync(string giftedBy, int count, string months, in CancellationToken cancellationToken)
     {
-        this._stream?.GiftedSub(giftedBy: giftedBy, count: count);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
 
-        return Task.CompletedTask;
+        this._stream.GiftedSub(giftedBy: giftedBy, count: count);
+
+        return this._contributionThanks.ThankForMultipleGiftSubsAsync(channelName: this._channelName, giftedBy: giftedBy, count: count, cancellationToken: cancellationToken);
     }
 
     public Task GiftedSubAsync(string giftedBy, string months, in CancellationToken cancellationToken)
     {
-        this._stream?.GiftedSub(giftedBy: giftedBy, count: 1);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
 
-        return Task.CompletedTask;
+        this._stream.GiftedSub(giftedBy: giftedBy, count: 1);
+
+        return this._contributionThanks.ThankForGiftingSubAsync(channelName: this._channelName, giftedBy: giftedBy, cancellationToken: cancellationToken);
     }
 
     public Task ContinuedSubAsync(string user, in CancellationToken cancellationToken)
@@ -115,47 +125,51 @@ public sealed class TwitchChannelState
         return Task.CompletedTask;
     }
 
-    public async Task NewSubscriberPaidAsync(string user, CancellationToken cancellationToken)
+    public Task NewSubscriberPaidAsync(string user, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            return;
+            return Task.CompletedTask;
         }
 
         this._stream.NewSubscriberPaid(user);
 
-        if (this._options.IsModChannel(this._channelName))
-        {
-            await this._contributionThanks.ThankForPaidSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
-        }
+        return this._contributionThanks.ThankForPaidSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
-    public async Task NewSubscriberPrimeAsync(string user, CancellationToken cancellationToken)
+    public Task NewSubscriberPrimeAsync(string user, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            return;
+            return Task.CompletedTask;
         }
 
         this._stream.NewSubscriberPrime(user);
 
-        if (this._options.IsModChannel(this._channelName))
-        {
-            await this._contributionThanks.ThankForPrimeSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
-        }
+        return this._contributionThanks.ThankForPrimeSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
     public Task ResubscribePaidAsync(string user, int months, in CancellationToken cancellationToken)
     {
-        this._stream?.ResubscribePaid(user);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
 
-        return Task.CompletedTask;
+        this._stream.ResubscribePaid(user);
+
+        return this._contributionThanks.ThankForPaidReSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
     public Task ResubscribePrimeAsync(string user, int months, in CancellationToken cancellationToken)
     {
-        this._stream?.ResubscribePrime(user);
+        if (this._stream == null)
+        {
+            return Task.CompletedTask;
+        }
 
-        return Task.CompletedTask;
+        this._stream.ResubscribePrime(user);
+
+        return this._contributionThanks.ThankForPrimeReSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 }
