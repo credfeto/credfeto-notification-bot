@@ -18,18 +18,23 @@ public static class TwitchSetup
     public static IServiceCollection ConfigureTwitch(this IServiceCollection services)
     {
         return services.AddServices()
+                       .AddActions()
                        .AddBackgroundServices();
+    }
+
+    private static IServiceCollection AddActions(this IServiceCollection services)
+    {
+        return services.AddSingleton<IRaidWelcome, RaidWelcome>()
+                       .AddSingleton<IHeistJoiner, HeistJoiner>()
+                       .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
+                       .AddSingleton<IContributionThanks, ContributionThanks>();
     }
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         return services.AddSingleton<ITwitchChannelManager, TwitchChannelManager>()
                        .AddSingleton<ITwitchChat, TwitchChat>()
-                       .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
-                       .AddSingleton<IRaidWelcome, RaidWelcome>()
-                       .AddSingleton<IHeistJoiner, HeistJoiner>()
-                       .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
-                       .AddSingleton<IContributionThanks, ContributionThanks>();
+                       .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
