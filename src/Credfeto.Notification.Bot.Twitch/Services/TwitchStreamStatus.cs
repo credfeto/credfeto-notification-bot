@@ -62,7 +62,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
     {
         this._logger.LogWarning($"{e.Channel}: Started streaming \"{e.Stream.Title}\" ({e.Stream.GameName}) at {e.Stream.StartedAt}");
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.Online(gameName: e.Stream.GameName, startDate: e.Stream.StartedAt);
     }
@@ -71,7 +71,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
     {
         this._logger.LogWarning($"{e.Channel}: Stopped streaming {e.Stream.Title} ({e.Stream.GameName}");
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.Offline();
     }

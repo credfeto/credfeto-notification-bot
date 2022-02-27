@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,7 +17,6 @@ using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Events;
 using TwitchLib.Communication.Models;
-using ChannelState = Credfeto.Notification.Bot.Twitch.Models.ChannelState;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
@@ -27,7 +27,6 @@ public sealed class TwitchChat : ITwitchChat
     private readonly ILogger<TwitchChat> _logger;
 
     private readonly TwitchBotOptions _options;
-    private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ITwitchChannelManager _twitchChannelManager;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
@@ -36,14 +35,12 @@ public sealed class TwitchChat : ITwitchChat
     public TwitchChat(IOptions<TwitchBotOptions> options,
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
-                      IRaidWelcome raidWelcome,
                       IHeistJoiner heistJoiner,
                       IShoutoutJoiner shoutoutJoiner,
                       ILogger<TwitchChat> logger)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
-        this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -110,7 +107,7 @@ public sealed class TwitchChat : ITwitchChat
         // RAID HOST
         Observable.FromEventPattern<OnRaidNotificationArgs>(addHandler: h => this._client.OnRaidNotification += h, removeHandler: h => this._client.OnRaidNotification -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this.IsModChannel(e.Channel))
+                  .Where(e => this._options.IsModChannel(e.Channel))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnRaidAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
@@ -193,21 +190,21 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnChatCleared(OnChatClearedArgs e)
     {
-        if (!this.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
         {
             return;
         }
 
         this._logger.LogInformation($"{e.Channel}: Chat Cleared");
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.ClearChat();
     }
 
     private void Client_OnCommunitySubscription(OnCommunitySubscriptionArgs e)
     {
-        if (!this.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
         {
             return;
         }
@@ -219,14 +216,14 @@ public sealed class TwitchChat : ITwitchChat
             return;
         }
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.GiftedMultiple(giftedBy: e.GiftedSubscription.DisplayName, count: e.GiftedSubscription.MsgParamMassGiftCount, months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration);
     }
 
     private void Client_OnGiftedSubscription(OnGiftedSubscriptionArgs e)
     {
-        if (!this.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
         {
             return;
         }
@@ -238,19 +235,14 @@ public sealed class TwitchChat : ITwitchChat
             return;
         }
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.GiftedSub(giftedBy: e.GiftedSubscription.DisplayName, months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration);
     }
 
-    private bool IsModChannel(string channel)
-    {
-        return this._options.Channels.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: channel));
-    }
-
     private void Client_OnChannelStateChanged(OnChannelStateChangedArgs e)
     {
-        if (!this.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
         {
             return;
         }
@@ -260,28 +252,28 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnContinuedGiftedSubscription(OnContinuedGiftedSubscriptionArgs e)
     {
-        if (!this.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
         {
             return;
         }
 
         this._logger.LogInformation($"{e.Channel}: {e.ContinuedGiftedSubscription.DisplayName} continued sub gifted by {e.ContinuedGiftedSubscription.MsgParamSenderLogin}");
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.ContinuedSub(e.ContinuedGiftedSubscription.DisplayName);
     }
 
     private void Client_OnPrimePaidSubscriber(OnPrimePaidSubscriberArgs e)
     {
-        if (!this.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
         {
             return;
         }
 
         this._logger.LogInformation($"{e.Channel}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid");
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.PrimeToPaid(e.PrimePaidSubscriber.DisplayName);
     }
@@ -309,18 +301,13 @@ public sealed class TwitchChat : ITwitchChat
         this._connected = true;
     }
 
-    private async Task OnRaidAsync(OnRaidNotificationArgs e, CancellationToken cancellationToken)
+    private Task OnRaidAsync(OnRaidNotificationArgs e, in CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"Raided by {e.RaidNotification.DisplayName}");
+        this._logger.LogInformation($"{e.Channel}: Raided by {e.RaidNotification.DisplayName}");
 
-        if (this._options.Raids.Contains(e.Channel))
-        {
-            await this._raidWelcome.IssueRaidWelcomeAsync(channel: e.Channel, raider: e.RaidNotification.DisplayName, cancellationToken: cancellationToken);
-        }
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
-
-        state.Raided(e.RaidNotification.DisplayName);
+        return state.RaidedAsync(raider: e.RaidNotification.DisplayName, viewerCount: e.RaidNotification.MsgParamViewerCount, cancellationToken: cancellationToken);
     }
 
     private void Client_OnJoinedChannel(OnJoinedChannelArgs e)
@@ -342,12 +329,12 @@ public sealed class TwitchChat : ITwitchChat
             await this.JoinHeistAsync(e: e, cancellationToken: cancellationToken);
         }
 
-        if (!this.IsModChannel(e.ChatMessage.Channel))
+        if (!this._options.IsModChannel(e.ChatMessage.Channel))
         {
             return;
         }
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
 
         if (state.ChatMessage(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits))
         {
@@ -369,14 +356,14 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnNewSubscriber(OnNewSubscriberArgs e)
     {
-        if (!this.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
         {
             return;
         }
 
         this._logger.LogInformation($"{e.Channel}: New Subscriber {e.Subscriber.DisplayName}");
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {
@@ -390,14 +377,14 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnReSubscriber(OnReSubscriberArgs e)
     {
-        if (!this.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
         {
             return;
         }
 
         this._logger.LogInformation($"{e.Channel}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
 
-        ChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         if (e.ReSubscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {

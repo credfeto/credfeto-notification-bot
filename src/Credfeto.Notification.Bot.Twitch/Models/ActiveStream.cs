@@ -31,12 +31,15 @@ internal sealed class ActiveStream
 
     public DateTime StartedAt { get; }
 
-    public void AddRaider(string raider)
+    public bool AddRaider(string raider, string viewerCount)
     {
         if (this._raiders.TryAdd(key: raider, value: true))
         {
             // New Raider found
+            return true;
         }
+
+        return false;
     }
 
     public void AddBitGifter(string user, int bits)
