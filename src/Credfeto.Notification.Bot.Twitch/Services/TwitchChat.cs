@@ -325,7 +325,7 @@ public sealed class TwitchChat : ITwitchChat
 
     private void Client_OnJoinedChannel(OnJoinedChannelArgs e)
     {
-        this._logger.LogInformation($"{e.Channel} Joining channel as {e.BotUsername}");
+        this._logger.LogInformation($"{e.Channel}: Joining channel as {e.BotUsername}");
     }
 
     private async Task OnMessageReceivedAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
