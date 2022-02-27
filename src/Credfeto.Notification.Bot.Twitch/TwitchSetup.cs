@@ -1,4 +1,6 @@
-﻿using Credfeto.Notification.Bot.Twitch.BackgroundServices;
+﻿using Credfeto.Notification.Bot.Twitch.Actions;
+using Credfeto.Notification.Bot.Twitch.Actions.Services;
+using Credfeto.Notification.Bot.Twitch.BackgroundServices;
 using Credfeto.Notification.Bot.Twitch.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,7 +28,8 @@ public static class TwitchSetup
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
                        .AddSingleton<IRaidWelcome, RaidWelcome>()
                        .AddSingleton<IHeistJoiner, HeistJoiner>()
-                       .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>();
+                       .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
+                       .AddSingleton<IContributionThanks, ContributionThanks>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)

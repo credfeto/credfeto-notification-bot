@@ -1,4 +1,5 @@
 using System;
+using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Models;
 
-namespace Credfeto.Notification.Bot.Twitch.Services;
+namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
 public sealed class HeistJoiner : MessageSenderBase, IHeistJoiner
 {
