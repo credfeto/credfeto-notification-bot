@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using NonBlocking;
 
-namespace Credfeto.Notification.Bot.Twitch.Services;
+namespace Credfeto.Notification.Bot.Twitch.Models;
 
 internal sealed class ActiveStream
 {

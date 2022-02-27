@@ -1,4 +1,4 @@
-using Credfeto.Notification.Bot.Twitch.Services;
+using Credfeto.Notification.Bot.Twitch.Models;
 
 namespace Credfeto.Notification.Bot.Twitch;
 
@@ -10,7 +10,7 @@ public interface ITwitchChannelManager
     /// <summary>
     ///     Gets the current channel.
     /// </summary>
-    /// <param name="channel"></param>
+    /// <param name="channel">The channel name.</param>
     /// <returns></returns>
     ChannelState GetChannel(string channel);
 }

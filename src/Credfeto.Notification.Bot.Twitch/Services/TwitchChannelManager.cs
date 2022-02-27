@@ -1,4 +1,5 @@
 using System;
+using Credfeto.Notification.Bot.Twitch.Models;
 using NonBlocking;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;

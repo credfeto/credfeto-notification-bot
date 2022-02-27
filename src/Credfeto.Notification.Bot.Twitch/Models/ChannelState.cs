@@ -1,6 +1,6 @@
 using System;
 
-namespace Credfeto.Notification.Bot.Twitch.Services;
+namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class ChannelState
 {

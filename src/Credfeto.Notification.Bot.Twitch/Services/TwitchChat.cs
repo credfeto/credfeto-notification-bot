@@ -13,6 +13,7 @@ using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Events;
 using TwitchLib.Communication.Models;
+using ChannelState = Credfeto.Notification.Bot.Twitch.Models.ChannelState;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
@@ -50,30 +51,7 @@ public sealed class TwitchChat : ITwitchChat
         client.Initialize(credentials: credentials, channels: channels);
         this._client = client;
 
-        Observable.FromEventPattern<OnLogArgs>(addHandler: h => this._client.OnLog += h, removeHandler: h => this._client.OnLog -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnLog);
-
-        Observable.FromEventPattern<OnJoinedChannelArgs>(addHandler: h => this._client.OnJoinedChannel += h, removeHandler: h => this._client.OnJoinedChannel -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnJoinedChannel);
-
-        Observable.FromEventPattern<OnMessageReceivedArgs>(addHandler: h => this._client.OnMessageReceived += h, removeHandler: h => this._client.OnMessageReceived -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnMessageReceived);
-
-        Observable.FromEventPattern<OnWhisperReceivedArgs>(addHandler: h => this._client.OnWhisperReceived += h, removeHandler: h => this._client.OnWhisperReceived -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnWhisperReceived);
-
-        Observable.FromEventPattern<OnNewSubscriberArgs>(addHandler: h => this._client.OnNewSubscriber += h, removeHandler: h => this._client.OnNewSubscriber -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnNewSubscriber);
-
-        Observable.FromEventPattern<OnReSubscriberArgs>(addHandler: h => this._client.OnReSubscriber += h, removeHandler: h => this._client.OnReSubscriber -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnReSubscriber);
-
+        // HEALTH
         Observable.FromEventPattern<OnConnectedArgs>(addHandler: h => this._client.OnConnected += h, removeHandler: h => this._client.OnConnected -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnConnected);
@@ -82,6 +60,34 @@ public sealed class TwitchChat : ITwitchChat
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnDisconnected);
 
+        Observable.FromEventPattern<OnReconnectedEventArgs>(addHandler: h => this._client.OnReconnected += h, removeHandler: h => this._client.OnReconnected -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnReconnected);
+
+        Observable.FromEventPattern<OnJoinedChannelArgs>(addHandler: h => this._client.OnJoinedChannel += h, removeHandler: h => this._client.OnJoinedChannel -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnJoinedChannel);
+
+        // STATE
+        Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h, removeHandler: h => this._client.OnChannelStateChanged -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnChannelStateChanged);
+
+        // LOGGING
+        Observable.FromEventPattern<OnLogArgs>(addHandler: h => this._client.OnLog += h, removeHandler: h => this._client.OnLog -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnLog);
+
+        // CHAT
+        Observable.FromEventPattern<OnMessageReceivedArgs>(addHandler: h => this._client.OnMessageReceived += h, removeHandler: h => this._client.OnMessageReceived -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnMessageReceived);
+
+        Observable.FromEventPattern<OnChatClearedArgs>(addHandler: h => this._client.OnChatCleared += h, removeHandler: h => this._client.OnChatCleared -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnChatCleared);
+
+        // RAID HOST
         Observable.FromEventPattern<OnRaidNotificationArgs>(addHandler: h => this._client.OnRaidNotification += h, removeHandler: h => this._client.OnRaidNotification -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnRaided);
@@ -90,9 +96,14 @@ public sealed class TwitchChat : ITwitchChat
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnBeingHosted);
 
-        Observable.FromEventPattern<OnChatClearedArgs>(addHandler: h => this._client.OnChatCleared += h, removeHandler: h => this._client.OnChatCleared -= h)
+        // SUBS
+        Observable.FromEventPattern<OnNewSubscriberArgs>(addHandler: h => this._client.OnNewSubscriber += h, removeHandler: h => this._client.OnNewSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnChatCleared);
+                  .Subscribe(this.Client_OnNewSubscriber);
+
+        Observable.FromEventPattern<OnReSubscriberArgs>(addHandler: h => this._client.OnReSubscriber += h, removeHandler: h => this._client.OnReSubscriber -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.Client_OnReSubscriber);
 
         Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h, removeHandler: h => this._client.OnCommunitySubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
@@ -101,10 +112,6 @@ public sealed class TwitchChat : ITwitchChat
         Observable.FromEventPattern<OnGiftedSubscriptionArgs>(addHandler: h => this._client.OnGiftedSubscription += h, removeHandler: h => this._client.OnGiftedSubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(this.Client_OnGiftedSubscription);
-
-        Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h, removeHandler: h => this._client.OnChannelStateChanged -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnChannelStateChanged);
 
         Observable.FromEventPattern<OnContinuedGiftedSubscriptionArgs>(addHandler: h => this._client.OnContinuedGiftedSubscription += h,
                                                                        removeHandler: h => this._client.OnContinuedGiftedSubscription -= h)
@@ -123,7 +130,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         if (!this._connected)
         {
-            this._logger.LogDebug("Reconnecting");
+            this._logger.LogDebug("Reconnecting...");
             this._client.Connect();
             this._connected = true;
         }
@@ -207,11 +214,19 @@ public sealed class TwitchChat : ITwitchChat
     private void Client_OnConnected(OnConnectedArgs e)
     {
         this._logger.LogWarning($"Connected to {e.BotUsername} {e.AutoJoinChannel}");
+        this._connected = true;
     }
 
     private void Client_OnDisconnected(OnDisconnectedEventArgs e)
     {
-        this._logger.LogWarning("Disconnected");
+        this._logger.LogWarning("Disconnected :(");
+        this._connected = false;
+    }
+
+    private void Client_OnReconnected(OnReconnectedEventArgs e)
+    {
+        this._logger.LogWarning("Reconnected :)");
+        this._connected = true;
     }
 
     private void Client_OnRaided(OnRaidNotificationArgs e)
@@ -238,8 +253,6 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
     private void Client_OnJoinedChannel(OnJoinedChannelArgs e)
     {
         this._logger.LogInformation($"{e.Channel} Joining channel as {e.BotUsername}");
-
-        //this._client.SendMessage(channel: e.Channel, message: "Hey guys! I am a bot connected via TwitchLib!");
     }
 
     private void Client_OnMessageReceived(OnMessageReceivedArgs e)
@@ -314,14 +327,6 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
         {
             this._client.SendMessage(channel: streamer.Channel, message: streamer.Message);
         }
-    }
-
-    private void Client_OnWhisperReceived(OnWhisperReceivedArgs e)
-    {
-        // if (e.WhisperMessage.Username == "my_friend")
-        // {
-        //     this._client.SendWhisper(receiver: e.WhisperMessage.Username, message: "Hey! Whispers are so cool!!");
-        // }
     }
 
     private void Client_OnNewSubscriber(OnNewSubscriberArgs e)
