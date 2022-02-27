@@ -155,7 +155,8 @@ public sealed class TwitchChat : ITwitchChat
         if (!this._connected)
         {
             this._logger.LogDebug("Reconnecting...");
-            this._client.Connect();
+
+            //this._client.Connect();
             this._connected = true;
         }
 
