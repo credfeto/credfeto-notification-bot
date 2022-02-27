@@ -67,18 +67,20 @@ public sealed class TwitchChannelState
             return;
         }
 
+        if (!this._options.IsModChannel(this._channelName))
+        {
+            return;
+        }
+
         if (bits != 0)
         {
             this._stream.AddBitGifter(user: user, bits: bits);
 
-            if (this._options.IsModChannel(this._channelName))
-            {
-                await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
-            }
+            await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
         }
 
         // TODO: Implement detection for other streamers
-        if (this._stream.AddChatter(user) && this._options.IsModChannel(this._channelName))
+        if (this._stream.AddChatter(user))
         {
             // first time chatted in channel
             await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: user, cancellationToken: cancellationToken);
