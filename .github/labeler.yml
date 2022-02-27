@@ -1,40 +1,40 @@
 "C#":
-  - any: [ './**/*.cs', './**/*.csproj' ]
+ - any: [ './**/*.cs', './**/*.csproj' ]
 "C# Project":
-  - any: [ './**/*.csproj' ]
+ - any: [ './**/*.csproj' ]
 "C# Solution":
-  - any: [ './**/*.sln' ]
+ - any: [ './**/*.sln' ]
 "Powershell":
-  - any: [ './**/*.ps1', './**/*.psm1' ]
+ - any: [ './**/*.ps1', './**/*.psm1' ]
 "SQL":
-  - any: [ 'db/**/*', './**/*.sql' ]
+ - any: [ './**/*.sql', 'db/**/*' ]
 "Solidity":
-  - any: [ './**/*.sol' ]
+ - any: [ './**/*.sol' ]
 "unit-tests":
-  - any: [ 'src/*.Tests.*/**/*', 'src/*.Tests/**/*', 'src/*.Tests.Integration.*/**/*', 'src/*.Tests.Integration/**/*' ]
+ - any: [ 'src/*.Tests.*/**/*', 'src/*.Tests.Integration.*/**/*', 'src/*.Tests.Integration/**/*', 'src/*.Tests/**/*' ]
 ".NET update":
-  - any: [ 'src/global.json' ]
+ - any: [ 'src/global.json' ]
 "Config Change":
-  - any: [ 'src/**/*.json', '!src/global.json' ]
+ - any: [ 'src/**/*.json', '!src/global.json' ]
 "Static Code Analysis Rules":
-  - any: [ 'src/CodeAnalysis.ruleset' ]
+ - any: [ 'src/CodeAnalysis.ruleset' ]
 "Migration Script":
-  - any: [ 'tools/MigrationScripts/**/*' ]
+ - any: [ 'tools/MigrationScripts/**/*' ]
 "Legal Text":
-  - any: [ 'tools/LegalText/**/*' ]
+ - any: [ 'tools/LegalText/**/*' ]
 "Change Log":
-  - any: [ 'CHANGELOG.md' ]
+ - any: [ 'CHANGELOG.md' ]
 "Read Me":
-  - any: [ 'README.md' ]
+ - any: [ 'README.md' ]
 "Setup":
-  - any: [ 'SETUP.md' ]
+ - any: [ 'SETUP.md' ]
 "Markdown":
-  - any: [ './**/*.md' ]
+ - any: [ './**/*.md' ]
 "github-actions":
-  - any: [ '.github/workflows/*.yml' ]
+ - any: [ '.github/workflows/*.yml' ]
 "Server":
-  - any: [ 'src/Credfeto.Notification.Bot.Server/**/*' ]
+ - any: [ 'src/Credfeto.Notification.Bot.Server/**/*' ]
 "Shared":
-  - any: [ 'src/Credfeto.Notification.Bot.Shared/**/*' ]
+ - any: [ 'src/Credfeto.Notification.Bot.Shared/**/*' ]
 "Twitch":
-  - any: [ 'src/Credfeto.Notification.Bot.Twitch/**/*' ]
+ - any: [ 'src/Credfeto.Notification.Bot.Twitch/**/*' ]
