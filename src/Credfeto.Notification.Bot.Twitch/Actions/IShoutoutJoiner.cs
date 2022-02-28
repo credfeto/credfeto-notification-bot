@@ -5,5 +5,5 @@ namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface IShoutoutJoiner
 {
-    Task IssueShoutoutAsync(string channel, string visitingStreamer, CancellationToken cancellationToken);
+    Task<bool> IssueShoutoutAsync(string channel, string visitingStreamer, CancellationToken cancellationToken);
 }

@@ -316,7 +316,11 @@ public sealed class TwitchChat : ITwitchChat
 
         if (this._options.Heists.Contains(e.ChatMessage.Channel))
         {
-            await this.JoinHeistAsync(e: e, cancellationToken: cancellationToken);
+            if (await this.JoinHeistAsync(e: e, cancellationToken: cancellationToken))
+            {
+                // It was a heist message, no point in processing anything else.
+                return;
+            }
         }
 
         TwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
@@ -324,7 +328,7 @@ public sealed class TwitchChat : ITwitchChat
         await state.ChatMessageAsync(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
     }
 
-    private async Task JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
+    private async Task<bool> JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
     {
         //:streamlabs!streamlabs@streamlabs.tmi.twitch.tv PRIVMSG #emilyisfun :Ahoy! Captain reckless_fury is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.
         if (StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") && e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
@@ -332,7 +336,11 @@ public sealed class TwitchChat : ITwitchChat
         {
             this._logger.LogInformation($"{e.ChatMessage.Channel}: Heist Starting!");
             await this._heistJoiner.JoinHeistAsync(channel: e.ChatMessage.Channel, cancellationToken: cancellationToken);
+
+            return true;
         }
+
+        return false;
     }
 
     private Task OnNewSubscriberAsync(OnNewSubscriberArgs e, in CancellationToken cancellationToken)

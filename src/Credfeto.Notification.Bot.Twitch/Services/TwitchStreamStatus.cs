@@ -41,11 +41,11 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
 
         Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnStreamOnline);
+                  .Subscribe(this.OnStreamOnline);
 
         Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.Client_OnStreamOffline);
+                  .Subscribe(this.OnStreamOffline);
     }
 
     /// <inheritdoc />
@@ -58,7 +58,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
         //return Task.CompletedTask;
     }
 
-    private void Client_OnStreamOnline(OnStreamOnlineArgs e)
+    private void OnStreamOnline(OnStreamOnlineArgs e)
     {
         this._logger.LogWarning($"{e.Channel}: Started streaming \"{e.Stream.Title}\" ({e.Stream.GameName}) at {e.Stream.StartedAt}");
 
@@ -67,7 +67,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
         state.Online(gameName: e.Stream.GameName, startDate: e.Stream.StartedAt);
     }
 
-    private void Client_OnStreamOffline(OnStreamOfflineArgs e)
+    private void OnStreamOffline(OnStreamOfflineArgs e)
     {
         this._logger.LogWarning($"{e.Channel}: Stopped streaming {e.Stream.Title} ({e.Stream.GameName}");
 

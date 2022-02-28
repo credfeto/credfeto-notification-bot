@@ -36,19 +36,19 @@ public sealed class TwitchChannelState
 
     public void Online(string gameName, in DateTime startDate)
     {
-        // TODO: Implement
+        this._logger.LogInformation($"{this._channelName}: Going Online...");
         this._stream = new(gameName: gameName, startedAt: startDate);
     }
 
     public void Offline()
     {
-        // TODO: Implement
+        this._logger.LogInformation($"{this._channelName}: Going Offline...");
         this._stream = null;
     }
 
     public void ClearChat()
     {
-        // TODO: Implement
+        this._logger.LogInformation($"{this._channelName}: Potential incident - chat cleared.");
         this._stream?.AddIncident();
     }
 
@@ -83,9 +83,12 @@ public sealed class TwitchChannelState
         if (this._stream.AddChatter(user))
         {
             // first time chatted in channel
-            await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: user, cancellationToken: cancellationToken);
+            bool streamer = await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: user, cancellationToken: cancellationToken);
 
-            // TODO: Add new chat welcome.
+            if (!streamer)
+            {
+                // TODO: Add new chat welcome.
+            }
         }
     }
 

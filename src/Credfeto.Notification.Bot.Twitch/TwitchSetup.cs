@@ -34,7 +34,8 @@ public static class TwitchSetup
     {
         return services.AddSingleton<ITwitchChannelManager, TwitchChannelManager>()
                        .AddSingleton<ITwitchChat, TwitchChat>()
-                       .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>();
+                       .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
+                       .AddSingleton<IUserInfoService, UserInfoService>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
