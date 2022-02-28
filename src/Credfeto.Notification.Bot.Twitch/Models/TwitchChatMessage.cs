@@ -1,5 +1,8 @@
+using System.Diagnostics;
+
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
+[DebuggerDisplay("{Channel}: {Message}")]
 public sealed class TwitchChatMessage
 {
     public TwitchChatMessage(string channel, string message)

@@ -1,19 +1,21 @@
 using System;
+using System.Diagnostics;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
+[DebuggerDisplay("{UserName}: Streamer: {IsStreamer} Created: {DateCreated}")]
 public sealed class TwitchUser
 {
-    public TwitchUser(string userName, bool isBroadcaster, DateTime? dateCreated)
+    public TwitchUser(string userName, bool isStreamer, DateTime? dateCreated)
     {
         this.UserName = userName;
-        this.IsBroadcaster = isBroadcaster;
+        this.IsStreamer = isStreamer;
         this.DateCreated = dateCreated;
     }
 
     public string UserName { get; }
 
-    public bool IsBroadcaster { get; }
+    public bool IsStreamer { get; }
 
     public DateTime? DateCreated { get; }
 }

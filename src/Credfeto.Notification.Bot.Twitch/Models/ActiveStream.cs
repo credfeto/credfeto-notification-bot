@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using NonBlocking;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
+[DebuggerDisplay("{GameName}: Started: {StartedAt}")]
 internal sealed class ActiveStream
 {
     private readonly ConcurrentDictionary<string, bool> _bitGifters;

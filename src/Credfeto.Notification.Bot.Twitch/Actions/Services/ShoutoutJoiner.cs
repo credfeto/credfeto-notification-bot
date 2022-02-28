@@ -41,13 +41,15 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
             if (user != null)
             {
-                this._logger.LogWarning($"Found {user.UserName}. Streamer: {user.IsBroadcaster} Created: {user.DateCreated}");
+                this._logger.LogWarning($"Found {user.UserName}. Streamer: {user.IsStreamer} Created: {user.DateCreated}");
 
-                if (user.IsBroadcaster)
+                if (user.IsStreamer)
                 {
                     // TODO: Check to see if the user has streamed recently using API
                     // TODO: Can mod comments be read?
                     this._logger.LogWarning($"{channel}: Check out https://www.twitch.tv/{visitingStreamer}");
+
+                    // TODO: Log in DB and id becomes a regular then shout them out
                 }
             }
 
