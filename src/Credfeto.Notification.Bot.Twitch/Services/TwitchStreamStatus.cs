@@ -36,7 +36,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
                                  .Distinct()
                                  .ToList();
 
-        this._api = OptionsExtensions.ConfigureTwitchApi(this._options);
+        this._api = this._options.ConfigureTwitchApi();
         this._lsm = new(this._api);
         this._lsm.SetChannelsByName(channels);
 

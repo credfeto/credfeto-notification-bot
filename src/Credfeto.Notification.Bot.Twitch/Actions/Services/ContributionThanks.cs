@@ -3,48 +3,67 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
 public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 {
-    public ContributionThanks(IMessageChannel<TwitchChatMessage> twitchChatMessageChannel)
+    private readonly ILogger<ContributionThanks> _logger;
+
+    public ContributionThanks(IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<ContributionThanks> logger)
         : base(twitchChatMessageChannel)
     {
+        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public Task ThankForBitsAsync(string channel, string user, CancellationToken cancellationToken)
+    // Welcome to everyone from front page; If you're enjoying what you're seeing and hearing then click through and follow.
+    public async Task ThankForBitsAsync(string channel, string user, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await this.SendMessageAsync(channel: channel, $"Thanks @{user} bis.", cancellationToken: cancellationToken);
+
+        this._logger.LogInformation($"{channel}: Thanks @{user} for bits.");
     }
 
-    public Task ThankForPrimeSubAsync(string channel, string user, CancellationToken cancellationToken)
+    public async Task ThankForPrimeSubAsync(string channel, string user, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
+
+        this._logger.LogInformation($"{channel}: Thanks @{user} for subscribing (Prime)");
     }
 
-    public Task ThankForPrimeReSubAsync(string channel, string user, in CancellationToken cancellationToken)
+    public async Task ThankForPrimeReSubAsync(string channel, string user, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
+
+        this._logger.LogInformation($"{channel}: Thanks @{user} for resubscribing (Prime)");
     }
 
-    public Task ThankForPaidReSubAsync(string channel, string user, in CancellationToken cancellationToken)
+    public async Task ThankForPaidReSubAsync(string channel, string user, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
+
+        this._logger.LogInformation($"{channel}: Thanks @{user} for resubscribing (Paid)");
     }
 
-    public Task ThankForPaidSubAsync(string channel, string user, CancellationToken cancellationToken)
+    public async Task ThankForNewPaidSubAsync(string channel, string user, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
+
+        this._logger.LogInformation($"{channel}: Thanks @{user} for subscribing (Paid)");
     }
 
-    public Task ThankForMultipleGiftSubsAsync(string channelName, string giftedBy, int count, in CancellationToken cancellationToken)
+    public async Task ThankForMultipleGiftSubsAsync(string channelName, string giftedBy, int count, CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        await this.SendMessageAsync(channel: channelName, $"Thanks @{giftedBy} for gifting subs.", cancellationToken: cancellationToken);
+
+        this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting subs.");
     }
 
-    public Task ThankForGiftingSubAsync(string channelName, string giftedBy, in CancellationToken cancellationToken)
+    public async Task ThankForGiftingSubAsync(string channelName, string giftedBy, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await this.SendMessageAsync(channel: channelName, $"Thanks @{giftedBy} for gifting sub.", cancellationToken: cancellationToken);
+
+        this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub.");
     }
 }

@@ -24,7 +24,7 @@ public sealed class UserInfoService : IUserInfoService
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
-        this._api = OptionsExtensions.ConfigureTwitchApi(this._options);
+        this._api = this._options.ConfigureTwitchApi();
 
         this._cache = new(StringComparer.OrdinalIgnoreCase);
     }

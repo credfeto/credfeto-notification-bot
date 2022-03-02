@@ -141,7 +141,7 @@ public sealed class TwitchChannelState
 
         this._stream.NewSubscriberPaid(user);
 
-        return this._contributionThanks.ThankForPaidSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
+        return this._contributionThanks.ThankForNewPaidSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
     public Task NewSubscriberPrimeAsync(string user, in CancellationToken cancellationToken)
