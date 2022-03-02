@@ -17,8 +17,16 @@ internal static class OptionsExtensions
         return options.IsModChannel(channel) && options.Raids.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: channel));
     }
 
-    public static TwitchAPI ConfigureTwitchApi(TwitchBotOptions options)
+    public static TwitchAPI ConfigureTwitchApi(this TwitchBotOptions options)
     {
-        return new() { Settings = { ClientId = options.Authentication.ClientId, Secret = options.Authentication.ClientSecret } };
+        return new()
+               {
+                   Settings =
+                   {
+                       ClientId = options.Authentication.ClientId, Secret = options.Authentication.ClientSecret
+                       /*
+                       , AccessToken = options.Authentication.ClientAccessToken */
+                   }
+               };
     }
 }

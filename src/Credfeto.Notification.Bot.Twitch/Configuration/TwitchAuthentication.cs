@@ -13,4 +13,7 @@ public sealed class TwitchAuthentication
 
     // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public string ClientSecret { get; init; } = default!;
+
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+    public string ClientAccessToken { get; init; } = default!;
 }
