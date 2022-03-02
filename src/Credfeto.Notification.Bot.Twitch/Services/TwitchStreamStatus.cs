@@ -70,7 +70,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
 
     private void OnStreamOffline(OnStreamOfflineArgs e)
     {
-        this._logger.LogWarning($"{e.Channel}: Stopped streaming {e.Stream.Title} ({e.Stream.GameName}");
+        this._logger.LogWarning($"{e.Channel}: Stopped streaming {e.Stream.Title} ({e.Stream.GameName})");
 
         TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
