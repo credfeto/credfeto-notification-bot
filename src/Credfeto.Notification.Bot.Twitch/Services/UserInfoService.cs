@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -23,7 +24,7 @@ public sealed class UserInfoService : IUserInfoService
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
-        this._api = new() { Settings = { ClientId = this._options.Authentication.ClientId, Secret = this._options.Authentication.ClientSecret } };
+        this._api = OptionsExtensions.ConfigureTwitchApi(this._options);
 
         this._cache = new(StringComparer.OrdinalIgnoreCase);
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -35,7 +36,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
                                  .Distinct()
                                  .ToList();
 
-        this._api = new() { Settings = { ClientId = this._options.Authentication.ClientId, Secret = this._options.Authentication.ClientSecret } };
+        this._api = OptionsExtensions.ConfigureTwitchApi(this._options);
         this._lsm = new(this._api);
         this._lsm.SetChannelsByName(channels);
 
