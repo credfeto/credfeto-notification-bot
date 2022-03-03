@@ -58,8 +58,6 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
         this._logger.LogInformation($"{channel}: Check out https://www.twitch.tv/{visitingStreamer}");
 
-        return true;
-#if FALSE
         if (string.IsNullOrWhiteSpace(streamer.Message))
         {
             await this.SendMessageAsync(channel: channel, $"Check out https://www.twitch.tv/{visitingStreamer}", cancellationToken: cancellationToken);
@@ -70,6 +68,5 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         }
 
         return true;
-#endif
     }
 }

@@ -24,7 +24,6 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._gifters = new(StringComparer.CurrentCultureIgnoreCase);
     }
 
-    // Welcome to everyone from front page; If you're enjoying what you're seeing and hearing then click through and follow.
     public async Task ThankForBitsAsync(string channel, string user, CancellationToken cancellationToken)
     {
         await this.SendMessageAsync(channel: channel, $"Thanks @{user} for the bits.", cancellationToken: cancellationToken);
@@ -69,20 +68,18 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         return Task.CompletedTask;
     }
 
-    public Task ThankForGiftingSubAsync(string channelName, string giftedBy, CancellationToken cancellationToken)
+    public async Task ThankForGiftingSubAsync(string channelName, string giftedBy, CancellationToken cancellationToken)
     {
         if (this.WasLastGifter(channel: channelName, giftedBy: giftedBy))
         {
             this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub (Same as last gifter).");
 
-            return Task.CompletedTask;
+            return;
         }
 
-        // await this.SendMessageAsync(channel: channelName, $"Thanks @{giftedBy} for gifting sub.", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(channel: channelName, $"Thanks @{giftedBy} for gifting sub.", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub.");
-
-        return Task.CompletedTask;
     }
 
     private bool WasLastGifter(string channel, string giftedBy)
