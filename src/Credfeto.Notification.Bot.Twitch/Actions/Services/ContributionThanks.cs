@@ -53,17 +53,21 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._logger.LogInformation($"{channel}: Thanks @{user} for subscribing (Paid)");
     }
 
-    public async Task ThankForMultipleGiftSubsAsync(string channelName, string giftedBy, int count, CancellationToken cancellationToken)
+    public Task ThankForMultipleGiftSubsAsync(string channelName, string giftedBy, int count, CancellationToken cancellationToken)
     {
-        await this.SendMessageAsync(channel: channelName, $"Thanks @{giftedBy} for gifting subs.", cancellationToken: cancellationToken);
+        //await this.SendMessageAsync(channel: channelName, $"Thanks @{giftedBy} for gifting subs.", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting subs.");
+
+        return Task.CompletedTask;
     }
 
-    public async Task ThankForGiftingSubAsync(string channelName, string giftedBy, CancellationToken cancellationToken)
+    public Task ThankForGiftingSubAsync(string channelName, string giftedBy, CancellationToken cancellationToken)
     {
-        await this.SendMessageAsync(channel: channelName, $"Thanks @{giftedBy} for gifting sub.", cancellationToken: cancellationToken);
+        // await this.SendMessageAsync(channel: channelName, $"Thanks @{giftedBy} for gifting sub.", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub.");
+
+        return Task.CompletedTask;
     }
 }
