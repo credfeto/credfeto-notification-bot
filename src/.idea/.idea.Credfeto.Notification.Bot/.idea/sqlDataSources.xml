@@ -4,7 +4,9 @@
     <mapping uuid="712a76de-b625-4051-ba65-9336b414de9b" name="PostgreSQL - notification-bot@localhost (DDL) Mapping">
       <data-sources db="1349d03c-5933-40d1-ae82-cd6e4fee5254" ddl="f4188d8f-3b60-4c37-a107-fcb8c4f839cd" />
       <scope>
-        <node kind="database" qname="notification-bot" />
+        <node kind="database" qname="notification-bot">
+          <node kind="schema" qname="twitch" />
+        </node>
       </scope>
     </mapping>
   </component>
@@ -17,8 +19,6 @@
           <option name="languageId" value="PostgreSQL" />
           <option name="urls">
             <array>
-              <option value="file://$PROJECT_DIR$/../db/twitch/streamer_insert.sql" />
-              <option value="file://$PROJECT_DIR$/../db/twitch/streamer.sql" />
               <option value="file://$PROJECT_DIR$/../db" />
             </array>
           </option>
