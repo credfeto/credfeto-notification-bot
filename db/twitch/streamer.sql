@@ -1,8 +1,4 @@
-create table twitch.streamer
-(
-    username          varchar(100) not null
-        constraint streamer_pk
-            primary key,
-    started_streaming date         not null
-);
-
+CREATE TABLE twitch.streamer (
+    username VARCHAR(100) NOT NULL CONSTRAINT streamer_pk PRIMARY KEY,
+    started_streaming DATE NOT NULL
+    );

@@ -1,21 +1,17 @@
-create procedure twitch.streamer_insert(username_ character varying, started_streaming_ date)
-    language plpgsql
-as
+CREATE PROCEDURE twitch.streamer_insert (
+    username_ VARCHAR,
+    started_streaming_ DATE
+    ) LANGUAGE plpgsql
+AS
 $$
-begin
 
-    insert into twitch.streamer
-    (
+BEGIN
+    INSERT INTO twitch.streamer (
         username,
         started_streaming
-    )
-    values
-    (
+        )
+    VALUES (
         username_,
         started_streaming
-    );
-
-end
-$$;
-
-
+        );
+END $$;
