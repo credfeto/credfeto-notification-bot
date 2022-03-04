@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Credfeto.Notification.Bot.Pgsql;
+namespace Credfeto.Notification.Bot.Database.Pgsql;
 
 /// <summary>
 ///     Configuration for creating Postgresql connections.
@@ -11,5 +11,5 @@ public sealed class PgsqlServerConfiguration
     /// <summary>
     ///     Gets the connection string.
     /// </summary>
-    private string ConnectionString { get; init; } = default!;
+    public string ConnectionString { get; init; } = default!;
 }

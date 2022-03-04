@@ -44,6 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Data.Interfaces\Credfeto.Notification.Bot.Twitch.Data.Interfaces.csproj"/>
-    <ProjectReference Include="..\Credfeto.Notification.Dapper\Credfeto.Notification.Dapper.csproj"/>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Dapper\Credfeto.Notification.Bot.Database.Dapper.csproj"/>
   </ItemGroup>
 </Project>

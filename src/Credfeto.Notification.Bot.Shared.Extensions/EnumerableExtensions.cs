@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Credfeto.Notification.Bot.Shared;
+namespace Credfeto.Notification.Bot.Shared.Extensions;
 
 /// <summary>
 ///     Extensions on <see cref="IEnumerable{T}" />

@@ -18,6 +18,7 @@
     <TreatSpecificWarningsAsErrors/>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors/>
+    <RootNamespace>Credfeto.Notification.Dapper</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisLevel>latest</AnalysisLevel>
@@ -29,8 +30,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.123"/>
-    <PackageReference Include="Npgsql" Version="6.0.3"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
+    <PackageReference Include="Polly" Version="7.2.3"/>
+    <PackageReference Include="Npgsql" Version="6.0.3"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.5.1" PrivateAssets="All"/>
@@ -41,5 +43,8 @@
     <PackageReference Include="SonarAnalyzer.CSharp" Version="8.36.1.44192" PrivateAssets="All"/>
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All"/>
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Interfaces\Credfeto.Notification.Bot.Database.Interfaces.csproj"/>
   </ItemGroup>
 </Project>

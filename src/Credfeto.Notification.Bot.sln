@@ -35,9 +35,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Twitch", "Twitch", "{95998E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{B5ABC8F6-987B-412A-933A-AA438C0B4F7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Dapper", "Credfeto.Notification.Dapper\Credfeto.Notification.Dapper.csproj", "{F5AD38F8-524B-41A5-991C-23989055D0EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Dapper", "Credfeto.Notification.Bot.Database.Dapper\Credfeto.Notification.Bot.Database.Dapper.csproj", "{F5AD38F8-524B-41A5-991C-23989055D0EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Pgsql", "Credfeto.Notification.Bot.Pgsql\Credfeto.Notification.Bot.Pgsql.csproj", "{6AA05EC3-9795-489B-B68A-0C8717137D10}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Pgsql", "Credfeto.Notification.Bot.Database.Pgsql\Credfeto.Notification.Bot.Database.Pgsql.csproj", "{6AA05EC3-9795-489B-B68A-0C8717137D10}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Interfaces", "Credfeto.Notification.Bot.Database.Interfaces\Credfeto.Notification.Bot.Database.Interfaces.csproj", "{10D89A4F-C675-4335-A68A-8584D1DB7611}"
 EndProject

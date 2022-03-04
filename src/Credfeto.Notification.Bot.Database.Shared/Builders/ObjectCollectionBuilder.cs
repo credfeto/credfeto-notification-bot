@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Credfeto.Notification.Bot.Database.Interfaces.Builders;
-using Credfeto.Notification.Bot.Shared;
+using Credfeto.Notification.Bot.Shared.Extensions;
 
 namespace Credfeto.Notification.Bot.Database.Shared.Builders;
 
