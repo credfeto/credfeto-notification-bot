@@ -28,6 +28,20 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings-local.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings-template-for-local-database.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="PostBuild" BeforeTargets="PostBuildEvent">
+    <Copy Condition="Exists('appsettings-local.json')" SourceFiles="appsettings-local.json" DestinationFiles="$(OutDir)\appsettings-local.json"/>
+  </Target>
+  <ItemGroup>
     <PackageReference Include="FunFair.Test.Common" Version="5.9.2.1676"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0"/>
     <PackageReference Include="NSubstitute" Version="4.3.0"/>
@@ -50,6 +64,8 @@
     <PackageReference Include="xunit.analyzers" Version="0.10.0" PrivateAssets="All"/>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Pgsql\Credfeto.Notification.Bot.Database.Pgsql.csproj"/>
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj"/>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj"/>
   </ItemGroup>
 </Project>
