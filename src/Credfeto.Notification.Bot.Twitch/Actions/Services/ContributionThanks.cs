@@ -70,6 +70,32 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public async Task ThankForGiftingSubAsync(string channelName, string giftedBy, CancellationToken cancellationToken)
     {
+#if FALSE
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting subs.
+ steveforward: jimminewtron666: hell yeah! stevef18Woah stevef18Hornsofrock stevef18Woah stevef18Hornsofrock stevef18Woah stevef18Hornsofrock stevef18Woah stevef18Hornsofrock stevef18Woah stevef18Hornsofrock stevef18Woah stevef18Hornsofrock philsmLIT philsmLIT philsmLIT philsmLIT philsmLIT philsmLIT
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+ steveforward: lou_vella: lfsHH lfsHH lfsHH lfsHH lfsHH lfsHH lfsHH lfsHH
+ steveforward: Community Sub: Lou_Vella
+ steveforward: Thanks Lou_Vella for gifting sub.
+#endif
         if (this.WasLastGifter(channel: channelName, giftedBy: giftedBy))
         {
             this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub (Same as last gifter).");
