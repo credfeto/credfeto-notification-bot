@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Credfeto.Notification.Bot.Database;
+using Credfeto.Notification.Bot.Database.Shared;
 using Credfeto.Notification.Bot.Server.Helpers;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch;
@@ -28,6 +29,7 @@ internal static class Services
 
         services.AddOptions()
                 .ConfigureResources()
+                .ConfigureDatabaseShared()
                 .ConfigureDatabase()
                 .Configure<TwitchBotOptions>(configurationRoot.GetSection("Twitch"))
                 .ConfigureTwitch();

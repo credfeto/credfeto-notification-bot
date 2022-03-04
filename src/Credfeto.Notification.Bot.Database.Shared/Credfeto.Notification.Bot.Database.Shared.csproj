@@ -28,14 +28,12 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.123"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.5.1" PrivateAssets="All"/>
     <PackageReference Include="FunFair.CodeAnalysis" Version="5.8.1.1203" PrivateAssets="All"/>
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.1.46" PrivateAssets="All"/>
-    <PackageReference Include="Npgsql" Version="6.0.3"/>
     <PackageReference Include="Philips.CodeAnalysis.DuplicateCodeAnalyzer" Version="1.1.6" PrivateAssets="All"/>
     <PackageReference Include="Roslynator.Analyzers" Version="4.0.2" PrivateAssets="All"/>
     <PackageReference Include="SonarAnalyzer.CSharp" Version="8.36.1.44192" PrivateAssets="All"/>
@@ -43,7 +41,8 @@
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All"/>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Interfaces\Credfeto.Notification.Bot.Database.Interfaces.csproj"/>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared.Extensions\Credfeto.Notification.Bot.Shared.Extensions.csproj"/>
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Data.Interfaces\Credfeto.Notification.Bot.Twitch.Data.Interfaces.csproj"/>
-    <ProjectReference Include="..\Credfeto.Notification.Dapper\Credfeto.Notification.Dapper.csproj"/>
   </ItemGroup>
 </Project>
