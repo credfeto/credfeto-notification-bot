@@ -1,8 +1,11 @@
 create table twitch.streamer
 (
-    username          VARCHAR(100) not null
+    username          varchar(100) not null
         constraint streamer_pk
             primary key,
-    started_streaming TIMESTAMP    not null
+    started_streaming timestamp    not null
 );
+
+alter table twitch.streamer
+    owner to markr;
 

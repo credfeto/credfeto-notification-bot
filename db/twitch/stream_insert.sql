@@ -1,15 +1,18 @@
-create procedure twitch.stream_insert(channel_ varchar(100), start_date_ timestamp)
+create procedure twitch.stream_insert(channel_ character varying, start_date_ timestamp without time zone)
     language sql
-as $$
-  insert into twitch.stream
-  (
+as
+$$
+insert into twitch.stream
+(
     channel,
     start_date
-  )
-  values
+)
+values
     (
-      channel_,
-      start_date_
+        channel_,
+        start_date_
     );
 $$;
+
+alter procedure twitch.stream_insert(varchar, timestamp) owner to markr;
 
