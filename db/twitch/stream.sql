@@ -1,8 +1,8 @@
-CREATE TABLE twitch.stream (
-    channel VARCHAR(100) NOT NULL,
-    start_date TIMESTAMP,
-    CONSTRAINT stream_pk PRIMARY KEY (
-        channel,
-        start_date
-        )
-    );
+create table twitch.stream
+(
+    channel    VARCHAR(100) not null,
+    start_date timestamp    not null,
+    constraint stream_pk
+        primary key (channel, start_date)
+);
+

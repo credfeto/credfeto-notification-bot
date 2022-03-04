@@ -18,7 +18,7 @@ internal static class IntegrationTestStartup
         {
             services.AddSingleton(configurationRoot)
                     .AddOptions()
-                    .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgresql"))
+                    .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
                     .ConfigurePostgresql()
                     .ConfigureDatabase()
                     .ConfigureResources();
