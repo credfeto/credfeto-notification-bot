@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
-using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NonBlocking;
@@ -15,12 +15,14 @@ public sealed class UserInfoService : IUserInfoService
 {
     private readonly TwitchAPI _api;
 
-    private readonly ConcurrentDictionary<string, User?> _cache;
+    private readonly ConcurrentDictionary<string, TwitchUser?> _cache;
     private readonly ILogger<UserInfoService> _logger;
     private readonly TwitchBotOptions _options;
+    private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
 
-    public UserInfoService(IOptions<TwitchBotOptions> options, ILogger<UserInfoService> logger)
+    public UserInfoService(IOptions<TwitchBotOptions> options, ITwitchStreamerDataManager twitchStreamerDataManager, ILogger<UserInfoService> logger)
     {
+        this._twitchStreamerDataManager = twitchStreamerDataManager ?? throw new ArgumentNullException(nameof(twitchStreamerDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -31,14 +33,18 @@ public sealed class UserInfoService : IUserInfoService
 
     public async Task<TwitchUser?> GetUserAsync(string userName)
     {
-        if (this._cache.TryGetValue(key: userName, out User? user))
+        if (this._cache.TryGetValue(key: userName, out TwitchUser? user))
         {
-            if (user == null)
-            {
-                return null;
-            }
+            return user;
+        }
 
-            return Convert(user);
+        user = await this._twitchStreamerDataManager.GetByUserNameAsync(userName);
+
+        if (user != null)
+        {
+            this._cache.TryAdd(key: userName, value: user);
+
+            return user;
         }
 
         try
@@ -53,10 +59,15 @@ public sealed class UserInfoService : IUserInfoService
                 return null;
             }
 
-            user = result.Users[0];
+            user = Convert(result.Users[0]);
             this._cache.TryAdd(key: userName, value: user);
 
-            return Convert(user);
+            if (user.IsStreamer)
+            {
+                await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: user.UserName, startedStreaming: user.DateCreated);
+            }
+
+            return user;
         }
         catch (Exception exception)
         {
