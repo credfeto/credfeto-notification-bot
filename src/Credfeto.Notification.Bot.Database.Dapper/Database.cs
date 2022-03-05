@@ -40,7 +40,7 @@ public abstract class Database : IDatabase
         using (IDbConnection connection = this.GetConnection())
         {
             // ReSharper disable once AccessToDisposedClosure
-            return await this.ExecuteWithRetriesAsync(func: () => connection.ExecuteAsync(sql: storedProcedure, param: null, commandType: CommandType.StoredProcedure), context: storedProcedure);
+            return await this.ExecuteWithRetriesAsync(func: () => InternalExecuteAsync(storedProcedure: storedProcedure, param: null, connection: connection), context: storedProcedure);
         }
     }
 
@@ -50,7 +50,7 @@ public abstract class Database : IDatabase
         using (IDbConnection connection = this.GetConnection())
         {
             // ReSharper disable once AccessToDisposedClosure
-            return await this.ExecuteWithRetriesAsync(func: () => connection.ExecuteAsync(sql: storedProcedure, param: param, commandType: CommandType.StoredProcedure), context: storedProcedure);
+            return await this.ExecuteWithRetriesAsync(func: () => InternalExecuteAsync(storedProcedure: storedProcedure, param: param, connection: connection), context: storedProcedure);
         }
     }
 
@@ -162,6 +162,11 @@ public abstract class Database : IDatabase
     private static void ThrowsNoMatch()
     {
         throw new InvalidOperationException(message: "No match");
+    }
+
+    private static Task<int> InternalExecuteAsync(string storedProcedure, object? param, IDbConnection connection)
+    {
+        return connection.ExecuteAsync(sql: storedProcedure, param: param, commandType: CommandType.StoredProcedure);
     }
 
     private async Task<IReadOnlyList<TReturn>> InternalQueryAsync<TReturn>(string storedProcedure, object? param)
