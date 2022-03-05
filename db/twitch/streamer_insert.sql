@@ -1,22 +1,25 @@
-create function twitch.streamer_insert(username_ text, started_streaming_ timestamp with time zone) returns boolean
-    language plpgsql
-as
+CREATE FUNCTION twitch.streamer_insert (
+    username_ TEXT,
+    started_streaming_ TIMESTAMP WITH TIME zone
+    )
+RETURNS boolean LANGUAGE plpgsql
+AS
 $$
-begin
-    insert into twitch.streamer
-    (
+
+BEGIN
+    INSERT INTO twitch.streamer (
         username,
         started_streaming
-    )
-    values
-        (
-            username_,
-            started_streaming_
+        )
+    VALUES (
+        username_,
+        started_streaming_
         );
 
-    return FOUND;
-end
-$$;
+    RETURN FOUND;
+END $$;
 
-alter function twitch.streamer_insert(text, timestamp with time zone) owner to markr;
-
+ALTER FUNCTION twitch.streamer_insert (
+    TEXT,
+    TIMESTAMP WITH TIME zone
+    ) OWNER TO markr;
