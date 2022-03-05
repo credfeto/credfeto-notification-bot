@@ -30,7 +30,7 @@ internal static class Services
 
         services.AddOptions()
                 .ConfigureResources()
-                .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgresql"))
+                .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
                 .ConfigurePostgresql()
                 .ConfigureDatabaseShared()
                 .ConfigureDatabase()

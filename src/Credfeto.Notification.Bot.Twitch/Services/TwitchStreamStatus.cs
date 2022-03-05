@@ -42,7 +42,9 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
 
         Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.OnStreamOnline);
+                  .Select(e => Observable.FromAsync(() => this.OnStreamOnlineAsync(e)))
+                  .Concat()
+                  .Subscribe();
 
         Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
@@ -59,13 +61,20 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
         //return Task.CompletedTask;
     }
 
-    private void OnStreamOnline(OnStreamOnlineArgs e)
+    private async Task OnStreamOnlineAsync(OnStreamOnlineArgs e)
     {
         this._logger.LogWarning($"{e.Channel}: Started streaming \"{e.Stream.Title}\" ({e.Stream.GameName}) at {e.Stream.StartedAt}");
 
         TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
-        state.Online(gameName: e.Stream.GameName, startDate: e.Stream.StartedAt);
+        try
+        {
+            await state.OnlineAsync(gameName: e.Stream.GameName, startDate: e.Stream.StartedAt);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{e.Channel}: Failed to notify Started streaming");
+        }
     }
 
     private void OnStreamOffline(OnStreamOfflineArgs e)
