@@ -12,7 +12,8 @@ begin
         (
             channel_,
             start_date_
-        );
+        )
+    on conflict do nothing;
 
     return found;
 end;

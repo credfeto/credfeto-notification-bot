@@ -1,4 +1,4 @@
-create function twitch.streamer_insert(username_ text, datecreated_ timestamp with time zone) returns boolean
+create function twitch.streamer_insert(username_ text, date_created_ timestamp with time zone) returns boolean
     language plpgsql
 as
 $$
@@ -6,13 +6,14 @@ begin
     insert into twitch.streamer
     (
         username,
-        datecreated
+        date_created
     )
     values
         (
             userName_,
-            dateCreated_
-        );
+            date_created_
+        )
+    on conflict do nothing;
 
     return FOUND;
 end
