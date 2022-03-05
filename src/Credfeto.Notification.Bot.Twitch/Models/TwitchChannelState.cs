@@ -21,6 +21,7 @@ public sealed class TwitchChannelState
     private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
+    private readonly IUserInfoService _userInfoService;
     private ActiveStream? _stream;
 
     public TwitchChannelState(string channelName,
@@ -28,6 +29,7 @@ public sealed class TwitchChannelState
                               IRaidWelcome raidWelcome,
                               IShoutoutJoiner shoutoutJoiner,
                               IContributionThanks contributionThanks,
+                              IUserInfoService userInfoService,
                               ITwitchStreamDataManager twitchStreamDataManager,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
@@ -36,6 +38,7 @@ public sealed class TwitchChannelState
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
+        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -72,20 +75,27 @@ public sealed class TwitchChannelState
     {
         if (this._stream == null)
         {
+            this._logger.LogDebug($"{this._channelName}: Message from {user} while stream offline");
+
             return;
         }
 
         if (!this._options.IsModChannel(this._channelName))
         {
+            this._logger.LogDebug($"{this._channelName}: Message from {user} that not modding for");
+
             return;
         }
 
         if (bits != 0)
         {
+            this._logger.LogDebug($"{this._channelName}: {user} Gave {bits}");
             this._stream.AddBitGifter(user: user, bits: bits);
 
             await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
         }
+
+        this._logger.LogInformation($"{this._channelName}: {user} checking for chat status");
 
         // TODO: Implement detection for other streamers
         if (this._stream.AddChatter(user))
@@ -100,12 +110,20 @@ public sealed class TwitchChannelState
 
             await this._twitchStreamDataManager.AddChatterToStreamAsync(channel: this._channelName, streamStartDate: this._stream.StartedAt, username: user);
 
-            // first time chatted in channel
-            bool streamer = await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: user, cancellationToken: cancellationToken);
+            TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user);
 
-            if (!streamer)
+            if (twitchUser == null)
             {
-                // TODO: Add new chat welcome.
+                return;
+            }
+
+            this._logger.LogWarning($"Found {twitchUser.UserName}. Streamer: {twitchUser.IsStreamer} Created: {twitchUser.DateCreated}");
+
+            // TODO: Add new chat welcome (To regulars?).
+
+            if (twitchUser.IsStreamer)
+            {
+                await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: twitchUser, cancellationToken: cancellationToken);
             }
         }
     }

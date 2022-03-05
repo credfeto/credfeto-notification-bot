@@ -14,19 +14,17 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 {
     private readonly ILogger<ShoutoutJoiner> _logger;
     private readonly TwitchBotOptions _options;
-    private readonly IUserInfoService _userInfoService;
 
-    public ShoutoutJoiner(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, IUserInfoService userInfoService, ILogger<ShoutoutJoiner> logger)
+    public ShoutoutJoiner(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<ShoutoutJoiner> logger)
         : base(twitchChatMessageChannel)
     {
-        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public async Task<bool> IssueShoutoutAsync(string channel, string visitingStreamer, CancellationToken cancellationToken)
+    public async Task<bool> IssueShoutoutAsync(string channel, TwitchUser visitingStreamer, CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"{channel}: Checking if need to shoutout {visitingStreamer}");
+        this._logger.LogInformation($"{channel}: Checking if need to shoutout {visitingStreamer.UserName}");
         TwitchChannelShoutout? soChannel = this._options.Shoutouts.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: channel));
 
         if (soChannel == null)
@@ -38,30 +36,20 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
         if (streamer == null)
         {
-            TwitchUser? user = await this._userInfoService.GetUserAsync(visitingStreamer);
+            // TODO: Check to see if the user has streamed recently using API
+            // TODO: Can mod comments be read?
+            this._logger.LogWarning($"{channel}: Check out https://www.twitch.tv/{visitingStreamer.UserName}");
 
-            if (user != null)
-            {
-                this._logger.LogWarning($"Found {user.UserName}. Streamer: {user.IsStreamer} Created: {user.DateCreated}");
-
-                if (user.IsStreamer)
-                {
-                    // TODO: Check to see if the user has streamed recently using API
-                    // TODO: Can mod comments be read?
-                    this._logger.LogWarning($"{channel}: Check out https://www.twitch.tv/{visitingStreamer}");
-
-                    // TODO: Log in DB and id becomes a regular then shout them out
-                }
-            }
+            // TODO: Log in DB and id becomes a regular then shout them out
 
             return false;
         }
 
-        this._logger.LogInformation($"{channel}: Check out https://www.twitch.tv/{visitingStreamer}");
+        this._logger.LogInformation($"{channel}: Check out https://www.twitch.tv/{visitingStreamer.UserName}");
 
         if (string.IsNullOrWhiteSpace(streamer.Message))
         {
-            await this.SendMessageAsync(channel: channel, $"Check out https://www.twitch.tv/{visitingStreamer}", cancellationToken: cancellationToken);
+            await this.SendMessageAsync(channel: channel, $"Check out https://www.twitch.tv/{visitingStreamer.UserName}", cancellationToken: cancellationToken);
         }
         else
         {

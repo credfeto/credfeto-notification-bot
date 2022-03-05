@@ -9,7 +9,7 @@
         </node>
       </scope>
     </mapping>
-    <mapping uuid="045161cb-9e24-44ab-ad87-7f2b199de1ec" name="notification-bot@debian-i7 Mapping">
+    <mapping uuid="045161cb-9e24-44ab-ad87-7f2b199de1ec" name="notification-bot@debian-i7 DDL Mapping">
       <data-sources db="54dbe880-c49d-44bf-a680-092242d45a1d" ddl="f4188d8f-3b60-4c37-a107-fcb8c4f839cd" />
       <scope>
         <node kind="database" qname="notification-bot">
