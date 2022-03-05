@@ -20,7 +20,7 @@ public sealed class TwitchStreamerDataManager : ITwitchStreamerDataManager
 
     public Task AddStreamerAsync(string streamerName, DateTime startedStreaming)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.streamer_insert", new { username_ = streamerName, datecreated_ = startedStreaming });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.streamer_insert", new { username_ = streamerName, date_created_ = startedStreaming });
     }
 
     public Task<TwitchUser?> GetByUserNameAsync(string userName)
