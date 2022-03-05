@@ -29,12 +29,18 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     }
 
     [Fact]
-    public Task AddChatterToStreamAsync()
+    public async Task AddChatterToStreamAsync()
     {
         string channelName = GenerateUsername();
         string chatter = GenerateUsername();
         DateTime streamStart = this._currentTimeSource.UtcNow();
 
-        return this._twitchStreamDataManager.AddChatterToStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
+        bool isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
+        Assert.True(condition: isFirstMessageInStream, userMessage: "Should be first message");
+
+        await this._twitchStreamDataManager.AddChatterToStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
+
+        isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
+        Assert.False(condition: isFirstMessageInStream, userMessage: "Should not be first message");
     }
 }
