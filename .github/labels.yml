@@ -114,6 +114,34 @@
    color: "ff0000"
    description: "This pull request should not be merged yey"
 
+ - name: "Database"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Database project"
+
+ - name: "Database.Dapper"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Database.Dapper project"
+
+ - name: "Database.Interfaces"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Database.Interfaces project"
+
+ - name: "Database.Pgsql"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Database.Pgsql project"
+
+ - name: "Database.Shared"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Database.Shared project"
+
+ - name: "Database.Tests"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Database.Tests project"
+
+ - name: "Database.Tests.Integration"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Database.Tests.Integration project"
+
  - name: "Server"
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Server project"
@@ -122,7 +150,15 @@
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Shared project"
 
+ - name: "Shared.Extensions"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Shared.Extensions project"
+
  - name: "Twitch"
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Twitch project"
+
+ - name: "Twitch.Data.Interfaces"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Twitch.Data.Interfaces project"
 
