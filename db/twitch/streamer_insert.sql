@@ -1,20 +1,18 @@
-CREATE PROCEDURE twitch.streamer_insert (
-    username_ VARCHAR,
-    started_streaming_ TIMESTAMP without TIME zone
-    ) LANGUAGE sql
-AS
+create procedure twitch.streamer_insert(username_ text, started_streaming_ timestamp with time zone)
+    language sql
+as
 $$
-
-INSERT INTO twitch.streamer (
+insert into twitch.streamer
+(
     username,
     started_streaming
-    )
-VALUES (
-    username_,
-    started_streaming_
-    );$$;
+)
+values
+    (
+        username_,
+        started_streaming_
+    );
+$$;
 
-ALTER PROCEDURE twitch.streamer_insert (
-    VARCHAR,
-    TIMESTAMP
-    ) OWNER TO markr;
+alter procedure twitch.streamer_insert(text, timestamp with time zone) owner to markr;
+
