@@ -1,20 +1,17 @@
-create function twitch.streamer_get(username_ character varying)
-    returns TABLE(username character varying, datecreated timestamp without time zone)
-    language plpgsql
-as
+CREATE FUNCTION twitch.streamer_get (username_ VARCHAR)
+RETURNS TABLE (
+    username VARCHAR,
+    datecreated TIMESTAMP without TIME zone
+    ) LANGUAGE plpgsql
+AS
 $$
-begin
-    return QUERY(
-        select
-            s.username,
-            s.datecreated
-        from twitch.streamer s
-        where s.username = username_
-    );
-end;
-$$;
 
-alter function twitch.streamer_get(varchar) owner to markr;
+BEGIN
+    RETURN QUERY(SELECT s.username, s.datecreated FROM twitch.streamer s WHERE s.username = username_);
+END;$$;
 
-grant execute on function twitch.streamer_get(varchar) to bot;
+ALTER FUNCTION twitch.streamer_get (VARCHAR) OWNER TO markr;
 
+GRANT EXECUTE
+    ON FUNCTION twitch.streamer_get(VARCHAR)
+    TO bot;
