@@ -19,6 +19,32 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Shared", "Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj", "{DAC38F12-BF0F-4EB5-8AD9-0AE7C44FD52C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database", "Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj", "{71B54AD3-D740-47E0-86E1-DC9EB12BB904}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Tests", "Credfeto.Notification.Bot.Database.Tests\Credfeto.Notification.Bot.Database.Tests.csproj", "{1AF0EF16-EAAF-475A-B8FD-1839FC3BE107}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Tests.Integration", "Credfeto.Notification.Bot.Database.Tests.Integration\Credfeto.Notification.Bot.Database.Tests.Integration.csproj", "{939617F8-AE90-44AB-A449-F1F867A1B766}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Twitch.Data.Interfaces", "Credfeto.Notification.Bot.Twitch.Data.Interfaces\Credfeto.Notification.Bot.Twitch.Data.Interfaces.csproj", "{5C63DC80-5D7F-4091-804F-08101232D01C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{F61480AF-BE5E-4716-9331-93D9DD9B7934}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{4C9C7072-B117-48F4-A250-068B44C7C8CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Twitch", "Twitch", "{95998E18-592F-4DA8-86A9-D5892BBCD26E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{B5ABC8F6-987B-412A-933A-AA438C0B4F7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Dapper", "Credfeto.Notification.Bot.Database.Dapper\Credfeto.Notification.Bot.Database.Dapper.csproj", "{F5AD38F8-524B-41A5-991C-23989055D0EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Pgsql", "Credfeto.Notification.Bot.Database.Pgsql\Credfeto.Notification.Bot.Database.Pgsql.csproj", "{6AA05EC3-9795-489B-B68A-0C8717137D10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Interfaces", "Credfeto.Notification.Bot.Database.Interfaces\Credfeto.Notification.Bot.Database.Interfaces.csproj", "{10D89A4F-C675-4335-A68A-8584D1DB7611}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Database.Shared", "Credfeto.Notification.Bot.Database.Shared\Credfeto.Notification.Bot.Database.Shared.csproj", "{76989590-4943-4A85-BE7C-68BAB0850452}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Shared.Extensions", "Credfeto.Notification.Bot.Shared.Extensions\Credfeto.Notification.Bot.Shared.Extensions.csproj", "{7ADE5351-81E2-4C47-81E0-F470D5A3321E}"
+EndProject
 Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2DDAB2F1-7D26-48B5-8613-A8F973494365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,9 +59,59 @@ Global
 		{DAC38F12-BF0F-4EB5-8AD9-0AE7C44FD52C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAC38F12-BF0F-4EB5-8AD9-0AE7C44FD52C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAC38F12-BF0F-4EB5-8AD9-0AE7C44FD52C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71B54AD3-D740-47E0-86E1-DC9EB12BB904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71B54AD3-D740-47E0-86E1-DC9EB12BB904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71B54AD3-D740-47E0-86E1-DC9EB12BB904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71B54AD3-D740-47E0-86E1-DC9EB12BB904}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AF0EF16-EAAF-475A-B8FD-1839FC3BE107}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF0EF16-EAAF-475A-B8FD-1839FC3BE107}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF0EF16-EAAF-475A-B8FD-1839FC3BE107}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF0EF16-EAAF-475A-B8FD-1839FC3BE107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{939617F8-AE90-44AB-A449-F1F867A1B766}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{939617F8-AE90-44AB-A449-F1F867A1B766}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{939617F8-AE90-44AB-A449-F1F867A1B766}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{939617F8-AE90-44AB-A449-F1F867A1B766}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C63DC80-5D7F-4091-804F-08101232D01C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C63DC80-5D7F-4091-804F-08101232D01C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C63DC80-5D7F-4091-804F-08101232D01C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C63DC80-5D7F-4091-804F-08101232D01C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5AD38F8-524B-41A5-991C-23989055D0EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5AD38F8-524B-41A5-991C-23989055D0EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5AD38F8-524B-41A5-991C-23989055D0EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5AD38F8-524B-41A5-991C-23989055D0EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AA05EC3-9795-489B-B68A-0C8717137D10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AA05EC3-9795-489B-B68A-0C8717137D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AA05EC3-9795-489B-B68A-0C8717137D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AA05EC3-9795-489B-B68A-0C8717137D10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D89A4F-C675-4335-A68A-8584D1DB7611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D89A4F-C675-4335-A68A-8584D1DB7611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D89A4F-C675-4335-A68A-8584D1DB7611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D89A4F-C675-4335-A68A-8584D1DB7611}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76989590-4943-4A85-BE7C-68BAB0850452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76989590-4943-4A85-BE7C-68BAB0850452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76989590-4943-4A85-BE7C-68BAB0850452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76989590-4943-4A85-BE7C-68BAB0850452}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ADE5351-81E2-4C47-81E0-F470D5A3321E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ADE5351-81E2-4C47-81E0-F470D5A3321E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ADE5351-81E2-4C47-81E0-F470D5A3321E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ADE5351-81E2-4C47-81E0-F470D5A3321E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{71B54AD3-D740-47E0-86E1-DC9EB12BB904} = {F61480AF-BE5E-4716-9331-93D9DD9B7934}
+		{1AF0EF16-EAAF-475A-B8FD-1839FC3BE107} = {F61480AF-BE5E-4716-9331-93D9DD9B7934}
+		{939617F8-AE90-44AB-A449-F1F867A1B766} = {F61480AF-BE5E-4716-9331-93D9DD9B7934}
+		{2DDAB2F1-7D26-48B5-8613-A8F973494365} = {4C9C7072-B117-48F4-A250-068B44C7C8CA}
+		{1B81D72B-851E-4E79-9350-2977914BB5C3} = {95998E18-592F-4DA8-86A9-D5892BBCD26E}
+		{5C63DC80-5D7F-4091-804F-08101232D01C} = {95998E18-592F-4DA8-86A9-D5892BBCD26E}
+		{DAC38F12-BF0F-4EB5-8AD9-0AE7C44FD52C} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
+		{F5AD38F8-524B-41A5-991C-23989055D0EB} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
+		{6AA05EC3-9795-489B-B68A-0C8717137D10} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
+		{10D89A4F-C675-4335-A68A-8584D1DB7611} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
+		{76989590-4943-4A85-BE7C-68BAB0850452} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
+		{7ADE5351-81E2-4C47-81E0-F470D5A3321E} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
 	EndGlobalSection
 EndGlobal

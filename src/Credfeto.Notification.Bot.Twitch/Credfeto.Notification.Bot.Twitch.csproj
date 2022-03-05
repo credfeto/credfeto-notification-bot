@@ -50,5 +50,6 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
+        <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Data.Interfaces\Credfeto.Notification.Bot.Twitch.Data.Interfaces.csproj"/>
     </ItemGroup>
 </Project>

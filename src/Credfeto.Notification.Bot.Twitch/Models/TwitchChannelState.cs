@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Microsoft.Extensions.Logging;
 
@@ -19,6 +20,7 @@ public sealed class TwitchChannelState
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
+    private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private ActiveStream? _stream;
 
     public TwitchChannelState(string channelName,
@@ -26,6 +28,7 @@ public sealed class TwitchChannelState
                               IRaidWelcome raidWelcome,
                               IShoutoutJoiner shoutoutJoiner,
                               IContributionThanks contributionThanks,
+                              ITwitchStreamDataManager twitchStreamDataManager,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._channelName = channelName;
@@ -33,13 +36,16 @@ public sealed class TwitchChannelState
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
+        this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public void Online(string gameName, in DateTime startDate)
+    public Task OnlineAsync(string gameName, in DateTime startDate)
     {
         this._logger.LogInformation($"{this._channelName}: Going Online...");
         this._stream = new(gameName: gameName, startedAt: startDate);
+
+        return this._twitchStreamDataManager.RecordStreamStartAsync(channel: this._channelName, streamStartDate: startDate);
     }
 
     public void Offline()
@@ -84,6 +90,16 @@ public sealed class TwitchChannelState
         // TODO: Implement detection for other streamers
         if (this._stream.AddChatter(user))
         {
+            // note that this covers disconnections of the bot
+            bool firstTimeInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(channel: this._channelName, streamStartDate: this._stream.StartedAt, username: user);
+
+            if (!firstTimeInStream)
+            {
+                return;
+            }
+
+            await this._twitchStreamDataManager.AddChatterToStreamAsync(channel: this._channelName, streamStartDate: this._stream.StartedAt, username: user);
+
             // first time chatted in channel
             bool streamer = await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: user, cancellationToken: cancellationToken);
 

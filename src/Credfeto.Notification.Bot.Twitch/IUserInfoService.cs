@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 namespace Credfeto.Notification.Bot.Twitch;
 

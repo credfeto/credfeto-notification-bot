@@ -67,7 +67,10 @@
         <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
+      <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Pgsql\Credfeto.Notification.Bot.Database.Pgsql.csproj"/>
+      <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Shared\Credfeto.Notification.Bot.Database.Shared.csproj"/>
+      <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj"/>
+      <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj"/>
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Workers" />

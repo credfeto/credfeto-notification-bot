@@ -1,6 +1,7 @@
 using System;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,16 +17,19 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ConcurrentDictionary<string, TwitchChannelState> _streamStates;
+    private readonly ITwitchStreamDataManager _twitchStreamDataManager;
 
     public TwitchChannelManager(IOptions<TwitchBotOptions> options,
                                 IRaidWelcome raidWelcome,
                                 IShoutoutJoiner shoutoutJoiner,
                                 IContributionThanks contributionThanks,
+                                ITwitchStreamDataManager twitchStreamDataManager,
                                 ILogger<TwitchChannelManager> logger)
     {
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
+        this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._streamStates = new(comparer: StringComparer.OrdinalIgnoreCase);
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -45,6 +49,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                                                   raidWelcome: this._raidWelcome,
                                                                   shoutoutJoiner: this._shoutoutJoiner,
                                                                   contributionThanks: this._contributionThanks,
+                                                                  twitchStreamDataManager: this._twitchStreamDataManager,
                                                                   logger: this._logger));
     }
 }
