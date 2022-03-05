@@ -1,6 +1,7 @@
 using Credfeto.Notification.Bot.Database.Interfaces.Builders;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
+using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
 using Credfeto.Notification.Bot.Database.Twitch.DataManagers;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,8 @@ internal static class TwitchDatabaseSetup
 
     private static IServiceCollection AddObjectBuilders(this IServiceCollection services)
     {
-        return services.AddSingleton<IObjectBuilder<TwitchUserEntity, TwitchUser>, TwitchUserBuilder>();
+        return services.AddSingleton<IObjectBuilder<TwitchUserEntity, TwitchUser>, TwitchUserBuilder>()
+                       .AddSingleton<IObjectBuilder<TwitchChatterEntity, TwitchChatter>, TwitchChatterBuilder>();
     }
 
     private static IServiceCollection AddDataManagers(this IServiceCollection services)

@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Database.Tests.Integration.Setup;
 using Credfeto.Notification.Bot.Shared;
@@ -23,9 +22,7 @@ public sealed class TwitchStreamerDataManagerTests : DatabaseIntegrationTestBase
     [Fact]
     public async Task AddAsync()
     {
-        string channelName = "@" + Guid.NewGuid()
-                                       .ToString()
-                                       .Replace(oldValue: "-", newValue: "");
+        string channelName = GenerateUsername();
 
         TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(channelName);
         Assert.Null(user);

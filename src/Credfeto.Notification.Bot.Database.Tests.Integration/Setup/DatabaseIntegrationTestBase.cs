@@ -1,3 +1,4 @@
+using System;
 using FunFair.Test.Common;
 using Xunit.Abstractions;
 
@@ -8,5 +9,12 @@ public abstract class DatabaseIntegrationTestBase : IntegrationTestBase
     protected DatabaseIntegrationTestBase(ITestOutputHelper output)
         : base(output: output, dependencyInjectionRegistration: IntegrationTestStartup.ConfigureServices)
     {
+    }
+
+    protected static string GenerateUsername()
+    {
+        return "@" + Guid.NewGuid()
+                         .ToString()
+                         .Replace(oldValue: "-", newValue: "");
     }
 }

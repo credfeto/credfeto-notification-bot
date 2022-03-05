@@ -15,5 +15,5 @@ public sealed class TwitchChatterEntity
     public string? Chat_User { get; init; }
 
     // ReSharper disable once InconsistentNaming
-    public DateTime? First_Message_Date { get; init; }
+    public DateTime First_Message_Date { get; init; }
 }

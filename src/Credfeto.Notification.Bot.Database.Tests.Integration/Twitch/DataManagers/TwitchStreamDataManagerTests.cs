@@ -21,12 +21,20 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     }
 
     [Fact]
-    public Task AddAsync()
+    public Task AddStreamStartAsync()
     {
-        string channelName = "@" + Guid.NewGuid()
-                                       .ToString()
-                                       .Replace(oldValue: "-", newValue: "");
+        string channelName = GenerateUsername();
 
         return this._twitchStreamDataManager.RecordStreamStartAsync(channel: channelName, this._currentTimeSource.UtcNow());
+    }
+
+    [Fact]
+    public Task AddChatterToStreamAsync()
+    {
+        string channelName = GenerateUsername();
+        string chatter = GenerateUsername();
+        DateTime streamStart = this._currentTimeSource.UtcNow();
+
+        return this._twitchStreamDataManager.AddChatterToStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
     }
 }
