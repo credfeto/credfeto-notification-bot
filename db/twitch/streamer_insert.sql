@@ -5,8 +5,8 @@ $$
 begin
     insert into twitch.streamer
     (
-        UserName,
-        DateCreated
+        username,
+        datecreated
     )
     values
         (

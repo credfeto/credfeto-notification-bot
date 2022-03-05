@@ -6,10 +6,10 @@ $$
 begin
     return QUERY(
         select
-            UserName,
-            DateCreated
-        from twitch.streamer
-        where UserName = userName    
+            s.username,
+            s.datecreated
+        from twitch.streamer s
+        where s.username = username_
     );
 end;
 $$;
