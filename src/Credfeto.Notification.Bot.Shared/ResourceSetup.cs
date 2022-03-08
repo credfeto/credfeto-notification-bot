@@ -12,12 +12,7 @@ public static class ResourceSetup
     ///     Configures resources.
     /// </summary>
     /// <param name="services"></param>
-    public static IServiceCollection ConfigureResources(this IServiceCollection services)
-    {
-        return AddResources(services);
-    }
-
-    private static IServiceCollection AddResources(this IServiceCollection services)
+    public static IServiceCollection AddResources(this IServiceCollection services)
     {
         return services.AddSingleton<ICurrentTimeSource, CurrentTimeSource>()
                        .AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>));

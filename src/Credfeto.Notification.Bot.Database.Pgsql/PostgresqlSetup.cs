@@ -12,7 +12,7 @@ public static class PostgresqlSetup
     ///     Configures Postgresql DB.
     /// </summary>
     /// <param name="services"></param>
-    public static IServiceCollection ConfigurePostgresql(this IServiceCollection services)
+    public static IServiceCollection AddPostgresql(this IServiceCollection services)
     {
         return services.AddSingleton<IDatabase, PgsqlDatabase>();
     }

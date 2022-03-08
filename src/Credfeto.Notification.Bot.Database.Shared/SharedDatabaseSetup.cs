@@ -13,7 +13,7 @@ public static class SharedDatabaseSetup
     ///     Configures database.
     /// </summary>
     /// <param name="services">The DI Container to register services in.</param>
-    public static IServiceCollection ConfigureDatabaseShared(this IServiceCollection services)
+    public static IServiceCollection AddDatabaseShared(this IServiceCollection services)
     {
         return services.AddSingleton(typeof(IObjectCollectionBuilder<,>), typeof(ObjectCollectionBuilder<,>));
     }

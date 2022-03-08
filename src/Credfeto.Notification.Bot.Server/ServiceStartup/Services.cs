@@ -22,20 +22,25 @@ internal static class Services
     {
         hostContext.HostingEnvironment.ContentRootFileProvider = new NullFileProvider();
 
-        Log.Logger = new LoggerConfiguration().Enrich.FromLogContext()
-                                              .WriteTo.Console()
-                                              .CreateLogger();
+        Log.Logger = CreateLogger();
 
         IConfigurationRoot configurationRoot = LoadConfigFile();
 
         services.AddOptions()
-                .ConfigureResources()
+                .AddResources()
                 .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
-                .ConfigurePostgresql()
-                .ConfigureDatabaseShared()
-                .ConfigureDatabase()
+                .AddPostgresql()
+                .AddDatabaseShared()
+                .AddApplicationDatabase()
                 .Configure<TwitchBotOptions>(configurationRoot.GetSection("Twitch"))
-                .ConfigureTwitch();
+                .AddTwitch();
+    }
+
+    private static Logger CreateLogger()
+    {
+        return new LoggerConfiguration().Enrich.FromLogContext()
+                                        .WriteTo.Console()
+                                        .CreateLogger();
     }
 
     private static IConfigurationRoot LoadConfigFile()

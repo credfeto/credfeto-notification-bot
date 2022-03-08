@@ -9,7 +9,7 @@ public static class DatabaseSetup
     ///     Configures database.
     /// </summary>
     /// <param name="services">The DI Container to register services in.</param>
-    public static IServiceCollection ConfigureDatabase(this IServiceCollection services)
+    public static IServiceCollection AddApplicationDatabase(this IServiceCollection services)
     {
         return services.AddTwitch();
     }
