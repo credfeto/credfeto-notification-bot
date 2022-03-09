@@ -95,8 +95,6 @@ public sealed class TwitchChannelState
             await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
         }
 
-        this._logger.LogInformation($"{this._channelName}: {user} checking for chat status");
-
         // TODO: Implement detection for other streamers
         if (this._stream.AddChatter(user))
         {
