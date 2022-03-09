@@ -29,6 +29,8 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
         if (soChannel == null)
         {
+            this._logger.LogInformation($"{channel}: Shout-outs not enabled");
+
             return false;
         }
 
