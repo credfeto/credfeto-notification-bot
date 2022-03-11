@@ -38,6 +38,11 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
         if (streamer == null)
         {
+            foreach (TwitchFriendChannel c in soChannel.FriendChannels)
+            {
+                this._logger.LogInformation($"{channel}: Found Friend: {c.Channel}");
+            }
+
             // TODO: Check to see if the user has streamed recently using API
             // TODO: Can mod comments be read?
             this._logger.LogWarning($"{channel}: Check out https://www.twitch.tv/{visitingStreamer.UserName}");
