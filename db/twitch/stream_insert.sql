@@ -1,26 +1,23 @@
-CREATE FUNCTION twitch.stream_insert (
-    channel_ VARCHAR,
-    start_date_ TIMESTAMP WITH TIME zone
-    )
-RETURNS boolean LANGUAGE plpgsql
-AS
+create function twitch.stream_insert(channel_ character varying, start_date_ timestamp with time zone) returns boolean
+    language plpgsql
+as
 $$
-
-BEGIN
-    INSERT INTO twitch.stream (
+begin
+    insert into twitch.stream
+    (
         channel,
         start_date
+    )
+    values
+        (
+            channel_,
+            start_date_
         )
-    VALUES (
-        channel_,
-        start_date_
-        )
-        ON conflict do nothing;
+    on conflict do nothing;
 
-    RETURN found;
-END;$$;
+    return found;
+end;
+$$;
 
-ALTER FUNCTION twitch.stream_insert (
-    VARCHAR,
-    TIMESTAMP WITH TIME zone
-    ) OWNER TO markr;
+alter function twitch.stream_insert(varchar, timestamp with time zone) owner to markr;
+

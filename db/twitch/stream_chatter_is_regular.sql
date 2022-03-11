@@ -1,26 +1,28 @@
-CREATE FUNCTION twitch.stream_chatter_is_regular (
-    channel_ VARCHAR,
-    username_ VARCHAR
-    )
-RETURNS TABLE (
-    chat_user VARCHAR,
-    regular boolean
-    ) LANGUAGE plpgsql
-AS
+create function twitch.stream_chatter_is_regular(channel_ character varying, username_ character varying)
+    returns TABLE(chat_user character varying, regular boolean)
+    language plpgsql
+as
 $$
-
 BEGIN
-    RETURN query(SELECT username_ AS chat_user, EXISTS (
-                SELECT chat_user
-                FROM twitch.stream_chatter
-                WHERE channel = channel_
-                    AND chat_user = username_
-                GROUP BY chat_user
-                HAVING count(*) > 2
-                ) AS regular);
-END;$$;
+    return QUERY (
+        select c.chat_user, c.regular
+        from (
+                 select sc.chat_user, true as regular
+                 from twitch.stream_chatter sc
+                 where sc.channel = channel_
+                   and sc.chat_user = username_
+                 group by sc.chat_user
+                 having count(*) > 2
+                 union
+                 select username_ as chat_user,
+                        false     as regular
+             ) as c
+        order by c.regular desc
+        limit 1
+    );
 
-ALTER FUNCTION twitch.stream_chatter_is_regular (
-    VARCHAR,
-    VARCHAR
-    ) OWNER TO markr;
+END;
+$$;
+
+alter function twitch.stream_chatter_is_regular(varchar, varchar) owner to markr;
+
