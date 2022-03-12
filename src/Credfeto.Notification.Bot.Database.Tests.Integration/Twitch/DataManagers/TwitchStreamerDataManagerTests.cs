@@ -27,7 +27,7 @@ public sealed class TwitchStreamerDataManagerTests : DatabaseIntegrationTestBase
         TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(channelName);
         Assert.Null(user);
 
-        await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: channelName, this._currentTimeSource.UtcNow());
+        await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: channelName, streamerId: channelName, this._currentTimeSource.UtcNow());
 
         user = await this._twitchStreamerDataManager.GetByUserNameAsync(channelName);
         Assert.NotNull(user);
