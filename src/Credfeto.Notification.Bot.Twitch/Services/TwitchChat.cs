@@ -18,6 +18,9 @@ using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Events;
 using TwitchLib.Communication.Models;
+using TwitchLib.PubSub;
+using TwitchLib.PubSub.Events;
+using OnLogArgs = TwitchLib.Client.Events.OnLogArgs;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
@@ -28,6 +31,7 @@ public sealed class TwitchChat : ITwitchChat
     private readonly ILogger<TwitchChat> _logger;
 
     private readonly TwitchBotOptions _options;
+    private readonly TwitchPubSub _pubSub;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
@@ -45,6 +49,9 @@ public sealed class TwitchChat : ITwitchChat
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+
+        this._pubSub = new();
+        this._pubSub.Connect();
 
         List<string> channels = new[]
                                 {
@@ -65,6 +72,13 @@ public sealed class TwitchChat : ITwitchChat
 
         client.Initialize(credentials: credentials, channels: channels);
         this._client = client;
+
+        // FOLLOWS
+        Observable.FromEventPattern<OnFollowArgs>(addHandler: h => this._pubSub.OnFollow += h, removeHandler: h => this._pubSub.OnFollow -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Select(e => Observable.FromAsync(cancellationToken => this.OnFollowedAsync(e: e, cancellationToken: cancellationToken)))
+                  .Concat()
+                  .Subscribe();
 
         // HEALTH
         Observable.FromEventPattern<OnConnectedArgs>(addHandler: h => this._client.OnConnected += h, removeHandler: h => this._client.OnConnected -= h)
@@ -300,9 +314,20 @@ public sealed class TwitchChat : ITwitchChat
         return state.RaidedAsync(raider: e.RaidNotification.DisplayName, viewerCount: e.RaidNotification.MsgParamViewerCount, cancellationToken: cancellationToken);
     }
 
+    private async Task OnFollowedAsync(OnFollowArgs e, CancellationToken cancellationToken)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(0.1), cancellationToken: cancellationToken);
+        this._logger.LogInformation($"{e.FollowedChannelId}: Followed by {e.Username}");
+    }
+
     private void OnJoinedChannel(OnJoinedChannelArgs e)
     {
         this._logger.LogInformation($"{e.Channel}: Joining channel as {e.BotUsername}");
+
+        if (this._options.IsModChannel(e.Channel))
+        {
+            this._pubSub.ListenToFollows(e.Channel);
+        }
     }
 
     private async Task OnMessageReceivedAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
