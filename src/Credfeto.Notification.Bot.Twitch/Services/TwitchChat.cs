@@ -29,6 +29,7 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChat : ITwitchChat
 {
+    private readonly IChannelFollowCount _channelFollowCount;
     private readonly TwitchClient _client;
     private readonly IHeistJoiner _heistJoiner;
     private readonly ILogger<TwitchChat> _logger;
@@ -45,12 +46,14 @@ public sealed class TwitchChat : ITwitchChat
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
                       IUserInfoService userInfoService,
+                      IChannelFollowCount channelFollowCount,
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IHeistJoiner heistJoiner,
                       ILogger<TwitchChat> logger)
     {
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
+        this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
@@ -111,7 +114,7 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnJoinedChannelArgs>(addHandler: h => this._client.OnJoinedChannel += h, removeHandler: h => this._client.OnJoinedChannel -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Select(e => Observable.FromAsync(_ => this.OnJoinedChannelAsync(e: e)))
+                  .Select(e => Observable.FromAsync(cancellationToken => this.OnJoinedChannelAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
 
@@ -343,7 +346,7 @@ public sealed class TwitchChat : ITwitchChat
         }
     }
 
-    private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e)
+    private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{e.Channel}: Joining channel as {e.BotUsername}");
 
@@ -353,10 +356,13 @@ public sealed class TwitchChat : ITwitchChat
 
             if (channel != null)
             {
-                this._logger.LogInformation($"{e.Channel}: Listening to follows {channel.Id}");
+                this._logger.LogInformation($"{e.Channel}: Listening for new follows as {channel.Id} using pubsub");
                 this._pubSub.SendTopics();
                 this._pubSub.ListenToFollows(channel.Id);
                 this._userMappings.GetOrAdd(key: channel.Id, value: channel.UserName);
+
+                int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: e.Channel, cancellationToken: cancellationToken);
+                this._logger.LogInformation($"{e.Channel}: Currently has {followers} followers");
             }
         }
     }

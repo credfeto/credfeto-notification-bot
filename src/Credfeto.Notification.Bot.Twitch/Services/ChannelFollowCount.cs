@@ -1,0 +1,92 @@
+using System;
+using System.Globalization;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Twitch.Resources;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Polly;
+
+namespace Credfeto.Notification.Bot.Twitch.Services;
+
+public sealed class ChannelFollowCount : IChannelFollowCount
+{
+    private const string HTTP_CLIENT_NAME = nameof(ChannelFollowCount);
+    private static readonly TimeSpan ClientTimeout = TimeSpan.FromSeconds(2);
+    private static readonly TimeSpan ClientPolicyTimeout = ClientTimeout.Add(TimeSpan.FromSeconds(1));
+
+    private static readonly string UserAgentProduct = DetermineUserAgentProduct();
+    private static readonly string UserAgentVersion = DetermineUserAgentVersion();
+    private static readonly Uri BaseUri = new("https://api.crunchprank.net/");
+
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<ChannelFollowCount> _logger;
+
+    public ChannelFollowCount(IHttpClientFactory httpClientFactory, ILogger<ChannelFollowCount> logger)
+    {
+        this._httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
+    public async Task<int> GetCurrentFollowerCountAsync(string username, CancellationToken cancellationToken)
+    {
+        HttpClient client = this.GetClient();
+
+        Uri followCountUri = new("/twitch/followcount/" + username.ToLowerInvariant(), uriKind: UriKind.Relative);
+        string result = await client.GetStringAsync(requestUri: followCountUri, cancellationToken: cancellationToken);
+
+        if (int.TryParse(s: result, style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int followers))
+        {
+            return followers;
+        }
+
+        return -1;
+    }
+
+    private HttpClient GetClient()
+    {
+        return this._httpClientFactory.CreateClient(HTTP_CLIENT_NAME);
+    }
+
+    public static IServiceCollection RegisterHttpClient(IServiceCollection services)
+    {
+        return ConfigureCommon(services.AddHttpClient(name: HTTP_CLIENT_NAME, configureClient: InitialiseClientCommon));
+    }
+
+    private static string DetermineUserAgentProduct()
+    {
+        AssemblyName an = typeof(ChannelFollowCount).Assembly.GetName();
+
+        return an.Name!;
+    }
+
+    private static string DetermineUserAgentVersion()
+    {
+        AssemblyName an = typeof(ChannelFollowCount).Assembly.GetName();
+
+        return an.Version!.ToString();
+    }
+
+    private static void InitialiseClientCommon(HttpClient httpClient)
+    {
+        httpClient.BaseAddress = BaseUri;
+        httpClient.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher;
+        httpClient.Timeout = ClientTimeout;
+        httpClient.DefaultRequestVersion = new(major: 1, minor: 1);
+        httpClient.DefaultRequestHeaders.Accept.Add(new(mediaType: @"application/json"));
+        httpClient.DefaultRequestHeaders.UserAgent.Add(new(new ProductHeaderValue(name: UserAgentProduct, version: UserAgentVersion)));
+    }
+
+    private static IServiceCollection ConfigureCommon(IHttpClientBuilder builder)
+    {
+        return builder.SetHandlerLifetime(TimeSpan.FromMinutes(5))
+                      .ConfigurePrimaryHttpMessageHandler(configureHandler: _ => new HttpClientHandler { AutomaticDecompression = DecompressionMethods.All })
+                      .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(ClientPolicyTimeout))
+                      .AddSensibleTransientHttpErrorPolicy()
+                      .Services;
+    }
+}
