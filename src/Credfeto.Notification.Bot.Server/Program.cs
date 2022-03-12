@@ -32,8 +32,19 @@ internal static class Program
     {
         return Host.CreateDefaultBuilder(args)
                    .ConfigureServices(Services.Configure)
-                   .ConfigureLogging((_, logger) => logger.ClearProviders())
+                   .ConfigureLogging(InitialiseProviders)
                    .UseWindowsService()
                    .UseSystemd();
+    }
+
+    private static void InitialiseProviders(HostBuilderContext hostBuilderContext, ILoggingBuilder logger)
+    {
+#if DEBUG
+
+        // Nothing to configure here
+        logger.ClearProviders();
+#else
+        logger.ClearProviders();
+#endif
     }
 }
