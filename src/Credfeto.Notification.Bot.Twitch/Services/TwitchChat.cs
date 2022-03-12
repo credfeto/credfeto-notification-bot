@@ -340,10 +340,36 @@ public sealed class TwitchChat : ITwitchChat
     {
         await Task.Delay(TimeSpan.FromSeconds(0.1), cancellationToken: cancellationToken);
 
-        if (this._userMappings.TryGetValue(key: e.FollowedChannelId, out string? channelName))
+        if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out string? channelName))
         {
-            this._logger.LogInformation($"{channelName}: (Id: {e.FollowedChannelId}) Followed by {e.Username}");
+            return;
         }
+
+        this._logger.LogInformation($"{channelName}: (Id: {e.FollowedChannelId}) Followed by {e.Username}");
+
+        if (!this._options.IsModChannel(channelName))
+        {
+            return;
+        }
+
+        await this.HandleFollowersAsync(channel: channelName, cancellationToken: cancellationToken);
+    }
+
+    private async Task HandleFollowersAsync(string channel, CancellationToken cancellationToken)
+    {
+        int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: channel, cancellationToken: cancellationToken);
+        this._logger.LogWarning($"{channel}: Currently has {followers} followers");
+
+        int[] orderedFollowers = this._options.Milestones.Followers.OrderBy(i => i)
+                                     .ToArray();
+        int lastMileStoneReached = orderedFollowers.LastOrDefault(f => f < followers);
+        int nextMileStone = orderedFollowers.First(f => f > followers);
+
+        double distance = nextMileStone - lastMileStoneReached;
+        double left = followers - lastMileStoneReached;
+        double progress = Math.Round(left / distance * 100, digits: 2);
+
+        this._logger.LogWarning($"{channel}: Follower Milestone {lastMileStoneReached} Next {nextMileStone} Progress : {progress}% of gap filled");
     }
 
     private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
@@ -361,19 +387,7 @@ public sealed class TwitchChat : ITwitchChat
                 this._pubSub.ListenToFollows(channel.Id);
                 this._userMappings.GetOrAdd(key: channel.Id, value: channel.UserName);
 
-                int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: e.Channel, cancellationToken: cancellationToken);
-                this._logger.LogInformation($"{e.Channel}: Currently has {followers} followers");
-
-                int[] orderedFollowers = this._options.Milestones.Followers.OrderBy(i => i)
-                                             .ToArray();
-                int lastMileStoneReached = orderedFollowers.LastOrDefault(f => f < followers);
-                int nextMileStone = orderedFollowers.First(f => f > followers);
-
-                double distance = nextMileStone - lastMileStoneReached;
-                double left = followers - lastMileStoneReached;
-                double progress = Math.Round(left / distance * 100, digits: 2);
-
-                this._logger.LogInformation($"{e.Channel}: Follower Milestone {lastMileStoneReached} Next {nextMileStone} Progress : {progress}% of gap filled");
+                await this.HandleFollowersAsync(channel: e.Channel, cancellationToken: cancellationToken);
             }
         }
     }
