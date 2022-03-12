@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,7 +58,6 @@ public sealed class TwitchChat : ITwitchChat
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
         this._pubSub = new();
-        this._pubSub.Connect();
 
         this._userMappings = new(StringComparer.InvariantCultureIgnoreCase);
 
@@ -82,6 +82,14 @@ public sealed class TwitchChat : ITwitchChat
         this._client = client;
 
         // FOLLOWS
+
+        Observable.FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._pubSub.OnPubSubServiceError += h, removeHandler: h => this._pubSub.OnPubSubServiceError -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.OnPubSubServiceError);
+
+        Observable.FromEventPattern(addHandler: h => this._pubSub.OnPubSubServiceConnected += h, removeHandler: h => this._pubSub.OnPubSubServiceConnected -= h)
+                  .Subscribe(this.OnPubSubServiceConnected);
+
         Observable.FromEventPattern<OnFollowArgs>(addHandler: h => this._pubSub.OnFollow += h, removeHandler: h => this._pubSub.OnFollow -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnFollowedAsync(e: e, cancellationToken: cancellationToken)))
@@ -189,6 +197,7 @@ public sealed class TwitchChat : ITwitchChat
             .Subscribe(onNext: this.PublishChatMessage);
 
         this._client.Connect();
+        this._pubSub.Connect();
         this._connected = true;
     }
 
@@ -345,6 +354,7 @@ public sealed class TwitchChat : ITwitchChat
             if (channel != null)
             {
                 this._logger.LogInformation($"{e.Channel}: Listening to follows {channel.Id}");
+                this._pubSub.SendTopics();
                 this._pubSub.ListenToFollows(channel.Id);
                 this._userMappings.GetOrAdd(key: channel.Id, value: channel.UserName);
             }
@@ -424,5 +434,15 @@ public sealed class TwitchChat : ITwitchChat
         }
 
         return state.ResubscribePrimeAsync(user: e.ReSubscriber.DisplayName, months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
+    }
+
+    private void OnPubSubServiceError(OnPubSubServiceErrorArgs e)
+    {
+        this._logger.LogError($"{e.Exception.Message}");
+    }
+
+    private void OnPubSubServiceConnected(EventPattern<object> e)
+    {
+        this._logger.LogInformation("PubSub Connected");
     }
 }
