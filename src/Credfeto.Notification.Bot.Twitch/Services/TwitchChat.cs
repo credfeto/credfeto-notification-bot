@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
@@ -36,14 +37,17 @@ public sealed class TwitchChat : ITwitchChat
 
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
+    private readonly IUserInfoService _userInfoService;
     private bool _connected;
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
+                      IUserInfoService userInfoService,
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IHeistJoiner heistJoiner,
                       ILogger<TwitchChat> logger)
     {
+        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
@@ -95,7 +99,9 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnJoinedChannelArgs>(addHandler: h => this._client.OnJoinedChannel += h, removeHandler: h => this._client.OnJoinedChannel -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(onNext: this.OnJoinedChannel);
+                  .Select(e => Observable.FromAsync(cancellationToken => this.OnJoinedChannelAsync(e: e, cancellationToken: cancellationToken)))
+                  .Concat()
+                  .Subscribe();
 
         // STATE
         Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h, removeHandler: h => this._client.OnChannelStateChanged -= h)
@@ -320,13 +326,18 @@ public sealed class TwitchChat : ITwitchChat
         this._logger.LogInformation($"{e.FollowedChannelId}: Followed by {e.Username}");
     }
 
-    private void OnJoinedChannel(OnJoinedChannelArgs e)
+    private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{e.Channel}: Joining channel as {e.BotUsername}");
 
         if (this._options.IsModChannel(e.Channel))
         {
-            this._pubSub.ListenToFollows(e.Channel);
+            TwitchUser? channel = await this._userInfoService.GetUserAsync(e.Channel);
+
+            if (channel != null)
+            {
+                this._pubSub.ListenToFollows(channel.UserId);
+            }
         }
     }
 

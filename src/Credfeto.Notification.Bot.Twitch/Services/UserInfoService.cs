@@ -79,6 +79,6 @@ public sealed class UserInfoService : IUserInfoService
 
     private static TwitchUser Convert(User user)
     {
-        return new(userName: user.Login, !string.IsNullOrWhiteSpace(user.BroadcasterType), dateCreated: user.CreatedAt);
+        return new(userName: user.Login, id: user.Id, isStreamer: !string.IsNullOrWhiteSpace(user.BroadcasterType), dateCreated: user.CreatedAt);
     }
 }
