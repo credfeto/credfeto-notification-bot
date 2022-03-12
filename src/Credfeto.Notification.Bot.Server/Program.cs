@@ -39,12 +39,6 @@ internal static class Program
 
     private static void InitialiseProviders(HostBuilderContext hostBuilderContext, ILoggingBuilder logger)
     {
-#if DEBUG
-
-        // Nothing to configure here
         logger.ClearProviders();
-#else
-        logger.ClearProviders();
-#endif
     }
 }
