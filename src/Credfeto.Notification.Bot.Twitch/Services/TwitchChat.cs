@@ -344,6 +344,7 @@ public sealed class TwitchChat : ITwitchChat
 
             if (channel != null)
             {
+                this._logger.LogInformation($"{e.Channel}: Listening to follows {channel.Id}");
                 this._pubSub.ListenToFollows(channel.Id);
                 this._userMappings.GetOrAdd(key: channel.Id, value: channel.UserName);
             }
