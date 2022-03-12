@@ -21,4 +21,7 @@ public sealed class TwitchBotOptions
 
     // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public List<string> IgnoredUsers { get; init; } = default!;
+
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+    public TwitchMilestones Milestones { get; init; } = default!;
 }

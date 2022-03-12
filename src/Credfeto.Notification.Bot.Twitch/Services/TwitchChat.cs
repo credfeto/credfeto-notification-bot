@@ -363,6 +363,17 @@ public sealed class TwitchChat : ITwitchChat
 
                 int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: e.Channel, cancellationToken: cancellationToken);
                 this._logger.LogInformation($"{e.Channel}: Currently has {followers} followers");
+
+                int[] orderedFollowers = this._options.Milestones.Followers.OrderBy(i => i)
+                                             .ToArray();
+                int lastMileStoneReached = orderedFollowers.LastOrDefault(f => f < followers);
+                int nextMileStone = orderedFollowers.First(f => f > followers);
+
+                double distance = nextMileStone - lastMileStoneReached;
+                double left = followers - lastMileStoneReached;
+                double progress = Math.Round(left / distance * 100, digits: 2);
+
+                this._logger.LogInformation($"{e.Channel}: Follower Milestone {lastMileStoneReached} Next {nextMileStone} Progress : {progress}% of gap filled");
             }
         }
     }
