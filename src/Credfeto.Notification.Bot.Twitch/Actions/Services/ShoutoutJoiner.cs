@@ -14,10 +14,15 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 {
     private readonly ILogger<ShoutoutJoiner> _logger;
     private readonly TwitchBotOptions _options;
+    private readonly ITwitchStreamDataManager _twitchStreamDataManager;
 
-    public ShoutoutJoiner(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<ShoutoutJoiner> logger)
+    public ShoutoutJoiner(IOptions<TwitchBotOptions> options,
+                          IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                          ITwitchStreamDataManager twitchStreamDataManager,
+                          ILogger<ShoutoutJoiner> logger)
         : base(twitchChatMessageChannel)
     {
+        this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -46,31 +51,41 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
         if (streamer == null)
         {
-            foreach (TwitchFriendChannel c in soChannel.FriendChannels)
+            bool isRegular = await this._twitchStreamDataManager.IsRegularChatterAsync(channel: channel, username: visitingStreamer.UserName);
+
+            if (isRegular)
             {
-                this._logger.LogInformation($"{channel}: Found Friend: {c.Channel}");
+                await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
+
+                return true;
             }
 
-            // TODO: Check to see if the user has streamed recently using API
-            // TODO: Can mod comments be read?
-            this._logger.LogWarning($"{channel}: Check out https://www.twitch.tv/{visitingStreamer.UserName}");
-
-            // TODO: Log in DB and id becomes a regular then shout them out
+            this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: "NEW");
 
             return false;
         }
 
-        this._logger.LogInformation($"{channel}: Check out https://www.twitch.tv/{visitingStreamer.UserName}");
-
         if (string.IsNullOrWhiteSpace(streamer.Message))
         {
-            await this.SendMessageAsync(channel: channel, $"Check out https://www.twitch.tv/{visitingStreamer.UserName}", cancellationToken: cancellationToken);
+            await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
         }
         else
         {
             await this.SendMessageAsync(channel: channel, message: streamer.Message, cancellationToken: cancellationToken);
+            this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
         }
 
         return true;
+    }
+
+    private async Task SendStandardShoutoutAsync(string channel, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
+    {
+        await this.SendMessageAsync(channel: channel, $"Check out https://www.twitch.tv/{visitingStreamer.UserName}", cancellationToken: cancellationToken);
+        this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: code);
+    }
+
+    private void LogShoutout(string channel, TwitchUser visitingStreamer, string code)
+    {
+        this._logger.LogWarning($"{channel}: Check out https://www.twitch.tv/{visitingStreamer.UserName}  [{code}]");
     }
 }
