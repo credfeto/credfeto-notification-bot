@@ -186,7 +186,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
                     this._whenGifted = now;
                     this._logger.LogInformation($"Last Gift Time by {this._giftedBy} set to {now}");
 
-                    return false;
+                    return true;
                 }
             }
 
@@ -195,7 +195,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             this._whenGifted = now;
             this._giftedBy = giftedBy;
 
-            return true;
+            return false;
         }
     }
 }
