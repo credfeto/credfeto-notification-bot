@@ -323,6 +323,11 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
+        if (this._options.IsIgnoredUser(e.ChatMessage.Username))
+        {
+            return;
+        }
+
         TwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
 
         await state.ChatMessageAsync(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
@@ -334,7 +339,6 @@ public sealed class TwitchChat : ITwitchChat
         if (StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") && e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
             e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal))
         {
-            this._logger.LogInformation($"{e.ChatMessage.Channel}: Heist Starting!");
             await this._heistJoiner.JoinHeistAsync(channel: e.ChatMessage.Channel, cancellationToken: cancellationToken);
 
             return true;

@@ -29,4 +29,9 @@ internal static class OptionsExtensions
                    }
                };
     }
+
+    public static bool IsIgnoredUser(this TwitchBotOptions options, string username)
+    {
+        return options.IgnoredUsers.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: username));
+    }
 }
