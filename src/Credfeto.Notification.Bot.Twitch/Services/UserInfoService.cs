@@ -64,7 +64,7 @@ public sealed class UserInfoService : IUserInfoService
 
             if (user.IsStreamer)
             {
-                await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: user.UserName, startedStreaming: user.DateCreated);
+                await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: user.UserName, streamerId: user.Id, startedStreaming: user.DateCreated);
             }
 
             return user;

@@ -12,6 +12,7 @@ using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NonBlocking;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
@@ -38,6 +39,7 @@ public sealed class TwitchChat : ITwitchChat
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
     private readonly IUserInfoService _userInfoService;
+    private readonly ConcurrentDictionary<string, string> _userMappings;
     private bool _connected;
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
@@ -56,6 +58,8 @@ public sealed class TwitchChat : ITwitchChat
 
         this._pubSub = new();
         this._pubSub.Connect();
+
+        this._userMappings = new(StringComparer.InvariantCultureIgnoreCase);
 
         List<string> channels = new[]
                                 {
@@ -99,7 +103,7 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnJoinedChannelArgs>(addHandler: h => this._client.OnJoinedChannel += h, removeHandler: h => this._client.OnJoinedChannel -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Select(e => Observable.FromAsync(cancellationToken => this.OnJoinedChannelAsync(e: e, cancellationToken: cancellationToken)))
+                  .Select(e => Observable.FromAsync(_ => this.OnJoinedChannelAsync(e: e)))
                   .Concat()
                   .Subscribe();
 
@@ -323,10 +327,14 @@ public sealed class TwitchChat : ITwitchChat
     private async Task OnFollowedAsync(OnFollowArgs e, CancellationToken cancellationToken)
     {
         await Task.Delay(TimeSpan.FromSeconds(0.1), cancellationToken: cancellationToken);
-        this._logger.LogInformation($"{e.FollowedChannelId}: Followed by {e.Username}");
+
+        if (this._userMappings.TryGetValue(key: e.FollowedChannelId, out string? channelName))
+        {
+            this._logger.LogInformation($"{channelName}: (Id: {e.FollowedChannelId}) Followed by {e.Username}");
+        }
     }
 
-    private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
+    private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e)
     {
         this._logger.LogInformation($"{e.Channel}: Joining channel as {e.BotUsername}");
 
@@ -336,7 +344,8 @@ public sealed class TwitchChat : ITwitchChat
 
             if (channel != null)
             {
-                this._pubSub.ListenToFollows(channel.UserId);
+                this._pubSub.ListenToFollows(channel.Id);
+                this._userMappings.GetOrAdd(key: channel.Id, value: channel.UserName);
             }
         }
     }
