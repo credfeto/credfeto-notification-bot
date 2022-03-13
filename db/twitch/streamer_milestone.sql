@@ -10,3 +10,5 @@ create table twitch.streamer_milestone
 alter table twitch.streamer_milestone
     owner to markr;
 
+grant delete, insert, update on twitch.streamer_milestone to notificationbot;
+
