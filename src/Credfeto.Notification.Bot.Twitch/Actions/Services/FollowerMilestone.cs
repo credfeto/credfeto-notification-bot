@@ -43,6 +43,12 @@ public sealed class FollowerMilestone : MessageSenderBase, IFollowerMilestone
 
         this._logger.LogWarning($"{channel}: Follower Milestone {lastMileStoneReached} Next {nextMileStone} Progress : {progress}% of gap filled");
 
+        if (lastMileStoneReached == 0)
+        {
+            // New streamer - no need to do anything yet
+            return;
+        }
+
         bool milestoneFreshlyReached = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channel, followerCount: lastMileStoneReached);
 
         if (milestoneFreshlyReached)
