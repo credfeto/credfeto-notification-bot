@@ -99,7 +99,10 @@ public sealed class TwitchChannelState
             this._logger.LogDebug($"{this._channelName}: {user} Gave {bits}");
             this._stream.AddBitGifter(user: user, bits: bits);
 
-            await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
+            if (!this._options.IsSelf(user))
+            {
+                await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
+            }
         }
 
         // TODO: Implement detection for other streamers
@@ -154,6 +157,11 @@ public sealed class TwitchChannelState
 
         this._stream.GiftedSub(giftedBy: giftedBy, count: 1);
 
+        if (this._options.IsSelf(giftedBy))
+        {
+            return Task.CompletedTask;
+        }
+
         return this._contributionThanks.ThankForGiftingSubAsync(channelName: this._channelName, giftedBy: giftedBy, cancellationToken: cancellationToken);
     }
 
@@ -161,12 +169,22 @@ public sealed class TwitchChannelState
     {
         this._stream?.ContinuedSub(user);
 
+        if (this._options.IsSelf(user))
+        {
+            return Task.CompletedTask;
+        }
+
         return Task.CompletedTask;
     }
 
     public Task PrimeToPaidAsync(string user, in CancellationToken cancellationToken)
     {
         this._stream?.PrimeToPaid(user);
+
+        if (this._options.IsSelf(user))
+        {
+            return Task.CompletedTask;
+        }
 
         return Task.CompletedTask;
     }
@@ -180,6 +198,11 @@ public sealed class TwitchChannelState
 
         this._stream.NewSubscriberPaid(user);
 
+        if (this._options.IsSelf(user))
+        {
+            return Task.CompletedTask;
+        }
+
         return this._contributionThanks.ThankForNewPaidSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
@@ -191,6 +214,11 @@ public sealed class TwitchChannelState
         }
 
         this._stream.NewSubscriberPrime(user);
+
+        if (this._options.IsSelf(user))
+        {
+            return Task.CompletedTask;
+        }
 
         return this._contributionThanks.ThankForPrimeSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
@@ -204,6 +232,11 @@ public sealed class TwitchChannelState
 
         this._stream.ResubscribePaid(user);
 
+        if (this._options.IsSelf(user))
+        {
+            return Task.CompletedTask;
+        }
+
         return this._contributionThanks.ThankForPaidReSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
@@ -215,6 +248,11 @@ public sealed class TwitchChannelState
         }
 
         this._stream.ResubscribePrime(user);
+
+        if (this._options.IsSelf(user))
+        {
+            return Task.CompletedTask;
+        }
 
         return this._contributionThanks.ThankForPrimeReSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }

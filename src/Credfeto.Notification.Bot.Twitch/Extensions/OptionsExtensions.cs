@@ -34,4 +34,9 @@ internal static class OptionsExtensions
     {
         return options.IgnoredUsers.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: username));
     }
+
+    public static bool IsSelf(this TwitchBotOptions options, string username)
+    {
+        return StringComparer.InvariantCultureIgnoreCase.Equals(x: options.Authentication.UserName, y: username);
+    }
 }
