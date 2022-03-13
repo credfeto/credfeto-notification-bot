@@ -43,4 +43,16 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
         isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
         Assert.False(condition: isFirstMessageInStream, userMessage: "Should not be first message");
     }
+
+    [Fact]
+    public async Task UpdateFollowerMilestoneAsync()
+    {
+        string channelName = GenerateUsername();
+
+        bool isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channelName, followerCount: 10);
+        Assert.True(condition: isFirstHit, userMessage: "Should be first hit");
+
+        isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channelName, followerCount: 10);
+        Assert.False(condition: isFirstHit, userMessage: "Should not be first hit");
+    }
 }

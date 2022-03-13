@@ -12,4 +12,6 @@ public interface ITwitchStreamDataManager
     Task<bool> IsFirstMessageInStreamAsync(string channel, DateTime streamStartDate, string username);
 
     Task<bool> IsRegularChatterAsync(string channel, string username);
+
+    Task<bool> UpdateFollowerMilestoneAsync(string channel, int followerCount);
 }

@@ -12,15 +12,18 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 {
     private readonly IObjectBuilder<TwitchChatterEntity, TwitchChatter> _chatterBuilder;
     private readonly IDatabase _database;
+    private readonly IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> _followerMilestoneBuilder;
     private readonly IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> _regularChatterBuilder;
 
     public TwitchStreamDataManager(IDatabase database,
                                    IObjectBuilder<TwitchChatterEntity, TwitchChatter> chatterBuilder,
-                                   IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> regularChatterBuilder)
+                                   IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> regularChatterBuilder,
+                                   IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> followerMilestoneBuilder)
     {
         this._database = database ?? throw new ArgumentNullException(nameof(database));
         this._chatterBuilder = chatterBuilder ?? throw new ArgumentNullException(nameof(chatterBuilder));
         this._regularChatterBuilder = regularChatterBuilder ?? throw new ArgumentNullException(nameof(regularChatterBuilder));
+        this._followerMilestoneBuilder = followerMilestoneBuilder ?? throw new ArgumentNullException(nameof(followerMilestoneBuilder));
     }
 
     public Task RecordStreamStartAsync(string channel, DateTime streamStartDate)
@@ -49,5 +52,14 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
                                                                                        new { channel_ = channel, chat_user_ = username });
 
         return chatted?.Regular == true;
+    }
+
+    public async Task<bool> UpdateFollowerMilestoneAsync(string channel, int followerCount)
+    {
+        TwitchFollowerMilestone? milestone = await this._database.QuerySingleOrDefaultAsync(builder: this._followerMilestoneBuilder,
+                                                                                            storedProcedure: "twitch.stream_milestone_insert",
+                                                                                            new { channel_ = channel, followers_ = followerCount });
+
+        return milestone?.FreshlyReached == true;
     }
 }
