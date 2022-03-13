@@ -1,10 +1,13 @@
-CREATE TABLE twitch.stream (
-    channel VARCHAR(100) NOT NULL,
-    start_date TIMESTAMP NOT NULL,
-    CONSTRAINT stream_pk PRIMARY KEY (
-        channel,
-        start_date
-        )
-    );
+create table twitch.stream
+(
+    channel    varchar(100) not null,
+    start_date timestamp    not null,
+    constraint stream_pk
+        primary key (channel, start_date)
+);
 
-ALTER TABLE twitch.stream OWNER TO markr;
+alter table twitch.stream
+    owner to markr;
+
+grant delete, insert, select, update on twitch.stream to notificationbot;
+

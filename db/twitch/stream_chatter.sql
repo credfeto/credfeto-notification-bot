@@ -1,13 +1,15 @@
-CREATE TABLE twitch.stream_chatter (
-    channel VARCHAR(100) NOT NULL,
-    start_date TIMESTAMP NOT NULL,
-    chat_user VARCHAR(100) NOT NULL,
-    first_message_date TIMESTAMP NOT NULL,
-    CONSTRAINT stream_chatter_pk PRIMARY KEY (
-        channel,
-        start_date,
-        chat_user
-        )
-    );
+create table twitch.stream_chatter
+(
+    channel            varchar(100) not null,
+    start_date         timestamp    not null,
+    chat_user          varchar(100) not null,
+    first_message_date timestamp    not null,
+    constraint stream_chatter_pk
+        primary key (channel, start_date, chat_user)
+);
 
-ALTER TABLE twitch.stream_chatter OWNER TO markr;
+alter table twitch.stream_chatter
+    owner to markr;
+
+grant delete, insert, select, update on twitch.stream_chatter to notificationbot;
+

@@ -1,25 +1,16 @@
-CREATE FUNCTION twitch.stream_chatter_get (
-    channel_ VARCHAR,
-    start_date_ TIMESTAMP WITH TIME zone,
-    chat_user_ VARCHAR
-    )
-RETURNS TABLE (
-    channel VARCHAR,
-    start_date TIMESTAMP without TIME zone,
-    chat_user VARCHAR,
-    first_message_date TIMESTAMP without TIME zone
-    ) LANGUAGE plpgsql
-AS
+create function twitch.stream_chatter_get(channel_ character varying, start_date_ timestamp with time zone, chat_user_ character varying)
+    returns TABLE(channel character varying, start_date timestamp without time zone, chat_user character varying, first_message_date timestamp without time zone)
+    language plpgsql
+as
 $$
-
 BEGIN
     RETURN QUERY(SELECT s.channel, s.start_date, s.chat_user, s.first_message_date FROM twitch.stream_chatter s WHERE s.channel = channel_
-            AND s.start_date = start_date_
-            AND s.chat_user = chat_user_);
-END;$$;
+                                                                                                                  AND s.start_date = start_date_
+                                                                                                                  AND s.chat_user = chat_user_);
+END;
+$$;
 
-ALTER FUNCTION twitch.stream_chatter_get (
-    VARCHAR,
-    TIMESTAMP WITH TIME zone,
-    VARCHAR
-    ) OWNER TO markr;
+alter function twitch.stream_chatter_get(varchar, timestamp with time zone, varchar) owner to markr;
+
+grant execute on function twitch.stream_chatter_get(varchar, timestamp with time zone, varchar) to notificationbot;
+
