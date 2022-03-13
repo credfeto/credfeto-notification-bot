@@ -11,7 +11,9 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChannelManager : ITwitchChannelManager
 {
+    private readonly IChannelFollowCount _channelFollowCount;
     private readonly IContributionThanks _contributionThanks;
+    private readonly IFollowerMilestone _followerMilestone;
     private readonly ILogger<TwitchChannelManager> _logger;
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
@@ -26,6 +28,8 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                 IContributionThanks contributionThanks,
                                 ITwitchStreamDataManager twitchStreamDataManager,
                                 IUserInfoService userInfoService,
+                                IChannelFollowCount channelFollowCount,
+                                IFollowerMilestone followerMilestone,
                                 ILogger<TwitchChannelManager> logger)
     {
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
@@ -33,6 +37,8 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
+        this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
+        this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._streamStates = new(comparer: StringComparer.OrdinalIgnoreCase);
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -54,6 +60,8 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                                                   contributionThanks: this._contributionThanks,
                                                                   twitchStreamDataManager: this._twitchStreamDataManager,
                                                                   userInfoService: this._userInfoService,
+                                                                  channelFollowCount: this._channelFollowCount,
+                                                                  followerMilestone: this._followerMilestone,
                                                                   logger: this._logger));
     }
 }

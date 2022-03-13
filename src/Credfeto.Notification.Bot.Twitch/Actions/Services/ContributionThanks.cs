@@ -139,6 +139,13 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub.");
     }
 
+    public Task ThankForFollowAsync(string channelName, string user, CancellationToken cancellationToken)
+    {
+        this._logger.LogInformation($"{channelName}: Thanks @{user} for following.");
+
+        return Task.CompletedTask;
+    }
+
     private async Task<bool> WasLastGifterAsync(string channel, string giftedBy)
     {
         await this._gifterLock.WaitAsync();

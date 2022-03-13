@@ -31,6 +31,7 @@ public sealed class TwitchChat : ITwitchChat
 {
     private readonly IChannelFollowCount _channelFollowCount;
     private readonly TwitchClient _client;
+    private readonly IFollowerMilestone _followerMilestone;
     private readonly IHeistJoiner _heistJoiner;
     private readonly ILogger<TwitchChat> _logger;
 
@@ -46,17 +47,19 @@ public sealed class TwitchChat : ITwitchChat
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
                       IUserInfoService userInfoService,
-                      IChannelFollowCount channelFollowCount,
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IHeistJoiner heistJoiner,
+                      IChannelFollowCount channelFollowCount,
+                      IFollowerMilestone followerMilestone,
                       ILogger<TwitchChat> logger)
     {
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
-        this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
+        this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
+        this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -336,47 +339,35 @@ public sealed class TwitchChat : ITwitchChat
         return state.RaidedAsync(raider: e.RaidNotification.DisplayName, viewerCount: e.RaidNotification.MsgParamViewerCount, cancellationToken: cancellationToken);
     }
 
-    private async Task OnFollowedAsync(OnFollowArgs e, CancellationToken cancellationToken)
+    private Task OnFollowedAsync(OnFollowArgs e, in CancellationToken cancellationToken)
     {
-        await Task.Delay(TimeSpan.FromSeconds(0.1), cancellationToken: cancellationToken);
-
         if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out string? channelName))
         {
-            return;
+            return Task.CompletedTask;
         }
 
         this._logger.LogInformation($"{channelName}: (Id: {e.FollowedChannelId}) Followed by {e.Username}");
 
         if (!this._options.IsModChannel(channelName))
         {
-            return;
+            return Task.CompletedTask;
         }
 
-        await this.HandleFollowersAsync(channel: channelName, cancellationToken: cancellationToken);
-    }
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(channelName);
 
-    private async Task HandleFollowersAsync(string channel, CancellationToken cancellationToken)
-    {
-        int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: channel, cancellationToken: cancellationToken);
-        this._logger.LogWarning($"{channel}: Currently has {followers} followers");
-
-        int[] orderedFollowers = this._options.Milestones.Followers.OrderBy(i => i)
-                                     .ToArray();
-        int lastMileStoneReached = orderedFollowers.LastOrDefault(f => f < followers);
-        int nextMileStone = orderedFollowers.First(f => f > followers);
-
-        double distance = nextMileStone - lastMileStoneReached;
-        double left = followers - lastMileStoneReached;
-        double progress = Math.Round(left / distance * 100, digits: 2);
-
-        this._logger.LogWarning($"{channel}: Follower Milestone {lastMileStoneReached} Next {nextMileStone} Progress : {progress}% of gap filled");
+        return state.NewFollowerAsync(user: e.Username, cancellationToken: cancellationToken);
     }
 
     private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{e.Channel}: Joining channel as {e.BotUsername}");
 
-        if (this._options.IsModChannel(e.Channel))
+        if (!this._options.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
+        try
         {
             TwitchUser? channel = await this._userInfoService.GetUserAsync(e.Channel);
 
@@ -387,8 +378,14 @@ public sealed class TwitchChat : ITwitchChat
                 this._pubSub.ListenToFollows(channel.Id);
                 this._userMappings.GetOrAdd(key: channel.Id, value: channel.UserName);
 
-                await this.HandleFollowersAsync(channel: e.Channel, cancellationToken: cancellationToken);
+                int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: channel.UserName, cancellationToken: cancellationToken);
+
+                await this._followerMilestone.IssueMilestoneUpdateAsync(channel: channel.UserName, followers: followers, cancellationToken: cancellationToken);
             }
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError($"{e.Channel}: Failed to initialise: {exception.Message}");
         }
     }
 

@@ -10,6 +10,7 @@ internal sealed class ActiveStream
 {
     private readonly ConcurrentDictionary<string, bool> _bitGifters;
     private readonly ConcurrentDictionary<string, bool> _chatters;
+    private readonly ConcurrentDictionary<string, bool> _followers;
     private readonly ConcurrentDictionary<string, bool> _raiders;
     private readonly ConcurrentDictionary<string, bool> _subGifters;
     private readonly ConcurrentDictionary<string, bool> _subscribers;
@@ -27,6 +28,7 @@ internal sealed class ActiveStream
         this._subscribers = new(StringComparer.OrdinalIgnoreCase);
         this._subGifters = new(StringComparer.OrdinalIgnoreCase);
         this._bitGifters = new(StringComparer.OrdinalIgnoreCase);
+        this._followers = new(StringComparer.OrdinalIgnoreCase);
     }
 
     public string GameName { get; }
@@ -122,5 +124,16 @@ internal sealed class ActiveStream
         {
             // Resub
         }
+    }
+
+    public bool Follow(string user)
+    {
+        if (this._followers.TryAdd(key: user, value: true))
+        {
+            // New Follow
+            return true;
+        }
+
+        return false;
     }
 }

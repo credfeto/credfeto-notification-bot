@@ -42,7 +42,8 @@ public static class TwitchSetup
                        .AddSingleton<ITwitchChat, TwitchChat>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
                        .AddSingleton<IUserInfoService, UserInfoService>()
-                       .AddSingleton<IChannelFollowCount, ChannelFollowCount>();
+                       .AddSingleton<IChannelFollowCount, ChannelFollowCount>()
+                       .AddSingleton<IFollowerMilestone, FollowerMilestone>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
