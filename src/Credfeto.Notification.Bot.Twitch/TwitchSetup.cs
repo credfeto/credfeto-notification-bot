@@ -19,7 +19,13 @@ public static class TwitchSetup
     {
         return services.AddServices()
                        .AddActions()
+                       .AddHttpClients()
                        .AddBackgroundServices();
+    }
+
+    private static IServiceCollection AddHttpClients(this IServiceCollection services)
+    {
+        return ChannelFollowCount.RegisterHttpClient(services);
     }
 
     private static IServiceCollection AddActions(this IServiceCollection services)
@@ -35,7 +41,9 @@ public static class TwitchSetup
         return services.AddSingleton<ITwitchChannelManager, TwitchChannelManager>()
                        .AddSingleton<ITwitchChat, TwitchChat>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
-                       .AddSingleton<IUserInfoService, UserInfoService>();
+                       .AddSingleton<IUserInfoService, UserInfoService>()
+                       .AddSingleton<IChannelFollowCount, ChannelFollowCount>()
+                       .AddSingleton<IFollowerMilestone, FollowerMilestone>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)

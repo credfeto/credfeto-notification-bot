@@ -30,3 +30,7 @@ ALTER FUNCTION twitch.stream_chatter_insert (
     TIMESTAMP WITH TIME zone,
     VARCHAR
     ) OWNER TO markr;
+
+GRANT EXECUTE
+    ON FUNCTION twitch.stream_chatter_insert(VARCHAR, TIMESTAMP WITH TIME zone, VARCHAR)
+    TO notificationbot;

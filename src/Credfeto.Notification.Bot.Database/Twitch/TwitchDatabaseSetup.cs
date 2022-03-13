@@ -19,7 +19,9 @@ internal static class TwitchDatabaseSetup
     private static IServiceCollection AddObjectBuilders(this IServiceCollection services)
     {
         return services.AddSingleton<IObjectBuilder<TwitchUserEntity, TwitchUser>, TwitchUserBuilder>()
-                       .AddSingleton<IObjectBuilder<TwitchChatterEntity, TwitchChatter>, TwitchChatterBuilder>();
+                       .AddSingleton<IObjectBuilder<TwitchChatterEntity, TwitchChatter>, TwitchChatterBuilder>()
+                       .AddSingleton<IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter>, TwitchRegularChatterBuilder>()
+                       .AddSingleton<IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone>, TwitchFollowerMilestoneBuilder>();
     }
 
     private static IServiceCollection AddDataManagers(this IServiceCollection services)

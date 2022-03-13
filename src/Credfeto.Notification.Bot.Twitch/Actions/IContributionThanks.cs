@@ -18,4 +18,6 @@ public interface IContributionThanks
     Task ThankForMultipleGiftSubsAsync(string channelName, string giftedBy, int count, CancellationToken cancellationToken);
 
     Task ThankForGiftingSubAsync(string channelName, string giftedBy, CancellationToken cancellationToken);
+
+    Task ThankForFollowAsync(string channelName, string user, CancellationToken cancellationToken);
 }

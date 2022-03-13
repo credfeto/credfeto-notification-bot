@@ -9,3 +9,10 @@ CREATE TABLE twitch.streamer_follower_milestone (
     );
 
 ALTER TABLE twitch.streamer_follower_milestone OWNER TO markr;
+
+GRANT DELETE,
+    INSERT,
+    SELECT,
+    UPDATE
+    ON twitch.streamer_follower_milestone
+    TO notificationbot;

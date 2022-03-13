@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
 
 [DebuggerDisplay("{Channel}: {Chat_User} {First_Message_Date} Stream Started: {Start_Date}")]
-public sealed class TwitchChatterEntity
+public sealed record TwitchChatterEntity
 {
     public string? Channel { get; init; }
 

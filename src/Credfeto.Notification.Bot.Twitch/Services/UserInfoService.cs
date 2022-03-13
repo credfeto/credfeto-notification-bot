@@ -64,7 +64,7 @@ public sealed class UserInfoService : IUserInfoService
 
             if (user.IsStreamer)
             {
-                await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: user.UserName, startedStreaming: user.DateCreated);
+                await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: user.UserName, streamerId: user.Id, startedStreaming: user.DateCreated);
             }
 
             return user;
@@ -79,6 +79,6 @@ public sealed class UserInfoService : IUserInfoService
 
     private static TwitchUser Convert(User user)
     {
-        return new(userName: user.Login, !string.IsNullOrWhiteSpace(user.BroadcasterType), dateCreated: user.CreatedAt);
+        return new(userName: user.Login, id: user.Id, isStreamer: !string.IsNullOrWhiteSpace(user.BroadcasterType), dateCreated: user.CreatedAt);
     }
 }

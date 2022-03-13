@@ -11,6 +11,7 @@ namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 {
     private readonly ICurrentTimeSource _currentTimeSource;
+    private readonly SemaphoreSlim _gifterLock;
 
     private readonly ConcurrentDictionary<string, SubGifter> _gifters;
     private readonly ILogger<ContributionThanks> _logger;
@@ -22,6 +23,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         this._gifters = new(StringComparer.CurrentCultureIgnoreCase);
+        this._gifterLock = new(1);
     }
 
     public async Task ThankForBitsAsync(string channel, string user, CancellationToken cancellationToken)
@@ -61,7 +63,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public async Task ThankForMultipleGiftSubsAsync(string channelName, string giftedBy, int count, CancellationToken cancellationToken)
     {
-        if (this.WasLastGifter(channel: channelName, giftedBy: giftedBy))
+        if (await this.WasLastGifterAsync(channel: channelName, giftedBy: giftedBy))
         {
             this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub (Same as last gifter).");
 
@@ -100,8 +102,32 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
  steveforward: lou_vella: lfsHH lfsHH lfsHH lfsHH lfsHH lfsHH lfsHH lfsHH
  steveforward: Community Sub: Lou_Vella
  steveforward: Thanks Lou_Vella for gifting sub.
+
+[00:07:29 INF] steveforward: Community Sub: music_fanatic101
+[00:07:29 INF] steveforward: Thanks music_fanatic101 for gifting subs.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:31 INF] steveforward: Community Sub: music_fanatic101
+[00:07:31 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+[00:07:32 INF] steveforward: Community Sub: music_fanatic101
+[00:07:32 INF] steveforward: Thanks music_fanatic101 for gifting sub.
+
 #endif
-        if (this.WasLastGifter(channel: channelName, giftedBy: giftedBy))
+        if (await this.WasLastGifterAsync(channel: channelName, giftedBy: giftedBy))
         {
             this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub (Same as last gifter).");
 
@@ -113,24 +139,43 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._logger.LogInformation($"{channelName}: Thanks @{giftedBy} for gifting sub.");
     }
 
-    private bool WasLastGifter(string channel, string giftedBy)
+    public Task ThankForFollowAsync(string channelName, string user, CancellationToken cancellationToken)
     {
-        SubGifter subGifter = this._gifters.GetOrAdd(key: channel, new SubGifter(giftedBy: giftedBy, currentTimeSource: this._currentTimeSource));
+        this._logger.LogInformation($"{channelName}: Thanks @{user} for following.");
 
-        return subGifter.Update(giftedBy);
+        return Task.CompletedTask;
+    }
+
+    private async Task<bool> WasLastGifterAsync(string channel, string giftedBy)
+    {
+        await this._gifterLock.WaitAsync();
+
+        try
+        {
+            SubGifter subGifter = this._gifters.GetOrAdd(key: channel, new SubGifter(giftedBy: giftedBy, currentTimeSource: this._currentTimeSource, logger: this._logger));
+
+            return subGifter.Update(giftedBy);
+        }
+        finally
+        {
+            this._gifterLock.Release();
+        }
     }
 
     private sealed class SubGifter
     {
+        private static readonly TimeSpan DeDupTime = TimeSpan.FromSeconds(30);
         private readonly ICurrentTimeSource _currentTimeSource;
+        private readonly ILogger _logger;
         private string _giftedBy;
         private DateTime _whenGifted;
 
-        public SubGifter(string giftedBy, ICurrentTimeSource currentTimeSource)
+        public SubGifter(string giftedBy, ICurrentTimeSource currentTimeSource, ILogger logger)
         {
             this._giftedBy = giftedBy;
 
             this._currentTimeSource = currentTimeSource;
+            this._logger = logger;
             this._whenGifted = this._currentTimeSource.UtcNow();
         }
 
@@ -139,12 +184,20 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             DateTime now = this._currentTimeSource.UtcNow();
             TimeSpan duration = now - this._whenGifted;
 
-            if (duration > TimeSpan.FromSeconds(10) && StringComparer.InvariantCultureIgnoreCase.Equals(x: this._giftedBy, y: giftedBy))
-            {
-                this._whenGifted = now;
+            this._logger.LogInformation($"Last Gift {duration.TotalMilliseconds}ms ago by {this._giftedBy} at {now}");
 
-                return false;
+            if (duration > DeDupTime)
+            {
+                if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._giftedBy, y: giftedBy))
+                {
+                    this._whenGifted = now;
+                    this._logger.LogInformation($"Last Gift Time by {this._giftedBy} set to {now}");
+
+                    return true;
+                }
             }
+
+            this._logger.LogInformation($"New Gifter :{giftedBy} Last Gift Time set to {now}");
 
             this._whenGifted = now;
             this._giftedBy = giftedBy;

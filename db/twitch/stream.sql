@@ -8,3 +8,10 @@ CREATE TABLE twitch.stream (
     );
 
 ALTER TABLE twitch.stream OWNER TO markr;
+
+GRANT DELETE,
+    INSERT,
+    SELECT,
+    UPDATE
+    ON twitch.stream
+    TO notificationbot;

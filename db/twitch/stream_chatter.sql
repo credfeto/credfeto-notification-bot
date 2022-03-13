@@ -11,3 +11,10 @@ CREATE TABLE twitch.stream_chatter (
     );
 
 ALTER TABLE twitch.stream_chatter OWNER TO markr;
+
+GRANT DELETE,
+    INSERT,
+    SELECT,
+    UPDATE
+    ON twitch.stream_chatter
+    TO notificationbot;

@@ -14,14 +14,17 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 [DebuggerDisplay("{_channelName}")]
 public sealed class TwitchChannelState
 {
+    private readonly IChannelFollowCount _channelFollowCount;
     private readonly string _channelName;
     private readonly IContributionThanks _contributionThanks;
+    private readonly IFollowerMilestone _followerMilestone;
     private readonly ILogger _logger;
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
+
     private ActiveStream? _stream;
 
     public TwitchChannelState(string channelName,
@@ -31,6 +34,8 @@ public sealed class TwitchChannelState
                               IContributionThanks contributionThanks,
                               IUserInfoService userInfoService,
                               ITwitchStreamDataManager twitchStreamDataManager,
+                              IChannelFollowCount channelFollowCount,
+                              IFollowerMilestone followerMilestone,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._channelName = channelName;
@@ -40,6 +45,8 @@ public sealed class TwitchChannelState
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
+        this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
+        this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -94,8 +101,6 @@ public sealed class TwitchChannelState
 
             await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
         }
-
-        this._logger.LogInformation($"{this._channelName}: {user} checking for chat status");
 
         // TODO: Implement detection for other streamers
         if (this._stream.AddChatter(user))
@@ -212,5 +217,22 @@ public sealed class TwitchChannelState
         this._stream.ResubscribePrime(user);
 
         return this._contributionThanks.ThankForPrimeReSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
+    }
+
+    public async Task NewFollowerAsync(string user, CancellationToken cancellationToken)
+    {
+        if (this._stream == null)
+        {
+            return;
+        }
+
+        if (this._stream.Follow(user))
+        {
+            await this._contributionThanks.ThankForFollowAsync(channelName: this._channelName, user: user, cancellationToken: cancellationToken);
+
+            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: this._channelName, cancellationToken: cancellationToken);
+
+            await this._followerMilestone.IssueMilestoneUpdateAsync(channel: this._channelName, followers: followers, cancellationToken: cancellationToken);
+        }
     }
 }

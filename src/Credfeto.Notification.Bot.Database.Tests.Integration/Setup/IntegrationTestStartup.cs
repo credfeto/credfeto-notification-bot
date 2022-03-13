@@ -10,18 +10,18 @@ internal static class IntegrationTestStartup
 {
     private static readonly object InitLock = new();
 
-    public static void ConfigureServices(IServiceCollection services)
+    public static IServiceCollection ConfigureServices(IServiceCollection services)
     {
-        IConfigurationRoot configurationRoot = BuildConfiguration();
-
         lock (InitLock)
         {
-            services.AddSingleton(configurationRoot)
-                    .AddOptions()
-                    .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
-                    .AddPostgresql()
-                    .AddApplicationDatabase()
-                    .AddResources();
+            IConfigurationRoot configurationRoot = BuildConfiguration();
+
+            return services.AddSingleton(configurationRoot)
+                           .AddOptions()
+                           .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
+                           .AddPostgresql()
+                           .AddApplicationDatabase()
+                           .AddResources();
         }
     }
 

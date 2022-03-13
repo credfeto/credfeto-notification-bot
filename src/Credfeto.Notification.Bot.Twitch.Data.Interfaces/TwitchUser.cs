@@ -6,21 +6,28 @@ namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 /// <summary>
 ///     A Twitch user.
 /// </summary>
-[DebuggerDisplay("{UserName}: Streamer: {IsStreamer} Created: {DateCreated}")]
+[DebuggerDisplay("{UserName}: Id: {Id} Streamer: {IsStreamer} Created: {DateCreated}")]
 public sealed class TwitchUser
 {
     /// <summary>
     ///     Constructor.
     /// </summary>
+    /// <param name="id">Unique Twitch User Id.</param>
     /// <param name="userName">The username.</param>
     /// <param name="isStreamer">True, if the user is a streamer; otherwise, null.</param>
     /// <param name="dateCreated">The date the user was created.</param>
-    public TwitchUser(string userName, bool isStreamer, in DateTime dateCreated)
+    public TwitchUser(string id, string userName, bool isStreamer, in DateTime dateCreated)
     {
+        this.Id = id;
         this.UserName = userName;
         this.IsStreamer = isStreamer;
         this.DateCreated = dateCreated;
     }
+
+    /// <summary>
+    ///     The Unique Twitch User Id.
+    /// </summary>
+    public string Id { get; }
 
     /// <summary>
     ///     The username.

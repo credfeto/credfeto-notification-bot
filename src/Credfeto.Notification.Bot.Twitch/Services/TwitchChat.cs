@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NonBlocking;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
@@ -18,33 +21,51 @@ using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Events;
 using TwitchLib.Communication.Models;
+using TwitchLib.PubSub;
+using TwitchLib.PubSub.Events;
+using OnLogArgs = TwitchLib.Client.Events.OnLogArgs;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChat : ITwitchChat
 {
+    private readonly IChannelFollowCount _channelFollowCount;
     private readonly TwitchClient _client;
+    private readonly IFollowerMilestone _followerMilestone;
     private readonly IHeistJoiner _heistJoiner;
     private readonly ILogger<TwitchChat> _logger;
 
     private readonly TwitchBotOptions _options;
+    private readonly TwitchPubSub _pubSub;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
+    private readonly IUserInfoService _userInfoService;
+    private readonly ConcurrentDictionary<string, string> _userMappings;
     private bool _connected;
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
+                      IUserInfoService userInfoService,
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IHeistJoiner heistJoiner,
+                      IChannelFollowCount channelFollowCount,
+                      IFollowerMilestone followerMilestone,
                       ILogger<TwitchChat> logger)
     {
+        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
+        this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
+        this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+
+        this._pubSub = new();
+
+        this._userMappings = new(StringComparer.InvariantCultureIgnoreCase);
 
         List<string> channels = new[]
                                 {
@@ -66,6 +87,21 @@ public sealed class TwitchChat : ITwitchChat
         client.Initialize(credentials: credentials, channels: channels);
         this._client = client;
 
+        // FOLLOWS
+
+        Observable.FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._pubSub.OnPubSubServiceError += h, removeHandler: h => this._pubSub.OnPubSubServiceError -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Subscribe(this.OnPubSubServiceError);
+
+        Observable.FromEventPattern(addHandler: h => this._pubSub.OnPubSubServiceConnected += h, removeHandler: h => this._pubSub.OnPubSubServiceConnected -= h)
+                  .Subscribe(this.OnPubSubServiceConnected);
+
+        Observable.FromEventPattern<OnFollowArgs>(addHandler: h => this._pubSub.OnFollow += h, removeHandler: h => this._pubSub.OnFollow -= h)
+                  .Select(messageEvent => messageEvent.EventArgs)
+                  .Select(e => Observable.FromAsync(cancellationToken => this.OnFollowedAsync(e: e, cancellationToken: cancellationToken)))
+                  .Concat()
+                  .Subscribe();
+
         // HEALTH
         Observable.FromEventPattern<OnConnectedArgs>(addHandler: h => this._client.OnConnected += h, removeHandler: h => this._client.OnConnected -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
@@ -81,7 +117,9 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnJoinedChannelArgs>(addHandler: h => this._client.OnJoinedChannel += h, removeHandler: h => this._client.OnJoinedChannel -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(onNext: this.OnJoinedChannel);
+                  .Select(e => Observable.FromAsync(cancellationToken => this.OnJoinedChannelAsync(e: e, cancellationToken: cancellationToken)))
+                  .Concat()
+                  .Subscribe();
 
         // STATE
         Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h, removeHandler: h => this._client.OnChannelStateChanged -= h)
@@ -165,6 +203,7 @@ public sealed class TwitchChat : ITwitchChat
             .Subscribe(onNext: this.PublishChatMessage);
 
         this._client.Connect();
+        this._pubSub.Connect();
         this._connected = true;
     }
 
@@ -300,9 +339,54 @@ public sealed class TwitchChat : ITwitchChat
         return state.RaidedAsync(raider: e.RaidNotification.DisplayName, viewerCount: e.RaidNotification.MsgParamViewerCount, cancellationToken: cancellationToken);
     }
 
-    private void OnJoinedChannel(OnJoinedChannelArgs e)
+    private Task OnFollowedAsync(OnFollowArgs e, in CancellationToken cancellationToken)
+    {
+        if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out string? channelName))
+        {
+            return Task.CompletedTask;
+        }
+
+        this._logger.LogInformation($"{channelName}: (Id: {e.FollowedChannelId}) Followed by {e.Username}");
+
+        if (!this._options.IsModChannel(channelName))
+        {
+            return Task.CompletedTask;
+        }
+
+        TwitchChannelState state = this._twitchChannelManager.GetChannel(channelName);
+
+        return state.NewFollowerAsync(user: e.Username, cancellationToken: cancellationToken);
+    }
+
+    private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{e.Channel}: Joining channel as {e.BotUsername}");
+
+        if (!this._options.IsModChannel(e.Channel))
+        {
+            return;
+        }
+
+        try
+        {
+            TwitchUser? channel = await this._userInfoService.GetUserAsync(e.Channel);
+
+            if (channel != null)
+            {
+                this._logger.LogInformation($"{e.Channel}: Listening for new follows as {channel.Id} using pubsub");
+                this._pubSub.SendTopics();
+                this._pubSub.ListenToFollows(channel.Id);
+                this._userMappings.GetOrAdd(key: channel.Id, value: channel.UserName);
+
+                int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: channel.UserName, cancellationToken: cancellationToken);
+
+                await this._followerMilestone.IssueMilestoneUpdateAsync(channel: channel.UserName, followers: followers, cancellationToken: cancellationToken);
+            }
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError($"{e.Channel}: Failed to initialise: {exception.Message}");
+        }
     }
 
     private async Task OnMessageReceivedAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
@@ -323,6 +407,11 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
+        if (this._options.IsIgnoredUser(e.ChatMessage.Username))
+        {
+            return;
+        }
+
         TwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
 
         await state.ChatMessageAsync(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
@@ -330,17 +419,21 @@ public sealed class TwitchChat : ITwitchChat
 
     private async Task<bool> JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
     {
-        //:streamlabs!streamlabs@streamlabs.tmi.twitch.tv PRIVMSG #emilyisfun :Ahoy! Captain reckless_fury is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.
-        if (StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") && e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
-            e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal))
+        if (IsHeistStartingMessage(e))
         {
-            this._logger.LogInformation($"{e.ChatMessage.Channel}: Heist Starting!");
             await this._heistJoiner.JoinHeistAsync(channel: e.ChatMessage.Channel, cancellationToken: cancellationToken);
 
             return true;
         }
 
         return false;
+    }
+
+    private static bool IsHeistStartingMessage(OnMessageReceivedArgs e)
+    {
+        return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
+               e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
+               e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
     }
 
     private Task OnNewSubscriberAsync(OnNewSubscriberArgs e, in CancellationToken cancellationToken)
@@ -369,5 +462,15 @@ public sealed class TwitchChat : ITwitchChat
         }
 
         return state.ResubscribePrimeAsync(user: e.ReSubscriber.DisplayName, months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
+    }
+
+    private void OnPubSubServiceError(OnPubSubServiceErrorArgs e)
+    {
+        this._logger.LogError($"{e.Exception.Message}");
+    }
+
+    private void OnPubSubServiceConnected(EventPattern<object> e)
+    {
+        this._logger.LogInformation("PubSub Connected");
     }
 }

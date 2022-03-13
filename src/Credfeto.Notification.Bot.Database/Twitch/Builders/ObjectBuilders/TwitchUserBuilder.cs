@@ -14,6 +14,6 @@ public sealed class TwitchUserBuilder : IObjectBuilder<TwitchUserEntity, TwitchU
             return null;
         }
 
-        return new(source.UserName ?? throw new DataException("Missing Username"), isStreamer: true, dateCreated: source.DateCreated);
+        return new(source.Id ?? throw new DataException("Missing Id"), source.UserName ?? throw new DataException("Missing Username"), isStreamer: true, dateCreated: source.DateCreated);
     }
 }
