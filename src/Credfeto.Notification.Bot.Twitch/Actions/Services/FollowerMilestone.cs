@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,15 +15,20 @@ public sealed class FollowerMilestone : MessageSenderBase, IFollowerMilestone
 {
     private readonly ILogger<FollowerMilestone> _logger;
     private readonly TwitchBotOptions _options;
+    private readonly ITwitchStreamDataManager _twitchStreamDataManager;
 
-    public FollowerMilestone(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<FollowerMilestone> logger)
+    public FollowerMilestone(IOptions<TwitchBotOptions> options,
+                             ITwitchStreamDataManager twitchStreamDataManager,
+                             IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                             ILogger<FollowerMilestone> logger)
         : base(twitchChatMessageChannel)
     {
+        this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public Task IssueMilestoneUpdateAsync(string channel, int followers, CancellationToken cancellationToken)
+    public async Task IssueMilestoneUpdateAsync(string channel, int followers, CancellationToken cancellationToken)
     {
         this._logger.LogWarning($"{channel}: Currently has {followers} followers");
 
@@ -37,6 +43,11 @@ public sealed class FollowerMilestone : MessageSenderBase, IFollowerMilestone
 
         this._logger.LogWarning($"{channel}: Follower Milestone {lastMileStoneReached} Next {nextMileStone} Progress : {progress}% of gap filled");
 
-        return Task.CompletedTask;
+        bool milestoneFreshlyReached = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channel, followerCount: lastMileStoneReached);
+
+        if (milestoneFreshlyReached)
+        {
+            this._logger.LogWarning($"{channel}: Woo!! New follower milestone reached {lastMileStoneReached}");
+        }
     }
 }
