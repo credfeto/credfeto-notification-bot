@@ -94,15 +94,17 @@ public sealed class TwitchChannelState
             return;
         }
 
+        if (this._options.IsSelf(user))
+        {
+            return;
+        }
+
         if (bits != 0)
         {
             this._logger.LogDebug($"{this._channelName}: {user} Gave {bits}");
             this._stream.AddBitGifter(user: user, bits: bits);
 
-            if (!this._options.IsSelf(user))
-            {
-                await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
-            }
+            await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
         }
 
         // TODO: Implement detection for other streamers
