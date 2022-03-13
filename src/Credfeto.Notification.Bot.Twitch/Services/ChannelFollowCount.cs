@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Resources;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Polly;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
@@ -24,12 +23,10 @@ public sealed class ChannelFollowCount : IChannelFollowCount
     private static readonly Uri BaseUri = new("https://api.crunchprank.net/");
 
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly ILogger<ChannelFollowCount> _logger;
 
-    public ChannelFollowCount(IHttpClientFactory httpClientFactory, ILogger<ChannelFollowCount> logger)
+    public ChannelFollowCount(IHttpClientFactory httpClientFactory)
     {
         this._httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task<int> GetCurrentFollowerCountAsync(string username, CancellationToken cancellationToken)
