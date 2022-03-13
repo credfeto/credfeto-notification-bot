@@ -263,6 +263,11 @@ public sealed class TwitchChannelState
     {
         if (this._stream == null)
         {
+            // Stream offline but check the milestones anyway
+            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: this._channelName, cancellationToken: cancellationToken);
+
+            await this._followerMilestone.IssueMilestoneUpdateAsync(channel: this._channelName, followers: followers, cancellationToken: cancellationToken);
+
             return;
         }
 
