@@ -184,17 +184,14 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             DateTime now = this._currentTimeSource.UtcNow();
             TimeSpan duration = now - this._whenGifted;
 
-            this._logger.LogInformation($"Last Gift {duration.TotalMilliseconds}ms ago by {this._giftedBy} at {now}");
+            this._logger.LogInformation($"Last Gift {duration.TotalMilliseconds}ms ago (DeDup {DeDupTime.TotalMilliseconds}ms) by {this._giftedBy} at {now} ");
 
-            if (duration > DeDupTime)
+            if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._giftedBy, y: giftedBy))
             {
-                if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._giftedBy, y: giftedBy))
-                {
-                    this._whenGifted = now;
-                    this._logger.LogInformation($"Last Gift Time by {this._giftedBy} set to {now}");
+                this._whenGifted = now;
+                this._logger.LogInformation($"Last Gift Time by {this._giftedBy} set to {now}");
 
-                    return true;
-                }
+                return duration < DeDupTime;
             }
 
             this._logger.LogInformation($"New Gifter :{giftedBy} Last Gift Time set to {now}");
