@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Shared.Extensions", "Credfeto.Notification.Bot.Shared.Extensions\Credfeto.Notification.Bot.Shared.Extensions.csproj", "{7ADE5351-81E2-4C47-81E0-F470D5A3321E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Twitch.Tests", "Credfeto.Notification.Bot.Twitch.Tests\Credfeto.Notification.Bot.Twitch.Tests.csproj", "{86FE5DDD-EF63-44C4-AF2F-A47889AF0E0B}"
+EndProject
 Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2DDAB2F1-7D26-48B5-8613-A8F973494365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{7ADE5351-81E2-4C47-81E0-F470D5A3321E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ADE5351-81E2-4C47-81E0-F470D5A3321E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ADE5351-81E2-4C47-81E0-F470D5A3321E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86FE5DDD-EF63-44C4-AF2F-A47889AF0E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86FE5DDD-EF63-44C4-AF2F-A47889AF0E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86FE5DDD-EF63-44C4-AF2F-A47889AF0E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86FE5DDD-EF63-44C4-AF2F-A47889AF0E0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,5 +119,6 @@ Global
 		{10D89A4F-C675-4335-A68A-8584D1DB7611} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
 		{76989590-4943-4A85-BE7C-68BAB0850452} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
 		{7ADE5351-81E2-4C47-81E0-F470D5A3321E} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
+		{86FE5DDD-EF63-44C4-AF2F-A47889AF0E0B} = {95998E18-592F-4DA8-86A9-D5892BBCD26E}
 	EndGlobalSection
 EndGlobal
