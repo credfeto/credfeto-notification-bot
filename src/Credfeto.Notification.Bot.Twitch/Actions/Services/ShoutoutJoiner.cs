@@ -37,45 +37,68 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
     public async Task<bool> IssueShoutoutAsync(string channel, TwitchUser visitingStreamer, CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"{channel}: Checking if need to shoutout {visitingStreamer.UserName}");
-        TwitchChannelShoutout? soChannel = this._options.Shoutouts.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: channel));
-
-        if (soChannel == null)
+        try
         {
-            this._logger.LogInformation($"{channel}: Shout-outs not enabled");
+            this._logger.LogInformation($"{channel}: Checking if need to shoutout {visitingStreamer.UserName}");
+            TwitchChannelShoutout? soChannel = this._options.Shoutouts.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: channel));
 
-            return false;
-        }
-
-        TwitchFriendChannel? streamer = soChannel.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName));
-
-        if (streamer == null)
-        {
-            bool isRegular = await this._twitchStreamDataManager.IsRegularChatterAsync(channel: channel, username: visitingStreamer.UserName);
-
-            if (isRegular)
+            if (soChannel == null)
             {
-                await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
+                this._logger.LogInformation($"{channel}: Shout-outs not enabled");
 
-                return true;
+                return false;
             }
 
-            this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: "NEW");
+            TwitchFriendChannel? streamer = soChannel.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName));
+
+            if (streamer == null)
+            {
+                bool isRegular = await this.IsRegularChatterAsync(channel: channel, username: visitingStreamer.UserName);
+
+                if (isRegular)
+                {
+                    await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
+
+                    return true;
+                }
+
+                this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: "NEW");
+
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(streamer.Message))
+            {
+                await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
+            }
+            else
+            {
+                await this.SendMessageAsync(channel: channel, message: streamer.Message, cancellationToken: cancellationToken);
+                this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
+            }
+
+            return true;
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{channel}: Check Shoutout: Failed to check {exception.Message}");
 
             return false;
         }
+    }
 
-        if (string.IsNullOrWhiteSpace(streamer.Message))
+    private async Task<bool> IsRegularChatterAsync(string channel, string username)
+    {
+        try
         {
-            await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
+            return await this._twitchStreamDataManager.IsRegularChatterAsync(channel: channel, username: username);
         }
-        else
+        catch (Exception exception)
         {
-            await this.SendMessageAsync(channel: channel, message: streamer.Message, cancellationToken: cancellationToken);
-            this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
-        }
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{channel}: Is Regular Chatter: Failed to check {exception.Message}");
 
-        return true;
+            return false;
+        }
     }
 
     private async Task SendStandardShoutoutAsync(string channel, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
