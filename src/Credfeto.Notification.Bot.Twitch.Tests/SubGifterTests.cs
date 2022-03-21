@@ -28,13 +28,13 @@ public sealed class SubGifterTests : TestBase
 
     [Theory]
     [InlineData(INITIAL_GIFTER, 100, true)]
-    [InlineData(INITIAL_GIFTER, 29999, true)]
-    [InlineData(INITIAL_GIFTER, 30000, false)]
-    [InlineData(INITIAL_GIFTER, 30001, false)]
+    [InlineData(INITIAL_GIFTER, 4999, true)]
+    [InlineData(INITIAL_GIFTER, 5000, false)]
+    [InlineData(INITIAL_GIFTER, 5001, false)]
     [InlineData("other", 100, false)]
-    [InlineData("other", 29999, false)]
-    [InlineData("other", 30000, false)]
-    [InlineData("other", 30001, false)]
+    [InlineData("other", 4999, false)]
+    [InlineData("other", 5000, false)]
+    [InlineData("other", 5001, false)]
     public void GifterCheck(string gifter, int advanceMs, bool shouldBeSameGifter)
     {
         SubGifter subGifter = new(giftedBy: INITIAL_GIFTER, currentTimeSource: this._currentDateTimeSource, logger: this._logger);

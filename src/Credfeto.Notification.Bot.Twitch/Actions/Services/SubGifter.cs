@@ -7,7 +7,7 @@ namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
 public sealed class SubGifter
 {
-    private static readonly TimeSpan DeDupTime = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan DeDupTime = TimeSpan.FromSeconds(5);
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ILogger _logger;
     private string _giftedBy;
