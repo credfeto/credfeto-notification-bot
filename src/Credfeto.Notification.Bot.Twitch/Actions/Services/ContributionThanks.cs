@@ -152,7 +152,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
         try
         {
-            SubGifter subGifter = this._gifters.GetOrAdd(key: channel, new SubGifter(giftedBy: giftedBy, currentTimeSource: this._currentTimeSource, logger: this._logger));
+            SubGifter subGifter = this.GetSubGifter(channel);
 
             return subGifter.Update(giftedBy);
         }
@@ -160,5 +160,20 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         {
             this._gifterLock.Release();
         }
+    }
+
+    private SubGifter GetSubGifter(string channel)
+    {
+        if (this._gifters.TryGetValue(key: channel, out SubGifter? gifter))
+        {
+            return gifter;
+        }
+
+        gifter = new(Guid.NewGuid()
+                         .ToString(),
+                     currentTimeSource: this._currentTimeSource,
+                     logger: this._logger);
+
+        return this._gifters.GetOrAdd(key: channel, value: gifter);
     }
 }
