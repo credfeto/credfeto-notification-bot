@@ -432,7 +432,6 @@ public sealed class TwitchChat : ITwitchChat
     private static bool IsHeistStartingMessage(OnMessageReceivedArgs e)
     {
         return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
-               e.ChatMessage.Message.StartsWith(value: "Ahoy! Captain ", comparisonType: StringComparison.Ordinal) &&
                e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
     }
 
