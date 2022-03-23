@@ -152,7 +152,7 @@ public sealed class TwitchChannelState
             {
                 // TODO: Add new chat welcome (To regulars?).
                 this._logger.LogInformation($"{this._channelName}: Hi @{twitchUser.UserName}");
-                await this._welcomeWaggon.IssueWelcome(channel: this._channelName, user: twitchUser.UserName, cancellationToken: cancellationToken);
+                await this._welcomeWaggon.IssueWelcomeAsync(channel: this._channelName, user: twitchUser.UserName, cancellationToken: cancellationToken);
             }
 
             if (twitchUser.IsStreamer)

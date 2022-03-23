@@ -21,8 +21,10 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     private readonly ConcurrentDictionary<string, TwitchChannelState> _streamStates;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
+    private readonly IWelcomeWaggon _welcomeWaggon;
 
     public TwitchChannelManager(IOptions<TwitchBotOptions> options,
+                                IWelcomeWaggon welcomeWaggon,
                                 IRaidWelcome raidWelcome,
                                 IShoutoutJoiner shoutoutJoiner,
                                 IContributionThanks contributionThanks,
@@ -32,6 +34,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                 IFollowerMilestone followerMilestone,
                                 ILogger<TwitchChannelManager> logger)
     {
+        this._welcomeWaggon = welcomeWaggon ?? throw new ArgumentNullException(nameof(welcomeWaggon));
         this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
@@ -62,6 +65,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                                                   userInfoService: this._userInfoService,
                                                                   channelFollowCount: this._channelFollowCount,
                                                                   followerMilestone: this._followerMilestone,
+                                                                  welcomeWaggon: this._welcomeWaggon,
                                                                   logger: this._logger));
     }
 }

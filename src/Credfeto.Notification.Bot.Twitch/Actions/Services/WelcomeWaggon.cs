@@ -17,7 +17,7 @@ public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task IssueWelcome(string channel, string user, CancellationToken cancellationToken)
+    public async Task IssueWelcomeAsync(string channel, string user, CancellationToken cancellationToken)
     {
         await this.SendMessageAsync(channel: channel, $"Hi @{user}", cancellationToken: cancellationToken);
         this._logger.LogInformation($"{channel}: Hi {user}!");
