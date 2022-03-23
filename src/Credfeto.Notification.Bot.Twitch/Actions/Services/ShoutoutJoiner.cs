@@ -35,7 +35,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         }
     }
 
-    public async Task<bool> IssueShoutoutAsync(string channel, TwitchUser visitingStreamer, CancellationToken cancellationToken)
+    public async Task<bool> IssueShoutoutAsync(string channel, TwitchUser visitingStreamer, bool isRegular, CancellationToken cancellationToken)
     {
         try
         {
@@ -53,8 +53,6 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
             if (streamer == null)
             {
-                bool isRegular = await this.IsRegularChatterAsync(channel: channel, username: visitingStreamer.UserName);
-
                 if (isRegular)
                 {
                     await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
@@ -82,20 +80,6 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         catch (Exception exception)
         {
             this._logger.LogError(new(exception.HResult), exception: exception, $"{channel}: Check Shoutout: Failed to check {exception.Message}");
-
-            return false;
-        }
-    }
-
-    private async Task<bool> IsRegularChatterAsync(string channel, string username)
-    {
-        try
-        {
-            return await this._twitchStreamDataManager.IsRegularChatterAsync(channel: channel, username: username);
-        }
-        catch (Exception exception)
-        {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{channel}: Is Regular Chatter: Failed to check {exception.Message}");
 
             return false;
         }

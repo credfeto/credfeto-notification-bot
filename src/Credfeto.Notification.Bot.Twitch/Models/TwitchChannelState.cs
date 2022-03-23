@@ -134,18 +134,17 @@ public sealed class TwitchChannelState
 
             this._logger.LogWarning($"Found {twitchUser.UserName}. Streamer: {twitchUser.IsStreamer} Created: {twitchUser.DateCreated}");
 
-            // TODO: Add new chat welcome (To regulars?).
-
-            if (twitchUser.IsStreamer)
-            {
-                await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: twitchUser, cancellationToken: cancellationToken);
-            }
-
             bool isRegular = await this.IsRegularChatterAsync(channel: this._channelName, username: twitchUser.UserName);
 
             if (isRegular)
             {
+                // TODO: Add new chat welcome (To regulars?).
                 this._logger.LogInformation($"{this._channelName}: Hi @{twitchUser.UserName}");
+            }
+
+            if (twitchUser.IsStreamer)
+            {
+                await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: twitchUser, isRegular: isRegular, cancellationToken: cancellationToken);
             }
         }
     }
