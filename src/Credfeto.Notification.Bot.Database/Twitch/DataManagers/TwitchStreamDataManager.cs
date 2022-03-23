@@ -49,7 +49,7 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
     {
         TwitchRegularChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._regularChatterBuilder,
                                                                                        storedProcedure: "twitch.stream_chatter_is_regular",
-                                                                                       new { channel_ = channel, chat_user_ = username });
+                                                                                       new { channel_ = channel, username_ = username });
 
         return chatted?.Regular == true;
     }
