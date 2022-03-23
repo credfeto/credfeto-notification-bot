@@ -102,6 +102,13 @@ public sealed class TwitchChannelState
             return;
         }
 
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._channelName, y: user))
+        {
+            this._logger.LogDebug($"{this._channelName}: Message from {user} that not modding for");
+
+            return;
+        }
+
         if (bits != 0)
         {
             this._logger.LogDebug($"{this._channelName}: {user} Gave {bits}");
