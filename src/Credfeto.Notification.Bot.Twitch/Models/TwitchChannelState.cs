@@ -107,6 +107,11 @@ public sealed class TwitchChannelState
             await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
         }
 
+        if (this._options.IsIgnoredUser(user))
+        {
+            return;
+        }
+
         // TODO: Implement detection for other streamers
         if (this._stream.AddChatter(user))
         {
@@ -134,6 +139,13 @@ public sealed class TwitchChannelState
             if (twitchUser.IsStreamer)
             {
                 await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: twitchUser, cancellationToken: cancellationToken);
+            }
+
+            bool isRegular = await this.IsRegularChatterAsync(channel: this._channelName, username: twitchUser.UserName);
+
+            if (isRegular)
+            {
+                this._logger.LogInformation($"{this._channelName}: Hi @{twitchUser.UserName}");
             }
         }
     }
@@ -278,6 +290,20 @@ public sealed class TwitchChannelState
             int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: this._channelName, cancellationToken: cancellationToken);
 
             await this._followerMilestone.IssueMilestoneUpdateAsync(channel: this._channelName, followers: followers, cancellationToken: cancellationToken);
+        }
+    }
+
+    private async Task<bool> IsRegularChatterAsync(string channel, string username)
+    {
+        try
+        {
+            return await this._twitchStreamDataManager.IsRegularChatterAsync(channel: channel, username: username);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{channel}: Is Regular Chatter: Failed to check {exception.Message}");
+
+            return false;
         }
     }
 }

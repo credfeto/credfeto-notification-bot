@@ -407,11 +407,6 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
-        if (this._options.IsIgnoredUser(e.ChatMessage.Username))
-        {
-            return;
-        }
-
         TwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
 
         await state.ChatMessageAsync(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
