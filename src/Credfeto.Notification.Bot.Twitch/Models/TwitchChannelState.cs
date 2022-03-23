@@ -24,6 +24,7 @@ public sealed class TwitchChannelState
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
+    private readonly IWelcomeWaggon _welcomeWaggon;
 
     private ActiveStream? _stream;
 
@@ -36,6 +37,7 @@ public sealed class TwitchChannelState
                               ITwitchStreamDataManager twitchStreamDataManager,
                               IChannelFollowCount channelFollowCount,
                               IFollowerMilestone followerMilestone,
+                              IWelcomeWaggon welcomeWaggon,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._channelName = channelName;
@@ -47,6 +49,7 @@ public sealed class TwitchChannelState
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
         this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
+        this._welcomeWaggon = welcomeWaggon ?? throw new ArgumentNullException(nameof(welcomeWaggon));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -142,6 +145,7 @@ public sealed class TwitchChannelState
             {
                 // TODO: Add new chat welcome (To regulars?).
                 this._logger.LogInformation($"{this._channelName}: Hi @{twitchUser.UserName}");
+                await this._welcomeWaggon.IssueWelcome(channel: this._channelName, user: twitchUser.UserName, cancellationToken: cancellationToken);
             }
 
             if (twitchUser.IsStreamer)

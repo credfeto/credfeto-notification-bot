@@ -33,7 +33,8 @@ public static class TwitchSetup
         return services.AddSingleton<IRaidWelcome, RaidWelcome>()
                        .AddSingleton<IHeistJoiner, HeistJoiner>()
                        .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
-                       .AddSingleton<IContributionThanks, ContributionThanks>();
+                       .AddSingleton<IContributionThanks, ContributionThanks>()
+                       .AddSingleton<IWelcomeWaggon, WelcomeWaggon>();
     }
 
     private static IServiceCollection AddServices(this IServiceCollection services)
