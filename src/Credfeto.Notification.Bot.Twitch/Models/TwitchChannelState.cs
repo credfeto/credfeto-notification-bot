@@ -136,6 +136,8 @@ public sealed class TwitchChannelState
 
             bool isRegular = await this.IsRegularChatterAsync(channel: this._channelName, username: twitchUser.UserName);
 
+            this._logger.LogInformation($"{this._channelName}: {twitchUser.UserName} - Regular: {isRegular}");
+
             if (isRegular)
             {
                 // TODO: Add new chat welcome (To regulars?).
