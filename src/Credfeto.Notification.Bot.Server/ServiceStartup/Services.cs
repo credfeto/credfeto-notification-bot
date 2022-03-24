@@ -5,6 +5,7 @@ using Credfeto.Notification.Bot.Server.Helpers;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -25,6 +26,7 @@ internal static class Services
         IConfigurationRoot configurationRoot = LoadConfigFile();
 
         services.AddOptions()
+                .AddMediatR(typeof(Program))
                 .AddAppLogging()
                 .AddResources()
                 .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
