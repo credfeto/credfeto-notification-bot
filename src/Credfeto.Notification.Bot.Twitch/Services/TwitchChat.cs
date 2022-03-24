@@ -11,6 +11,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NonBlocking;
@@ -34,6 +35,7 @@ public sealed class TwitchChat : ITwitchChat
     private readonly IFollowerMilestone _followerMilestone;
     private readonly IHeistJoiner _heistJoiner;
     private readonly ILogger<TwitchChat> _logger;
+    private readonly IMediator _mediator;
 
     private readonly TwitchBotOptions _options;
     private readonly TwitchPubSub _pubSub;
@@ -52,6 +54,7 @@ public sealed class TwitchChat : ITwitchChat
                       IHeistJoiner heistJoiner,
                       IChannelFollowCount channelFollowCount,
                       IFollowerMilestone followerMilestone,
+                      IMediator mediator,
                       ILogger<TwitchChat> logger)
     {
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
@@ -60,6 +63,7 @@ public sealed class TwitchChat : ITwitchChat
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
         this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
         this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
+        this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 

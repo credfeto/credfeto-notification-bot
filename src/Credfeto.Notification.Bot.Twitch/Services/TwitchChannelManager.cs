@@ -3,6 +3,7 @@ using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NonBlocking;
@@ -15,6 +16,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     private readonly IContributionThanks _contributionThanks;
     private readonly IFollowerMilestone _followerMilestone;
     private readonly ILogger<TwitchChannelManager> _logger;
+    private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
@@ -32,6 +34,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                 IUserInfoService userInfoService,
                                 IChannelFollowCount channelFollowCount,
                                 IFollowerMilestone followerMilestone,
+                                IMediator mediator,
                                 ILogger<TwitchChannelManager> logger)
     {
         this._welcomeWaggon = welcomeWaggon ?? throw new ArgumentNullException(nameof(welcomeWaggon));
@@ -42,6 +45,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
         this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
+        this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._streamStates = new(comparer: StringComparer.OrdinalIgnoreCase);
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -66,6 +70,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                                                   channelFollowCount: this._channelFollowCount,
                                                                   followerMilestone: this._followerMilestone,
                                                                   welcomeWaggon: this._welcomeWaggon,
+                                                                  mediator: this._mediator,
                                                                   logger: this._logger));
     }
 }

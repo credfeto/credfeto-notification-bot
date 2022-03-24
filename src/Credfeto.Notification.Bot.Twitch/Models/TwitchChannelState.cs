@@ -7,6 +7,8 @@ using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
+using Credfeto.Notification.Bot.Twitch.Models.MediatorModels;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
@@ -19,6 +21,7 @@ public sealed class TwitchChannelState
     private readonly IContributionThanks _contributionThanks;
     private readonly IFollowerMilestone _followerMilestone;
     private readonly ILogger _logger;
+    private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
     private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
@@ -38,6 +41,7 @@ public sealed class TwitchChannelState
                               IChannelFollowCount channelFollowCount,
                               IFollowerMilestone followerMilestone,
                               IWelcomeWaggon welcomeWaggon,
+                              IMediator mediator,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._channelName = channelName;
@@ -50,6 +54,7 @@ public sealed class TwitchChannelState
         this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
         this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
         this._welcomeWaggon = welcomeWaggon ?? throw new ArgumentNullException(nameof(welcomeWaggon));
+        this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -283,26 +288,9 @@ public sealed class TwitchChannelState
         return this._contributionThanks.ThankForPrimeReSubAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
     }
 
-    public async Task NewFollowerAsync(string user, CancellationToken cancellationToken)
+    public Task NewFollowerAsync(string user, in CancellationToken cancellationToken)
     {
-        if (this._stream == null)
-        {
-            // Stream offline but check the milestones anyway
-            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: this._channelName, cancellationToken: cancellationToken);
-
-            await this._followerMilestone.IssueMilestoneUpdateAsync(channel: this._channelName, followers: followers, cancellationToken: cancellationToken);
-
-            return;
-        }
-
-        if (this._stream.Follow(user))
-        {
-            await this._contributionThanks.ThankForFollowAsync(channelName: this._channelName, user: user, cancellationToken: cancellationToken);
-
-            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: this._channelName, cancellationToken: cancellationToken);
-
-            await this._followerMilestone.IssueMilestoneUpdateAsync(channel: this._channelName, followers: followers, cancellationToken: cancellationToken);
-        }
+        return this._mediator.Publish(new TwitchChannelNewFollower(channel: this._channelName, user: user, this._stream != null), cancellationToken: cancellationToken);
     }
 
     private async Task<bool> IsRegularChatterAsync(string channel, string username)
