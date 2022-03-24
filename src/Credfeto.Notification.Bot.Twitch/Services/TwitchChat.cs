@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -340,7 +341,12 @@ public sealed class TwitchChat : ITwitchChat
 
         TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
-        return state.RaidedAsync(raider: e.RaidNotification.DisplayName, viewerCount: e.RaidNotification.MsgParamViewerCount, cancellationToken: cancellationToken);
+        if (!int.TryParse(s: e.RaidNotification.MsgParamViewerCount, style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int viewerCount))
+        {
+            viewerCount = 1;
+        }
+
+        return state.RaidedAsync(raider: e.RaidNotification.DisplayName, viewerCount: viewerCount, cancellationToken: cancellationToken);
     }
 
     private Task OnFollowedAsync(OnFollowArgs e, in CancellationToken cancellationToken)

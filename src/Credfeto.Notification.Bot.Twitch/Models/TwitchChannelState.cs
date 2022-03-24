@@ -72,10 +72,11 @@ public sealed class TwitchChannelState
         this._stream?.AddIncident();
     }
 
-    public async Task RaidedAsync(string raider, string viewerCount, CancellationToken cancellationToken)
+    public async Task RaidedAsync(string raider, int viewerCount, CancellationToken cancellationToken)
     {
         if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this._channelName))
         {
+            await this._mediator.Publish(new TwitchStreamRaided(channel: this._channelName, raider: raider, viewerCount: viewerCount), cancellationToken: cancellationToken);
             await this._raidWelcome.IssueRaidWelcomeAsync(channel: this._channelName, raider: raider, cancellationToken: cancellationToken);
         }
     }
