@@ -12,9 +12,7 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChannelManager : ITwitchChannelManager
 {
-    private readonly IChannelFollowCount _channelFollowCount;
     private readonly IContributionThanks _contributionThanks;
-    private readonly IFollowerMilestone _followerMilestone;
     private readonly ILogger<TwitchChannelManager> _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
@@ -32,8 +30,6 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                 IContributionThanks contributionThanks,
                                 ITwitchStreamDataManager twitchStreamDataManager,
                                 IUserInfoService userInfoService,
-                                IChannelFollowCount channelFollowCount,
-                                IFollowerMilestone followerMilestone,
                                 IMediator mediator,
                                 ILogger<TwitchChannelManager> logger)
     {
@@ -43,8 +39,6 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
-        this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
-        this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._streamStates = new(comparer: StringComparer.OrdinalIgnoreCase);
@@ -67,8 +61,6 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                                                   contributionThanks: this._contributionThanks,
                                                                   twitchStreamDataManager: this._twitchStreamDataManager,
                                                                   userInfoService: this._userInfoService,
-                                                                  channelFollowCount: this._channelFollowCount,
-                                                                  followerMilestone: this._followerMilestone,
                                                                   welcomeWaggon: this._welcomeWaggon,
                                                                   mediator: this._mediator,
                                                                   logger: this._logger));
