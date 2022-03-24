@@ -27,10 +27,10 @@ internal static class Logging
     public static void InitializeLogging(ILoggerFactory loggerFactory)
     {
         // set up Serilog logger
-        Log.Logger = CreateLogger();
+        Logger logger = CreateLogger();
 
         // set up the logger factory
-        loggerFactory.AddSerilog();
+        loggerFactory.AddSerilog(logger);
     }
 
     private static Logger CreateLogger()
