@@ -110,6 +110,9 @@ public sealed class TwitchChannelState
             this._logger.LogDebug($"{this._channelName}: {user} Gave {bits}");
             this._stream.AddBitGifter(user: user, bits: bits);
 
+            await this._mediator.Publish(new TwitchBitsGift(channel: this._channelName, user: user, bits: bits), cancellationToken: cancellationToken);
+
+            // TODO: Move into the handler.
             await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
         }
 
@@ -131,6 +134,9 @@ public sealed class TwitchChannelState
 
             await this._twitchStreamDataManager.AddChatterToStreamAsync(channel: this._channelName, streamStartDate: this._stream.StartedAt, username: user);
 
+            await this._mediator.Publish(new TwitchStreamNewChatter(channel: this._channelName, user: user), cancellationToken: cancellationToken);
+
+            // TODO: Move the below into the handler.
             TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user);
 
             if (twitchUser == null)
