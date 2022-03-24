@@ -16,7 +16,6 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     private readonly ILogger<TwitchChannelManager> _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
-    private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ConcurrentDictionary<string, TwitchChannelState> _streamStates;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
@@ -25,7 +24,6 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
 
     public TwitchChannelManager(IOptions<TwitchBotOptions> options,
                                 IWelcomeWaggon welcomeWaggon,
-                                IRaidWelcome raidWelcome,
                                 IShoutoutJoiner shoutoutJoiner,
                                 IContributionThanks contributionThanks,
                                 ITwitchStreamDataManager twitchStreamDataManager,
@@ -34,7 +32,6 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
                                 ILogger<TwitchChannelManager> logger)
     {
         this._welcomeWaggon = welcomeWaggon ?? throw new ArgumentNullException(nameof(welcomeWaggon));
-        this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
@@ -56,7 +53,6 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
         return this._streamStates.GetOrAdd(key: channel,
                                            new TwitchChannelState(channel.ToLowerInvariant(),
                                                                   options: this._options,
-                                                                  raidWelcome: this._raidWelcome,
                                                                   shoutoutJoiner: this._shoutoutJoiner,
                                                                   contributionThanks: this._contributionThanks,
                                                                   twitchStreamDataManager: this._twitchStreamDataManager,

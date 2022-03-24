@@ -21,7 +21,6 @@ public sealed class TwitchChannelState
     private readonly ILogger _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
-    private readonly IRaidWelcome _raidWelcome;
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
@@ -31,7 +30,6 @@ public sealed class TwitchChannelState
 
     public TwitchChannelState(string channelName,
                               TwitchBotOptions options,
-                              IRaidWelcome raidWelcome,
                               IShoutoutJoiner shoutoutJoiner,
                               IContributionThanks contributionThanks,
                               IUserInfoService userInfoService,
@@ -42,7 +40,6 @@ public sealed class TwitchChannelState
     {
         this._channelName = channelName;
         this._options = options ?? throw new ArgumentNullException(nameof(options));
-        this._raidWelcome = raidWelcome ?? throw new ArgumentNullException(nameof(raidWelcome));
         this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
@@ -77,7 +74,6 @@ public sealed class TwitchChannelState
         if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this._channelName))
         {
             await this._mediator.Publish(new TwitchStreamRaided(channel: this._channelName, raider: raider, viewerCount: viewerCount), cancellationToken: cancellationToken);
-            await this._raidWelcome.IssueRaidWelcomeAsync(channel: this._channelName, raider: raider, cancellationToken: cancellationToken);
         }
     }
 
