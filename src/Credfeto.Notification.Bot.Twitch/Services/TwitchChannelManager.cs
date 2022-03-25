@@ -27,7 +27,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     }
 
     /// <inheritdoc />
-    public TwitchChannelState GetChannel(string channel)
+    public ITwitchChannelState GetChannel(string channel)
     {
         if (this._streamStates.TryGetValue(key: channel, out TwitchChannelState? state))
         {

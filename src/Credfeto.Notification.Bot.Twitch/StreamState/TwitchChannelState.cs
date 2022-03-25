@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
 
 [DebuggerDisplay("{_channelName}")]
-public sealed class TwitchChannelState
+public sealed class TwitchChannelState : ITwitchChannelState
 {
     private readonly string _channelName;
     private readonly ILogger _logger;

@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Models;
-using Credfeto.Notification.Bot.Twitch.StreamState;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -32,7 +31,7 @@ public sealed class TwitchStreamOfflineNotificationHandler : INotificationHandle
     {
         this._logger.LogWarning($"{notification.Channel}: Stopped streaming \"{notification.Title}\" ({notification.GameName}) at {notification.StartedAt}");
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(notification.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(notification.Channel);
 
         try
         {

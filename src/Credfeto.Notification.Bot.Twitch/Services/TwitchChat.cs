@@ -239,7 +239,7 @@ public sealed class TwitchChat : ITwitchChat
 
         this._logger.LogInformation($"{e.Channel}: Chat Cleared");
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         state.ClearChat();
     }
@@ -253,7 +253,7 @@ public sealed class TwitchChat : ITwitchChat
             return Task.CompletedTask;
         }
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         return state.GiftedMultipleAsync(giftedBy: e.GiftedSubscription.DisplayName,
                                          count: e.GiftedSubscription.MsgParamMassGiftCount,
@@ -270,7 +270,7 @@ public sealed class TwitchChat : ITwitchChat
             return Task.CompletedTask;
         }
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         return state.GiftedSubAsync(giftedBy: e.GiftedSubscription.DisplayName, months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration, cancellationToken: cancellationToken);
     }
@@ -289,7 +289,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.Channel}: {e.ContinuedGiftedSubscription.DisplayName} continued sub gifted by {e.ContinuedGiftedSubscription.MsgParamSenderLogin}");
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         return state.ContinuedSubAsync(user: e.ContinuedGiftedSubscription.DisplayName, cancellationToken: cancellationToken);
     }
@@ -298,7 +298,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.Channel}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid");
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         return state.PrimeToPaidAsync(user: e.PrimePaidSubscriber.DisplayName, cancellationToken: cancellationToken);
     }
@@ -330,7 +330,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.Channel}: Raided by {e.RaidNotification.DisplayName}");
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         if (!int.TryParse(s: e.RaidNotification.MsgParamViewerCount, style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int viewerCount))
         {
@@ -354,7 +354,7 @@ public sealed class TwitchChat : ITwitchChat
             return Task.CompletedTask;
         }
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(channelName);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channelName);
 
         return state.NewFollowerAsync(user: e.Username, cancellationToken: cancellationToken);
     }
@@ -407,7 +407,7 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
 
         await state.ChatMessageAsync(user: e.ChatMessage.Username, message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
     }
@@ -434,7 +434,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.Channel}: New Subscriber {e.Subscriber.DisplayName}");
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {
@@ -448,7 +448,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         this._logger.LogInformation($"{e.Channel}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
 
-        TwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.Channel);
 
         if (e.ReSubscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {
