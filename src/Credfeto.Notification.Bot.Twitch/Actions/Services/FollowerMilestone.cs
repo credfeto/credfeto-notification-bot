@@ -54,6 +54,7 @@ public sealed class FollowerMilestone : MessageSenderBase, IFollowerMilestone
         if (milestoneFreshlyReached)
         {
             this._logger.LogWarning($"{channel}: Woo!! New follower milestone reached {lastMileStoneReached}");
+            await this.SendMessageAsync(channel: channel, $"/me @{channel} Woo! {lastMileStoneReached} followers reached!", cancellationToken: cancellationToken);
         }
     }
 }

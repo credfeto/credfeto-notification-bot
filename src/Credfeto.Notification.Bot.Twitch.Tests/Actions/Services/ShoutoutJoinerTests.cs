@@ -75,7 +75,7 @@ public sealed class ShoutoutJoinerTests : TestBase
     }
 
     [Fact]
-    public async Task IssueShoutoutShoutoutsDisabledAsync()
+    public async Task IssueShoutoutDisabledAsync()
     {
         TwitchUser visitingStreamer = new(id: "123456", userName: VISITING_CHANNEL, isStreamer: true, new(year: 2020, month: 1, day: 1));
 
