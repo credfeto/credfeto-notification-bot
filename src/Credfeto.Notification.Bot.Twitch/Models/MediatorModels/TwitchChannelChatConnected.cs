@@ -2,7 +2,7 @@ using MediatR;
 
 namespace Credfeto.Notification.Bot.Twitch.Models.MediatorModels;
 
-public sealed class TwitchChannelChatConnected : IMediator, INotification
+public sealed class TwitchChannelChatConnected : INotification
 {
     public TwitchChannelChatConnected(string channel)
     {
