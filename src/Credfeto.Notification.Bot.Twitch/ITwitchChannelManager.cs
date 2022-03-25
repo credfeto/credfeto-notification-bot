@@ -1,4 +1,4 @@
-using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.StreamState;
 
 namespace Credfeto.Notification.Bot.Twitch;
 

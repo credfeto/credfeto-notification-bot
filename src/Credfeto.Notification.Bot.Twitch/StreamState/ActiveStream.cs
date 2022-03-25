@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using NonBlocking;
 
-namespace Credfeto.Notification.Bot.Twitch.Models;
+namespace Credfeto.Notification.Bot.Twitch.StreamState;
 
 [DebuggerDisplay("{GameName}: Started: {StartedAt}")]
 internal sealed class ActiveStream

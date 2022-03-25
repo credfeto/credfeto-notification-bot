@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
-using Credfeto.Notification.Bot.Twitch.Models.MediatorModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Credfeto.Notification.Bot.Twitch.Models;
+namespace Credfeto.Notification.Bot.Twitch.StreamState;
 
 [DebuggerDisplay("{_channelName}")]
 public sealed class TwitchChannelState

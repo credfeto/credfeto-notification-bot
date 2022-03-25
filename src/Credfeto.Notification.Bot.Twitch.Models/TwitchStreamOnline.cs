@@ -1,7 +1,4 @@
-using System;
-using MediatR;
-
-namespace Credfeto.Notification.Bot.Twitch.Models.MediatorModels;
+namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchStreamOnline : INotification
 {
