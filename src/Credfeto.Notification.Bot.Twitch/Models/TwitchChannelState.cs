@@ -21,30 +21,21 @@ public sealed class TwitchChannelState
     private readonly ILogger _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
-    private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
-    private readonly IUserInfoService _userInfoService;
-    private readonly IWelcomeWaggon _welcomeWaggon;
 
     private ActiveStream? _stream;
 
     public TwitchChannelState(string channelName,
                               TwitchBotOptions options,
-                              IShoutoutJoiner shoutoutJoiner,
                               IContributionThanks contributionThanks,
-                              IUserInfoService userInfoService,
                               ITwitchStreamDataManager twitchStreamDataManager,
-                              IWelcomeWaggon welcomeWaggon,
                               IMediator mediator,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._channelName = channelName;
         this._options = options ?? throw new ArgumentNullException(nameof(options));
-        this._shoutoutJoiner = shoutoutJoiner ?? throw new ArgumentNullException(nameof(shoutoutJoiner));
         this._contributionThanks = contributionThanks ?? throw new ArgumentNullException(nameof(contributionThanks));
-        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
-        this._welcomeWaggon = welcomeWaggon ?? throw new ArgumentNullException(nameof(welcomeWaggon));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -111,9 +102,6 @@ public sealed class TwitchChannelState
             this._stream.AddBitGifter(user: user, bits: bits);
 
             await this._mediator.Publish(new TwitchBitsGift(channel: this._channelName, user: user, bits: bits), cancellationToken: cancellationToken);
-
-            // TODO: Move into the handler.
-            await this._contributionThanks.ThankForBitsAsync(channel: this._channelName, user: user, cancellationToken: cancellationToken);
         }
 
         if (this._options.IsIgnoredUser(user))
@@ -132,35 +120,11 @@ public sealed class TwitchChannelState
                 return;
             }
 
+            bool isRegular = await this.IsRegularChatterAsync(channel: this._channelName, username: user);
+
             await this._twitchStreamDataManager.AddChatterToStreamAsync(channel: this._channelName, streamStartDate: this._stream.StartedAt, username: user);
 
-            await this._mediator.Publish(new TwitchStreamNewChatter(channel: this._channelName, user: user), cancellationToken: cancellationToken);
-
-            // TODO: Move the below into the handler.
-            TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user);
-
-            if (twitchUser == null)
-            {
-                return;
-            }
-
-            this._logger.LogWarning($"Found {twitchUser.UserName}. Streamer: {twitchUser.IsStreamer} Created: {twitchUser.DateCreated}");
-
-            bool isRegular = await this.IsRegularChatterAsync(channel: this._channelName, username: twitchUser.UserName);
-
-            this._logger.LogInformation($"{this._channelName}: {twitchUser.UserName} - Regular: {isRegular}");
-
-            if (isRegular)
-            {
-                // TODO: Add new chat welcome (To regulars?).
-                this._logger.LogInformation($"{this._channelName}: Hi @{twitchUser.UserName}");
-                await this._welcomeWaggon.IssueWelcomeAsync(channel: this._channelName, user: twitchUser.UserName, cancellationToken: cancellationToken);
-            }
-
-            if (twitchUser.IsStreamer)
-            {
-                await this._shoutoutJoiner.IssueShoutoutAsync(channel: this._channelName, visitingStreamer: twitchUser, isRegular: isRegular, cancellationToken: cancellationToken);
-            }
+            await this._mediator.Publish(new TwitchStreamNewChatter(channel: this._channelName, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
         }
     }
 
