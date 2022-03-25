@@ -12,6 +12,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Models.MediatorModels;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -31,9 +32,7 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChat : ITwitchChat
 {
-    private readonly IChannelFollowCount _channelFollowCount;
     private readonly TwitchClient _client;
-    private readonly IFollowerMilestone _followerMilestone;
     private readonly IHeistJoiner _heistJoiner;
     private readonly ILogger<TwitchChat> _logger;
     private readonly IMediator _mediator;
@@ -53,8 +52,6 @@ public sealed class TwitchChat : ITwitchChat
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IHeistJoiner heistJoiner,
-                      IChannelFollowCount channelFollowCount,
-                      IFollowerMilestone followerMilestone,
                       IMediator mediator,
                       ILogger<TwitchChat> logger)
     {
@@ -62,8 +59,6 @@ public sealed class TwitchChat : ITwitchChat
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
-        this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
-        this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -388,9 +383,7 @@ public sealed class TwitchChat : ITwitchChat
                 this._pubSub.ListenToFollows(channel.Id);
                 this._userMappings.GetOrAdd(key: channel.Id, value: channel.UserName);
 
-                int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: channel.UserName, cancellationToken: cancellationToken);
-
-                await this._followerMilestone.IssueMilestoneUpdateAsync(channel: channel.UserName, followers: followers, cancellationToken: cancellationToken);
+                await this._mediator.Publish(new TwitchChannelChatConnected(channel.UserName), cancellationToken: cancellationToken);
             }
         }
         catch (Exception exception)
