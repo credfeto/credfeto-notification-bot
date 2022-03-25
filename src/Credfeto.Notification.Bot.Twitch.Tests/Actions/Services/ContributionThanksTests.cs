@@ -12,9 +12,9 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class ContributionThanksTests : TestBase
 {
-    private const string CHANNEL = "channel";
-    private const string GIFTER = "gifter";
-    private const string USER = "user";
+    private const string CHANNEL = nameof(CHANNEL);
+    private const string GIFTING_USER = nameof(GIFTING_USER);
+    private const string USER = nameof(USER);
 
     private readonly IContributionThanks _contributionThanks;
     private readonly ICurrentTimeSource _currentTimeSource;
@@ -50,9 +50,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThanksForBitsAsync()
     {
-        await this._contributionThanks.ThankForBitsAsync(channel: CHANNEL, user: GIFTER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForBitsAsync(channel: CHANNEL, user: GIFTING_USER, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTER} for the bits");
+        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTING_USER} for the bits");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -60,9 +60,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForGiftingOneSubAsync()
     {
-        await this._contributionThanks.ThankForGiftingSubAsync(channel: CHANNEL, giftedBy: GIFTER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForGiftingSubAsync(channel: CHANNEL, giftedBy: GIFTING_USER, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTER} for gifting sub");
+        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTING_USER} for gifting sub");
 
         this.ReceivedCurrentTime();
     }
@@ -70,9 +70,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForGiftingMultipleSubsAsync()
     {
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(channel: CHANNEL, giftedBy: GIFTER, count: 27, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(channel: CHANNEL, giftedBy: GIFTING_USER, count: 27, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTER} for gifting subs");
+        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTING_USER} for gifting subs");
 
         this.ReceivedCurrentTime();
     }
