@@ -64,7 +64,7 @@ public sealed class ContributionThanksTests : TestBase
 
         await this.ReceivedPublishMessageAsync($"Thanks @{GIFTER} for gifting sub");
 
-        this.DidNotReceiveCurrentTime();
+        this.ReceivedCurrentTime();
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         await this._contributionThanks.ThankForMultipleGiftSubsAsync(channel: CHANNEL, giftedBy: GIFTER, count: 27, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTER} for gifting sub");
+        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTER} for gifting subs");
 
         this.ReceivedCurrentTime();
     }

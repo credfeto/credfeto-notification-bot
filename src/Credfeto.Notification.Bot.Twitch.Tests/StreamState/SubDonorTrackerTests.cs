@@ -37,7 +37,10 @@ public sealed class SubDonorTrackerTests : TestBase
     [InlineData("other", 5001, false)]
     public void DonorCheck(string donor, int advanceMs, bool shouldBeSameGifter)
     {
-        SubDonorTracker subDonorTracker = new(giftedBy: INITIAL_DONOR, currentTimeSource: this._currentDateTimeSource, logger: this._logger);
+        SubDonorTracker subDonorTracker = new(currentTimeSource: this._currentDateTimeSource, logger: this._logger);
+
+        bool firstUser = subDonorTracker.Update(INITIAL_DONOR);
+        Assert.False(condition: firstUser, userMessage: "First user should never be the 'same' user");
 
         this._context.Advance(TimeSpan.FromMilliseconds(advanceMs));
 

@@ -119,10 +119,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return subDonorTracker;
         }
 
-        subDonorTracker = new(Guid.NewGuid()
-                                  .ToString(),
-                              currentTimeSource: this._currentTimeSource,
-                              logger: this._logger);
+        subDonorTracker = new(currentTimeSource: this._currentTimeSource, logger: this._logger);
 
         return this._donors.GetOrAdd(key: channel, value: subDonorTracker);
     }
