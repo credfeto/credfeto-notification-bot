@@ -7,7 +7,6 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
-using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Extensions;
@@ -33,7 +32,6 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 public sealed class TwitchChat : ITwitchChat
 {
     private readonly TwitchClient _client;
-    private readonly IHeistJoiner _heistJoiner;
     private readonly ILogger<TwitchChat> _logger;
     private readonly IMediator _mediator;
 
@@ -51,14 +49,12 @@ public sealed class TwitchChat : ITwitchChat
                       IUserInfoService userInfoService,
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
-                      IHeistJoiner heistJoiner,
                       IMediator mediator,
                       ILogger<TwitchChat> logger)
     {
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
-        this._heistJoiner = heistJoiner ?? throw new ArgumentNullException(nameof(heistJoiner));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -374,6 +370,7 @@ public sealed class TwitchChat : ITwitchChat
 
         try
         {
+            // TODO: Consider moving PubSub to own class
             TwitchUser? channel = await this._userInfoService.GetUserAsync(e.Channel);
 
             if (channel != null)
@@ -419,7 +416,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         if (IsHeistStartingMessage(e))
         {
-            await this._heistJoiner.JoinHeistAsync(channel: e.ChatMessage.Channel, cancellationToken: cancellationToken);
+            await this._mediator.Publish(new StreamLabsHeistStarting(e.ChatMessage.Message), cancellationToken: cancellationToken);
 
             return true;
         }
