@@ -35,6 +35,12 @@ public sealed class ContributionThanksTests : TestBase
                    .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Channel == CHANNEL && t.Message == expectedMessage), Arg.Any<CancellationToken>());
     }
 
+    private ValueTask DidNotReceivePublishMessageAsync()
+    {
+        return this._twitchChatMessageChannel.DidNotReceive()
+                   .PublishAsync(Arg.Any<TwitchChatMessage>(), Arg.Any<CancellationToken>());
+    }
+
     private void ReceivedCurrentTime()
     {
         this._currentTimeSource.Received(1)
@@ -113,6 +119,16 @@ public sealed class ContributionThanksTests : TestBase
         await this._contributionThanks.ThankForPrimeReSubAsync(channel: CHANNEL, user: USER, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{USER} for resubscribing");
+
+        this.DidNotReceiveCurrentTime();
+    }
+
+    [Fact]
+    public async Task ThankForFollowAsync()
+    {
+        await this._contributionThanks.ThankForFollowAsync(channel: CHANNEL, user: USER, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
 
         this.DidNotReceiveCurrentTime();
     }
