@@ -6,19 +6,19 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
 
-namespace Credfeto.Notification.Bot.Twitch.Tests;
+namespace Credfeto.Notification.Bot.Twitch.Tests.StreamState;
 
-public sealed class SubGifterTests : TestBase
+public sealed class SubDonorTrackerTests : TestBase
 {
-    private const string INITIAL_GIFTER = "me";
+    private const string INITIAL_DONOR = "me";
     private readonly Context _context;
     private readonly ICurrentTimeSource _currentDateTimeSource;
     private readonly ILogger _logger;
 
-    public SubGifterTests()
+    public SubDonorTrackerTests()
     {
         this._currentDateTimeSource = GetSubstitute<ICurrentTimeSource>();
-        this._logger = this.GetTypedLogger<SubGifter>();
+        this._logger = this.GetTypedLogger<SubDonorTracker>();
 
         this._context = new();
 
@@ -27,21 +27,21 @@ public sealed class SubGifterTests : TestBase
     }
 
     [Theory]
-    [InlineData(INITIAL_GIFTER, 100, true)]
-    [InlineData(INITIAL_GIFTER, 4999, true)]
-    [InlineData(INITIAL_GIFTER, 5000, false)]
-    [InlineData(INITIAL_GIFTER, 5001, false)]
+    [InlineData(INITIAL_DONOR, 100, true)]
+    [InlineData(INITIAL_DONOR, 4999, true)]
+    [InlineData(INITIAL_DONOR, 5000, false)]
+    [InlineData(INITIAL_DONOR, 5001, false)]
     [InlineData("other", 100, false)]
     [InlineData("other", 4999, false)]
     [InlineData("other", 5000, false)]
     [InlineData("other", 5001, false)]
-    public void GifterCheck(string gifter, int advanceMs, bool shouldBeSameGifter)
+    public void DonorCheck(string donor, int advanceMs, bool shouldBeSameGifter)
     {
-        SubGifter subGifter = new(giftedBy: INITIAL_GIFTER, currentTimeSource: this._currentDateTimeSource, logger: this._logger);
+        SubDonorTracker subDonorTracker = new(giftedBy: INITIAL_DONOR, currentTimeSource: this._currentDateTimeSource, logger: this._logger);
 
         this._context.Advance(TimeSpan.FromMilliseconds(advanceMs));
 
-        bool sameUser = subGifter.Update(gifter);
+        bool sameUser = subDonorTracker.Update(donor);
         Assert.Equal(expected: shouldBeSameGifter, actual: sameUser);
     }
 

@@ -23,7 +23,7 @@ public sealed class TwitchGiftSubSingleNotificationHandler : INotificationHandle
     {
         try
         {
-            await this._contributionThanks.ThankForGiftingSubAsync(channelName: notification.Channel, giftedBy: notification.User, cancellationToken: cancellationToken);
+            await this._contributionThanks.ThankForGiftingSubAsync(channel: notification.Channel, giftedBy: notification.User, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {

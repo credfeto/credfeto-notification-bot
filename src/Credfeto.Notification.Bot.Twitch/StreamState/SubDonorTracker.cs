@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
 
-public sealed class SubGifter
+public sealed class SubDonorTracker
 {
     private static readonly TimeSpan DeDupTime = TimeSpan.FromSeconds(5);
     private readonly ICurrentTimeSource _currentTimeSource;
@@ -13,9 +13,9 @@ public sealed class SubGifter
     private string _giftedBy;
     private DateTime _whenGifted;
 
-    public SubGifter(string giftedBy,
-                     ICurrentTimeSource currentTimeSource,
-                     [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
+    public SubDonorTracker(string giftedBy,
+                           ICurrentTimeSource currentTimeSource,
+                           [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._giftedBy = giftedBy;
 

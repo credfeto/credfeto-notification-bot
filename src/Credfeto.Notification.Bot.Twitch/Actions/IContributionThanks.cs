@@ -15,9 +15,9 @@ public interface IContributionThanks
 
     Task ThankForNewPaidSubAsync(string channel, string user, CancellationToken cancellationToken);
 
-    Task ThankForMultipleGiftSubsAsync(string channelName, string giftedBy, int count, CancellationToken cancellationToken);
+    Task ThankForMultipleGiftSubsAsync(string channel, string giftedBy, int count, CancellationToken cancellationToken);
 
-    Task ThankForGiftingSubAsync(string channelName, string giftedBy, CancellationToken cancellationToken);
+    Task ThankForGiftingSubAsync(string channel, string giftedBy, CancellationToken cancellationToken);
 
-    Task ThankForFollowAsync(string channelName, string user, CancellationToken cancellationToken);
+    Task ThankForFollowAsync(string channel, string user, CancellationToken cancellationToken);
 }
