@@ -25,7 +25,7 @@ public sealed class TwitchChannelChatConnectedNotificationHandler : INotificatio
     {
         try
         {
-            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(username: notification.Channel, cancellationToken: cancellationToken);
+            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(channel: notification.Channel, cancellationToken: cancellationToken);
 
             await this._followerMilestone.IssueMilestoneUpdateAsync(channel: notification.Channel, followers: followers, cancellationToken: cancellationToken);
         }
