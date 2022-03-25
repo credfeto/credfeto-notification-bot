@@ -34,16 +34,28 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
                                                                                   this.GetTypedLogger<TwitchStreamNewChatterNotificationHandler>());
     }
 
-    private Task<bool> DidNotIssueShoutoutAsync()
+    private Task DidNotReceiveIssueShoutoutAsync()
     {
         return this._shoutoutJoiner.DidNotReceive()
                    .IssueShoutoutAsync(Arg.Any<string>(), Arg.Any<TwitchUser>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
+    }
+
+    private Task ReceivedIssueShoutoutAsync()
+    {
+        return this._shoutoutJoiner.Received(1)
+                   .IssueShoutoutAsync(channel: CHANNEL, Arg.Is<TwitchUser>(t => t.UserName == USER && t.IsStreamer), Arg.Any<bool>(), Arg.Any<CancellationToken>());
     }
 
     private Task DidNotReceiveWelcomeAsync()
     {
         return this._welcomeWaggon.DidNotReceive()
                    .IssueWelcomeAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+    }
+
+    private Task ReceivedWelcomeAsync()
+    {
+        return this._welcomeWaggon.Received(1)
+                   .IssueWelcomeAsync(channel: CHANNEL, user: USER, Arg.Any<CancellationToken>());
     }
 
     private Task<TwitchUser?> ReceivedGetUserAsync()
@@ -62,7 +74,7 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
 
         await this.ReceivedGetUserAsync();
         await this.DidNotReceiveWelcomeAsync();
-        await this.DidNotIssueShoutoutAsync();
+        await this.DidNotReceiveIssueShoutoutAsync();
     }
 
     [Fact]
@@ -74,6 +86,21 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         await this._notificationHandler.Handle(new(channel: CHANNEL, user: USER, isRegular: false), cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
+        await this.DidNotReceiveWelcomeAsync();
+        await this.DidNotReceiveIssueShoutoutAsync();
+    }
+
+    [Fact]
+    public async Task HandleForNewStreamerAsync()
+    {
+        this._userInfoService.GetUserAsync(USER)
+            .Returns(new TwitchUser(id: "123456", userName: USER, isStreamer: true, dateCreated: DateTime.MinValue));
+
+        await this._notificationHandler.Handle(new(channel: CHANNEL, user: USER, isRegular: false), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedGetUserAsync();
+        await this.DidNotReceiveWelcomeAsync();
+        await this.ReceivedIssueShoutoutAsync();
     }
 
     [Fact]
@@ -85,6 +112,8 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         await this._notificationHandler.Handle(new(channel: CHANNEL, user: USER, isRegular: true), cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
+        await this.ReceivedWelcomeAsync();
+        await this.DidNotReceiveIssueShoutoutAsync();
     }
 
     [Fact]
@@ -96,5 +125,7 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         await this._notificationHandler.Handle(new(channel: CHANNEL, user: USER, isRegular: true), cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
+        await this.ReceivedWelcomeAsync();
+        await this.ReceivedIssueShoutoutAsync();
     }
 }
