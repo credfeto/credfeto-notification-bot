@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using MediatR;
 using Microsoft.Extensions.Logging;

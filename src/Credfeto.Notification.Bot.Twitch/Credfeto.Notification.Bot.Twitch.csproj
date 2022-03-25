@@ -48,8 +48,8 @@
         <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Tests\Credfeto.Notification.Bot.Database.Tests.csproj"/>
         <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
         <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Data.Interfaces\Credfeto.Notification.Bot.Twitch.Data.Interfaces.csproj" />
+        <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Models\Credfeto.Notification.Bot.Twitch.Models.csproj"/>
     </ItemGroup>
 </Project>

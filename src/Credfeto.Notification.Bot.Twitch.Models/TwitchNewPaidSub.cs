@@ -1,3 +1,5 @@
+using MediatR;
+
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchNewPaidSub : INotification

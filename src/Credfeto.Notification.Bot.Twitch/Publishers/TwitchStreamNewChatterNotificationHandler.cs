@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
-using Credfeto.Notification.Bot.Twitch.Models.MediatorModels;
+using Credfeto.Notification.Bot.Twitch.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
