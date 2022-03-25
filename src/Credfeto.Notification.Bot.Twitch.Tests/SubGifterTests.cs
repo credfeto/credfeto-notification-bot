@@ -1,6 +1,6 @@
 ﻿using System;
 using Credfeto.Notification.Bot.Shared;
-using Credfeto.Notification.Bot.Twitch.Actions.Services;
+using Credfeto.Notification.Bot.Twitch.Models;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Logging;
 using NSubstitute;

@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Credfeto.Notification.Bot.Shared;
 using Microsoft.Extensions.Logging;
 
-namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
+namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class SubGifter
 {
