@@ -7,7 +7,7 @@ public interface IContributionThanks
 {
     Task ThankForBitsAsync(string channel, string user, CancellationToken cancellationToken);
 
-    Task ThankForPrimeSubAsync(string channel, string user, CancellationToken cancellationToken);
+    Task ThankForNewPrimeSubAsync(string channel, string user, CancellationToken cancellationToken);
 
     Task ThankForPrimeReSubAsync(string channel, string user, CancellationToken cancellationToken);
 

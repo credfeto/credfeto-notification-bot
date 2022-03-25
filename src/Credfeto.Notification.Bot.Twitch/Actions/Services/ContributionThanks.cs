@@ -33,7 +33,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._logger.LogInformation($"{channel}: Thanks @{user} for for the bits.");
     }
 
-    public async Task ThankForPrimeSubAsync(string channel, string user, CancellationToken cancellationToken)
+    public async Task ThankForNewPrimeSubAsync(string channel, string user, CancellationToken cancellationToken)
     {
         await this.SendMessageAsync(channel: channel, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
 

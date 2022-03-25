@@ -35,7 +35,7 @@ internal sealed class ActiveStream
 
     public DateTime StartedAt { get; }
 
-    public bool AddRaider(string raider, string viewerCount)
+    public bool AddRaider(string raider, int viewerCount)
     {
         if (this._raiders.TryAdd(key: raider, value: true))
         {
