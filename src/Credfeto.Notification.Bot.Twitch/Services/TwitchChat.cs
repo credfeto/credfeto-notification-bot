@@ -214,8 +214,6 @@ public sealed class TwitchChat : ITwitchChat
         }
 
         return Task.CompletedTask;
-
-        //return Task.CompletedTask;
     }
 
     private void PublishChatMessage(TwitchChatMessage twitchChatMessage)
