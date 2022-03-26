@@ -122,6 +122,10 @@
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Database.Dapper project"
 
+ - name: "Database.Dapper.Tests"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Database.Dapper.Tests project"
+
  - name: "Database.Interfaces"
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Database.Interfaces project"
@@ -130,9 +134,17 @@
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Database.Pgsql project"
 
+ - name: "Database.Pgsql.Tests"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Database.Pgsql.Tests project"
+
  - name: "Database.Shared"
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Database.Shared project"
+
+ - name: "Database.Shared.Tests"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Database.Shared.Tests project"
 
  - name: "Database.Tests"
    color: "0e8a16"
@@ -153,6 +165,14 @@
  - name: "Shared.Extensions"
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Shared.Extensions project"
+
+ - name: "Shared.Extensions.Tests"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Shared.Extensions.Tests project"
+
+ - name: "Shared.Tests"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Shared.Tests project"
 
  - name: "Twitch"
    color: "96f7d2"
