@@ -49,4 +49,7 @@
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All"/>
     <PackageReference Include="xunit.analyzers" Version="0.10.0" PrivateAssets="All"/>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj"/>
+  </ItemGroup>
 </Project>
