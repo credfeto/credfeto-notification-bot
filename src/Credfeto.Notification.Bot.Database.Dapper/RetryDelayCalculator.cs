@@ -6,7 +6,7 @@ namespace Credfeto.Notification.Dapper;
 /// <summary>
 ///     Calculates delay retries.
 /// </summary>
-internal static class RetryDelayCalculator
+public static class RetryDelayCalculator
 {
     private static readonly Random RandomNumberGenerator = new();
 
