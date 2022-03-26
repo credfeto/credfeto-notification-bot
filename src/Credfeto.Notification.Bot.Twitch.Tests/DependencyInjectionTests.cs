@@ -2,7 +2,9 @@ using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -21,7 +23,7 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     private static IServiceCollection Configure(IServiceCollection service)
     {
         return service.AddMockedService<ICurrentTimeSource>()
-                      .AddMockedService<ITwitchStreamerDataManager>()
+                      .AddMockedService<IMessageChannel<TwitchChatMessage>>()
                       .AddMockedService<IOptions<TwitchBotOptions>>(options =>
                                                                     {
                                                                         options.Value.Returns(new TwitchBotOptions
@@ -33,9 +35,15 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
                                                                                                                        ClientSecret = "Invalid",
                                                                                                                        OAuthToken = "Invalid",
                                                                                                                        UserName = "Invalid"
-                                                                                                                   }
+                                                                                                                   },
+                                                                                                  Channels = new(),
+                                                                                                  Shoutouts = new(),
+                                                                                                  Heists = new()
                                                                                               });
                                                                     })
+                      .AddMockedService<IMediator>()
+                      .AddMockedService<ITwitchStreamDataManager>()
+                      .AddMockedService<ITwitchStreamerDataManager>()
 
                       // Items being tested
                       .AddTwitch();
