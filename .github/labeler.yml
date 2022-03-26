@@ -36,12 +36,18 @@
  - any: [ 'src/Credfeto.Notification.Bot.Database/**/*' ]
 "Database.Dapper":
  - any: [ 'src/Credfeto.Notification.Bot.Database.Dapper/**/*' ]
+"Database.Dapper.Tests":
+ - any: [ 'src/Credfeto.Notification.Bot.Database.Dapper.Tests/**/*' ]
 "Database.Interfaces":
  - any: [ 'src/Credfeto.Notification.Bot.Database.Interfaces/**/*' ]
 "Database.Pgsql":
  - any: [ 'src/Credfeto.Notification.Bot.Database.Pgsql/**/*' ]
+"Database.Pgsql.Tests":
+ - any: [ 'src/Credfeto.Notification.Bot.Database.Pgsql.Tests/**/*' ]
 "Database.Shared":
  - any: [ 'src/Credfeto.Notification.Bot.Database.Shared/**/*' ]
+"Database.Shared.Tests":
+ - any: [ 'src/Credfeto.Notification.Bot.Database.Shared.Tests/**/*' ]
 "Database.Tests":
  - any: [ 'src/Credfeto.Notification.Bot.Database.Tests/**/*' ]
 "Database.Tests.Integration":
@@ -52,6 +58,10 @@
  - any: [ 'src/Credfeto.Notification.Bot.Shared/**/*' ]
 "Shared.Extensions":
  - any: [ 'src/Credfeto.Notification.Bot.Shared.Extensions/**/*' ]
+"Shared.Extensions.Tests":
+ - any: [ 'src/Credfeto.Notification.Bot.Shared.Extensions.Tests/**/*' ]
+"Shared.Tests":
+ - any: [ 'src/Credfeto.Notification.Bot.Shared.Tests/**/*' ]
 "Twitch":
  - any: [ 'src/Credfeto.Notification.Bot.Twitch/**/*' ]
 "Twitch.Data.Interfaces":
