@@ -222,6 +222,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         try
         {
+            this._logger.LogInformation($"{twitchChatMessage.Channel}: >>> @{this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
             this._client.SendMessage(channel: twitchChatMessage.Channel, message: twitchChatMessage.Message);
         }
         catch (Exception exception)
