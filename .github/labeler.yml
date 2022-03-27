@@ -54,6 +54,8 @@
  - any: [ 'src/Credfeto.Notification.Bot.Database.Tests.Integration/**/*' ]
 "Discord":
  - any: [ 'src/Credfeto.Notification.Bot.Discord/**/*' ]
+"Discord.Models":
+ - any: [ 'src/Credfeto.Notification.Bot.Discord.Models/**/*' ]
 "Server":
  - any: [ 'src/Credfeto.Notification.Bot.Server/**/*' ]
 "Shared":
