@@ -7,6 +7,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
+using MediatR;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
@@ -17,6 +18,7 @@ public sealed class FollowerMilestoneTests : TestBase
 {
     private const string CHANNEL = nameof(CHANNEL);
     private readonly IFollowerMilestone _followerMileStone;
+    private readonly IMediator _mediator;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
 
@@ -24,6 +26,8 @@ public sealed class FollowerMilestoneTests : TestBase
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
         this._twitchStreamDataManager = GetSubstitute<ITwitchStreamDataManager>();
+        this._mediator = GetSubstitute<IMediator>();
+
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions
                               {
@@ -43,6 +47,7 @@ public sealed class FollowerMilestoneTests : TestBase
                               });
 
         this._followerMileStone = new FollowerMilestone(options: options,
+                                                        mediator: this._mediator,
                                                         twitchStreamDataManager: this._twitchStreamDataManager,
                                                         twitchChatMessageChannel: this._twitchChatMessageChannel,
                                                         this.GetTypedLogger<FollowerMilestone>());
