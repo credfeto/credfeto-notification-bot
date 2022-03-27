@@ -27,7 +27,7 @@ internal static class Services
         IConfigurationRoot configurationRoot = LoadConfigFile();
 
         services.AddOptions()
-                .AddMediatR(typeof(Program), typeof(TwitchSetup))
+                .AddMediatR(typeof(Program), typeof(DiscordSetup), typeof(TwitchSetup))
                 .AddAppLogging()
                 .AddResources()
                 .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))

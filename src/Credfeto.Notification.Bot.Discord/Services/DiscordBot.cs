@@ -35,7 +35,7 @@ public sealed class DiscordBot : IDiscordBot
 
         this._messageChannel.ReadAllAsync(CancellationToken.None)
             .ToObservable()
-            .Select(message => Observable.FromAsync(cancellationToken => this.PublishMessageAsync(message: message, cancellationToken: cancellationToken)))
+            .Select(message => Observable.FromAsync(() => this.PublishMessageAsync(message: message)))
             .Concat()
             .Subscribe();
     }
@@ -47,7 +47,7 @@ public sealed class DiscordBot : IDiscordBot
         this._logger.LogDebug($"{message.Channel}: Queuing message for Discord");
     }
 
-    private async Task PublishMessageAsync(DiscordMessage message, CancellationToken cancellationToken)
+    private async Task PublishMessageAsync(DiscordMessage message)
     {
         SocketTextChannel? socketTextChannel = this.GetChannel(message.Channel);
 

@@ -49,5 +49,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Credfeto.Notification.Bot.Discord.Models\Credfeto.Notification.Bot.Discord.Models.csproj"/>
     <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj"/>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Models\Credfeto.Notification.Bot.Twitch.Models.csproj"/>
   </ItemGroup>
 </Project>
