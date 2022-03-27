@@ -16,6 +16,7 @@ public static class DiscordSetup
     public static IServiceCollection AddDiscord(this IServiceCollection services)
     {
         return services.AddSingleton<DiscordSocketClient>()
+                       .AddSingleton<IDiscordBot, DiscordBot>()
                        .AddSingleton<IDiscordConnectionService, DiscordConnectionService>()
                        .AddHostedService(x => x.GetRequiredService<IDiscordConnectionService>());
     }
