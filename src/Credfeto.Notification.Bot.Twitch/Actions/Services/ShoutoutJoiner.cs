@@ -25,14 +25,6 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
-
-        foreach (TwitchChannelShoutout channel in this._options.Shoutouts)
-        {
-            foreach (TwitchFriendChannel visitingStreamer in channel.FriendChannels)
-            {
-                this._logger.LogWarning($"{channel.Channel}: Has Friend for shoutouts - {visitingStreamer.Channel}");
-            }
-        }
     }
 
     public async Task<bool> IssueShoutoutAsync(string channel, TwitchUser visitingStreamer, bool isRegular, CancellationToken cancellationToken)
