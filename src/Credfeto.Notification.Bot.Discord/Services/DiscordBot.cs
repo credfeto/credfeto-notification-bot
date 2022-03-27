@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Discord.Models;
 using Credfeto.Notification.Bot.Shared;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;

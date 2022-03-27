@@ -46,8 +46,4 @@
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All"/>
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All"/>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Discord.Models\Credfeto.Notification.Bot.Discord.Models.csproj"/>
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj"/>
-  </ItemGroup>
 </Project>

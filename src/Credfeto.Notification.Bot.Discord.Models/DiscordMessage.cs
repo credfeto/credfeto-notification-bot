@@ -1,7 +1,7 @@
 using System;
 using Discord;
 
-namespace Credfeto.Notification.Bot.Discord;
+namespace Credfeto.Notification.Bot.Discord.Models;
 
 /// <summary>
 ///     A message to publish
