@@ -13,6 +13,6 @@ public static class DiscordSetup
     /// <param name="services">The Service collection to add the services to.</param>
     public static IServiceCollection AddDiscord(this IServiceCollection services)
     {
-        return services;
+        return services.AddSingleton<DiscordSocketClient>();
     }
 }

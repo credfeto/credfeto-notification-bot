@@ -16,7 +16,9 @@ See [CHANGELOG](CHANGELOG.md) for history
    here: [https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token)
    .
 
-3. Application configuration settings:
+   https://discord.com/oauth2/authorize?scope=bot&permissions=68608&client_id=YOUR_CLIENT_ID_HERE
+
+4. Application configuration settings:
 
 * `Discord:Token` [Required] Must be configured with the Discord Bot User Token.
 
