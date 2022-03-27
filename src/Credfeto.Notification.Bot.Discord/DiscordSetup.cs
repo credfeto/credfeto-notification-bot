@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Credfeto.Notification.Bot.Discord.Services;
+using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Credfeto.Notification.Bot.Discord;
 
@@ -13,6 +15,8 @@ public static class DiscordSetup
     /// <param name="services">The Service collection to add the services to.</param>
     public static IServiceCollection AddDiscord(this IServiceCollection services)
     {
-        return services.AddSingleton<DiscordSocketClient>();
+        return services.AddSingleton<DiscordSocketClient>()
+                       .AddSingleton<IDiscordConnectionService, DiscordConnectionService>()
+                       .AddHostedService(x => x.GetRequiredService<IDiscordConnectionService>());
     }
 }
