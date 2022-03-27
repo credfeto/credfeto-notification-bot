@@ -154,6 +154,10 @@
    color: "0e8a16"
    description: "Changes in Credfeto.Notification.Bot.Database.Tests.Integration project"
 
+ - name: "Discord"
+   color: "96f7d2"
+   description: "Changes in Credfeto.Notification.Bot.Discord project"
+
  - name: "Server"
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Server project"
