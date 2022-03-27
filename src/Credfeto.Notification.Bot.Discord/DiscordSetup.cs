@@ -1,4 +1,5 @@
-﻿using Credfeto.Notification.Bot.Discord.Services;
+﻿using Credfeto.Notification.Bot.Discord.BackgroundServices;
+using Credfeto.Notification.Bot.Discord.Services;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,6 +19,7 @@ public static class DiscordSetup
         return services.AddSingleton<DiscordSocketClient>()
                        .AddSingleton<IDiscordBot, DiscordBot>()
                        .AddSingleton<IDiscordConnectionService, DiscordConnectionService>()
-                       .AddHostedService(x => x.GetRequiredService<IDiscordConnectionService>());
+                       .AddHostedService(x => x.GetRequiredService<IDiscordConnectionService>())
+                       .AddHostedService<DiscordTestServices>();
     }
 }

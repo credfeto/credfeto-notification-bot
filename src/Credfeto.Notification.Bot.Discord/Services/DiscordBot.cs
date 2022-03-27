@@ -35,6 +35,7 @@ public sealed class DiscordBot : IDiscordBot
 
         this._messageChannel.ReadAllAsync(CancellationToken.None)
             .ToObservable()
+            .Delay(TimeSpan.FromSeconds(1))
             .Select(message => Observable.FromAsync(() => this.PublishMessageAsync(message: message)))
             .Concat()
             .Subscribe();
