@@ -50,7 +50,7 @@
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1"/>
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2"/>
+      <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2"/>
         <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
         <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
         <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
@@ -68,12 +68,13 @@
         <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
         <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
     </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Pgsql\Credfeto.Notification.Bot.Database.Pgsql.csproj"/>
-      <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Shared\Credfeto.Notification.Bot.Database.Shared.csproj"/>
-      <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj"/>
-      <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj"/>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Pgsql\Credfeto.Notification.Bot.Database.Pgsql.csproj"/>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Shared\Credfeto.Notification.Bot.Database.Shared.csproj"/>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj"/>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Discord\Credfeto.Notification.Bot.Discord.csproj"/>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj"/>
+  </ItemGroup>
     <ItemGroup>
         <Folder Include="Workers" />
     </ItemGroup>

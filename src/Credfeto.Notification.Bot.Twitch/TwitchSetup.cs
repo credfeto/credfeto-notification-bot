@@ -14,7 +14,7 @@ public static class TwitchSetup
     /// <summary>
     ///     Configures twitch integration.
     /// </summary>
-    /// <param name="services"></param>
+    /// <param name="services">The Service collection to add the services to.</param>
     public static IServiceCollection AddTwitch(this IServiceCollection services)
     {
         return services.AddServices()
