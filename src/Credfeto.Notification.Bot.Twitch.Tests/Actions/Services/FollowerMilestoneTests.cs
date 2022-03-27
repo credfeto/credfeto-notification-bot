@@ -1,11 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
-using Credfeto.Notification.Bot.Twitch.StreamState;
+using Credfeto.Notification.Bot.Twitch.Models;
 using FunFair.Test.Common;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -19,12 +18,10 @@ public sealed class FollowerMilestoneTests : TestBase
     private const string CHANNEL = nameof(CHANNEL);
     private readonly IFollowerMilestone _followerMileStone;
     private readonly IMediator _mediator;
-    private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
 
     public FollowerMilestoneTests()
     {
-        this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
         this._twitchStreamDataManager = GetSubstitute<ITwitchStreamDataManager>();
         this._mediator = GetSubstitute<IMediator>();
 
@@ -46,11 +43,7 @@ public sealed class FollowerMilestoneTests : TestBase
                                                }
                               });
 
-        this._followerMileStone = new FollowerMilestone(options: options,
-                                                        mediator: this._mediator,
-                                                        twitchStreamDataManager: this._twitchStreamDataManager,
-                                                        twitchChatMessageChannel: this._twitchChatMessageChannel,
-                                                        this.GetTypedLogger<FollowerMilestone>());
+        this._followerMileStone = new FollowerMilestone(options: options, mediator: this._mediator, twitchStreamDataManager: this._twitchStreamDataManager, this.GetTypedLogger<FollowerMilestone>());
     }
 
     [Fact]
@@ -61,7 +54,7 @@ public sealed class FollowerMilestoneTests : TestBase
 
         await this._followerMileStone.IssueMilestoneUpdateAsync(channel: CHANNEL, followers: 101, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"/me @{CHANNEL} Woo! {100} followers reached!");
+        await this.ReceivedPublishMessageAsync(milestone: 100, nextMilestone: 1000);
         await this.ReceivedUpdateMilestoneAsync();
     }
 
@@ -83,15 +76,15 @@ public sealed class FollowerMilestoneTests : TestBase
                    .UpdateFollowerMilestoneAsync(channel: CHANNEL, followerCount: 100);
     }
 
-    private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
+    private Task ReceivedPublishMessageAsync(int milestone, int nextMilestone)
     {
-        return this._twitchChatMessageChannel.Received(1)
-                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Channel == CHANNEL && t.Message == expectedMessage), Arg.Any<CancellationToken>());
+        return this._mediator.Received(1)
+                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Channel == CHANNEL && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone), Arg.Any<CancellationToken>());
     }
 
-    private ValueTask DidNotReceivePublishMessageAsync()
+    private Task DidNotReceivePublishMessageAsync()
     {
-        return this._twitchChatMessageChannel.DidNotReceive()
-                   .PublishAsync(Arg.Any<TwitchChatMessage>(), Arg.Any<CancellationToken>());
+        return this._mediator.DidNotReceive()
+                   .Publish(Arg.Any<TwitchFollowerMilestoneReached>(), Arg.Any<CancellationToken>());
     }
 }

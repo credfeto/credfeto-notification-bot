@@ -2,32 +2,25 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
-using Credfeto.Notification.Bot.Twitch.StreamState;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
-public sealed class FollowerMilestone : MessageSenderBase, IFollowerMilestone
+public sealed class FollowerMilestone : IFollowerMilestone
 {
     private readonly ILogger<FollowerMilestone> _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
 
-    public FollowerMilestone(IOptions<TwitchBotOptions> options,
-                             IMediator mediator,
-                             ITwitchStreamDataManager twitchStreamDataManager,
-                             IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
-                             ILogger<FollowerMilestone> logger)
-        : base(twitchChatMessageChannel)
+    public FollowerMilestone(IOptions<TwitchBotOptions> options, IMediator mediator, ITwitchStreamDataManager twitchStreamDataManager, ILogger<FollowerMilestone> logger)
     {
-        this._mediator = mediator;
+        this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -56,13 +49,11 @@ public sealed class FollowerMilestone : MessageSenderBase, IFollowerMilestone
 
         bool milestoneFreshlyReached = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channel, followerCount: lastMileStoneReached);
 
-        await this._mediator.Publish(new TwitchFollowerMilestoneReached(channel: channel, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
-                                     cancellationToken: cancellationToken);
-
         if (milestoneFreshlyReached)
         {
+            await this._mediator.Publish(new TwitchFollowerMilestoneReached(channel: channel, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
+                                         cancellationToken: cancellationToken);
             this._logger.LogWarning($"{channel}: Woo!! New follower milestone reached {lastMileStoneReached}");
-            await this.SendMessageAsync(channel: channel, $"/me @{channel} Woo! {lastMileStoneReached} followers reached!", cancellationToken: cancellationToken);
         }
     }
 }
