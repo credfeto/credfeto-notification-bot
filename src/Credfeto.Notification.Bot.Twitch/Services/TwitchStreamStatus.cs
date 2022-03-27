@@ -58,10 +58,6 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
     /// <inheritdoc />
     public Task UpdateAsync()
     {
-        this._logger.LogWarning($"API ClientId: {this._api.Settings.ClientId}");
-        this._logger.LogWarning($"API AccessToken: {this._api.Settings.AccessToken}");
-        this._logger.LogWarning($"API Secret: {this._api.Settings.Secret}");
-
         return this._lsm.UpdateLiveStreamersAsync();
     }
 
