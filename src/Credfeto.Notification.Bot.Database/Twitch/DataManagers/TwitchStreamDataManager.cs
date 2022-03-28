@@ -62,4 +62,10 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
         return milestone?.FreshlyReached == true;
     }
+
+    public Task<int> RecordNewFollowerAsync(string channelName, string username)
+    {
+        // TODO: Implement
+        return Task.FromResult(1);
+    }
 }

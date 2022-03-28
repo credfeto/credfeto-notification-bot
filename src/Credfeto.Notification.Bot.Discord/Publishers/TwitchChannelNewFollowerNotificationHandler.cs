@@ -26,10 +26,19 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
         Embed embed = new EmbedBuilder().WithColor(Color.Blue)
                                         .WithCurrentTimestamp()
                                         .WithUrl($"https://twitch.tv/{notification.User}")
-                                        .AddField(name: "Online",
+                                        .AddField(name: "Streamer",
+                                                  notification.IsStreamer
+                                                      ? "Yes"
+                                                      : "No")
+                                        .AddField(name: "Followed While Streaming",
                                                   notification.StreamOnline
                                                       ? "Yes"
                                                       : "No")
+                                        .AddField(name: "Status",
+                                                  notification.FollowCount == 1
+                                                      ? "New Follower"
+                                                      : $"Followed {notification.FollowCount} times")
+                                        .AddField(name: "Account Created", notification.AccountCreated.ToString("yyyy-MM-dd HH:mm:ss"))
                                         .Build();
         DiscordMessage discordMessage = new(channel: notification.Channel, embed: embed, $"{notification.Channel} Was Followed by {notification.User}", image: null);
 

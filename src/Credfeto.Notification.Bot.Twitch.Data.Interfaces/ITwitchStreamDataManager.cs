@@ -14,4 +14,6 @@ public interface ITwitchStreamDataManager
     Task<bool> IsRegularChatterAsync(string channel, string username);
 
     Task<bool> UpdateFollowerMilestoneAsync(string channel, int followerCount);
+
+    Task<int> RecordNewFollowerAsync(string channelName, string username);
 }

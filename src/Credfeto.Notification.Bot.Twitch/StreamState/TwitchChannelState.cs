@@ -20,17 +20,20 @@ public sealed class TwitchChannelState : ITwitchChannelState
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
+    private readonly IUserInfoService _userInfoService;
 
     private ActiveStream? _stream;
 
     public TwitchChannelState(string channelName,
                               TwitchBotOptions options,
+                              IUserInfoService userInfoService,
                               ITwitchStreamDataManager twitchStreamDataManager,
                               IMediator mediator,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this._channelName = channelName;
         this._options = options ?? throw new ArgumentNullException(nameof(options));
+        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -246,9 +249,24 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return this._mediator.Publish(new TwitchPrimeReSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task NewFollowerAsync(string user, in CancellationToken cancellationToken)
+    public async Task NewFollowerAsync(string username, CancellationToken cancellationToken)
     {
-        return this._mediator.Publish(new TwitchChannelNewFollower(channel: this._channelName, user: user, this._stream != null), cancellationToken: cancellationToken);
+        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(channelName: this._channelName, username: username);
+
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(username);
+
+        TwitchChannelNewFollower model;
+
+        if (twitchUser != null)
+        {
+            model = new(channel: this._channelName, user: username, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
+        }
+        else
+        {
+            model = new(channel: this._channelName, user: username, this._stream != null, isStreamer: false, accountCreated: DateTime.MinValue, followCount: followCount);
+        }
+
+        await this._mediator.Publish(notification: model, cancellationToken: cancellationToken);
     }
 
     private async Task<bool> IsRegularChatterAsync(string channel, string username)

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -41,7 +42,8 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
         this._channelFollowCount.GetCurrentFollowerCountAsync(channel: CHANNEL, Arg.Any<CancellationToken>())
             .Returns(followerCount);
 
-        await this._notificationHandler.Handle(new(channel: CHANNEL, user: USER, streamOnline: streamOnline), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(channel: CHANNEL, user: USER, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();
 

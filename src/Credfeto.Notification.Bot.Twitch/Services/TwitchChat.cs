@@ -355,7 +355,7 @@ public sealed class TwitchChat : ITwitchChat
 
         ITwitchChannelState state = this._twitchChannelManager.GetChannel(channelName);
 
-        return state.NewFollowerAsync(user: e.Username, cancellationToken: cancellationToken);
+        return state.NewFollowerAsync(username: e.Username, cancellationToken: cancellationToken);
     }
 
     private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)

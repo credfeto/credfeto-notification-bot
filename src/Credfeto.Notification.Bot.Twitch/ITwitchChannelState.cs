@@ -32,5 +32,5 @@ public interface ITwitchChannelState
 
     Task ResubscribePrimeAsync(string user, int months, in CancellationToken cancellationToken);
 
-    Task NewFollowerAsync(string user, in CancellationToken cancellationToken);
+    Task NewFollowerAsync(string username, CancellationToken cancellationToken);
 }
