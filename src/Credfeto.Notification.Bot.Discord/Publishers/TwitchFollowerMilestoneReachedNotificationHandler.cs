@@ -23,12 +23,15 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : INotific
 
     public async Task Handle(TwitchFollowerMilestoneReached notification, CancellationToken cancellationToken)
     {
+        string title = $"Woo! New follower milestone reached {notification.MilestoneReached}";
+
         Embed embed = new EmbedBuilder().WithColor(Color.Gold)
+                                        .WithTitle(title)
                                         .WithCurrentTimestamp()
                                         .WithUrl($"https://twitch.tv/{notification.Channel}")
                                         .AddField(name: "Next Milestone", value: notification.NextMilestone)
                                         .Build();
-        DiscordMessage discordMessage = new(channel: notification.Channel, embed: embed, $"Woo! New follower milestone reached {notification.MilestoneReached}", image: null);
+        DiscordMessage discordMessage = new(channel: notification.Channel, embed: embed, title: title, image: null);
 
         await this._messageChannel.PublishAsync(message: discordMessage, cancellationToken: cancellationToken);
 
