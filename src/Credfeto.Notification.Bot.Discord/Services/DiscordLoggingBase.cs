@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Discord;
 using Microsoft.Extensions.Logging;
@@ -42,6 +43,14 @@ public abstract class DiscordLoggingBase
 
     private Task LogDebugAsync(LogMessage arg)
     {
+        this.IssueDebugLog(arg);
+
+        return Task.CompletedTask;
+    }
+
+    [Conditional("DEBUG")]
+    private void IssueDebugLog(LogMessage arg)
+    {
         if (arg.Exception != null)
         {
             this._logger.LogDebug(new(arg.Exception.HResult), exception: arg.Exception, message: arg.Message);
@@ -50,11 +59,17 @@ public abstract class DiscordLoggingBase
         {
             this._logger.LogDebug(arg.Message);
         }
+    }
+
+    private Task LogInformationAsync(LogMessage arg)
+    {
+        this.IssueInformationalLog(arg);
 
         return Task.CompletedTask;
     }
 
-    private Task LogInformationAsync(LogMessage arg)
+    [Conditional("DEBUG")]
+    private void IssueInformationalLog(LogMessage arg)
     {
         if (arg.Exception != null)
         {
@@ -64,11 +79,17 @@ public abstract class DiscordLoggingBase
         {
             this._logger.LogInformation(arg.Message);
         }
+    }
+
+    private Task LogWarningAsync(LogMessage arg)
+    {
+        this.IssueWarningLog(arg);
 
         return Task.CompletedTask;
     }
 
-    private Task LogWarningAsync(LogMessage arg)
+    [Conditional("DEBUG")]
+    private void IssueWarningLog(LogMessage arg)
     {
         if (arg.Exception != null)
         {
@@ -78,8 +99,6 @@ public abstract class DiscordLoggingBase
         {
             this._logger.LogWarning(arg.Message);
         }
-
-        return Task.CompletedTask;
     }
 
     private Task LogErrorAsync(LogMessage arg)
