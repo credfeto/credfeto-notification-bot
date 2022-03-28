@@ -4,7 +4,9 @@ create table twitch.stream_follower
     follower       varchar(100) not null,
     follow_count   integer      not null,
     first_followed timestamp    not null,
-    last_followed  timestamp    not null
+    last_followed  timestamp    not null,
+    constraint stream_follower_pk
+        primary key (channel, follower)
 );
 
 alter table twitch.stream_follower

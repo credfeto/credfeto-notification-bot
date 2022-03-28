@@ -1,17 +1,14 @@
-CREATE TABLE twitch.streamer_milestone (
-    channel VARCHAR(100) NOT NULL,
-    followers INT NOT NULL,
-    date_created TIMESTAMP NOT NULL,
-    CONSTRAINT streamer_milestone_pk UNIQUE (
-        channel,
-        followers
-        )
-    );
+create table twitch.streamer_milestone
+(
+    channel      varchar(100) not null,
+    followers    integer      not null,
+    date_created timestamp    not null,
+    constraint streamer_milestone_pk
+        unique (channel, followers)
+);
 
-ALTER TABLE twitch.streamer_milestone OWNER TO markr;
+alter table twitch.streamer_milestone
+    owner to markr;
 
-GRANT DELETE,
-    INSERT,
-    UPDATE
-    ON twitch.streamer_milestone
-    TO notificationbot;
+grant insert, select, update on twitch.streamer_milestone to notificationbot;
+
