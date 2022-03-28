@@ -25,6 +25,7 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : INotific
     {
         Embed embed = new EmbedBuilder().WithColor(Color.Gold)
                                         .WithCurrentTimestamp()
+                                        .WithUrl($"https://twitch.tv/{notification.Channel}")
                                         .AddField(name: "Next Milestone", value: notification.NextMilestone)
                                         .Build();
         DiscordMessage discordMessage = new(channel: notification.Channel, embed: embed, $"Woo! New follower milestone reached {notification.MilestoneReached}", image: null);
