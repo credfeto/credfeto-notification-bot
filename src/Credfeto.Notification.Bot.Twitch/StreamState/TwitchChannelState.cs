@@ -251,7 +251,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public async Task NewFollowerAsync(string username, CancellationToken cancellationToken)
     {
-        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(channelName: this._channelName, username: username);
+        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(channel: this._channelName, username: username);
 
         TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(username);
 

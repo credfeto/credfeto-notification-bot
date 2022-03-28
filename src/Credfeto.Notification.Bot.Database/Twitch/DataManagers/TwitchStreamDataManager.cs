@@ -12,18 +12,21 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 {
     private readonly IObjectBuilder<TwitchChatterEntity, TwitchChatter> _chatterBuilder;
     private readonly IDatabase _database;
+    private readonly IObjectBuilder<TwitchFollowerEntity, TwitchFollower> _followerBuilder;
     private readonly IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> _followerMilestoneBuilder;
     private readonly IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> _regularChatterBuilder;
 
     public TwitchStreamDataManager(IDatabase database,
                                    IObjectBuilder<TwitchChatterEntity, TwitchChatter> chatterBuilder,
                                    IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> regularChatterBuilder,
-                                   IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> followerMilestoneBuilder)
+                                   IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> followerMilestoneBuilder,
+                                   IObjectBuilder<TwitchFollowerEntity, TwitchFollower> followerBuilder)
     {
         this._database = database ?? throw new ArgumentNullException(nameof(database));
         this._chatterBuilder = chatterBuilder ?? throw new ArgumentNullException(nameof(chatterBuilder));
         this._regularChatterBuilder = regularChatterBuilder ?? throw new ArgumentNullException(nameof(regularChatterBuilder));
         this._followerMilestoneBuilder = followerMilestoneBuilder ?? throw new ArgumentNullException(nameof(followerMilestoneBuilder));
+        this._followerBuilder = followerBuilder ?? throw new ArgumentNullException(nameof(followerBuilder));
     }
 
     public Task RecordStreamStartAsync(string channel, DateTime streamStartDate)
@@ -63,9 +66,12 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         return milestone?.FreshlyReached == true;
     }
 
-    public Task<int> RecordNewFollowerAsync(string channelName, string username)
+    public async Task<int> RecordNewFollowerAsync(string channel, string username)
     {
-        // TODO: Implement
-        return Task.FromResult(1);
+        TwitchFollower follower = await this._database.QuerySingleAsync(builder: this._followerBuilder,
+                                                                        storedProcedure: "twitch.stream_follower_insert",
+                                                                        new { channel_ = channel, follower_ = username });
+
+        return follower.FollowCount;
     }
 }

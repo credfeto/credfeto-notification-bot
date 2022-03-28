@@ -15,5 +15,5 @@ public interface ITwitchStreamDataManager
 
     Task<bool> UpdateFollowerMilestoneAsync(string channel, int followerCount);
 
-    Task<int> RecordNewFollowerAsync(string channelName, string username);
+    Task<int> RecordNewFollowerAsync(string channel, string username);
 }
