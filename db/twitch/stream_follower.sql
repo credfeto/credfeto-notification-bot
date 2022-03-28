@@ -1,16 +1,19 @@
-create table twitch.stream_follower
-(
-    channel        varchar(100) not null,
-    follower       varchar(100) not null,
-    follow_count   integer      not null,
-    first_followed timestamp    not null,
-    last_followed  timestamp    not null,
-    constraint stream_follower_pk
-        primary key (channel, follower)
-);
+CREATE TABLE twitch.stream_follower (
+    channel VARCHAR(100) NOT NULL,
+    follower VARCHAR(100) NOT NULL,
+    follow_count INT NOT NULL,
+    first_followed TIMESTAMP NOT NULL,
+    last_followed TIMESTAMP NOT NULL,
+    CONSTRAINT stream_follower_pk PRIMARY KEY (
+        channel,
+        follower
+        )
+    );
 
-alter table twitch.stream_follower
-    owner to markr;
+ALTER TABLE twitch.stream_follower OWNER TO markr;
 
-grant insert, select, update on twitch.stream_follower to notificationbot;
-
+GRANT INSERT,
+    SELECT,
+    UPDATE
+    ON twitch.stream_follower
+    TO notificationbot;

@@ -1,27 +1,36 @@
-create function twitch.stream_chatter_insert(channel_ character varying, start_date_ timestamp with time zone, chat_user_ character varying) returns boolean
-    language plpgsql
-as
+CREATE FUNCTION twitch.stream_chatter_insert (
+    channel_ VARCHAR,
+    start_date_ TIMESTAMP WITH TIME zone,
+    chat_user_ VARCHAR
+    )
+RETURNS boolean LANGUAGE plpgsql
+AS
 $$
+
 BEGIN
     INSERT INTO twitch.stream_chatter (
         channel,
         start_date,
         chat_user,
         first_message_date
-    )
+        )
     VALUES (
-               channel_,
-               start_date_,
-               chat_user_,
-               now()
-           )
-    ON conflict do nothing;
+        channel_,
+        start_date_,
+        chat_user_,
+        now()
+        )
+        ON conflict do nothing;
 
     RETURN found;
-END;
-$$;
+END;$$;
 
-alter function twitch.stream_chatter_insert(varchar, timestamp with time zone, varchar) owner to markr;
+ALTER FUNCTION twitch.stream_chatter_insert (
+    VARCHAR,
+    TIMESTAMP WITH TIME zone,
+    VARCHAR
+    ) OWNER TO markr;
 
-grant execute on function twitch.stream_chatter_insert(varchar, timestamp with time zone, varchar) to notificationbot;
-
+GRANT EXECUTE
+    ON FUNCTION twitch.stream_chatter_insert(VARCHAR, TIMESTAMP WITH TIME zone, VARCHAR)
+    TO notificationbot;
