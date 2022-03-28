@@ -23,8 +23,11 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
 
     public async Task Handle(TwitchChannelNewFollower notification, CancellationToken cancellationToken)
     {
+        string title = $"{notification.Channel} was followed by {notification.User}";
+
         Embed embed = new EmbedBuilder().WithColor(Color.Blue)
                                         .WithCurrentTimestamp()
+                                        .WithTitle(title)
                                         .WithUrl($"https://twitch.tv/{notification.User}")
                                         .AddField(name: "Streamer",
                                                   notification.IsStreamer
@@ -40,7 +43,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
                                                       : $"Followed {notification.FollowCount} times")
                                         .AddField(name: "Account Created", notification.AccountCreated.ToString("yyyy-MM-dd HH:mm:ss"))
                                         .Build();
-        DiscordMessage discordMessage = new(channel: notification.Channel, embed: embed, $"{notification.Channel} Was Followed by {notification.User}", image: null);
+        DiscordMessage discordMessage = new(channel: notification.Channel, embed: embed, title: title, image: null);
 
         await this._messageChannel.PublishAsync(message: discordMessage, cancellationToken: cancellationToken);
 
