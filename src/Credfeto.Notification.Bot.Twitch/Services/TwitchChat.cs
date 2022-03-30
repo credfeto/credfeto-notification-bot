@@ -415,7 +415,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         if (IsHeistStartingMessage(e))
         {
-            await this._mediator.Publish(new StreamLabsHeistStarting(e.ChatMessage.Message), cancellationToken: cancellationToken);
+            await this._mediator.Publish(new StreamLabsHeistStarting(e.ChatMessage.Channel), cancellationToken: cancellationToken);
 
             return true;
         }
