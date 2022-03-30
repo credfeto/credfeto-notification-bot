@@ -36,7 +36,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 
         await this.ReceivedPublishMessageAsync(raidWelcome);
         await this.ReceivedPublishMessageAsync($"Thanks @{RAIDER} for the raid");
-        await this.ReceivedPublishMessageAsync($"Check out https://www.twitch.tv/{RAIDER}");
+        await this.ReceivedPublishMessageAsync($"!so @{RAIDER}");
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)

@@ -26,7 +26,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 
         await this.SendMessageAsync(channel: channel, message: raidWelcome, cancellationToken: cancellationToken);
         await this.SendMessageAsync(channel: channel, $"Thanks @{raider} for the raid", cancellationToken: cancellationToken);
-        await this.SendMessageAsync(channel: channel, $"Check out https://www.twitch.tv/{raider}", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(channel: channel, $"!so @{raider}", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{channel}: {raider} is raiding!");
     }
