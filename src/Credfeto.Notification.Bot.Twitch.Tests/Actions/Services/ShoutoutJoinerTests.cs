@@ -91,7 +91,7 @@ public sealed class ShoutoutJoinerTests : TestBase
 
         await this._shoutoutJoiner.IssueShoutoutAsync(channel: CHANNEL_SHOUT_OUTS_ENABLED, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Check out https://www.twitch.tv/{VISITING_CHANNEL}");
+        await this.ReceivedPublishMessageAsync($"!so @{VISITING_CHANNEL}");
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public sealed class ShoutoutJoinerTests : TestBase
 
         await this._shoutoutJoiner.IssueShoutoutAsync(channel: CHANNEL_SHOUT_OUTS_ENABLED, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Check out https://www.twitch.tv/{VISITING_CHANNEL_FRIEND_WITH_NO_MESSAGE}");
+        await this.ReceivedPublishMessageAsync($"!so @{VISITING_CHANNEL_FRIEND_WITH_NO_MESSAGE}");
     }
 
     [Fact]
