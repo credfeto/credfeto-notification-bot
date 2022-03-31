@@ -390,8 +390,6 @@ public sealed class TwitchChat : ITwitchChat
 
     private async Task OnMessageReceivedAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"{e.ChatMessage.Channel}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
-
         if (StringComparer.InvariantCultureIgnoreCase.Equals(x: e.ChatMessage.Username, y: this._options.Authentication.UserName))
         {
             return;
@@ -405,6 +403,8 @@ public sealed class TwitchChat : ITwitchChat
                 return;
             }
         }
+
+        this._logger.LogInformation($"{e.ChatMessage.Channel}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
 
         ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
 
