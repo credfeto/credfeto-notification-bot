@@ -404,6 +404,11 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
+        if (!this._options.IsModChannel(e.ChatMessage.Channel))
+        {
+            return;
+        }
+
         this._logger.LogInformation($"{e.ChatMessage.Channel}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
 
         ITwitchChannelState state = this._twitchChannelManager.GetChannel(e.ChatMessage.Channel);
