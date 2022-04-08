@@ -66,7 +66,7 @@ public sealed class TwitchChat : ITwitchChat
         List<string> channels = new[]
                                 {
                                     this._options.Authentication.UserName
-                                }.Concat(this._options.Channels)
+                                }.Concat(this._options.Channels.Select(channel => channel.ChannelName))
                                  .Concat(this._options.Heists)
                                  .Select(c => c.ToLowerInvariant())
                                  .Distinct()
@@ -221,7 +221,8 @@ public sealed class TwitchChat : ITwitchChat
         try
         {
             this._logger.LogInformation($"{twitchChatMessage.Channel}: >>> @{this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
-            this._client.SendMessage(channel: twitchChatMessage.Channel, message: twitchChatMessage.Message);
+
+            //this._client.SendMessage(channel: twitchChatMessage.Channel, message: twitchChatMessage.Message);
         }
         catch (Exception exception)
         {

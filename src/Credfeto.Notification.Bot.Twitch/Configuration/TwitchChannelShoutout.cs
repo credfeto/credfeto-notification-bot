@@ -4,8 +4,7 @@ namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchChannelShoutout
 {
-    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
-    public string Channel { get; init; } = default!;
+    public bool Enabled { get; init; }
 
     // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public List<TwitchFriendChannel> FriendChannels { get; init; } = default!;

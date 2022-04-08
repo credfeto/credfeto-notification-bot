@@ -7,14 +7,20 @@ namespace Credfeto.Notification.Bot.Twitch.Extensions;
 
 internal static class OptionsExtensions
 {
+    public static TwitchModChannel? GetModChannel(this TwitchBotOptions options, string channel)
+    {
+        return options.Channels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: channel));
+    }
+
     public static bool IsModChannel(this TwitchBotOptions options, string channel)
     {
-        return options.Channels.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: channel));
+        return options.GetModChannel(channel) != null;
     }
 
     public static bool RaidWelcomeEnabled(this TwitchBotOptions options, string channel)
     {
-        return options.IsModChannel(channel) && options.Raids.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: channel));
+        return options.GetModChannel(channel)
+                      ?.Raids.Enabled ?? false;
     }
 
     public static TwitchAPI ConfigureTwitchApi(this TwitchBotOptions options)

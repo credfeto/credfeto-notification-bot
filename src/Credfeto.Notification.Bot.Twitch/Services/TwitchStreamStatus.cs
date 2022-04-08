@@ -33,7 +33,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
         List<string> channels = new[]
                                 {
                                     this._options.Authentication.UserName
-                                }.Concat(this._options.Channels)
+                                }.Concat(this._options.Channels.Select(c => c.ChannelName))
                                  .Select(c => c.ToLowerInvariant())
                                  .Distinct()
                                  .ToList();

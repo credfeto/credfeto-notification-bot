@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -31,17 +32,14 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
     {
         try
         {
-            this._logger.LogInformation($"{channel}: Checking if need to shoutout {visitingStreamer.UserName}");
-            TwitchChannelShoutout? soChannel = this._options.Shoutouts.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: channel));
+            TwitchModChannel? modChannel = this._options.GetModChannel(channel);
 
-            if (soChannel == null)
+            if (modChannel?.ShoutOuts.Enabled != true)
             {
-                this._logger.LogInformation($"{channel}: Shout-outs not enabled");
-
                 return false;
             }
 
-            TwitchFriendChannel? streamer = soChannel.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName));
+            TwitchFriendChannel? streamer = modChannel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName));
 
             if (streamer == null)
             {

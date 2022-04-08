@@ -37,7 +37,6 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
                                                                                                                        UserName = "Invalid"
                                                                                                                    },
                                                                                                   Channels = new(),
-                                                                                                  Shoutouts = new(),
                                                                                                   Heists = new()
                                                                                               });
                                                                     })

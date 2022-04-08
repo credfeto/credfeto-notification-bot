@@ -29,18 +29,25 @@ public sealed class ShoutoutJoinerTests : TestBase
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions
                               {
-                                  Shoutouts = new()
-                                              {
-                                                  new()
-                                                  {
-                                                      Channel = CHANNEL_SHOUT_OUTS_ENABLED,
-                                                      FriendChannels = new()
-                                                                       {
-                                                                           new() { Channel = VISITING_CHANNEL_FRIEND_WITH_MESSAGE, Message = "Check out this weird and wonderful streamer!" },
-                                                                           new() { Channel = VISITING_CHANNEL_FRIEND_WITH_NO_MESSAGE, Message = null }
-                                                                       }
-                                                  }
-                                              }
+                                  Channels = new()
+                                             {
+                                                 new()
+                                                 {
+                                                     ChannelName = CHANNEL_SHOUT_OUTS_ENABLED,
+                                                     ShoutOuts = new()
+                                                                 {
+                                                                     Enabled = true,
+                                                                     FriendChannels = new()
+                                                                                      {
+                                                                                          new()
+                                                                                          {
+                                                                                              Channel = VISITING_CHANNEL_FRIEND_WITH_MESSAGE, Message = "Check out this weird and wonderful streamer!"
+                                                                                          },
+                                                                                          new() { Channel = VISITING_CHANNEL_FRIEND_WITH_NO_MESSAGE, Message = null }
+                                                                                      }
+                                                                 }
+                                                 }
+                                             }
                               });
 
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
