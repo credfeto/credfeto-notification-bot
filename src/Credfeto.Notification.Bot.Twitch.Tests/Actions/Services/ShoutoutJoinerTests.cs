@@ -22,7 +22,6 @@ public sealed class ShoutoutJoinerTests : TestBase
     private const string VISITING_CHANNEL = nameof(VISITING_CHANNEL);
     private readonly IShoutoutJoiner _shoutoutJoiner;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
-    private readonly ITwitchStreamDataManager _twitchStreamDataManager;
 
     public ShoutoutJoinerTests()
     {
@@ -51,12 +50,8 @@ public sealed class ShoutoutJoinerTests : TestBase
                               });
 
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
-        this._twitchStreamDataManager = GetSubstitute<ITwitchStreamDataManager>();
 
-        this._shoutoutJoiner = new ShoutoutJoiner(options: options,
-                                                  twitchChatMessageChannel: this._twitchChatMessageChannel,
-                                                  twitchStreamDataManager: this._twitchStreamDataManager,
-                                                  this.GetTypedLogger<ShoutoutJoiner>());
+        this._shoutoutJoiner = new ShoutoutJoiner(options: options, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<ShoutoutJoiner>());
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)

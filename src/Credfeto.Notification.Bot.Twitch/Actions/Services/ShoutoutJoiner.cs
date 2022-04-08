@@ -15,15 +15,10 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 {
     private readonly ILogger<ShoutoutJoiner> _logger;
     private readonly TwitchBotOptions _options;
-    private readonly ITwitchStreamDataManager _twitchStreamDataManager;
 
-    public ShoutoutJoiner(IOptions<TwitchBotOptions> options,
-                          IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
-                          ITwitchStreamDataManager twitchStreamDataManager,
-                          ILogger<ShoutoutJoiner> logger)
+    public ShoutoutJoiner(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<ShoutoutJoiner> logger)
         : base(twitchChatMessageChannel)
     {
-        this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }

@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
+using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -20,8 +22,10 @@ public sealed class RaidWelcomeTests : TestBase
     public RaidWelcomeTests()
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
+        IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
+        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = CHANNEL, Raids = new() { Enabled = true } } } });
 
-        this._raidWelcome = new RaidWelcome(twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
+        this._raidWelcome = new RaidWelcome(options: options, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
     }
 
     [Fact]
