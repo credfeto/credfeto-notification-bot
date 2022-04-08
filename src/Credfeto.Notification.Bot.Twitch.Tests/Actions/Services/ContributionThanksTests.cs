@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
+using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -24,9 +26,13 @@ public sealed class ContributionThanksTests : TestBase
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
         this._currentTimeSource = GetSubstitute<ICurrentTimeSource>();
+        IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
+        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = CHANNEL, Thanks = new() { Enabled = true } } } });
 
-        this._contributionThanks =
-            new ContributionThanks(twitchChatMessageChannel: this._twitchChatMessageChannel, currentTimeSource: this._currentTimeSource, this.GetTypedLogger<ContributionThanks>());
+        this._contributionThanks = new ContributionThanks(options: options,
+                                                          twitchChatMessageChannel: this._twitchChatMessageChannel,
+                                                          currentTimeSource: this._currentTimeSource,
+                                                          this.GetTypedLogger<ContributionThanks>());
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
