@@ -1,5 +1,6 @@
 ﻿using System;
 using Credfeto.Notification.Bot.Shared;
+using Credfeto.Notification.Bot.Twitch.Services;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Logging;
@@ -39,12 +40,12 @@ public sealed class SubDonorTrackerTests : TestBase
     {
         SubDonorTracker subDonorTracker = new(currentTimeSource: this._currentDateTimeSource, logger: this._logger);
 
-        bool firstUser = subDonorTracker.Update(INITIAL_DONOR);
+        bool firstUser = subDonorTracker.Update(Types.UserFromString(INITIAL_DONOR));
         Assert.False(condition: firstUser, userMessage: "First user should never be the 'same' user");
 
         this._context.Advance(TimeSpan.FromMilliseconds(advanceMs));
 
-        bool sameUser = subDonorTracker.Update(donor);
+        bool sameUser = subDonorTracker.Update(Types.UserFromString(donor));
         Assert.Equal(expected: shouldBeSameGifter, actual: sameUser);
     }
 

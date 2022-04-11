@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using MediatR;
@@ -15,7 +16,7 @@ namespace Credfeto.Notification.Bot.Twitch.StreamState;
 [DebuggerDisplay("{_channelName}")]
 public sealed class TwitchChannelState : ITwitchChannelState
 {
-    private readonly string _channelName;
+    private readonly Channel _channelName;
     private readonly ILogger _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
@@ -24,7 +25,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     private ActiveStream? _stream;
 
-    public TwitchChannelState(string channelName,
+    public TwitchChannelState(in Channel channelName,
                               TwitchBotOptions options,
                               IUserInfoService userInfoService,
                               ITwitchStreamDataManager twitchStreamDataManager,
@@ -59,7 +60,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         this._stream?.AddIncident();
     }
 
-    public async Task RaidedAsync(string raider, int viewerCount, CancellationToken cancellationToken)
+    public async Task RaidedAsync(User raider, int viewerCount, CancellationToken cancellationToken)
     {
         if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this._channelName))
         {
@@ -67,7 +68,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         }
     }
 
-    public async Task ChatMessageAsync(string user, string message, int bits, CancellationToken cancellationToken)
+    public async Task ChatMessageAsync(User user, string message, int bits, CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -128,7 +129,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         await this._mediator.Publish(new TwitchStreamNewChatter(channel: this._channelName, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
     }
 
-    public Task GiftedMultipleAsync(string giftedBy, int count, string months, in CancellationToken cancellationToken)
+    public Task GiftedMultipleAsync(User giftedBy, int count, string months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -140,7 +141,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return this._mediator.Publish(new TwitchGiftSubMultiple(channel: this._channelName, user: giftedBy, count: count), cancellationToken: cancellationToken);
     }
 
-    public Task GiftedSubAsync(string giftedBy, string months, in CancellationToken cancellationToken)
+    public Task GiftedSubAsync(User giftedBy, string months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -157,7 +158,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return this._mediator.Publish(new TwitchGiftSubSingle(channel: this._channelName, user: giftedBy), cancellationToken: cancellationToken);
     }
 
-    public Task ContinuedSubAsync(string user, in CancellationToken cancellationToken)
+    public Task ContinuedSubAsync(User user, in CancellationToken cancellationToken)
     {
         this._stream?.ContinuedSub(user);
 
@@ -169,7 +170,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return Task.CompletedTask;
     }
 
-    public Task PrimeToPaidAsync(string user, in CancellationToken cancellationToken)
+    public Task PrimeToPaidAsync(User user, in CancellationToken cancellationToken)
     {
         this._stream?.PrimeToPaid(user);
 
@@ -181,7 +182,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return Task.CompletedTask;
     }
 
-    public Task NewSubscriberPaidAsync(string user, in CancellationToken cancellationToken)
+    public Task NewSubscriberPaidAsync(User user, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -198,7 +199,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return this._mediator.Publish(new TwitchNewPaidSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task NewSubscriberPrimeAsync(string user, in CancellationToken cancellationToken)
+    public Task NewSubscriberPrimeAsync(User user, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -215,7 +216,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return this._mediator.Publish(new TwitchNewPrimeSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task ResubscribePaidAsync(string user, int months, in CancellationToken cancellationToken)
+    public Task ResubscribePaidAsync(User user, int months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -232,7 +233,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return this._mediator.Publish(new TwitchPaidReSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task ResubscribePrimeAsync(string user, int months, in CancellationToken cancellationToken)
+    public Task ResubscribePrimeAsync(User user, int months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -249,27 +250,27 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return this._mediator.Publish(new TwitchPrimeReSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
     }
 
-    public async Task NewFollowerAsync(string username, CancellationToken cancellationToken)
+    public async Task NewFollowerAsync(User user, CancellationToken cancellationToken)
     {
-        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(channel: this._channelName, username: username);
+        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(channel: this._channelName, username: user);
 
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(username);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user);
 
         TwitchChannelNewFollower model;
 
         if (twitchUser != null)
         {
-            model = new(channel: this._channelName, user: username, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
+            model = new(channel: this._channelName, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
         }
         else
         {
-            model = new(channel: this._channelName, user: username, this._stream != null, isStreamer: false, accountCreated: DateTime.MinValue, followCount: followCount);
+            model = new(channel: this._channelName, user: user, this._stream != null, isStreamer: false, accountCreated: DateTime.MinValue, followCount: followCount);
         }
 
         await this._mediator.Publish(notification: model, cancellationToken: cancellationToken);
     }
 
-    private async Task<bool> IsRegularChatterAsync(string channel, string username)
+    private async Task<bool> IsRegularChatterAsync(Channel channel, User username)
     {
         try
         {

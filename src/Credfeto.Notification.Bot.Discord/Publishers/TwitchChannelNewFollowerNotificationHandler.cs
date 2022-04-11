@@ -43,7 +43,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
                                                       : $"Followed {notification.FollowCount} times")
                                         .AddField(name: "Account Created", notification.AccountCreated.ToString("yyyy-MM-dd HH:mm:ss"))
                                         .Build();
-        DiscordMessage discordMessage = new(channel: notification.Channel, embed: embed, title: title, image: null);
+        DiscordMessage discordMessage = new(notification.Channel.ToString(), embed: embed, title: title, image: null);
 
         await this._messageChannel.PublishAsync(message: discordMessage, cancellationToken: cancellationToken);
 

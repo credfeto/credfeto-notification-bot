@@ -1,19 +1,20 @@
 using System;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 public interface ITwitchStreamDataManager
 {
-    Task RecordStreamStartAsync(string channel, DateTime streamStartDate);
+    Task RecordStreamStartAsync(Channel channel, DateTime streamStartDate);
 
-    Task AddChatterToStreamAsync(string channel, DateTime streamStartDate, string username);
+    Task AddChatterToStreamAsync(Channel channel, DateTime streamStartDate, User username);
 
-    Task<bool> IsFirstMessageInStreamAsync(string channel, DateTime streamStartDate, string username);
+    Task<bool> IsFirstMessageInStreamAsync(Channel channel, DateTime streamStartDate, User username);
 
-    Task<bool> IsRegularChatterAsync(string channel, string username);
+    Task<bool> IsRegularChatterAsync(Channel channel, User username);
 
-    Task<bool> UpdateFollowerMilestoneAsync(string channel, int followerCount);
+    Task<bool> UpdateFollowerMilestoneAsync(Channel channel, int followerCount);
 
-    Task<int> RecordNewFollowerAsync(string channel, string username);
+    Task<int> RecordNewFollowerAsync(Channel channel, User username);
 }

@@ -31,7 +31,7 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : INotific
                                         .WithUrl($"https://twitch.tv/{notification.Channel}")
                                         .AddField(name: "Next Milestone", value: notification.NextMilestone)
                                         .Build();
-        DiscordMessage discordMessage = new(channel: notification.Channel, embed: embed, title: title, image: null);
+        DiscordMessage discordMessage = new(notification.Channel.ToString(), embed: embed, title: title, image: null);
 
         await this._messageChannel.PublishAsync(message: discordMessage, cancellationToken: cancellationToken);
 

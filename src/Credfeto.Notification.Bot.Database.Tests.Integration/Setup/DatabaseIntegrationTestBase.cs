@@ -1,4 +1,5 @@
 using System;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using FunFair.Test.Common;
 using Xunit.Abstractions;
 
@@ -11,10 +12,19 @@ public abstract class DatabaseIntegrationTestBase : IntegrationTestBase
     {
     }
 
-    protected static string GenerateUsername()
+    protected static Channel GenerateChannelUsername()
     {
-        return "@" + Guid.NewGuid()
-                         .ToString()
-                         .Replace(oldValue: "-", newValue: "");
+        return new("@" + Guid.NewGuid()
+                             .ToString()
+                             .Replace(oldValue: "-", newValue: "")
+                             .ToLowerInvariant());
+    }
+
+    protected static User GenerateViewerUsername()
+    {
+        return new("@" + Guid.NewGuid()
+                             .ToString()
+                             .Replace(oldValue: "-", newValue: "")
+                             .ToLowerInvariant());
     }
 }

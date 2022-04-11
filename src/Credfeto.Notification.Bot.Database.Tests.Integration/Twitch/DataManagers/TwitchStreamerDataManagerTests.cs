@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Database.Tests.Integration.Setup;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -22,12 +23,12 @@ public sealed class TwitchStreamerDataManagerTests : DatabaseIntegrationTestBase
     [Fact]
     public async Task AddAsync()
     {
-        string channelName = GenerateUsername();
+        Channel channelName = GenerateChannelUsername();
 
         TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(channelName);
         Assert.Null(user);
 
-        await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: channelName, streamerId: channelName, this._currentTimeSource.UtcNow());
+        await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: channelName, channelName.ToString(), this._currentTimeSource.UtcNow());
 
         user = await this._twitchStreamerDataManager.GetByUserNameAsync(channelName);
         Assert.NotNull(user);

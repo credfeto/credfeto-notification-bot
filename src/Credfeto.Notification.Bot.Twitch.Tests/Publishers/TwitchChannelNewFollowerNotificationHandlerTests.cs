@@ -2,8 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
+using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
@@ -13,8 +15,8 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
 {
-    private const string CHANNEL = nameof(CHANNEL);
-    private const string USER = nameof(USER);
+    private static readonly Channel Channel = Types.ChannelFromString(nameof(Channel));
+    private static readonly User User = Types.UserFromString(nameof(User));
 
     private readonly IChannelFollowCount _channelFollowCount;
     private readonly IFollowerMilestone _followerMilestone;
@@ -39,10 +41,10 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
     [InlineData(120, true)]
     public async Task HandleAsync(int followerCount, bool streamOnline)
     {
-        this._channelFollowCount.GetCurrentFollowerCountAsync(channel: CHANNEL, Arg.Any<CancellationToken>())
+        this._channelFollowCount.GetCurrentFollowerCountAsync(channel: Channel, Arg.Any<CancellationToken>())
             .Returns(followerCount);
 
-        await this._notificationHandler.Handle(new(channel: CHANNEL, user: USER, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
+        await this._notificationHandler.Handle(new(channel: Channel, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
                                                cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();
@@ -53,12 +55,12 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
     private Task ReceivedIssueMilestoneUpdateAsync(int followerCount)
     {
         return this._followerMilestone.Received(1)
-                   .IssueMilestoneUpdateAsync(channel: CHANNEL, followers: followerCount, Arg.Any<CancellationToken>());
+                   .IssueMilestoneUpdateAsync(channel: Channel, followers: followerCount, Arg.Any<CancellationToken>());
     }
 
     private Task ReceivedGetCurrentFollowerCountAsync()
     {
         return this._channelFollowCount.Received(1)
-                   .GetCurrentFollowerCountAsync(channel: CHANNEL, Arg.Any<CancellationToken>());
+                   .GetCurrentFollowerCountAsync(channel: Channel, Arg.Any<CancellationToken>());
     }
 }

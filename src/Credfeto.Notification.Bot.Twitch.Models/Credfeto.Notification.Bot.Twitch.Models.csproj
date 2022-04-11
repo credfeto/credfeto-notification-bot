@@ -36,8 +36,10 @@
         <PackageReference Include="SonarAnalyzer.CSharp" Version="8.37.0.45539" PrivateAssets="All" />
         <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
         <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
+        <PackageReference Include="StronglyTypedId" Version="1.0.0-beta06" PrivateAssets="all" ExcludeAssets="runtime"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
+      <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.DataTypes\Credfeto.Notification.Bot.Twitch.DataTypes.csproj"/>
     </ItemGroup>
 </Project>

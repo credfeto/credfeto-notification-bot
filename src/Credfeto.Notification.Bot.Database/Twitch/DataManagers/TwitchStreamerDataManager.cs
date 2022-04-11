@@ -4,6 +4,7 @@ using Credfeto.Notification.Bot.Database.Interfaces;
 using Credfeto.Notification.Bot.Database.Interfaces.Builders;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.DataManagers;
 
@@ -18,13 +19,18 @@ public sealed class TwitchStreamerDataManager : ITwitchStreamerDataManager
         this._twitchUserBuilder = twitchUserBuilder ?? throw new ArgumentNullException(nameof(twitchUserBuilder));
     }
 
-    public Task AddStreamerAsync(string streamerName, string streamerId, DateTime startedStreaming)
+    public Task AddStreamerAsync(Channel streamerName, string streamerId, DateTime startedStreaming)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.streamer_insert", new { username_ = streamerName, id_ = streamerId, date_created_ = startedStreaming });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.streamer_insert", new { username_ = streamerName.ToString(), id_ = streamerId, date_created_ = startedStreaming });
     }
 
-    public Task<TwitchUser?> GetByUserNameAsync(string userName)
+    public Task<TwitchUser?> GetByUserNameAsync(Channel userName)
     {
-        return this._database.QuerySingleOrDefaultAsync(builder: this._twitchUserBuilder, storedProcedure: "twitch.streamer_get", new { username_ = userName });
+        return this._database.QuerySingleOrDefaultAsync(builder: this._twitchUserBuilder, storedProcedure: "twitch.streamer_get", new { username_ = userName.ToString() });
+    }
+
+    public Task<TwitchUser?> GetByUserNameAsync(User userName)
+    {
+        return this._database.QuerySingleOrDefaultAsync(builder: this._twitchUserBuilder, storedProcedure: "twitch.streamer_get", new { username_ = userName.ToString() });
     }
 }

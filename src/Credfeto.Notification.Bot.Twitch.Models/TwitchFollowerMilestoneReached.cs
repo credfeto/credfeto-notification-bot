@@ -1,10 +1,11 @@
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using MediatR;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchFollowerMilestoneReached : INotification
 {
-    public TwitchFollowerMilestoneReached(string channel, int milestoneReached, int nextMilestone, double progress)
+    public TwitchFollowerMilestoneReached(in Channel channel, int milestoneReached, int nextMilestone, double progress)
     {
         this.Channel = channel;
         this.MilestoneReached = milestoneReached;
@@ -12,7 +13,7 @@ public sealed class TwitchFollowerMilestoneReached : INotification
         this.Progress = progress;
     }
 
-    public string Channel { get; }
+    public Channel Channel { get; }
 
     public int MilestoneReached { get; }
 

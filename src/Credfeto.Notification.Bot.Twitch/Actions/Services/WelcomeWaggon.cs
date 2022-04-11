@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
@@ -23,7 +24,7 @@ public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
         this._options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async Task IssueWelcomeAsync(string channel, string user, CancellationToken cancellationToken)
+    public async Task IssueWelcomeAsync(Channel channel, User user, CancellationToken cancellationToken)
     {
         TwitchModChannel? modChannel = this._options.GetModChannel(channel);
 

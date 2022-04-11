@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch;
 
@@ -12,25 +13,25 @@ public interface ITwitchChannelState
 
     void ClearChat();
 
-    Task RaidedAsync(string raider, int viewerCount, CancellationToken cancellationToken);
+    Task RaidedAsync(User raider, int viewerCount, CancellationToken cancellationToken);
 
-    Task ChatMessageAsync(string user, string message, int bits, CancellationToken cancellationToken);
+    Task ChatMessageAsync(User user, string message, int bits, CancellationToken cancellationToken);
 
-    Task GiftedMultipleAsync(string giftedBy, int count, string months, in CancellationToken cancellationToken);
+    Task GiftedMultipleAsync(User giftedBy, int count, string months, in CancellationToken cancellationToken);
 
-    Task GiftedSubAsync(string giftedBy, string months, in CancellationToken cancellationToken);
+    Task GiftedSubAsync(User giftedBy, string months, in CancellationToken cancellationToken);
 
-    Task ContinuedSubAsync(string user, in CancellationToken cancellationToken);
+    Task ContinuedSubAsync(User user, in CancellationToken cancellationToken);
 
-    Task PrimeToPaidAsync(string user, in CancellationToken cancellationToken);
+    Task PrimeToPaidAsync(User user, in CancellationToken cancellationToken);
 
-    Task NewSubscriberPaidAsync(string user, in CancellationToken cancellationToken);
+    Task NewSubscriberPaidAsync(User user, in CancellationToken cancellationToken);
 
-    Task NewSubscriberPrimeAsync(string user, in CancellationToken cancellationToken);
+    Task NewSubscriberPrimeAsync(User user, in CancellationToken cancellationToken);
 
-    Task ResubscribePaidAsync(string user, int months, in CancellationToken cancellationToken);
+    Task ResubscribePaidAsync(User user, int months, in CancellationToken cancellationToken);
 
-    Task ResubscribePrimeAsync(string user, int months, in CancellationToken cancellationToken);
+    Task ResubscribePrimeAsync(User user, int months, in CancellationToken cancellationToken);
 
-    Task NewFollowerAsync(string username, CancellationToken cancellationToken);
+    Task NewFollowerAsync(User user, CancellationToken cancellationToken);
 }

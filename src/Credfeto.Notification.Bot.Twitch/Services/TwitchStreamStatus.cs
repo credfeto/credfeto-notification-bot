@@ -67,7 +67,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
 
         try
         {
-            await this._mediator.Publish(new TwitchStreamOnline(channel: e.Channel, title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
+            await this._mediator.Publish(new TwitchStreamOnline(new(e.Channel.ToLowerInvariant()), title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
                                          cancellationToken: cancellationToken);
         }
         catch (Exception exception)
@@ -80,7 +80,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
     {
         try
         {
-            await this._mediator.Publish(new TwitchStreamOffline(channel: e.Channel, title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
+            await this._mediator.Publish(new TwitchStreamOffline(new(e.Channel.ToLowerInvariant()), title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
                                          cancellationToken: cancellationToken);
         }
         catch (Exception exception)

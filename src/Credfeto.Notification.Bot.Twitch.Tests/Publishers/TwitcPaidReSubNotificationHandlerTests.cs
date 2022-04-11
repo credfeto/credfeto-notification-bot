@@ -1,8 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
+using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
@@ -12,8 +14,8 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchPaidReSubNotificationHandlerTests : TestBase
 {
-    private const string CHANNEL = nameof(CHANNEL);
-    private const string SUBSCRIBER = nameof(SUBSCRIBER);
+    private static readonly Channel Channel = Types.ChannelFromString(nameof(Channel));
+    private static readonly User Subscriber = Types.UserFromString(nameof(Subscriber));
     private readonly IContributionThanks _contributionThanks;
     private readonly INotificationHandler<TwitchPaidReSub> _notificationHandler;
 
@@ -27,7 +29,7 @@ public sealed class TwitchPaidReSubNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(channel: CHANNEL, user: SUBSCRIBER), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(channel: Channel, user: Subscriber), cancellationToken: CancellationToken.None);
 
         await this.ThankForPaidReSubAsync();
     }
@@ -35,6 +37,6 @@ public sealed class TwitchPaidReSubNotificationHandlerTests : TestBase
     private Task ThankForPaidReSubAsync()
     {
         return this._contributionThanks.Received(1)
-                   .ThankForPaidReSubAsync(channel: CHANNEL, user: SUBSCRIBER, Arg.Any<CancellationToken>());
+                   .ThankForPaidReSubAsync(channel: Channel, user: Subscriber, Arg.Any<CancellationToken>());
     }
 }

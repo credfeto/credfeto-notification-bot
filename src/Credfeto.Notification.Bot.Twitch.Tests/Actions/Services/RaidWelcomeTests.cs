@@ -4,6 +4,8 @@ using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Services;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Options;
@@ -14,8 +16,8 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class RaidWelcomeTests : TestBase
 {
-    private const string CHANNEL = nameof(CHANNEL);
-    private const string RAIDER = nameof(RAIDER);
+    private static readonly Channel Channel = Types.ChannelFromString(nameof(Channel));
+    private static readonly User Raider = Types.UserFromString(nameof(Raider));
     private readonly IRaidWelcome _raidWelcome;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
@@ -23,7 +25,7 @@ public sealed class RaidWelcomeTests : TestBase
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
         IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = CHANNEL, Raids = new() { Enabled = true } } } });
+        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Channel.ToString(), Raids = new() { Enabled = true } } } });
 
         this._raidWelcome = new RaidWelcome(options: options, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
     }
@@ -31,7 +33,7 @@ public sealed class RaidWelcomeTests : TestBase
     [Fact]
     public async Task IssueRaidWelcomeAsync()
     {
-        await this._raidWelcome.IssueRaidWelcomeAsync(channel: CHANNEL, raider: RAIDER, cancellationToken: CancellationToken.None);
+        await this._raidWelcome.IssueRaidWelcomeAsync(channel: Channel, raider: Raider, cancellationToken: CancellationToken.None);
 
         const string raidWelcome = @"
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
@@ -39,13 +41,13 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
 
         await this.ReceivedPublishMessageAsync(raidWelcome);
-        await this.ReceivedPublishMessageAsync($"Thanks @{RAIDER} for the raid");
-        await this.ReceivedPublishMessageAsync($"!so @{RAIDER}");
+        await this.ReceivedPublishMessageAsync($"Thanks @{Raider} for the raid");
+        await this.ReceivedPublishMessageAsync($"!so @{Raider}");
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
     {
         return this._twitchChatMessageChannel.Received(1)
-                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Channel == CHANNEL && t.Message == expectedMessage), Arg.Any<CancellationToken>());
+                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Channel == Channel && t.Message == expectedMessage), Arg.Any<CancellationToken>());
     }
 }

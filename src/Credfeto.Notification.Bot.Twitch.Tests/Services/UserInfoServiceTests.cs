@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Options;
@@ -12,7 +13,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
 public sealed class UserInfoServiceTests : TestBase
 {
-    private const string USERNAME = nameof(USERNAME);
+    private static readonly User Username = Types.UserFromString(nameof(Username));
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
     private readonly IUserInfoService _userInfoService;
 
@@ -28,14 +29,14 @@ public sealed class UserInfoServiceTests : TestBase
     [Fact]
     public async Task GetUserReturnsNullIfNotFoundAsync()
     {
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(USERNAME);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(Username);
 
         Assert.Null(twitchUser);
 
         await this._twitchStreamerDataManager.Received(1)
-                  .GetByUserNameAsync(USERNAME);
+                  .GetByUserNameAsync(Username);
 
         await this._twitchStreamerDataManager.DidNotReceive()
-                  .AddStreamerAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<DateTime>());
+                  .AddStreamerAsync(Arg.Any<Channel>(), Arg.Any<string>(), Arg.Any<DateTime>());
     }
 }

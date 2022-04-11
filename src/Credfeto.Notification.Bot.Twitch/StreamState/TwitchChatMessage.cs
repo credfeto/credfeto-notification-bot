@@ -1,17 +1,18 @@
 using System.Diagnostics;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
 
 [DebuggerDisplay("{Channel}: {Message}")]
 public sealed class TwitchChatMessage
 {
-    public TwitchChatMessage(string channel, string message)
+    public TwitchChatMessage(in Channel channel, string message)
     {
         this.Channel = channel;
         this.Message = message;
     }
 
-    public string Channel { get; }
+    public Channel Channel { get; }
 
     public string Message { get; }
 }

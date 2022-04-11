@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using NonBlocking;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
@@ -8,12 +9,12 @@ namespace Credfeto.Notification.Bot.Twitch.StreamState;
 [DebuggerDisplay("{GameName}: Started: {StartedAt}")]
 internal sealed class ActiveStream
 {
-    private readonly ConcurrentDictionary<string, bool> _bitGifters;
-    private readonly ConcurrentDictionary<string, bool> _chatters;
-    private readonly ConcurrentDictionary<string, bool> _followers;
-    private readonly ConcurrentDictionary<string, bool> _raiders;
-    private readonly ConcurrentDictionary<string, bool> _subGifters;
-    private readonly ConcurrentDictionary<string, bool> _subscribers;
+    private readonly ConcurrentDictionary<User, bool> _bitGifters;
+    private readonly ConcurrentDictionary<User, bool> _chatters;
+    private readonly ConcurrentDictionary<User, bool> _followers;
+    private readonly ConcurrentDictionary<User, bool> _raiders;
+    private readonly ConcurrentDictionary<User, bool> _subGifters;
+    private readonly ConcurrentDictionary<User, bool> _subscribers;
 
     private int _incidents;
 
@@ -23,19 +24,19 @@ internal sealed class ActiveStream
         this.StartedAt = startedAt;
 
         this._incidents = 0;
-        this._raiders = new(StringComparer.OrdinalIgnoreCase);
-        this._chatters = new(StringComparer.OrdinalIgnoreCase);
-        this._subscribers = new(StringComparer.OrdinalIgnoreCase);
-        this._subGifters = new(StringComparer.OrdinalIgnoreCase);
-        this._bitGifters = new(StringComparer.OrdinalIgnoreCase);
-        this._followers = new(StringComparer.OrdinalIgnoreCase);
+        this._raiders = new();
+        this._chatters = new();
+        this._subscribers = new();
+        this._subGifters = new();
+        this._bitGifters = new();
+        this._followers = new();
     }
 
     public string GameName { get; }
 
     public DateTime StartedAt { get; }
 
-    public bool AddRaider(string raider, int viewerCount)
+    public bool AddRaider(in User raider, int viewerCount)
     {
         if (this._raiders.TryAdd(key: raider, value: true))
         {
@@ -46,7 +47,7 @@ internal sealed class ActiveStream
         return false;
     }
 
-    public void AddBitGifter(string user, int bits)
+    public void AddBitGifter(in User user, int bits)
     {
         if (this._bitGifters.TryAdd(key: user, value: true))
         {
@@ -54,7 +55,7 @@ internal sealed class ActiveStream
         }
     }
 
-    public bool AddChatter(string chatter)
+    public bool AddChatter(in User chatter)
     {
         if (this._chatters.TryAdd(key: chatter, value: true))
         {
@@ -70,7 +71,7 @@ internal sealed class ActiveStream
         Interlocked.Increment(ref this._incidents);
     }
 
-    public void GiftedSub(string giftedBy, int count)
+    public void GiftedSub(in User giftedBy, int count)
     {
         if (this._subGifters.TryAdd(key: giftedBy, value: true))
         {
@@ -78,7 +79,7 @@ internal sealed class ActiveStream
         }
     }
 
-    public void ContinuedSub(string user)
+    public void ContinuedSub(in User user)
     {
         if (this._subscribers.TryAdd(key: user, value: true))
         {
@@ -86,7 +87,7 @@ internal sealed class ActiveStream
         }
     }
 
-    public void PrimeToPaid(string user)
+    public void PrimeToPaid(in User user)
     {
         if (this._subscribers.TryAdd(key: user, value: true))
         {
@@ -94,7 +95,7 @@ internal sealed class ActiveStream
         }
     }
 
-    public void NewSubscriberPaid(string user)
+    public void NewSubscriberPaid(in User user)
     {
         if (this._subscribers.TryAdd(key: user, value: true))
         {
@@ -102,7 +103,7 @@ internal sealed class ActiveStream
         }
     }
 
-    public void NewSubscriberPrime(string user)
+    public void NewSubscriberPrime(in User user)
     {
         if (this._subscribers.TryAdd(key: user, value: true))
         {
@@ -110,7 +111,7 @@ internal sealed class ActiveStream
         }
     }
 
-    public void ResubscribePaid(string user)
+    public void ResubscribePaid(in User user)
     {
         if (this._subscribers.TryAdd(key: user, value: true))
         {
@@ -118,7 +119,7 @@ internal sealed class ActiveStream
         }
     }
 
-    public void ResubscribePrime(string user)
+    public void ResubscribePrime(in User user)
     {
         if (this._subscribers.TryAdd(key: user, value: true))
         {
@@ -126,7 +127,7 @@ internal sealed class ActiveStream
         }
     }
 
-    public bool Follow(string user)
+    public bool Follow(in User user)
     {
         if (this._followers.TryAdd(key: user, value: true))
         {

@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
@@ -14,7 +15,7 @@ public abstract class MessageSenderBase
         this._twitchChatMessageChannel = twitchChatMessageChannel;
     }
 
-    protected ValueTask SendMessageAsync(string channel, string message, in CancellationToken cancellationToken)
+    protected ValueTask SendMessageAsync(in Channel channel, string message, in CancellationToken cancellationToken)
     {
         TwitchChatMessage toSend = new(channel: channel, message: message);
 

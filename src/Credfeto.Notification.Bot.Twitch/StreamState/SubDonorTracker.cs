@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Credfeto.Notification.Bot.Shared;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
@@ -10,7 +11,7 @@ public sealed class SubDonorTracker
     private static readonly TimeSpan DeDupTime = TimeSpan.FromSeconds(5);
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ILogger _logger;
-    private string? _giftedBy;
+    private User? _giftedBy;
     private DateTime _whenGifted;
 
     public SubDonorTracker(ICurrentTimeSource currentTimeSource,
@@ -23,7 +24,7 @@ public sealed class SubDonorTracker
         this._whenGifted = DateTime.MinValue;
     }
 
-    public bool Update(string giftedBy)
+    public bool Update(in User giftedBy)
     {
         DateTime now = this._currentTimeSource.UtcNow();
 

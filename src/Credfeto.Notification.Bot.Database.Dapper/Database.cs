@@ -9,7 +9,7 @@ using Credfeto.Notification.Bot.Database.Interfaces.Builders;
 using Dapper;
 using Polly;
 
-namespace Credfeto.Notification.Dapper;
+namespace Credfeto.Notification.Bot.Database.Dapper;
 
 /// <summary>
 ///     Basic Database implementation.

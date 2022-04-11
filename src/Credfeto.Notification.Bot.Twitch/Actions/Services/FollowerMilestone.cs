@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,7 @@ public sealed class FollowerMilestone : IFollowerMilestone
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public async Task IssueMilestoneUpdateAsync(string channel, int followers, CancellationToken cancellationToken)
+    public async Task IssueMilestoneUpdateAsync(Channel channel, int followers, CancellationToken cancellationToken)
     {
         this._logger.LogWarning($"{channel}: Currently has {followers} followers");
 

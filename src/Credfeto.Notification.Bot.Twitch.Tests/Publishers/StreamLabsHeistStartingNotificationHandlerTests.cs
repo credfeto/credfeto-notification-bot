@@ -1,8 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
+using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
@@ -12,7 +14,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
 {
-    private const string CHANNEL = nameof(CHANNEL);
+    private static readonly Channel Channel = Types.ChannelFromString(nameof(Channel));
     private readonly IHeistJoiner _heistJoiner;
     private readonly INotificationHandler<StreamLabsHeistStarting> _notificationHandler;
 
@@ -26,7 +28,7 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(CHANNEL), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(Channel), cancellationToken: CancellationToken.None);
 
         await this.ReceivedJoinHeistAsync();
     }
@@ -34,6 +36,6 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
     private Task ReceivedJoinHeistAsync()
     {
         return this._heistJoiner.Received(1)
-                   .JoinHeistAsync(channel: CHANNEL, Arg.Any<CancellationToken>());
+                   .JoinHeistAsync(channel: Channel, Arg.Any<CancellationToken>());
     }
 }

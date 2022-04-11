@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,7 @@ public sealed class HeistJoiner : MessageSenderBase, IHeistJoiner
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task JoinHeistAsync(string channel, CancellationToken cancellationToken)
+    public async Task JoinHeistAsync(Channel channel, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{channel}: Heist Starting!");
         await this.SendMessageAsync(channel: channel, message: "!heist all", cancellationToken: cancellationToken);

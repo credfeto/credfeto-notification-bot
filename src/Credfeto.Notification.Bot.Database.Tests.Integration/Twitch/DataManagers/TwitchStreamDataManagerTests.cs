@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Database.Tests.Integration.Setup;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -23,7 +24,7 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     [Fact]
     public Task AddStreamStartAsync()
     {
-        string channelName = GenerateUsername();
+        Channel channelName = GenerateChannelUsername();
 
         return this._twitchStreamDataManager.RecordStreamStartAsync(channel: channelName, this._currentTimeSource.UtcNow());
     }
@@ -31,8 +32,8 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     [Fact]
     public async Task AddChatterToStreamAsync()
     {
-        string channelName = GenerateUsername();
-        string chatter = GenerateUsername();
+        Channel channelName = GenerateChannelUsername();
+        User chatter = GenerateViewerUsername();
         DateTime streamStart = this._currentTimeSource.UtcNow();
 
         bool isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
@@ -47,7 +48,7 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     [Fact]
     public async Task UpdateFollowerMilestoneAsync()
     {
-        string channelName = GenerateUsername();
+        Channel channelName = GenerateChannelUsername();
 
         bool isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channelName, followerCount: 10);
         Assert.True(condition: isFirstHit, userMessage: "Should be first hit");
@@ -59,8 +60,8 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     [Fact]
     public async Task RecordNewFollowerAsync()
     {
-        string channelName = GenerateUsername();
-        string followerName = GenerateUsername();
+        Channel channelName = GenerateChannelUsername();
+        User followerName = GenerateViewerUsername();
 
         int follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(channel: channelName, username: followerName);
         Assert.Equal(expected: 1, actual: follows);

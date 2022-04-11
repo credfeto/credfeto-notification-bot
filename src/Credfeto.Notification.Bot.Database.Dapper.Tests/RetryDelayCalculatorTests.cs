@@ -1,9 +1,8 @@
 ﻿using System;
-using Credfeto.Notification.Dapper;
 using FunFair.Test.Common;
 using Xunit;
 
-namespace Credfeto.Notification.Database.Dapper.Tests;
+namespace Credfeto.Notification.Bot.Database.Dapper.Tests;
 
 public sealed class RetryDelayCalculatorTests : TestBase
 {

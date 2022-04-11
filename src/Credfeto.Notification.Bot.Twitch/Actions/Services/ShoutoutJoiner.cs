@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
@@ -23,7 +24,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public async Task<bool> IssueShoutoutAsync(string channel, TwitchUser visitingStreamer, bool isRegular, CancellationToken cancellationToken)
+    public async Task<bool> IssueShoutoutAsync(Channel channel, TwitchUser visitingStreamer, bool isRegular, CancellationToken cancellationToken)
     {
         try
         {
@@ -34,7 +35,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
                 return false;
             }
 
-            TwitchFriendChannel? streamer = modChannel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName));
+            TwitchFriendChannel? streamer = modChannel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
 
             if (streamer == null)
             {
@@ -70,13 +71,13 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         }
     }
 
-    private async Task SendStandardShoutoutAsync(string channel, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
+    private async Task SendStandardShoutoutAsync(Channel channel, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
     {
         await this.SendMessageAsync(channel: channel, $"!so @{visitingStreamer.UserName}", cancellationToken: cancellationToken);
         this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: code);
     }
 
-    private void LogShoutout(string channel, TwitchUser visitingStreamer, string code)
+    private void LogShoutout(in Channel channel, TwitchUser visitingStreamer, string code)
     {
         this._logger.LogWarning($"{channel}: Check out https://www.twitch.tv/{visitingStreamer.UserName}  [{code}]");
     }

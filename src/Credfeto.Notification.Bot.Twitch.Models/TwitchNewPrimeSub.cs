@@ -1,16 +1,17 @@
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using MediatR;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchNewPrimeSub : INotification
 {
-    public TwitchNewPrimeSub(string channel, string user)
+    public TwitchNewPrimeSub(in Channel channel, in User user)
     {
         this.Channel = channel;
         this.User = user;
     }
 
-    public string Channel { get; }
+    public Channel Channel { get; }
 
-    public string User { get; }
+    public User User { get; }
 }

@@ -1,11 +1,12 @@
 using System;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using MediatR;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchStreamOffline : INotification
 {
-    public TwitchStreamOffline(string channel, string title, string gameName, in DateTime startedAt)
+    public TwitchStreamOffline(in Channel channel, string title, string gameName, in DateTime startedAt)
     {
         this.Channel = channel;
         this.Title = title;
@@ -13,7 +14,7 @@ public sealed class TwitchStreamOffline : INotification
         this.StartedAt = startedAt;
     }
 
-    public string Channel { get; }
+    public Channel Channel { get; }
 
     public string Title { get; }
 

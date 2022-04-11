@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
@@ -23,7 +24,7 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
         this._options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async Task IssueRaidWelcomeAsync(string channel, string raider, CancellationToken cancellationToken)
+    public async Task IssueRaidWelcomeAsync(Channel channel, User raider, CancellationToken cancellationToken)
     {
         TwitchModChannel? modChannel = this._options.GetModChannel(channel);
 

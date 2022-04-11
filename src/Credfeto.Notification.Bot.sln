@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Discord.Models", "Credfeto.Notification.Bot.Discord.Models\Credfeto.Notification.Bot.Discord.Models.csproj", "{E96806DF-3284-4CAE-B41C-4B84F5347CDF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Twitch.DataTypes", "Credfeto.Notification.Bot.Twitch.DataTypes\Credfeto.Notification.Bot.Twitch.DataTypes.csproj", "{778CC4E6-5EF5-41E3-8903-E526AED74FE0}"
+EndProject
 Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2DDAB2F1-7D26-48B5-8613-A8F973494365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -153,6 +155,10 @@ Global
 		{E96806DF-3284-4CAE-B41C-4B84F5347CDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E96806DF-3284-4CAE-B41C-4B84F5347CDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E96806DF-3284-4CAE-B41C-4B84F5347CDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778CC4E6-5EF5-41E3-8903-E526AED74FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778CC4E6-5EF5-41E3-8903-E526AED74FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778CC4E6-5EF5-41E3-8903-E526AED74FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778CC4E6-5EF5-41E3-8903-E526AED74FE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -182,5 +188,6 @@ Global
 		{E5EAB637-DC52-43C8-AC6E-D2FBC4D79EE3} = {B5ABC8F6-987B-412A-933A-AA438C0B4F7D}
 		{793719D5-D6DE-4092-B438-E7489463BB95} = {D0CDFD0F-10B1-48B3-8860-7EF9A7CCF550}
 		{E96806DF-3284-4CAE-B41C-4B84F5347CDF} = {D0CDFD0F-10B1-48B3-8860-7EF9A7CCF550}
+		{778CC4E6-5EF5-41E3-8903-E526AED74FE0} = {95998E18-592F-4DA8-86A9-D5892BBCD26E}
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Credfeto.Notification.Dapper;
+namespace Credfeto.Notification.Bot.Database.Dapper;
 
 /// <summary>
 ///     Calculates delay retries.

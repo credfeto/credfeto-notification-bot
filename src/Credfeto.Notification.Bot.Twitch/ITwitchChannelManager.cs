@@ -1,3 +1,5 @@
+using Credfeto.Notification.Bot.Twitch.DataTypes;
+
 namespace Credfeto.Notification.Bot.Twitch;
 
 /// <summary>
@@ -10,5 +12,5 @@ public interface ITwitchChannelManager
     /// </summary>
     /// <param name="channel">The channel name.</param>
     /// <returns></returns>
-    ITwitchChannelState GetChannel(string channel);
+    ITwitchChannelState GetChannel(Channel channel);
 }

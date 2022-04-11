@@ -4,6 +4,8 @@ using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Services;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Options;
@@ -14,9 +16,9 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class ContributionThanksTests : TestBase
 {
-    private const string CHANNEL = nameof(CHANNEL);
-    private const string GIFTING_USER = nameof(GIFTING_USER);
-    private const string USER = nameof(USER);
+    private static readonly Channel Channel = Types.ChannelFromString(nameof(Channel));
+    private static readonly User GiftingUser = Types.UserFromString(nameof(GiftingUser));
+    private static readonly User User = Types.UserFromString(nameof(User));
 
     private readonly IContributionThanks _contributionThanks;
     private readonly ICurrentTimeSource _currentTimeSource;
@@ -27,7 +29,7 @@ public sealed class ContributionThanksTests : TestBase
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
         this._currentTimeSource = GetSubstitute<ICurrentTimeSource>();
         IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = CHANNEL, Thanks = new() { Enabled = true } } } });
+        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Channel.ToString(), Thanks = new() { Enabled = true } } } });
 
         this._contributionThanks = new ContributionThanks(options: options,
                                                           twitchChatMessageChannel: this._twitchChatMessageChannel,
@@ -38,7 +40,7 @@ public sealed class ContributionThanksTests : TestBase
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
     {
         return this._twitchChatMessageChannel.Received(1)
-                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Channel == CHANNEL && t.Message == expectedMessage), Arg.Any<CancellationToken>());
+                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Channel == Channel && t.Message == expectedMessage), Arg.Any<CancellationToken>());
     }
 
     private ValueTask DidNotReceivePublishMessageAsync()
@@ -62,9 +64,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThanksForBitsAsync()
     {
-        await this._contributionThanks.ThankForBitsAsync(channel: CHANNEL, user: GIFTING_USER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForBitsAsync(channel: Channel, user: GiftingUser, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTING_USER} for the bits");
+        await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for the bits");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -72,9 +74,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForGiftingOneSubAsync()
     {
-        await this._contributionThanks.ThankForGiftingSubAsync(channel: CHANNEL, giftedBy: GIFTING_USER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForGiftingSubAsync(channel: Channel, giftedBy: GiftingUser, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTING_USER} for gifting sub");
+        await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for gifting sub");
 
         this.ReceivedCurrentTime();
     }
@@ -82,9 +84,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForGiftingMultipleSubsAsync()
     {
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(channel: CHANNEL, giftedBy: GIFTING_USER, count: 27, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(channel: Channel, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{GIFTING_USER} for gifting subs");
+        await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for gifting subs");
 
         this.ReceivedCurrentTime();
     }
@@ -92,9 +94,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForNewPaidSubAsync()
     {
-        await this._contributionThanks.ThankForNewPaidSubAsync(channel: CHANNEL, user: USER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForNewPaidSubAsync(channel: Channel, user: User, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{USER} for subscribing");
+        await this.ReceivedPublishMessageAsync($"Thanks @{User} for subscribing");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -102,9 +104,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForNewPrimeSubAsync()
     {
-        await this._contributionThanks.ThankForNewPrimeSubAsync(channel: CHANNEL, user: USER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForNewPrimeSubAsync(channel: Channel, user: User, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{USER} for subscribing");
+        await this.ReceivedPublishMessageAsync($"Thanks @{User} for subscribing");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -112,9 +114,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForPaidReSubAsync()
     {
-        await this._contributionThanks.ThankForPaidReSubAsync(channel: CHANNEL, user: USER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForPaidReSubAsync(channel: Channel, user: User, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{USER} for resubscribing");
+        await this.ReceivedPublishMessageAsync($"Thanks @{User} for resubscribing");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -122,9 +124,9 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForPrimeReSubAsync()
     {
-        await this._contributionThanks.ThankForPrimeReSubAsync(channel: CHANNEL, user: USER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForPrimeReSubAsync(channel: Channel, user: User, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{USER} for resubscribing");
+        await this.ReceivedPublishMessageAsync($"Thanks @{User} for resubscribing");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -132,7 +134,7 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForFollowAsync()
     {
-        await this._contributionThanks.ThankForFollowAsync(channel: CHANNEL, user: USER, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForFollowAsync(channel: Channel, user: User, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
 

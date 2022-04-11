@@ -1,6 +1,7 @@
 using System;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,7 +15,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     private readonly ILogger<TwitchChannelManager> _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
-    private readonly ConcurrentDictionary<string, TwitchChannelState> _streamStates;
+    private readonly ConcurrentDictionary<Channel, TwitchChannelState> _streamStates;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
 
@@ -28,12 +29,12 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._streamStates = new(comparer: StringComparer.OrdinalIgnoreCase);
+        this._streamStates = new();
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
     /// <inheritdoc />
-    public ITwitchChannelState GetChannel(string channel)
+    public ITwitchChannelState GetChannel(Channel channel)
     {
         if (this._streamStates.TryGetValue(key: channel, out TwitchChannelState? state))
         {
@@ -41,7 +42,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
         }
 
         return this._streamStates.GetOrAdd(key: channel,
-                                           new TwitchChannelState(channel.ToLowerInvariant(),
+                                           new TwitchChannelState(channelName: channel,
                                                                   options: this._options,
                                                                   userInfoService: this._userInfoService,
                                                                   twitchStreamDataManager: this._twitchStreamDataManager,

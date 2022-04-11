@@ -1,8 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
+using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
@@ -12,8 +14,8 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
 {
-    private const string CHANNEL = nameof(CHANNEL);
-    private const string GIFTED_BY = nameof(GIFTED_BY);
+    private static readonly Channel Channel = Types.ChannelFromString(nameof(Channel));
+    private static readonly User GiftedBy = Types.UserFromString(nameof(GiftedBy));
     private readonly IContributionThanks _contributionThanks;
     private readonly INotificationHandler<TwitchGiftSubMultiple> _notificationHandler;
 
@@ -27,7 +29,7 @@ public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(channel: CHANNEL, user: GIFTED_BY, count: 42), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(channel: Channel, user: GiftedBy, count: 42), cancellationToken: CancellationToken.None);
 
         await this.ThankForMultipleGiftSubsAsync();
     }
@@ -35,6 +37,6 @@ public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
     private Task ThankForMultipleGiftSubsAsync()
     {
         return this._contributionThanks.Received(1)
-                   .ThankForMultipleGiftSubsAsync(channel: CHANNEL, giftedBy: GIFTED_BY, count: 42, Arg.Any<CancellationToken>());
+                   .ThankForMultipleGiftSubsAsync(channel: Channel, giftedBy: GiftedBy, count: 42, Arg.Any<CancellationToken>());
     }
 }

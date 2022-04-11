@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
@@ -16,7 +17,7 @@ public sealed class TwitchUser
     /// <param name="userName">The username.</param>
     /// <param name="isStreamer">True, if the user is a streamer; otherwise, null.</param>
     /// <param name="dateCreated">The date the user was created.</param>
-    public TwitchUser(string id, string userName, bool isStreamer, in DateTime dateCreated)
+    public TwitchUser(string id, in User userName, bool isStreamer, in DateTime dateCreated)
     {
         this.Id = id;
         this.UserName = userName;
@@ -32,7 +33,7 @@ public sealed class TwitchUser
     /// <summary>
     ///     The username.
     /// </summary>
-    public string UserName { get; }
+    public User UserName { get; }
 
     /// <summary>
     ///     True, if the user is a streamer; otherwise, null.

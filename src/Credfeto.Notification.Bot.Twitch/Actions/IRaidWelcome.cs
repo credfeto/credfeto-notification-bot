@@ -1,9 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface IRaidWelcome
 {
-    Task IssueRaidWelcomeAsync(string channel, string raider, CancellationToken cancellationToken);
+    Task IssueRaidWelcomeAsync(Channel channel, User raider, CancellationToken cancellationToken);
 }
