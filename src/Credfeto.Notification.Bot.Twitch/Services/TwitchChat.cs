@@ -197,6 +197,7 @@ public sealed class TwitchChat : ITwitchChat
 
         this._twitchChatMessageChannel.ReadAllAsync(CancellationToken.None)
             .ToObservable()
+            .Delay(TimeSpan.FromSeconds(1))
             .Subscribe(onNext: this.PublishChatMessage);
 
         this._client.Connect();
