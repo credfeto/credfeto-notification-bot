@@ -70,6 +70,8 @@
  - any: [ 'src/Credfeto.Notification.Bot.Twitch/**/*' ]
 "Twitch.Data.Interfaces":
  - any: [ 'src/Credfeto.Notification.Bot.Twitch.Data.Interfaces/**/*' ]
+"Twitch.DataTypes":
+ - any: [ 'src/Credfeto.Notification.Bot.Twitch.DataTypes/**/*' ]
 "Twitch.Models":
  - any: [ 'src/Credfeto.Notification.Bot.Twitch.Models/**/*' ]
 "Twitch.Tests":
