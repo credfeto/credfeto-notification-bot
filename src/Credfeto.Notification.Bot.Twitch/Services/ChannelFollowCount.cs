@@ -30,11 +30,11 @@ public sealed class ChannelFollowCount : IChannelFollowCount
         this._httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
     }
 
-    public async Task<int> GetCurrentFollowerCountAsync(Channel channel, CancellationToken cancellationToken)
+    public async Task<int> GetCurrentFollowerCountAsync(Streamer streamer, CancellationToken cancellationToken)
     {
         HttpClient client = this.GetClient();
 
-        Uri followCountUri = new("/twitch/followcount/" + channel, uriKind: UriKind.Relative);
+        Uri followCountUri = new("/twitch/followcount/" + streamer, uriKind: UriKind.Relative);
         string result = await client.GetStringAsync(requestUri: followCountUri, cancellationToken: cancellationToken);
 
         if (int.TryParse(s: result, style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int followers))

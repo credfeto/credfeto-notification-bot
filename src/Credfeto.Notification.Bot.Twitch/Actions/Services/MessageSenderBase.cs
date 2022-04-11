@@ -15,9 +15,9 @@ public abstract class MessageSenderBase
         this._twitchChatMessageChannel = twitchChatMessageChannel;
     }
 
-    protected ValueTask SendMessageAsync(in Channel channel, string message, in CancellationToken cancellationToken)
+    protected ValueTask SendMessageAsync(in Streamer streamer, string message, in CancellationToken cancellationToken)
     {
-        TwitchChatMessage toSend = new(channel: channel, message: message);
+        TwitchChatMessage toSend = new(streamer: streamer, message: message);
 
         return this._twitchChatMessageChannel.PublishAsync(message: toSend, cancellationToken: cancellationToken);
     }

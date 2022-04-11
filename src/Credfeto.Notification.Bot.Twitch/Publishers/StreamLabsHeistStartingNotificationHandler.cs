@@ -23,11 +23,11 @@ public sealed class StreamLabsHeistStartingNotificationHandler : INotificationHa
     {
         try
         {
-            await this._heistJoiner.JoinHeistAsync(channel: notification.Channel, cancellationToken: cancellationToken);
+            await this._heistJoiner.JoinHeistAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to join heist");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to join heist");
         }
     }
 }

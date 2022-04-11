@@ -15,7 +15,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     private readonly ILogger<TwitchChannelManager> _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
-    private readonly ConcurrentDictionary<Channel, TwitchChannelState> _streamStates;
+    private readonly ConcurrentDictionary<Streamer, TwitchChannelState> _streamStates;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
 
@@ -34,15 +34,15 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     }
 
     /// <inheritdoc />
-    public ITwitchChannelState GetChannel(Channel channel)
+    public ITwitchChannelState GetChannel(Streamer streamer)
     {
-        if (this._streamStates.TryGetValue(key: channel, out TwitchChannelState? state))
+        if (this._streamStates.TryGetValue(key: streamer, out TwitchChannelState? state))
         {
             return state;
         }
 
-        return this._streamStates.GetOrAdd(key: channel,
-                                           new TwitchChannelState(channelName: channel,
+        return this._streamStates.GetOrAdd(key: streamer,
+                                           new TwitchChannelState(streamerName: streamer,
                                                                   options: this._options,
                                                                   userInfoService: this._userInfoService,
                                                                   twitchStreamDataManager: this._twitchStreamDataManager,

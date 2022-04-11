@@ -24,49 +24,49 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     [Fact]
     public Task AddStreamStartAsync()
     {
-        Channel channelName = GenerateChannelUsername();
+        Streamer streamerName = GenerateStreamerUsername();
 
-        return this._twitchStreamDataManager.RecordStreamStartAsync(channel: channelName, this._currentTimeSource.UtcNow());
+        return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: streamerName, this._currentTimeSource.UtcNow());
     }
 
     [Fact]
     public async Task AddChatterToStreamAsync()
     {
-        Channel channelName = GenerateChannelUsername();
-        User chatter = GenerateViewerUsername();
+        Streamer streamerName = GenerateStreamerUsername();
+        Viewer chatter = GenerateViewerUsername();
         DateTime streamStart = this._currentTimeSource.UtcNow();
 
-        bool isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
+        bool isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter);
         Assert.True(condition: isFirstMessageInStream, userMessage: "Should be first message");
 
-        await this._twitchStreamDataManager.AddChatterToStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
+        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter);
 
-        isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(channel: channelName, streamStartDate: streamStart, username: chatter);
+        isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter);
         Assert.False(condition: isFirstMessageInStream, userMessage: "Should not be first message");
     }
 
     [Fact]
     public async Task UpdateFollowerMilestoneAsync()
     {
-        Channel channelName = GenerateChannelUsername();
+        Streamer streamerName = GenerateStreamerUsername();
 
-        bool isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channelName, followerCount: 10);
+        bool isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamerName, followerCount: 10);
         Assert.True(condition: isFirstHit, userMessage: "Should be first hit");
 
-        isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channelName, followerCount: 10);
+        isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamerName, followerCount: 10);
         Assert.False(condition: isFirstHit, userMessage: "Should not be first hit");
     }
 
     [Fact]
     public async Task RecordNewFollowerAsync()
     {
-        Channel channelName = GenerateChannelUsername();
-        User followerName = GenerateViewerUsername();
+        Streamer streamerName = GenerateStreamerUsername();
+        Viewer followerName = GenerateViewerUsername();
 
-        int follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(channel: channelName, username: followerName);
+        int follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: streamerName, username: followerName);
         Assert.Equal(expected: 1, actual: follows);
 
-        follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(channel: channelName, username: followerName);
+        follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: streamerName, username: followerName);
         Assert.Equal(expected: 2, actual: follows);
     }
 }

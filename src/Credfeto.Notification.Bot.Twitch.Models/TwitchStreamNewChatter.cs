@@ -5,16 +5,16 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchStreamNewChatter : INotification
 {
-    public TwitchStreamNewChatter(in Channel channel, in User user, bool isRegular)
+    public TwitchStreamNewChatter(in Streamer streamer, in Viewer user, bool isRegular)
     {
-        this.Channel = channel;
+        this.Streamer = streamer;
         this.User = user;
         this.IsRegular = isRegular;
     }
 
-    public Channel Channel { get; }
+    public Streamer Streamer { get; }
 
-    public User User { get; }
+    public Viewer User { get; }
 
     public bool IsRegular { get; }
 }

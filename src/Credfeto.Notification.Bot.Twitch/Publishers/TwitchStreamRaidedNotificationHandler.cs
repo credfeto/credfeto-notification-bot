@@ -32,11 +32,11 @@ public sealed class TwitchStreamRaidedNotificationHandler : INotificationHandler
     {
         try
         {
-            await this._raidWelcome.IssueRaidWelcomeAsync(channel: notification.Channel, raider: notification.Raider, cancellationToken: cancellationToken);
+            await this._raidWelcome.IssueRaidWelcomeAsync(streamer: notification.Streamer, raider: notification.Raider, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify stream raid");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify stream raid");
         }
     }
 }

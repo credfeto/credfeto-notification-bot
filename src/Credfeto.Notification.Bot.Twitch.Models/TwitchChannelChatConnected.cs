@@ -5,10 +5,10 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchChannelChatConnected : INotification
 {
-    public TwitchChannelChatConnected(in Channel channel)
+    public TwitchChannelChatConnected(in Streamer streamer)
     {
-        this.Channel = channel;
+        this.Streamer = streamer;
     }
 
-    public Channel Channel { get; }
+    public Streamer Streamer { get; }
 }

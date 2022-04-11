@@ -24,61 +24,62 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public async Task<bool> IssueShoutoutAsync(Channel channel, TwitchUser visitingStreamer, bool isRegular, CancellationToken cancellationToken)
+    public async Task<bool> IssueShoutoutAsync(Streamer streamer, TwitchUser visitingStreamer, bool isRegular, CancellationToken cancellationToken)
     {
         try
         {
-            TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+            TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
             if (modChannel?.ShoutOuts.Enabled != true)
             {
                 return false;
             }
 
-            TwitchFriendChannel? streamer = modChannel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
+            TwitchFriendChannel? twitchFriendChannel =
+                modChannel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
 
-            if (streamer == null)
+            if (twitchFriendChannel == null)
             {
                 if (isRegular)
                 {
-                    await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
+                    await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
 
                     return true;
                 }
 
-                this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: "NEW");
+                this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "NEW");
 
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(streamer.Message))
+            if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
             {
-                await this.SendStandardShoutoutAsync(channel: channel, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
+                await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
             }
             else
             {
-                await this.SendMessageAsync(channel: channel, message: streamer.Message, cancellationToken: cancellationToken);
-                this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
+                await this.SendMessageAsync(streamer: streamer, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
+                this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
             }
 
             return true;
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{channel}: Check Shoutout: Failed to check {exception.Message}");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{streamer}: Check Shoutout: Failed to check {exception.Message}");
 
             return false;
         }
     }
 
-    private async Task SendStandardShoutoutAsync(Channel channel, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
+    private async Task SendStandardShoutoutAsync(Streamer streamer, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
     {
-        await this.SendMessageAsync(channel: channel, $"!so @{visitingStreamer.UserName}", cancellationToken: cancellationToken);
-        this.LogShoutout(channel: channel, visitingStreamer: visitingStreamer, code: code);
+        await this.SendMessageAsync(streamer: streamer, $"!so @{visitingStreamer.UserName}", cancellationToken: cancellationToken);
+        this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: code);
     }
 
-    private void LogShoutout(in Channel channel, TwitchUser visitingStreamer, string code)
+    private void LogShoutout(in Streamer streamer, TwitchUser visitingStreamer, string code)
     {
-        this._logger.LogWarning($"{channel}: Check out https://www.twitch.tv/{visitingStreamer.UserName}  [{code}]");
+        this._logger.LogWarning($"{streamer}: Check out https://www.twitch.tv/{visitingStreamer.UserName}  [{code}]");
     }
 }

@@ -11,7 +11,7 @@ public sealed class SubDonorTracker
     private static readonly TimeSpan DeDupTime = TimeSpan.FromSeconds(5);
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ILogger _logger;
-    private User? _giftedBy;
+    private Viewer? _giftedBy;
     private DateTime _whenGifted;
 
     public SubDonorTracker(ICurrentTimeSource currentTimeSource,
@@ -24,7 +24,7 @@ public sealed class SubDonorTracker
         this._whenGifted = DateTime.MinValue;
     }
 
-    public bool Update(in User giftedBy)
+    public bool Update(in Viewer giftedBy)
     {
         DateTime now = this._currentTimeSource.UtcNow();
 

@@ -8,19 +8,19 @@ namespace Credfeto.Notification.Bot.Twitch.Extensions;
 
 internal static class OptionsExtensions
 {
-    public static TwitchModChannel? GetModChannel(this TwitchBotOptions options, Channel channel)
+    public static TwitchModChannel? GetModChannel(this TwitchBotOptions options, Streamer streamer)
     {
-        return options.Channels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: channel.Value));
+        return options.Channels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: streamer.Value));
     }
 
-    public static bool IsModChannel(this TwitchBotOptions options, in Channel channel)
+    public static bool IsModChannel(this TwitchBotOptions options, in Streamer streamer)
     {
-        return options.GetModChannel(channel) != null;
+        return options.GetModChannel(streamer) != null;
     }
 
-    public static bool RaidWelcomeEnabled(this TwitchBotOptions options, in Channel channel)
+    public static bool RaidWelcomeEnabled(this TwitchBotOptions options, in Streamer streamer)
     {
-        return options.GetModChannel(channel)
+        return options.GetModChannel(streamer)
                       ?.Raids.Enabled ?? false;
     }
 
@@ -37,12 +37,12 @@ internal static class OptionsExtensions
                };
     }
 
-    public static bool IsIgnoredUser(this TwitchBotOptions options, User username)
+    public static bool IsIgnoredUser(this TwitchBotOptions options, Viewer username)
     {
         return options.IgnoredUsers.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: username));
     }
 
-    public static bool IsSelf(this TwitchBotOptions options, in User username)
+    public static bool IsSelf(this TwitchBotOptions options, in Viewer username)
     {
         return StringComparer.InvariantCultureIgnoreCase.Equals(x: options.Authentication.UserName, y: username);
     }

@@ -30,15 +30,15 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : MessageS
 
     public async Task Handle(TwitchFollowerMilestoneReached notification, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(notification.Channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(notification.Streamer);
 
         if (modChannel?.MileStones.Enabled != true)
         {
             return;
         }
 
-        await this.SendMessageAsync(channel: notification.Channel, $"/me @{notification.Channel} Woo! {notification.MilestoneReached} followers reached!", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: notification.Streamer, $"/me @{notification.Streamer} Woo! {notification.MilestoneReached} followers reached!", cancellationToken: cancellationToken);
 
-        this._logger.LogWarning($"{notification.Channel}: Woo!! New follower milestone reached {notification.MilestoneReached}");
+        this._logger.LogWarning($"{notification.Streamer}: Woo!! New follower milestone reached {notification.MilestoneReached}");
     }
 }

@@ -13,26 +13,26 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
 
-[DebuggerDisplay("{_channelName}")]
+[DebuggerDisplay("{_streamerName}")]
 public sealed class TwitchChannelState : ITwitchChannelState
 {
-    private readonly Channel _channelName;
     private readonly ILogger _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
+    private readonly Streamer _streamerName;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
 
     private ActiveStream? _stream;
 
-    public TwitchChannelState(in Channel channelName,
+    public TwitchChannelState(in Streamer streamerName,
                               TwitchBotOptions options,
                               IUserInfoService userInfoService,
                               ITwitchStreamDataManager twitchStreamDataManager,
                               IMediator mediator,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
-        this._channelName = channelName;
+        this._streamerName = streamerName;
         this._options = options ?? throw new ArgumentNullException(nameof(options));
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
@@ -42,44 +42,44 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public Task OnlineAsync(string gameName, in DateTime startDate)
     {
-        this._logger.LogInformation($"{this._channelName}: Going Online...");
+        this._logger.LogInformation($"{this._streamerName}: Going Online...");
         this._stream = new(gameName: gameName, startedAt: startDate);
 
-        return this._twitchStreamDataManager.RecordStreamStartAsync(channel: this._channelName, streamStartDate: startDate);
+        return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this._streamerName, streamStartDate: startDate);
     }
 
     public void Offline()
     {
-        this._logger.LogInformation($"{this._channelName}: Going Offline...");
+        this._logger.LogInformation($"{this._streamerName}: Going Offline...");
         this._stream = null;
     }
 
     public void ClearChat()
     {
-        this._logger.LogInformation($"{this._channelName}: Potential incident - chat cleared.");
+        this._logger.LogInformation($"{this._streamerName}: Potential incident - chat cleared.");
         this._stream?.AddIncident();
     }
 
-    public async Task RaidedAsync(User raider, int viewerCount, CancellationToken cancellationToken)
+    public async Task RaidedAsync(Viewer raider, int viewerCount, CancellationToken cancellationToken)
     {
-        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this._channelName))
+        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this._streamerName))
         {
-            await this._mediator.Publish(new TwitchStreamRaided(channel: this._channelName, raider: raider, viewerCount: viewerCount), cancellationToken: cancellationToken);
+            await this._mediator.Publish(new TwitchStreamRaided(streamer: this._streamerName, raider: raider, viewerCount: viewerCount), cancellationToken: cancellationToken);
         }
     }
 
-    public async Task ChatMessageAsync(User user, string message, int bits, CancellationToken cancellationToken)
+    public async Task ChatMessageAsync(Viewer user, string message, int bits, CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            this._logger.LogDebug($"{this._channelName}: Message from {user} while stream offline");
+            this._logger.LogDebug($"{this._streamerName}: Message from {user} while stream offline");
 
             return;
         }
 
-        if (!this._options.IsModChannel(this._channelName))
+        if (!this._options.IsModChannel(this._streamerName))
         {
-            this._logger.LogDebug($"{this._channelName}: Message from {user} that not modding for");
+            this._logger.LogDebug($"{this._streamerName}: Message from {user} that not modding for");
 
             return;
         }
@@ -89,19 +89,19 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return;
         }
 
-        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._channelName, y: user))
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._streamerName, y: user))
         {
-            this._logger.LogDebug($"{this._channelName}: Message from {user} that not modding for");
+            this._logger.LogDebug($"{this._streamerName}: Message from {user} that not modding for");
 
             return;
         }
 
         if (bits != 0)
         {
-            this._logger.LogDebug($"{this._channelName}: {user} Gave {bits}");
+            this._logger.LogDebug($"{this._streamerName}: {user} Gave {bits}");
             this._stream.AddBitGifter(user: user, bits: bits);
 
-            await this._mediator.Publish(new TwitchBitsGift(channel: this._channelName, user: user, bits: bits), cancellationToken: cancellationToken);
+            await this._mediator.Publish(new TwitchBitsGift(streamer: this._streamerName, user: user, bits: bits), cancellationToken: cancellationToken);
         }
 
         if (this._options.IsIgnoredUser(user))
@@ -115,21 +115,21 @@ public sealed class TwitchChannelState : ITwitchChannelState
         }
 
         // note that this covers disconnections of the bot
-        bool firstTimeInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(channel: this._channelName, streamStartDate: this._stream.StartedAt, username: user);
+        bool firstTimeInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: this._streamerName, streamStartDate: this._stream.StartedAt, username: user);
 
         if (!firstTimeInStream)
         {
             return;
         }
 
-        bool isRegular = await this.IsRegularChatterAsync(channel: this._channelName, username: user);
+        bool isRegular = await this.IsRegularChatterAsync(streamer: this._streamerName, username: user);
 
-        await this._twitchStreamDataManager.AddChatterToStreamAsync(channel: this._channelName, streamStartDate: this._stream.StartedAt, username: user);
+        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this._streamerName, streamStartDate: this._stream.StartedAt, username: user);
 
-        await this._mediator.Publish(new TwitchStreamNewChatter(channel: this._channelName, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
+        await this._mediator.Publish(new TwitchStreamNewChatter(streamer: this._streamerName, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
     }
 
-    public Task GiftedMultipleAsync(User giftedBy, int count, string months, in CancellationToken cancellationToken)
+    public Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -138,10 +138,10 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         this._stream.GiftedSub(giftedBy: giftedBy, count: count);
 
-        return this._mediator.Publish(new TwitchGiftSubMultiple(channel: this._channelName, user: giftedBy, count: count), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchGiftSubMultiple(streamer: this._streamerName, user: giftedBy, count: count), cancellationToken: cancellationToken);
     }
 
-    public Task GiftedSubAsync(User giftedBy, string months, in CancellationToken cancellationToken)
+    public Task GiftedSubAsync(Viewer giftedBy, string months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -155,10 +155,10 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchGiftSubSingle(channel: this._channelName, user: giftedBy), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchGiftSubSingle(streamer: this._streamerName, user: giftedBy), cancellationToken: cancellationToken);
     }
 
-    public Task ContinuedSubAsync(User user, in CancellationToken cancellationToken)
+    public Task ContinuedSubAsync(Viewer user, in CancellationToken cancellationToken)
     {
         this._stream?.ContinuedSub(user);
 
@@ -170,7 +170,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return Task.CompletedTask;
     }
 
-    public Task PrimeToPaidAsync(User user, in CancellationToken cancellationToken)
+    public Task PrimeToPaidAsync(Viewer user, in CancellationToken cancellationToken)
     {
         this._stream?.PrimeToPaid(user);
 
@@ -182,7 +182,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return Task.CompletedTask;
     }
 
-    public Task NewSubscriberPaidAsync(User user, in CancellationToken cancellationToken)
+    public Task NewSubscriberPaidAsync(Viewer user, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -196,10 +196,10 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchNewPaidSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchNewPaidSub(streamer: this._streamerName, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task NewSubscriberPrimeAsync(User user, in CancellationToken cancellationToken)
+    public Task NewSubscriberPrimeAsync(Viewer user, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -213,10 +213,10 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchNewPrimeSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchNewPrimeSub(streamer: this._streamerName, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task ResubscribePaidAsync(User user, int months, in CancellationToken cancellationToken)
+    public Task ResubscribePaidAsync(Viewer user, int months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -230,10 +230,10 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchPaidReSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchPaidReSub(streamer: this._streamerName, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task ResubscribePrimeAsync(User user, int months, in CancellationToken cancellationToken)
+    public Task ResubscribePrimeAsync(Viewer user, int months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -247,12 +247,12 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchPrimeReSub(channel: this._channelName, user: user), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchPrimeReSub(streamer: this._streamerName, user: user), cancellationToken: cancellationToken);
     }
 
-    public async Task NewFollowerAsync(User user, CancellationToken cancellationToken)
+    public async Task NewFollowerAsync(Viewer user, CancellationToken cancellationToken)
     {
-        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(channel: this._channelName, username: user);
+        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: this._streamerName, username: user);
 
         TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user);
 
@@ -260,25 +260,25 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            model = new(channel: this._channelName, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
+            model = new(streamer: this._streamerName, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
         }
         else
         {
-            model = new(channel: this._channelName, user: user, this._stream != null, isStreamer: false, accountCreated: DateTime.MinValue, followCount: followCount);
+            model = new(streamer: this._streamerName, user: user, this._stream != null, isStreamer: false, accountCreated: DateTime.MinValue, followCount: followCount);
         }
 
         await this._mediator.Publish(notification: model, cancellationToken: cancellationToken);
     }
 
-    private async Task<bool> IsRegularChatterAsync(Channel channel, User username)
+    private async Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username)
     {
         try
         {
-            return await this._twitchStreamDataManager.IsRegularChatterAsync(channel: channel, username: username);
+            return await this._twitchStreamDataManager.IsRegularChatterAsync(streamer: streamer, username: username);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{channel}: Is Regular Chatter: Failed to check {exception.Message}");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{streamer}: Is Regular Chatter: Failed to check {exception.Message}");
 
             return false;
         }

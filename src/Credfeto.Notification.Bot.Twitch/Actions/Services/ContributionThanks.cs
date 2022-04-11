@@ -17,7 +17,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly SemaphoreSlim _donorLock;
 
-    private readonly ConcurrentDictionary<Channel, SubDonorTracker> _donors;
+    private readonly ConcurrentDictionary<Streamer, SubDonorTracker> _donors;
     private readonly ILogger<ContributionThanks> _logger;
     private readonly TwitchBotOptions _options;
 
@@ -33,139 +33,139 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async Task ThankForBitsAsync(Channel channel, User user, CancellationToken cancellationToken)
+    public async Task ThankForBitsAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Thanks.Enabled != true)
         {
             return;
         }
 
-        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for the bits", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for the bits", cancellationToken: cancellationToken);
 
-        this._logger.LogInformation($"{channel}: Thanks @{user} for for the bits");
+        this._logger.LogInformation($"{streamer}: Thanks @{user} for for the bits");
     }
 
-    public async Task ThankForNewPrimeSubAsync(Channel channel, User user, CancellationToken cancellationToken)
+    public async Task ThankForNewPrimeSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Thanks.Enabled != true)
         {
             return;
         }
 
-        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
 
-        this._logger.LogInformation($"{channel}: Thanks @{user} for subscribing (Prime)");
+        this._logger.LogInformation($"{streamer}: Thanks @{user} for subscribing (Prime)");
     }
 
-    public async Task ThankForPrimeReSubAsync(Channel channel, User user, CancellationToken cancellationToken)
+    public async Task ThankForPrimeReSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Thanks.Enabled != true)
         {
             return;
         }
 
-        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
 
-        this._logger.LogInformation($"{channel}: Thanks @{user} for resubscribing (Prime)");
+        this._logger.LogInformation($"{streamer}: Thanks @{user} for resubscribing (Prime)");
     }
 
-    public async Task ThankForPaidReSubAsync(Channel channel, User user, CancellationToken cancellationToken)
+    public async Task ThankForPaidReSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Thanks.Enabled != true)
         {
             return;
         }
 
-        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
 
-        this._logger.LogInformation($"{channel}: Thanks @{user} for resubscribing (Paid)");
+        this._logger.LogInformation($"{streamer}: Thanks @{user} for resubscribing (Paid)");
     }
 
-    public async Task ThankForNewPaidSubAsync(Channel channel, User user, CancellationToken cancellationToken)
+    public async Task ThankForNewPaidSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Thanks.Enabled != true)
         {
             return;
         }
 
-        await this.SendMessageAsync(channel: channel, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
 
-        this._logger.LogInformation($"{channel}: Thanks @{user} for subscribing (Paid)");
+        this._logger.LogInformation($"{streamer}: Thanks @{user} for subscribing (Paid)");
     }
 
-    public async Task ThankForMultipleGiftSubsAsync(Channel channel, User giftedBy, int count, CancellationToken cancellationToken)
+    public async Task ThankForMultipleGiftSubsAsync(Streamer streamer, Viewer giftedBy, int count, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Thanks.Enabled != true)
         {
             return;
         }
 
-        if (await this.WasLastSubDonorAsync(channel: channel, giftedBy: giftedBy))
+        if (await this.WasLastSubDonorAsync(streamer: streamer, giftedBy: giftedBy))
         {
-            this._logger.LogInformation($"{channel}: Thanks @{giftedBy} for gifting sub (Same as last donor).");
+            this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting sub (Same as last donor).");
 
             return;
         }
 
-        await this.SendMessageAsync(channel: channel, $"Thanks @{giftedBy} for gifting subs", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"Thanks @{giftedBy} for gifting subs", cancellationToken: cancellationToken);
 
-        this._logger.LogInformation($"{channel}: Thanks @{giftedBy} for gifting subs");
+        this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting subs");
     }
 
-    public async Task ThankForGiftingSubAsync(Channel channel, User giftedBy, CancellationToken cancellationToken)
+    public async Task ThankForGiftingSubAsync(Streamer streamer, Viewer giftedBy, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Thanks.Enabled != true)
         {
             return;
         }
 
-        this._logger.LogInformation($"{channel}: Thanks @{giftedBy} for gifting sub");
+        this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting sub");
 
-        if (await this.WasLastSubDonorAsync(channel: channel, giftedBy: giftedBy))
+        if (await this.WasLastSubDonorAsync(streamer: streamer, giftedBy: giftedBy))
         {
-            this._logger.LogInformation($"{channel}: Thanks @{giftedBy} for gifting sub (Same as last donor)");
+            this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting sub (Same as last donor)");
 
             return;
         }
 
-        await this.SendMessageAsync(channel: channel, $"Thanks @{giftedBy} for gifting sub", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"Thanks @{giftedBy} for gifting sub", cancellationToken: cancellationToken);
     }
 
-    public Task ThankForFollowAsync(Channel channel, User user, CancellationToken cancellationToken)
+    public Task ThankForFollowAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Thanks.Enabled != true)
         {
             return Task.CompletedTask;
         }
 
-        this._logger.LogInformation($"{channel}: Thanks @{user} for following");
+        this._logger.LogInformation($"{streamer}: Thanks @{user} for following");
 
         return Task.CompletedTask;
     }
 
-    private async Task<bool> WasLastSubDonorAsync(Channel channel, User giftedBy)
+    private async Task<bool> WasLastSubDonorAsync(Streamer streamer, Viewer giftedBy)
     {
         await this._donorLock.WaitAsync();
 
         try
         {
-            SubDonorTracker subDonorTracker = this.GetSubDonorTrackerForChannel(channel);
+            SubDonorTracker subDonorTracker = this.GetSubDonorTrackerForChannel(streamer);
 
             return subDonorTracker.Update(giftedBy);
         }
@@ -175,15 +175,15 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         }
     }
 
-    private SubDonorTracker GetSubDonorTrackerForChannel(in Channel channel)
+    private SubDonorTracker GetSubDonorTrackerForChannel(in Streamer streamer)
     {
-        if (this._donors.TryGetValue(key: channel, out SubDonorTracker? subDonorTracker))
+        if (this._donors.TryGetValue(key: streamer, out SubDonorTracker? subDonorTracker))
         {
             return subDonorTracker;
         }
 
         subDonorTracker = new(currentTimeSource: this._currentTimeSource, logger: this._logger);
 
-        return this._donors.GetOrAdd(key: channel, value: subDonorTracker);
+        return this._donors.GetOrAdd(key: streamer, value: subDonorTracker);
     }
 }

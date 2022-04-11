@@ -30,48 +30,48 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         this._followerBuilder = followerBuilder ?? throw new ArgumentNullException(nameof(followerBuilder));
     }
 
-    public Task RecordStreamStartAsync(Channel channel, DateTime streamStartDate)
+    public Task RecordStreamStartAsync(Streamer streamer, DateTime streamStartDate)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_insert", new { channel_ = channel.ToString(), start_date_ = streamStartDate });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
     }
 
-    public Task AddChatterToStreamAsync(Channel channel, DateTime streamStartDate, User username)
+    public Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert", new { channel_ = channel.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
     }
 
-    public async Task<bool> IsFirstMessageInStreamAsync(Channel channel, DateTime streamStartDate, User username)
+    public async Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
     {
         TwitchChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
                                                                                 storedProcedure: "twitch.stream_chatter_get",
-                                                                                new { channel_ = channel.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+                                                                                new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
 
         return chatted == null;
     }
 
-    public async Task<bool> IsRegularChatterAsync(Channel channel, User username)
+    public async Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username)
     {
         TwitchRegularChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._regularChatterBuilder,
                                                                                        storedProcedure: "twitch.stream_chatter_is_regular",
-                                                                                       new { channel_ = channel.ToString(), username_ = username.ToString() });
+                                                                                       new { channel_ = streamer.ToString(), username_ = username.ToString() });
 
         return chatted?.Regular == true;
     }
 
-    public async Task<bool> UpdateFollowerMilestoneAsync(Channel channel, int followerCount)
+    public async Task<bool> UpdateFollowerMilestoneAsync(Streamer streamer, int followerCount)
     {
         TwitchFollowerMilestone? milestone = await this._database.QuerySingleOrDefaultAsync(builder: this._followerMilestoneBuilder,
                                                                                             storedProcedure: "twitch.stream_milestone_insert",
-                                                                                            new { channel_ = channel.ToString(), followers_ = followerCount });
+                                                                                            new { channel_ = streamer.ToString(), followers_ = followerCount });
 
         return milestone?.FreshlyReached == true;
     }
 
-    public async Task<int> RecordNewFollowerAsync(Channel channel, User username)
+    public async Task<int> RecordNewFollowerAsync(Streamer streamer, Viewer username)
     {
         TwitchFollower follower = await this._database.QuerySingleAsync(builder: this._followerBuilder,
                                                                         storedProcedure: "twitch.stream_follower_insert",
-                                                                        new { channel_ = channel.ToString(), follower_ = username.ToString() });
+                                                                        new { channel_ = streamer.ToString(), follower_ = username.ToString() });
 
         return follower.FollowCount;
     }

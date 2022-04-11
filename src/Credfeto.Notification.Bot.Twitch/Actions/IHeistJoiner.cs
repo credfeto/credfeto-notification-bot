@@ -6,5 +6,5 @@ namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface IHeistJoiner
 {
-    Task JoinHeistAsync(Channel channel, CancellationToken cancellationToken);
+    Task JoinHeistAsync(Streamer streamer, CancellationToken cancellationToken);
 }

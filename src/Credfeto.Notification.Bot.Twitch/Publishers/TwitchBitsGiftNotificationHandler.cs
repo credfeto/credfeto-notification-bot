@@ -23,11 +23,11 @@ public sealed class TwitchBitsGiftNotificationHandler : INotificationHandler<Twi
     {
         try
         {
-            await this._contributionThanks.ThankForBitsAsync(channel: notification.Channel, user: notification.User, cancellationToken: cancellationToken);
+            await this._contributionThanks.ThankForBitsAsync(streamer: notification.Streamer, user: notification.User, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify new bits gift");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify new bits gift");
         }
     }
 }

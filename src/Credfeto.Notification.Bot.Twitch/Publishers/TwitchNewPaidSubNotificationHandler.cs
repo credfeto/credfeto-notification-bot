@@ -23,11 +23,11 @@ public sealed class TwitchNewPaidSubNotificationHandler : INotificationHandler<T
     {
         try
         {
-            await this._contributionThanks.ThankForNewPaidSubAsync(channel: notification.Channel, user: notification.User, cancellationToken: cancellationToken);
+            await this._contributionThanks.ThankForNewPaidSubAsync(streamer: notification.Streamer, user: notification.User, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify new sub (paid)");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify new sub (paid)");
         }
     }
 }

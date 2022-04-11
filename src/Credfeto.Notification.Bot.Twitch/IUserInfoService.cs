@@ -6,7 +6,7 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface IUserInfoService
 {
-    Task<TwitchUser?> GetUserAsync(User userName);
+    Task<TwitchUser?> GetUserAsync(Viewer userName);
 
-    Task<TwitchUser?> GetUserAsync(Channel userName);
+    Task<TwitchUser?> GetUserAsync(Streamer userName);
 }

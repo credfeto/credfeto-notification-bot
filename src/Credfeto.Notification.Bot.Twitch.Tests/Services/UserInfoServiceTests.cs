@@ -13,7 +13,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
 public sealed class UserInfoServiceTests : TestBase
 {
-    private static readonly User Username = Types.UserFromString(nameof(Username));
+    private static readonly Viewer Username = Viewer.FromString(nameof(Username));
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
     private readonly IUserInfoService _userInfoService;
 
@@ -37,6 +37,6 @@ public sealed class UserInfoServiceTests : TestBase
                   .GetByUserNameAsync(Username);
 
         await this._twitchStreamerDataManager.DidNotReceive()
-                  .AddStreamerAsync(Arg.Any<Channel>(), Arg.Any<string>(), Arg.Any<DateTime>());
+                  .AddStreamerAsync(Arg.Any<Streamer>(), Arg.Any<string>(), Arg.Any<DateTime>());
     }
 }

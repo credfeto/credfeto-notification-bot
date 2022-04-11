@@ -6,9 +6,9 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchChannelNewFollower : INotification
 {
-    public TwitchChannelNewFollower(in Channel channel, in User user, bool streamOnline, bool isStreamer, in DateTime accountCreated, int followCount)
+    public TwitchChannelNewFollower(in Streamer streamer, in Viewer user, bool streamOnline, bool isStreamer, in DateTime accountCreated, int followCount)
     {
-        this.Channel = channel;
+        this.Streamer = streamer;
         this.User = user;
         this.StreamOnline = streamOnline;
         this.IsStreamer = isStreamer;
@@ -16,9 +16,9 @@ public sealed class TwitchChannelNewFollower : INotification
         this.FollowCount = followCount;
     }
 
-    public Channel Channel { get; }
+    public Streamer Streamer { get; }
 
-    public User User { get; }
+    public Viewer User { get; }
 
     public bool StreamOnline { get; }
 

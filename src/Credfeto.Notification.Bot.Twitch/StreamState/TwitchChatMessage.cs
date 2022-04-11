@@ -3,16 +3,16 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
 
-[DebuggerDisplay("{Channel}: {Message}")]
+[DebuggerDisplay("{Streamer}: {Message}")]
 public sealed class TwitchChatMessage
 {
-    public TwitchChatMessage(in Channel channel, string message)
+    public TwitchChatMessage(in Streamer streamer, string message)
     {
-        this.Channel = channel;
+        this.Streamer = streamer;
         this.Message = message;
     }
 
-    public Channel Channel { get; }
+    public Streamer Streamer { get; }
 
     public string Message { get; }
 }

@@ -41,22 +41,22 @@ public sealed class TwitchStreamNewChatterNotificationHandler : INotificationHan
 
             this._logger.LogWarning($"Found {twitchUser.UserName}. Streamer: {twitchUser.IsStreamer} Created: {twitchUser.DateCreated}");
 
-            this._logger.LogInformation($"{notification.Channel}: {twitchUser.UserName} - Regular: {notification.IsRegular}");
+            this._logger.LogInformation($"{notification.Streamer}: {twitchUser.UserName} - Regular: {notification.IsRegular}");
 
             if (notification.IsRegular)
             {
-                this._logger.LogInformation($"{notification.Channel}: Hi @{twitchUser.UserName}");
-                await this._welcomeWaggon.IssueWelcomeAsync(channel: notification.Channel, user: twitchUser.UserName, cancellationToken: cancellationToken);
+                this._logger.LogInformation($"{notification.Streamer}: Hi @{twitchUser.UserName}");
+                await this._welcomeWaggon.IssueWelcomeAsync(streamer: notification.Streamer, user: twitchUser.UserName, cancellationToken: cancellationToken);
             }
 
             if (twitchUser.IsStreamer)
             {
-                await this._shoutoutJoiner.IssueShoutoutAsync(channel: notification.Channel, visitingStreamer: twitchUser, isRegular: notification.IsRegular, cancellationToken: cancellationToken);
+                await this._shoutoutJoiner.IssueShoutoutAsync(streamer: notification.Streamer, visitingStreamer: twitchUser, isRegular: notification.IsRegular, cancellationToken: cancellationToken);
             }
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify new chatter");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify new chatter");
         }
     }
 }

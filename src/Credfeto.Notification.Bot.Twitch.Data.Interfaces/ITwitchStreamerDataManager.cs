@@ -6,9 +6,9 @@ namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 public interface ITwitchStreamerDataManager
 {
-    Task AddStreamerAsync(Channel streamerName, string streamerId, DateTime startedStreaming);
+    Task AddStreamerAsync(Streamer streamerName, string streamerId, DateTime startedStreaming);
 
-    Task<TwitchUser?> GetByUserNameAsync(Channel userName);
+    Task<TwitchUser?> GetByUserNameAsync(Streamer userName);
 
-    Task<TwitchUser?> GetByUserNameAsync(User userName);
+    Task<TwitchUser?> GetByUserNameAsync(Viewer userName);
 }

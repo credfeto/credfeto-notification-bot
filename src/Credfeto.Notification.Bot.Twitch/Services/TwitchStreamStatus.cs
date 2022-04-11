@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using MediatR;
@@ -63,11 +64,12 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
 
     private async Task OnStreamOnlineAsync(OnStreamOnlineArgs e, CancellationToken cancellationToken)
     {
-        this._logger.LogWarning($"{e.Channel}: Started streaming \"{e.Stream.Title}\" ({e.Stream.GameName}) at {e.Stream.StartedAt}");
+        Streamer streamer = Streamer.FromString(e.Channel);
+        this._logger.LogWarning($"{streamer}: Started streaming \"{e.Stream.Title}\" ({e.Stream.GameName}) at {e.Stream.StartedAt}");
 
         try
         {
-            await this._mediator.Publish(new TwitchStreamOnline(new(e.Channel.ToLowerInvariant()), title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
+            await this._mediator.Publish(new TwitchStreamOnline(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
                                          cancellationToken: cancellationToken);
         }
         catch (Exception exception)
@@ -78,9 +80,11 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
 
     private async Task OnStreamOfflineAsync(OnStreamOfflineArgs e, CancellationToken cancellationToken)
     {
+        Streamer streamer = Streamer.FromString(e.Channel);
+
         try
         {
-            await this._mediator.Publish(new TwitchStreamOffline(new(e.Channel.ToLowerInvariant()), title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
+            await this._mediator.Publish(new TwitchStreamOffline(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
                                          cancellationToken: cancellationToken);
         }
         catch (Exception exception)

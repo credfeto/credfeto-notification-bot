@@ -6,7 +6,6 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
-using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -17,7 +16,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class FollowerMilestoneTests : TestBase
 {
-    private static readonly Channel Channel = Types.ChannelFromString(nameof(Channel));
+    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private readonly IFollowerMilestone _followerMileStone;
     private readonly IMediator _mediator;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
@@ -51,10 +50,10 @@ public sealed class FollowerMilestoneTests : TestBase
     [Fact]
     public async Task FollowerMileStoneReachedForTheFirstTimeAsync()
     {
-        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: Channel, followerCount: 100)
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: 100)
             .Returns(true);
 
-        await this._followerMileStone.IssueMilestoneUpdateAsync(channel: Channel, followers: 101, cancellationToken: CancellationToken.None);
+        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: Streamer, followers: 101, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync(milestone: 100, nextMilestone: 1000);
         await this.ReceivedUpdateMilestoneAsync();
@@ -63,10 +62,10 @@ public sealed class FollowerMilestoneTests : TestBase
     [Fact]
     public async Task FollowerMileStoneReachedButAlreadyMetTimeAsync()
     {
-        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: Channel, followerCount: 100)
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: 100)
             .Returns(false);
 
-        await this._followerMileStone.IssueMilestoneUpdateAsync(channel: Channel, followers: 101, cancellationToken: CancellationToken.None);
+        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: Streamer, followers: 101, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
         await this.ReceivedUpdateMilestoneAsync();
@@ -75,13 +74,13 @@ public sealed class FollowerMilestoneTests : TestBase
     private Task<bool> ReceivedUpdateMilestoneAsync()
     {
         return this._twitchStreamDataManager.Received(1)
-                   .UpdateFollowerMilestoneAsync(channel: Channel, followerCount: 100);
+                   .UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: 100);
     }
 
     private Task ReceivedPublishMessageAsync(int milestone, int nextMilestone)
     {
         return this._mediator.Received(1)
-                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Channel == Channel && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone), Arg.Any<CancellationToken>());
+                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone), Arg.Any<CancellationToken>());
     }
 
     private Task DidNotReceivePublishMessageAsync()

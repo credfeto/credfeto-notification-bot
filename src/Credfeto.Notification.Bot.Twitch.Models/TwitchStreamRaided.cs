@@ -5,16 +5,16 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchStreamRaided : INotification
 {
-    public TwitchStreamRaided(in Channel channel, in User raider, int viewerCount)
+    public TwitchStreamRaided(in Streamer streamer, in Viewer raider, int viewerCount)
     {
-        this.Channel = channel;
+        this.Streamer = streamer;
         this.Raider = raider;
         this.ViewerCount = viewerCount;
     }
 
-    public Channel Channel { get; }
+    public Streamer Streamer { get; }
 
-    public User Raider { get; }
+    public Viewer Raider { get; }
 
     public int ViewerCount { get; }
 }

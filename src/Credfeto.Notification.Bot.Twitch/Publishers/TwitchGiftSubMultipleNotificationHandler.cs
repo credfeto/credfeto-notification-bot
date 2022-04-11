@@ -23,11 +23,11 @@ public sealed class TwitchGiftSubMultipleNotificationHandler : INotificationHand
     {
         try
         {
-            await this._contributionThanks.ThankForMultipleGiftSubsAsync(channel: notification.Channel, giftedBy: notification.User, count: notification.Count, cancellationToken: cancellationToken);
+            await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: notification.Streamer, giftedBy: notification.User, count: notification.Count, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify gift sub (multiple)");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify gift sub (multiple)");
         }
     }
 }

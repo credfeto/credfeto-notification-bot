@@ -23,11 +23,11 @@ public sealed class TwitchNewPrimeSubNotificationHandler : INotificationHandler<
     {
         try
         {
-            await this._contributionThanks.ThankForNewPrimeSubAsync(channel: notification.Channel, user: notification.User, cancellationToken: cancellationToken);
+            await this._contributionThanks.ThankForNewPrimeSubAsync(streamer: notification.Streamer, user: notification.User, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify new sub (prime)");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify new sub (prime)");
         }
     }
 }

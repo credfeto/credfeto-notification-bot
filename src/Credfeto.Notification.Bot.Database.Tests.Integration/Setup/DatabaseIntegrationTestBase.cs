@@ -12,19 +12,19 @@ public abstract class DatabaseIntegrationTestBase : IntegrationTestBase
     {
     }
 
-    protected static Channel GenerateChannelUsername()
+    protected static Streamer GenerateStreamerUsername()
     {
-        return new("@" + Guid.NewGuid()
-                             .ToString()
-                             .Replace(oldValue: "-", newValue: "")
-                             .ToLowerInvariant());
+        return new("@S" + Guid.NewGuid()
+                              .ToString()
+                              .Replace(oldValue: "-", newValue: "")
+                              .ToLowerInvariant());
     }
 
-    protected static User GenerateViewerUsername()
+    protected static Viewer GenerateViewerUsername()
     {
-        return new("@" + Guid.NewGuid()
-                             .ToString()
-                             .Replace(oldValue: "-", newValue: "")
-                             .ToLowerInvariant());
+        return new("@V" + Guid.NewGuid()
+                              .ToString()
+                              .Replace(oldValue: "-", newValue: "")
+                              .ToLowerInvariant());
     }
 }

@@ -4,7 +4,6 @@ using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
-using Credfeto.Notification.Bot.Twitch.Services;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
 using NSubstitute;
@@ -14,7 +13,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class HeistJoinerTests : TestBase
 {
-    private static readonly Channel Channel = Types.ChannelFromString(nameof(Channel));
+    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private readonly IHeistJoiner _heistJoiner;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
@@ -28,7 +27,7 @@ public sealed class HeistJoinerTests : TestBase
     [Fact]
     public async Task JoinHeistAsync()
     {
-        await this._heistJoiner.JoinHeistAsync(channel: Channel, cancellationToken: CancellationToken.None);
+        await this._heistJoiner.JoinHeistAsync(streamer: Streamer, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync("!heist all");
     }
@@ -36,6 +35,6 @@ public sealed class HeistJoinerTests : TestBase
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
     {
         return this._twitchChatMessageChannel.Received(1)
-                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Channel == Channel && t.Message == expectedMessage), Arg.Any<CancellationToken>());
+                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == Streamer && t.Message == expectedMessage), Arg.Any<CancellationToken>());
     }
 }

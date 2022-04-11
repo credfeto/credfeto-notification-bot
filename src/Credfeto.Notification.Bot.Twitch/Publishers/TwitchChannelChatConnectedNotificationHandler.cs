@@ -25,13 +25,13 @@ public sealed class TwitchChannelChatConnectedNotificationHandler : INotificatio
     {
         try
         {
-            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(channel: notification.Channel, cancellationToken: cancellationToken);
+            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
 
-            await this._followerMilestone.IssueMilestoneUpdateAsync(channel: notification.Channel, followers: followers, cancellationToken: cancellationToken);
+            await this._followerMilestone.IssueMilestoneUpdateAsync(streamer: notification.Streamer, followers: followers, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify chat connected");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify chat connected");
         }
     }
 }

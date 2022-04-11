@@ -28,13 +28,13 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : INotific
         Embed embed = new EmbedBuilder().WithColor(Color.Gold)
                                         .WithTitle(title)
                                         .WithCurrentTimestamp()
-                                        .WithUrl($"https://twitch.tv/{notification.Channel}")
+                                        .WithUrl($"https://twitch.tv/{notification.Streamer}")
                                         .AddField(name: "Next Milestone", value: notification.NextMilestone)
                                         .Build();
-        DiscordMessage discordMessage = new(notification.Channel.ToString(), embed: embed, title: title, image: null);
+        DiscordMessage discordMessage = new(notification.Streamer.ToString(), embed: embed, title: title, image: null);
 
         await this._messageChannel.PublishAsync(message: discordMessage, cancellationToken: cancellationToken);
 
-        this._logger.LogDebug($"{notification.Channel}: Woo!! New follower milestone reached {notification.MilestoneReached}");
+        this._logger.LogDebug($"{notification.Streamer}: Woo!! New follower milestone reached {notification.MilestoneReached}");
     }
 }

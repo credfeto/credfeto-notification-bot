@@ -10,7 +10,7 @@ public interface ITwitchChannelManager
     /// <summary>
     ///     Gets the current channel.
     /// </summary>
-    /// <param name="channel">The channel name.</param>
+    /// <param name="streamer">The channel name.</param>
     /// <returns></returns>
-    ITwitchChannelState GetChannel(Channel channel);
+    ITwitchChannelState GetChannel(Streamer streamer);
 }

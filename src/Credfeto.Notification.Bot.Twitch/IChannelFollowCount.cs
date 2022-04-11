@@ -6,5 +6,5 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface IChannelFollowCount
 {
-    Task<int> GetCurrentFollowerCountAsync(Channel channel, CancellationToken cancellationToken);
+    Task<int> GetCurrentFollowerCountAsync(Streamer streamer, CancellationToken cancellationToken);
 }

@@ -5,10 +5,10 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class StreamLabsHeistStarting : INotification
 {
-    public StreamLabsHeistStarting(in Channel channel)
+    public StreamLabsHeistStarting(in Streamer streamer)
     {
-        this.Channel = channel;
+        this.Streamer = streamer;
     }
 
-    public Channel Channel { get; }
+    public Streamer Streamer { get; }
 }

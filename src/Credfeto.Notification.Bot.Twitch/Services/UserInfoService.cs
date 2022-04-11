@@ -9,7 +9,6 @@ using Microsoft.Extensions.Options;
 using NonBlocking;
 using TwitchLib.Api;
 using TwitchLib.Api.Helix.Models.Users.GetUsers;
-using User = Credfeto.Notification.Bot.Twitch.DataTypes.User;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
@@ -17,7 +16,7 @@ public sealed class UserInfoService : IUserInfoService
 {
     private readonly TwitchAPI _api;
 
-    private readonly ConcurrentDictionary<User, TwitchUser?> _cache;
+    private readonly ConcurrentDictionary<Viewer, TwitchUser?> _cache;
     private readonly ILogger<UserInfoService> _logger;
     private readonly TwitchBotOptions _options;
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
@@ -33,12 +32,12 @@ public sealed class UserInfoService : IUserInfoService
         this._cache = new();
     }
 
-    public Task<TwitchUser?> GetUserAsync(Channel userName)
+    public Task<TwitchUser?> GetUserAsync(Streamer userName)
     {
-        return this.GetUserAsync(userName.UserFromChannel());
+        return this.GetUserAsync(userName.ToUser());
     }
 
-    public async Task<TwitchUser?> GetUserAsync(User userName)
+    public async Task<TwitchUser?> GetUserAsync(Viewer userName)
     {
         if (this._cache.TryGetValue(key: userName, out TwitchUser? user))
         {
@@ -84,8 +83,8 @@ public sealed class UserInfoService : IUserInfoService
         }
     }
 
-    private static TwitchUser Convert(TwitchLib.Api.Helix.Models.Users.GetUsers.User user)
+    private static TwitchUser Convert(User user)
     {
-        return new(userName: new(user.Login.ToLowerInvariant()), id: user.Id, isStreamer: !string.IsNullOrWhiteSpace(user.BroadcasterType), dateCreated: user.CreatedAt);
+        return new(userName: Viewer.FromString(user.Login), id: user.Id, isStreamer: !string.IsNullOrWhiteSpace(user.BroadcasterType), dateCreated: user.CreatedAt);
     }
 }

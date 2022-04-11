@@ -6,5 +6,5 @@ namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface IRaidWelcome
 {
-    Task IssueRaidWelcomeAsync(Channel channel, User raider, CancellationToken cancellationToken);
+    Task IssueRaidWelcomeAsync(Streamer streamer, Viewer raider, CancellationToken cancellationToken);
 }

@@ -23,11 +23,11 @@ public sealed class TwitchGiftSubSingleNotificationHandler : INotificationHandle
     {
         try
         {
-            await this._contributionThanks.ThankForGiftingSubAsync(channel: notification.Channel, giftedBy: notification.User, cancellationToken: cancellationToken);
+            await this._contributionThanks.ThankForGiftingSubAsync(streamer: notification.Streamer, giftedBy: notification.User, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify gift sub (single)");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify gift sub (single)");
         }
     }
 }

@@ -23,11 +23,11 @@ public sealed class TwitchPaidReSubNotificationHandler : INotificationHandler<Tw
     {
         try
         {
-            await this._contributionThanks.ThankForPaidReSubAsync(channel: notification.Channel, user: notification.User, cancellationToken: cancellationToken);
+            await this._contributionThanks.ThankForPaidReSubAsync(streamer: notification.Streamer, user: notification.User, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify re-sub (paid)");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify re-sub (paid)");
         }
     }
 }

@@ -43,7 +43,7 @@ public sealed class TwitchChat : ITwitchChat
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
     private readonly IUserInfoService _userInfoService;
-    private readonly ConcurrentDictionary<string, Channel> _userMappings;
+    private readonly ConcurrentDictionary<string, Streamer> _userMappings;
     private bool _connected;
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
@@ -140,13 +140,13 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnChatClearedArgs>(addHandler: h => this._client.OnChatCleared += h, removeHandler: h => this._client.OnChatCleared -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this._options.IsModChannel(Types.ChannelFromString(e.Channel)))
+                  .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Subscribe(onNext: this.Client_OnChatCleared);
 
         // RAIDS
         Observable.FromEventPattern<OnRaidNotificationArgs>(addHandler: h => this._client.OnRaidNotification += h, removeHandler: h => this._client.OnRaidNotification -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this._options.IsModChannel(Types.ChannelFromString(e.Channel)))
+                  .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnRaidAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
@@ -154,28 +154,28 @@ public sealed class TwitchChat : ITwitchChat
         // SUBS
         Observable.FromEventPattern<OnNewSubscriberArgs>(addHandler: h => this._client.OnNewSubscriber += h, removeHandler: h => this._client.OnNewSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this._options.IsModChannel(Types.ChannelFromString(e.Channel)))
+                  .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnNewSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
 
         Observable.FromEventPattern<OnReSubscriberArgs>(addHandler: h => this._client.OnReSubscriber += h, removeHandler: h => this._client.OnReSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this._options.IsModChannel(Types.ChannelFromString(e.Channel)))
+                  .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnReSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
 
         Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h, removeHandler: h => this._client.OnCommunitySubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this._options.IsModChannel(Types.ChannelFromString(e.Channel)))
+                  .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnCommunitySubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
 
         Observable.FromEventPattern<OnGiftedSubscriptionArgs>(addHandler: h => this._client.OnGiftedSubscription += h, removeHandler: h => this._client.OnGiftedSubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this._options.IsModChannel(Types.ChannelFromString(e.Channel)))
+                  .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnGiftedSubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
@@ -183,14 +183,14 @@ public sealed class TwitchChat : ITwitchChat
         Observable.FromEventPattern<OnContinuedGiftedSubscriptionArgs>(addHandler: h => this._client.OnContinuedGiftedSubscription += h,
                                                                        removeHandler: h => this._client.OnContinuedGiftedSubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this._options.IsModChannel(Types.ChannelFromString(e.Channel)))
+                  .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnContinuedGiftedSubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
 
         Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h, removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => this._options.IsModChannel(Types.ChannelFromString(e.Channel)))
+                  .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnPrimePaidSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
@@ -221,45 +221,45 @@ public sealed class TwitchChat : ITwitchChat
     {
         try
         {
-            this._logger.LogInformation($"{twitchChatMessage.Channel}: >>> @{this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
+            this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> @{this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
 
             //this._client.SendMessage(channel: twitchChatMessage.Channel, message: twitchChatMessage.Message);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{twitchChatMessage.Channel}: Failed to publish message : {exception.Message}");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{twitchChatMessage.Streamer}: Failed to publish message : {exception.Message}");
         }
     }
 
     private void Client_OnChatCleared(OnChatClearedArgs e)
     {
-        Channel channel = new(e.Channel.ToLowerInvariant());
+        Streamer streamer = Streamer.FromString(e.Channel);
 
-        if (!this._options.IsModChannel(channel))
+        if (!this._options.IsModChannel(streamer))
         {
             return;
         }
 
-        this._logger.LogInformation($"{channel}: Chat Cleared");
+        this._logger.LogInformation($"{streamer}: Chat Cleared");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
         state.ClearChat();
     }
 
     private Task OnCommunitySubscriptionAsync(OnCommunitySubscriptionArgs e, in CancellationToken cancellationToken)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
-        this._logger.LogInformation($"{channel}: Community Sub: {e.GiftedSubscription.DisplayName}");
+        Streamer streamer = Streamer.FromString(e.Channel);
+        this._logger.LogInformation($"{streamer}: Community Sub: {e.GiftedSubscription.DisplayName}");
 
         if (e.GiftedSubscription.IsAnonymous)
         {
             return Task.CompletedTask;
         }
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
-        return state.GiftedMultipleAsync(Types.UserFromString(e.GiftedSubscription.DisplayName),
+        return state.GiftedMultipleAsync(Viewer.FromString(e.GiftedSubscription.DisplayName),
                                          count: e.GiftedSubscription.MsgParamMassGiftCount,
                                          months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration,
                                          cancellationToken: cancellationToken);
@@ -267,49 +267,49 @@ public sealed class TwitchChat : ITwitchChat
 
     private Task OnGiftedSubscriptionAsync(OnGiftedSubscriptionArgs e, in CancellationToken cancellationToken)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
-        this._logger.LogInformation($"{channel}: Community Sub: {e.GiftedSubscription.DisplayName}");
+        Streamer streamer = Streamer.FromString(e.Channel);
+        this._logger.LogInformation($"{streamer}: Community Sub: {e.GiftedSubscription.DisplayName}");
 
         if (e.GiftedSubscription.IsAnonymous)
         {
             return Task.CompletedTask;
         }
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
-        return state.GiftedSubAsync(Types.UserFromString(e.GiftedSubscription.DisplayName), months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration, cancellationToken: cancellationToken);
+        return state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName), months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration, cancellationToken: cancellationToken);
     }
 
     private void Client_OnChannelStateChanged(OnChannelStateChangedArgs e)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
+        Streamer streamer = Streamer.FromString(e.Channel);
 
-        if (!this._options.IsModChannel(channel))
+        if (!this._options.IsModChannel(streamer))
         {
             return;
         }
 
-        this._logger.LogInformation($"{channel}: Emote Only: {e.ChannelState.EmoteOnly} Follower Only: {e.ChannelState.FollowersOnly} Sub Only: {e.ChannelState.SubOnly}");
+        this._logger.LogInformation($"{streamer}: Emote Only: {e.ChannelState.EmoteOnly} Follower Only: {e.ChannelState.FollowersOnly} Sub Only: {e.ChannelState.SubOnly}");
     }
 
     private Task OnContinuedGiftedSubscriptionAsync(OnContinuedGiftedSubscriptionArgs e, in CancellationToken cancellationToken)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
+        Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.LogInformation($"{e.Channel}: {e.ContinuedGiftedSubscription.DisplayName} continued sub gifted by {e.ContinuedGiftedSubscription.MsgParamSenderLogin}");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
-        return state.ContinuedSubAsync(Types.UserFromString(e.ContinuedGiftedSubscription.DisplayName), cancellationToken: cancellationToken);
+        return state.ContinuedSubAsync(Viewer.FromString(e.ContinuedGiftedSubscription.DisplayName), cancellationToken: cancellationToken);
     }
 
     private Task OnPrimePaidSubscriberAsync(OnPrimePaidSubscriberArgs e, in CancellationToken cancellationToken)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
-        this._logger.LogInformation($"{channel}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid");
+        Streamer streamer = Streamer.FromString(e.Channel);
+        this._logger.LogInformation($"{streamer}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
-        return state.PrimeToPaidAsync(Types.UserFromString(e.PrimePaidSubscriber.DisplayName), cancellationToken: cancellationToken);
+        return state.PrimeToPaidAsync(Viewer.FromString(e.PrimePaidSubscriber.DisplayName), cancellationToken: cancellationToken);
     }
 
     private void OnLog(OnLogArgs e)
@@ -337,27 +337,27 @@ public sealed class TwitchChat : ITwitchChat
 
     private Task OnRaidAsync(OnRaidNotificationArgs e, in CancellationToken cancellationToken)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
-        this._logger.LogInformation($"{channel}: Raided by {e.RaidNotification.DisplayName}");
+        Streamer streamer = Streamer.FromString(e.Channel);
+        this._logger.LogInformation($"{streamer}: Raided by {e.RaidNotification.DisplayName}");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
         if (!int.TryParse(s: e.RaidNotification.MsgParamViewerCount, style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int viewerCount))
         {
             viewerCount = 1;
         }
 
-        return state.RaidedAsync(Types.UserFromString(e.RaidNotification.DisplayName), viewerCount: viewerCount, cancellationToken: cancellationToken);
+        return state.RaidedAsync(Viewer.FromString(e.RaidNotification.DisplayName), viewerCount: viewerCount, cancellationToken: cancellationToken);
     }
 
     private Task OnFollowedAsync(OnFollowArgs e, in CancellationToken cancellationToken)
     {
-        if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out Channel channelName))
+        if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out Streamer channelName))
         {
             return Task.CompletedTask;
         }
 
-        User user = Types.UserFromString(e.Username);
+        Viewer user = Viewer.FromString(e.Username);
 
         this._logger.LogInformation($"{channelName}: (Id: {e.FollowedChannelId}) Followed by {user}");
 
@@ -373,10 +373,10 @@ public sealed class TwitchChat : ITwitchChat
 
     private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
-        this._logger.LogInformation($"{channel}: Joining channel as {e.BotUsername}");
+        Streamer streamer = Streamer.FromString(e.Channel);
+        this._logger.LogInformation($"{streamer}: Joining channel as {e.BotUsername}");
 
-        if (!this._options.IsModChannel(channel))
+        if (!this._options.IsModChannel(streamer))
         {
             return;
         }
@@ -384,16 +384,16 @@ public sealed class TwitchChat : ITwitchChat
         try
         {
             // TODO: Consider moving PubSub to own class
-            TwitchUser? channelUser = await this._userInfoService.GetUserAsync(channel);
+            TwitchUser? channelUser = await this._userInfoService.GetUserAsync(streamer);
 
             if (channelUser != null)
             {
                 this._logger.LogInformation($"{e.Channel}: Listening for new follows as {channelUser.Id} using pubsub");
                 this._pubSub.SendTopics();
                 this._pubSub.ListenToFollows(channelUser.Id);
-                this._userMappings.TryAdd(key: channelUser.Id, value: channel);
+                this._userMappings.TryAdd(key: channelUser.Id, value: streamer);
 
-                await this._mediator.Publish(new TwitchChannelChatConnected(channel), cancellationToken: cancellationToken);
+                await this._mediator.Publish(new TwitchChannelChatConnected(streamer), cancellationToken: cancellationToken);
             }
         }
         catch (Exception exception)
@@ -418,18 +418,18 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
-        Channel channel = Types.ChannelFromString(e.ChatMessage.Channel);
+        Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
 
-        if (!this._options.IsModChannel(channel))
+        if (!this._options.IsModChannel(streamer))
         {
             return;
         }
 
-        this._logger.LogInformation($"{channel}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
+        this._logger.LogInformation($"{streamer}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
-        await state.ChatMessageAsync(Types.UserFromString(e.ChatMessage.Username), message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
+        await state.ChatMessageAsync(Viewer.FromString(e.ChatMessage.Username), message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
     }
 
     private async Task<bool> JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
@@ -452,33 +452,33 @@ public sealed class TwitchChat : ITwitchChat
 
     private Task OnNewSubscriberAsync(OnNewSubscriberArgs e, in CancellationToken cancellationToken)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
+        Streamer streamer = Streamer.FromString(e.Channel);
 
-        this._logger.LogInformation($"{channel}: New Subscriber {e.Subscriber.DisplayName}");
+        this._logger.LogInformation($"{streamer}: New Subscriber {e.Subscriber.DisplayName}");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
         if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {
-            return state.NewSubscriberPaidAsync(Types.UserFromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
+            return state.NewSubscriberPaidAsync(Viewer.FromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
         }
 
-        return state.NewSubscriberPrimeAsync(Types.UserFromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
+        return state.NewSubscriberPrimeAsync(Viewer.FromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
     }
 
     private Task OnReSubscriberAsync(OnReSubscriberArgs e, in CancellationToken cancellationToken)
     {
-        Channel channel = Types.ChannelFromString(e.Channel);
-        this._logger.LogInformation($"{channel}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
+        Streamer streamer = Streamer.FromString(e.Channel);
+        this._logger.LogInformation($"{streamer}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(streamer);
 
         if (e.ReSubscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {
-            return state.ResubscribePaidAsync(Types.UserFromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
+            return state.ResubscribePaidAsync(Viewer.FromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
         }
 
-        return state.ResubscribePrimeAsync(Types.UserFromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
+        return state.ResubscribePrimeAsync(Viewer.FromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
     }
 
     private void OnPubSubServiceError(OnPubSubServiceErrorArgs e)

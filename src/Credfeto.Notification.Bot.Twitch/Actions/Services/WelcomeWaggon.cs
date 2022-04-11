@@ -24,16 +24,16 @@ public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
         this._options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async Task IssueWelcomeAsync(Channel channel, User user, CancellationToken cancellationToken)
+    public async Task IssueWelcomeAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Welcome.Enabled != true)
         {
             return;
         }
 
-        await this.SendMessageAsync(channel: channel, $"Hi @{user}", cancellationToken: cancellationToken);
-        this._logger.LogInformation($"{channel}: Hi {user}!");
+        await this.SendMessageAsync(streamer: streamer, $"Hi @{user}", cancellationToken: cancellationToken);
+        this._logger.LogInformation($"{streamer}: Hi {user}!");
     }
 }

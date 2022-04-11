@@ -6,5 +6,5 @@ namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface IWelcomeWaggon
 {
-    Task IssueWelcomeAsync(Channel channel, User user, CancellationToken cancellationToken);
+    Task IssueWelcomeAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken);
 }

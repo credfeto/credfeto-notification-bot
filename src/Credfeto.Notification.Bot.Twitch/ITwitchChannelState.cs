@@ -13,25 +13,25 @@ public interface ITwitchChannelState
 
     void ClearChat();
 
-    Task RaidedAsync(User raider, int viewerCount, CancellationToken cancellationToken);
+    Task RaidedAsync(Viewer raider, int viewerCount, CancellationToken cancellationToken);
 
-    Task ChatMessageAsync(User user, string message, int bits, CancellationToken cancellationToken);
+    Task ChatMessageAsync(Viewer user, string message, int bits, CancellationToken cancellationToken);
 
-    Task GiftedMultipleAsync(User giftedBy, int count, string months, in CancellationToken cancellationToken);
+    Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken);
 
-    Task GiftedSubAsync(User giftedBy, string months, in CancellationToken cancellationToken);
+    Task GiftedSubAsync(Viewer giftedBy, string months, in CancellationToken cancellationToken);
 
-    Task ContinuedSubAsync(User user, in CancellationToken cancellationToken);
+    Task ContinuedSubAsync(Viewer user, in CancellationToken cancellationToken);
 
-    Task PrimeToPaidAsync(User user, in CancellationToken cancellationToken);
+    Task PrimeToPaidAsync(Viewer user, in CancellationToken cancellationToken);
 
-    Task NewSubscriberPaidAsync(User user, in CancellationToken cancellationToken);
+    Task NewSubscriberPaidAsync(Viewer user, in CancellationToken cancellationToken);
 
-    Task NewSubscriberPrimeAsync(User user, in CancellationToken cancellationToken);
+    Task NewSubscriberPrimeAsync(Viewer user, in CancellationToken cancellationToken);
 
-    Task ResubscribePaidAsync(User user, int months, in CancellationToken cancellationToken);
+    Task ResubscribePaidAsync(Viewer user, int months, in CancellationToken cancellationToken);
 
-    Task ResubscribePrimeAsync(User user, int months, in CancellationToken cancellationToken);
+    Task ResubscribePrimeAsync(Viewer user, int months, in CancellationToken cancellationToken);
 
-    Task NewFollowerAsync(User user, CancellationToken cancellationToken);
+    Task NewFollowerAsync(Viewer user, CancellationToken cancellationToken);
 }

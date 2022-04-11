@@ -23,14 +23,14 @@ public sealed class TwitchStreamerDataManagerTests : DatabaseIntegrationTestBase
     [Fact]
     public async Task AddAsync()
     {
-        Channel channelName = GenerateChannelUsername();
+        Streamer streamerName = GenerateStreamerUsername();
 
-        TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(channelName);
+        TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(streamerName);
         Assert.Null(user);
 
-        await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: channelName, channelName.ToString(), this._currentTimeSource.UtcNow());
+        await this._twitchStreamerDataManager.AddStreamerAsync(streamerName: streamerName, streamerName.ToString(), this._currentTimeSource.UtcNow());
 
-        user = await this._twitchStreamerDataManager.GetByUserNameAsync(channelName);
+        user = await this._twitchStreamerDataManager.GetByUserNameAsync(streamerName);
         Assert.NotNull(user);
     }
 }

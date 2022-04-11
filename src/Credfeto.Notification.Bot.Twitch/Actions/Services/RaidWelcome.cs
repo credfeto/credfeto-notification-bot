@@ -24,9 +24,9 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
         this._options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
-    public async Task IssueRaidWelcomeAsync(Channel channel, User raider, CancellationToken cancellationToken)
+    public async Task IssueRaidWelcomeAsync(Streamer streamer, Viewer raider, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(channel);
+        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
 
         if (modChannel?.Raids.Enabled != true)
         {
@@ -38,10 +38,10 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
 GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
 
-        await this.SendMessageAsync(channel: channel, message: raidWelcome, cancellationToken: cancellationToken);
-        await this.SendMessageAsync(channel: channel, $"Thanks @{raider} for the raid", cancellationToken: cancellationToken);
-        await this.SendMessageAsync(channel: channel, $"!so @{raider}", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, message: raidWelcome, cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"Thanks @{raider} for the raid", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, $"!so @{raider}", cancellationToken: cancellationToken);
 
-        this._logger.LogInformation($"{channel}: {raider} is raiding!");
+        this._logger.LogInformation($"{streamer}: {raider} is raiding!");
     }
 }

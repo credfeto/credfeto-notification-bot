@@ -27,9 +27,9 @@ public sealed class FollowerMilestone : IFollowerMilestone
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public async Task IssueMilestoneUpdateAsync(Channel channel, int followers, CancellationToken cancellationToken)
+    public async Task IssueMilestoneUpdateAsync(Streamer streamer, int followers, CancellationToken cancellationToken)
     {
-        this._logger.LogWarning($"{channel}: Currently has {followers} followers");
+        this._logger.LogWarning($"{streamer}: Currently has {followers} followers");
 
         int[] orderedFollowers = this._options.Milestones.Followers.OrderBy(i => i)
                                      .ToArray();
@@ -40,7 +40,7 @@ public sealed class FollowerMilestone : IFollowerMilestone
         double left = followers - lastMileStoneReached;
         double progress = Math.Round(left / distance * 100, digits: 2);
 
-        this._logger.LogWarning($"{channel}: Follower Milestone {lastMileStoneReached} Next {nextMileStone} Progress : {progress}% of gap filled");
+        this._logger.LogWarning($"{streamer}: Follower Milestone {lastMileStoneReached} Next {nextMileStone} Progress : {progress}% of gap filled");
 
         if (lastMileStoneReached == 0)
         {
@@ -48,13 +48,13 @@ public sealed class FollowerMilestone : IFollowerMilestone
             return;
         }
 
-        bool milestoneFreshlyReached = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(channel: channel, followerCount: lastMileStoneReached);
+        bool milestoneFreshlyReached = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamer, followerCount: lastMileStoneReached);
 
         if (milestoneFreshlyReached)
         {
-            await this._mediator.Publish(new TwitchFollowerMilestoneReached(channel: channel, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
+            await this._mediator.Publish(new TwitchFollowerMilestoneReached(streamer: streamer, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
                                          cancellationToken: cancellationToken);
-            this._logger.LogWarning($"{channel}: Woo!! New follower milestone reached {lastMileStoneReached}");
+            this._logger.LogWarning($"{streamer}: Woo!! New follower milestone reached {lastMileStoneReached}");
         }
     }
 }

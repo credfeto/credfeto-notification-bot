@@ -38,13 +38,13 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
             // TODO: Check DB to see if user has ever followed
             await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken: cancellationToken);
 
-            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(channel: notification.Channel, cancellationToken: cancellationToken);
+            int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
 
-            await this._followerMilestone.IssueMilestoneUpdateAsync(channel: notification.Channel, followers: followers, cancellationToken: cancellationToken);
+            await this._followerMilestone.IssueMilestoneUpdateAsync(streamer: notification.Streamer, followers: followers, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify Started streaming");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify Started streaming");
         }
     }
 }

@@ -19,17 +19,17 @@ public sealed class TwitchStreamerDataManager : ITwitchStreamerDataManager
         this._twitchUserBuilder = twitchUserBuilder ?? throw new ArgumentNullException(nameof(twitchUserBuilder));
     }
 
-    public Task AddStreamerAsync(Channel streamerName, string streamerId, DateTime startedStreaming)
+    public Task AddStreamerAsync(Streamer streamerName, string streamerId, DateTime startedStreaming)
     {
         return this._database.ExecuteAsync(storedProcedure: "twitch.streamer_insert", new { username_ = streamerName.ToString(), id_ = streamerId, date_created_ = startedStreaming });
     }
 
-    public Task<TwitchUser?> GetByUserNameAsync(Channel userName)
+    public Task<TwitchUser?> GetByUserNameAsync(Streamer userName)
     {
         return this._database.QuerySingleOrDefaultAsync(builder: this._twitchUserBuilder, storedProcedure: "twitch.streamer_get", new { username_ = userName.ToString() });
     }
 
-    public Task<TwitchUser?> GetByUserNameAsync(User userName)
+    public Task<TwitchUser?> GetByUserNameAsync(Viewer userName)
     {
         return this._database.QuerySingleOrDefaultAsync(builder: this._twitchUserBuilder, storedProcedure: "twitch.streamer_get", new { username_ = userName.ToString() });
     }

@@ -18,10 +18,10 @@ public sealed class HeistJoiner : MessageSenderBase, IHeistJoiner
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task JoinHeistAsync(Channel channel, CancellationToken cancellationToken)
+    public async Task JoinHeistAsync(Streamer streamer, CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"{channel}: Heist Starting!");
-        await this.SendMessageAsync(channel: channel, message: "!heist all", cancellationToken: cancellationToken);
-        this._logger.LogInformation($"{channel}: Heist Starting! - Join Sent");
+        this._logger.LogInformation($"{streamer}: Heist Starting!");
+        await this.SendMessageAsync(streamer: streamer, message: "!heist all", cancellationToken: cancellationToken);
+        this._logger.LogInformation($"{streamer}: Heist Starting! - Join Sent");
     }
 }

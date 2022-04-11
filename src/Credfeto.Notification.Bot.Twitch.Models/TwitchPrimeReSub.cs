@@ -5,13 +5,13 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchPrimeReSub : INotification
 {
-    public TwitchPrimeReSub(in Channel channel, in User user)
+    public TwitchPrimeReSub(in Streamer streamer, in Viewer user)
     {
-        this.Channel = channel;
+        this.Streamer = streamer;
         this.User = user;
     }
 
-    public Channel Channel { get; }
+    public Streamer Streamer { get; }
 
-    public User User { get; }
+    public Viewer User { get; }
 }

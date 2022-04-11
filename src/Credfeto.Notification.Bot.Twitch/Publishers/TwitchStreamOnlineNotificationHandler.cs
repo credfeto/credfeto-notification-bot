@@ -29,9 +29,9 @@ public sealed class TwitchStreamOnlineNotificationHandler : INotificationHandler
     /// <inheritdoc />
     public async Task Handle(TwitchStreamOnline notification, CancellationToken cancellationToken)
     {
-        this._logger.LogWarning($"{notification.Channel}: Started streaming \"{notification.Title}\" ({notification.GameName}) at {notification.StartedAt}");
+        this._logger.LogWarning($"{notification.Streamer}: Started streaming \"{notification.Title}\" ({notification.GameName}) at {notification.StartedAt}");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(notification.Channel);
+        ITwitchChannelState state = this._twitchChannelManager.GetChannel(notification.Streamer);
 
         try
         {
@@ -39,7 +39,7 @@ public sealed class TwitchStreamOnlineNotificationHandler : INotificationHandler
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Channel}: Failed to notify Started streaming");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify Started streaming");
         }
     }
 }

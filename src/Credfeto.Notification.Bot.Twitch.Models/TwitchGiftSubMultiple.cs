@@ -5,16 +5,16 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchGiftSubMultiple : INotification
 {
-    public TwitchGiftSubMultiple(in Channel channel, in User user, int count)
+    public TwitchGiftSubMultiple(in Streamer streamer, in Viewer user, int count)
     {
-        this.Channel = channel;
+        this.Streamer = streamer;
         this.User = user;
         this.Count = count;
     }
 
-    public Channel Channel { get; }
+    public Streamer Streamer { get; }
 
-    public User User { get; }
+    public Viewer User { get; }
 
     public int Count { get; }
 }

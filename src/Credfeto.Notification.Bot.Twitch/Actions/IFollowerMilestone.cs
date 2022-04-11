@@ -6,5 +6,5 @@ namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface IFollowerMilestone
 {
-    Task IssueMilestoneUpdateAsync(Channel channel, int followers, CancellationToken cancellationToken);
+    Task IssueMilestoneUpdateAsync(Streamer streamer, int followers, CancellationToken cancellationToken);
 }
