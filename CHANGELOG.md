@@ -23,6 +23,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated TwitchLib to 3.5.2
 - FF-1429 - Updated Discord.Net to 3.5.0
 - FF-1429 - Updated Discord.Net.Analyzers to 3.5.0
+- FF-1429 - Updated Microsoft.Extensions to 6.0.4
 ### Removed
 ### Deployment Changes
 
