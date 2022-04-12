@@ -46,12 +46,10 @@ public static class TwitchSetup
 
     private static IClient CreateWebSocketClient()
     {
-        IClient client = new WebSocketClient(new ClientOptions
-                                             {
-                                                 MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30), ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
-                                             });
-
-        return client;
+        return new WebSocketClient(new ClientOptions
+                                   {
+                                       MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30), ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
+                                   });
     }
 
     private static IServiceCollection AddActions(this IServiceCollection services)
