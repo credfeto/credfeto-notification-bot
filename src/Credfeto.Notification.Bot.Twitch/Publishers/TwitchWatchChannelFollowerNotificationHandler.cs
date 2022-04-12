@@ -35,8 +35,7 @@ public sealed class TwitchWatchChannelFollowerNotificationHandler : INotificatio
         }
 
         this._logger.LogInformation($"{streamer}: Enabling for follower tracking");
-        this._followerDetector.Enable(notification.Info);
 
-        return Task.CompletedTask;
+        return this._followerDetector.EnableAsync(notification.Info);
     }
 }

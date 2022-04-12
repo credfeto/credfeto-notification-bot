@@ -22,10 +22,13 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
     private readonly IDisposable _followedSubscription;
     private readonly ILogger<TwitchFollowerDetector> _logger;
     private readonly TwitchBotOptions _options;
+    private readonly SemaphoreSlim _semaphoreSlim;
     private readonly IDisposable _serviceErrorSubscription;
     private readonly ITwitchChannelManager _twitchChannelManager;
     private readonly ITwitchPubSub _twitchPubSub;
     private readonly ConcurrentDictionary<string, Streamer> _userMappings;
+
+    private bool _connected;
 
     public TwitchFollowerDetector(IOptions<TwitchBotOptions> options, ITwitchPubSub twitchPubSub, ITwitchChannelManager twitchChannelManager, ILogger<TwitchFollowerDetector> logger)
     {
@@ -34,7 +37,9 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
+        this._semaphoreSlim = new(1);
         this._userMappings = new(StringComparer.InvariantCultureIgnoreCase);
+        this._connected = false;
 
         // FOLLOWS
 
@@ -56,9 +61,6 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
                                                .Select(e => Observable.FromAsync(cancellationToken => this.OnFollowedAsync(e: e, cancellationToken: cancellationToken)))
                                                .Concat()
                                                .Subscribe();
-
-        this._twitchPubSub.Connect();
-        this._twitchPubSub.SendTopics();
     }
 
     public void Dispose()
@@ -67,10 +69,13 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         this._disconnectedSubscription.Dispose();
         this._followedSubscription.Dispose();
         this._serviceErrorSubscription.Dispose();
+        this._semaphoreSlim.Dispose();
     }
 
-    public void Enable(TwitchUser streamer)
+    public async Task EnableAsync(TwitchUser streamer)
     {
+        await this.EnsureConnectedAsync();
+
         if (this._userMappings.TryAdd(key: streamer.Id, streamer.UserName.ToStreamer()))
         {
             this._logger.LogInformation($"{streamer.UserName}: Tracking follower notifications as twitch user id {streamer.Id}.");
@@ -80,7 +85,39 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
     public Task UpdateAsync()
     {
-        return Task.CompletedTask;
+        if (this._userMappings.IsEmpty)
+        {
+            return Task.CompletedTask;
+        }
+
+        return this.EnsureConnectedAsync();
+    }
+
+    private async Task EnsureConnectedAsync()
+    {
+        if (this._connected)
+        {
+            return;
+        }
+
+        await this._semaphoreSlim.WaitAsync();
+
+        try
+        {
+            this._twitchPubSub.Connect();
+            await Task.Delay(TimeSpan.FromMilliseconds(value: 500));
+            this._twitchPubSub.SendTopics();
+
+            foreach (string streamerId in this._userMappings.Keys)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(value: 500));
+                this._twitchPubSub.ListenToFollows(streamerId);
+            }
+        }
+        finally
+        {
+            this._semaphoreSlim.Release();
+        }
     }
 
     private void OnPubSubServiceError(OnPubSubServiceErrorArgs e)
@@ -90,12 +127,14 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
     private void OnConnected(EventPattern<object> e)
     {
+        this._connected = true;
         this._logger.LogInformation("PubSub Connected...");
     }
 
     private void OnDisconnected(EventPattern<object> e)
     {
         this._logger.LogInformation("PubSub Disconnected...");
+        this._connected = false;
     }
 
     private Task OnFollowedAsync(OnFollowArgs e, in CancellationToken cancellationToken)

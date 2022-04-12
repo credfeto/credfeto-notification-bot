@@ -12,7 +12,7 @@ public interface ITwitchFollowerDetector
     ///     Enables a streamer;
     /// </summary>
     /// <param name="streamer">Streamer.</param>
-    void Enable(TwitchUser streamer);
+    Task EnableAsync(TwitchUser streamer);
 
     /// <summary>
     ///     Updates the status.
