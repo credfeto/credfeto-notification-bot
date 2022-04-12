@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
-using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
@@ -16,16 +14,12 @@ using Credfeto.Notification.Bot.Twitch.StreamState;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NonBlocking;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
 using TwitchLib.Client.Interfaces;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Events;
-using TwitchLib.PubSub.Events;
-using TwitchLib.PubSub.Interfaces;
-using OnLogArgs = TwitchLib.Client.Events.OnLogArgs;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
@@ -36,34 +30,25 @@ public sealed class TwitchChat : ITwitchChat
     private readonly IMediator _mediator;
 
     private readonly TwitchBotOptions _options;
-    private readonly ITwitchPubSub _pubSub;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
-    private readonly IUserInfoService _userInfoService;
-    private readonly ConcurrentDictionary<string, Streamer> _userMappings;
     private bool _connected;
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
-                      IUserInfoService userInfoService,
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IMediator mediator,
                       ITwitchClient twitchClient,
-                      ITwitchPubSub twitchPubSub,
                       ILogger<TwitchChat> logger)
     {
-        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
-        this._pubSub = twitchPubSub ?? throw new ArgumentNullException(nameof(twitchPubSub));
-
-        this._userMappings = new(StringComparer.InvariantCultureIgnoreCase);
 
         List<string> channels = new[]
                                 {
@@ -77,21 +62,6 @@ public sealed class TwitchChat : ITwitchChat
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
 
         this._client.Initialize(credentials: credentials, channels: channels);
-
-        // FOLLOWS
-
-        Observable.FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._pubSub.OnPubSubServiceError += h, removeHandler: h => this._pubSub.OnPubSubServiceError -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Subscribe(this.OnPubSubServiceError);
-
-        Observable.FromEventPattern(addHandler: h => this._pubSub.OnPubSubServiceConnected += h, removeHandler: h => this._pubSub.OnPubSubServiceConnected -= h)
-                  .Subscribe(this.OnPubSubServiceConnected);
-
-        Observable.FromEventPattern<OnFollowArgs>(addHandler: h => this._pubSub.OnFollow += h, removeHandler: h => this._pubSub.OnFollow -= h)
-                  .Select(messageEvent => messageEvent.EventArgs)
-                  .Select(e => Observable.FromAsync(cancellationToken => this.OnFollowedAsync(e: e, cancellationToken: cancellationToken)))
-                  .Concat()
-                  .Subscribe();
 
         // HEALTH
         Observable.FromEventPattern<OnConnectedArgs>(addHandler: h => this._client.OnConnected += h, removeHandler: h => this._client.OnConnected -= h)
@@ -195,7 +165,6 @@ public sealed class TwitchChat : ITwitchChat
             .Subscribe(onNext: this.PublishChatMessage);
 
         this._client.Connect();
-        this._pubSub.Connect();
         this._connected = true;
     }
 
@@ -345,27 +314,6 @@ public sealed class TwitchChat : ITwitchChat
         return state.RaidedAsync(Viewer.FromString(e.RaidNotification.DisplayName), viewerCount: viewerCount, cancellationToken: cancellationToken);
     }
 
-    private Task OnFollowedAsync(OnFollowArgs e, in CancellationToken cancellationToken)
-    {
-        if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out Streamer channelName))
-        {
-            return Task.CompletedTask;
-        }
-
-        Viewer user = Viewer.FromString(e.Username);
-
-        this._logger.LogInformation($"{channelName}: (Id: {e.FollowedChannelId}) Followed by {user}");
-
-        if (!this._options.IsModChannel(channelName))
-        {
-            return Task.CompletedTask;
-        }
-
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channelName);
-
-        return state.NewFollowerAsync(user: user, cancellationToken: cancellationToken);
-    }
-
     private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
@@ -378,26 +326,7 @@ public sealed class TwitchChat : ITwitchChat
 
         try
         {
-            // TODO: Consider moving PubSub to own class
-            TwitchUser? channelUser = await this._userInfoService.GetUserAsync(streamer);
-
-            if (channelUser != null)
-            {
-                this._logger.LogInformation($"{e.Channel}: Listening for new follows as {channelUser.Id} using pubsub");
-                this._pubSub.SendTopics();
-                this._pubSub.ListenToFollows(channelUser.Id);
-
-                if (!this._userMappings.TryAdd(key: channelUser.Id, value: streamer))
-                {
-                    this._logger.LogWarning($"{streamer}: Could not add channel user");
-                }
-
-                await this._mediator.Publish(new TwitchChannelChatConnected(streamer), cancellationToken: cancellationToken);
-            }
-            else
-            {
-                this._logger.LogWarning($"{streamer}: Could not get channel user");
-            }
+            await this._mediator.Publish(new TwitchChannelChatConnected(streamer), cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
@@ -482,15 +411,5 @@ public sealed class TwitchChat : ITwitchChat
         }
 
         return state.ResubscribePrimeAsync(Viewer.FromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
-    }
-
-    private void OnPubSubServiceError(OnPubSubServiceErrorArgs e)
-    {
-        this._logger.LogError($"{e.Exception.Message}");
-    }
-
-    private void OnPubSubServiceConnected(EventPattern<object> e)
-    {
-        this._logger.LogInformation("PubSub Connected");
     }
 }

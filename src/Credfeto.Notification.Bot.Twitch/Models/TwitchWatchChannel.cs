@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
-public sealed class TwitchChannelStartupEvent : INotification
+public sealed class TwitchWatchChannel : INotification
 {
-    public TwitchChannelStartupEvent(TwitchUser info)
+    public TwitchWatchChannel(TwitchUser info)
     {
         this.Info = info ?? throw new ArgumentNullException(nameof(info));
     }

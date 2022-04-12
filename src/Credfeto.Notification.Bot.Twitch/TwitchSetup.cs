@@ -70,6 +70,7 @@ public static class TwitchSetup
                        .AddSingleton<ITwitchChat, TwitchChat>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
                        .AddSingleton<IUserInfoService, UserInfoService>()
+                       .AddSingleton<ITwitchFollowerDetector, TwitchFollowerDetector>()
                        .AddSingleton<IChannelFollowCount, ChannelFollowCount>()
                        .AddSingleton<IFollowerMilestone, FollowerMilestone>();
     }

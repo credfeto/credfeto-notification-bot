@@ -1,18 +1,18 @@
 using System.Threading.Tasks;
-using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 namespace Credfeto.Notification.Bot.Twitch;
 
 /// <summary>
-///     Stream Status
+///     Detectors of followers.
 /// </summary>
-public interface ITwitchStreamStatus
+public interface ITwitchFollowerDetector
 {
     /// <summary>
     ///     Enables a streamer;
     /// </summary>
     /// <param name="streamer">Streamer.</param>
-    void Enable(in Streamer streamer);
+    void Enable(TwitchUser streamer);
 
     /// <summary>
     ///     Updates the status.

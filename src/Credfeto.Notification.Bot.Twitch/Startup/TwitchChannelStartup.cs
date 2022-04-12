@@ -56,7 +56,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
             {
                 ITwitchChannelState channel = this._twitchChannelManager.GetChannel(streamer);
                 this._logger.LogInformation($"Streamer: {channel.Streamer}");
-                await this._mediator.Publish(new TwitchChannelStartupEvent(info), cancellationToken: cancellationToken);
+                await this._mediator.Publish(new TwitchWatchChannel(info), cancellationToken: cancellationToken);
             }
         }
     }
