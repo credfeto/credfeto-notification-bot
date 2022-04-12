@@ -47,8 +47,10 @@ internal static class Logging
 
     private static void AddFilters(ILoggingBuilder builder)
     {
-        builder.AddFilter(category: @"Microsoft", level: LogLevel.Warning)
+        builder.AddFilter(category: @"Discord", level: LogLevel.Warning)
+               .AddFilter(category: @"Microsoft", level: LogLevel.Warning)
                .AddFilter(category: @"System.Net.Http.HttpClient", level: LogLevel.Warning)
-               .AddFilter(category: @"Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware", level: LogLevel.Error);
+               .AddFilter(category: @"Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware", level: LogLevel.Error)
+               .AddFilter(category: @"TwitchLib", level: LogLevel.Warning);
     }
 }
