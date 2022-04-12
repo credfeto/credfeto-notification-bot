@@ -56,7 +56,7 @@ public sealed class UserInfoService : IUserInfoService
         try
         {
             this._logger.LogDebug($"Getting User information for {userName}");
-            GetUsersResponse result = await this._api.Helix.Users.GetUsersAsync(logins: new() { userName.ToString() });
+            GetUsersResponse result = await this._api.Helix.Users.GetUsersAsync(logins: new() { userName.Value });
 
             if (result.Users.Length == 0)
             {
@@ -70,7 +70,7 @@ public sealed class UserInfoService : IUserInfoService
 
             if (user.IsStreamer)
             {
-                await this._twitchStreamerDataManager.AddStreamerAsync(new(user.UserName.ToString()), streamerId: user.Id, startedStreaming: user.DateCreated);
+                await this._twitchStreamerDataManager.AddStreamerAsync(user.UserName.ToStreamer(), streamerId: user.Id, startedStreaming: user.DateCreated);
             }
 
             return user;

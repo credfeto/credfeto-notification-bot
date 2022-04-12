@@ -392,9 +392,17 @@ public sealed class TwitchChat : ITwitchChat
                 this._logger.LogInformation($"{e.Channel}: Listening for new follows as {channelUser.Id} using pubsub");
                 this._pubSub.SendTopics();
                 this._pubSub.ListenToFollows(channelUser.Id);
-                this._userMappings.TryAdd(key: channelUser.Id, value: streamer);
+
+                if (!this._userMappings.TryAdd(key: channelUser.Id, value: streamer))
+                {
+                    this._logger.LogWarning($"{streamer}: Could not add channel user");
+                }
 
                 await this._mediator.Publish(new TwitchChannelChatConnected(streamer), cancellationToken: cancellationToken);
+            }
+            else
+            {
+                this._logger.LogWarning($"{streamer}: Could not get channel user");
             }
         }
         catch (Exception exception)
