@@ -11,7 +11,7 @@ namespace Credfeto.Notification.Bot.Twitch.BackgroundServices;
 /// </summary>
 public sealed class FollowersWorker : BackgroundService
 {
-    private static readonly TimeSpan Interval = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan Interval = TimeSpan.FromSeconds(5);
 
     private readonly ILogger<FollowersWorker> _logger;
     private readonly ITwitchFollowerDetector _twitchFollowerDetector;

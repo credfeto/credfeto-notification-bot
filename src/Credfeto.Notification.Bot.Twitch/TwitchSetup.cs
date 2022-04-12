@@ -78,7 +78,8 @@ public static class TwitchSetup
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
     {
         return services.AddHostedService<UpdateTwitchLiveStatusWorker>()
-                       .AddHostedService<RestoreTwitchChatConnectionWorker>();
+                       .AddHostedService<RestoreTwitchChatConnectionWorker>()
+                       .AddHostedService<FollowersWorker>();
     }
 
     private static IServiceCollection AddStartupServices(this IServiceCollection services)
