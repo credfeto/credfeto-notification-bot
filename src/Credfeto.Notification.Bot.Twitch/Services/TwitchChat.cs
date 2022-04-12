@@ -152,6 +152,7 @@ public sealed class TwitchChat : ITwitchChat
         this._twitchChatMessageChannel.ReadAllAsync(CancellationToken.None)
             .ToObservable()
             .Delay(TimeSpan.FromSeconds(1))
+            .Where(this.IsConnectedToChat)
             .Subscribe(onNext: this.PublishChatMessage);
 
         this._client.Connect();
@@ -185,6 +186,11 @@ public sealed class TwitchChat : ITwitchChat
         }
 
         return Task.CompletedTask;
+    }
+
+    private bool IsConnectedToChat(TwitchChatMessage chatMessage)
+    {
+        return this._client.JoinedChannels.Any(joinedChannel => StringComparer.InvariantCultureIgnoreCase.Equals(x: chatMessage.Streamer.Value, y: joinedChannel.Channel));
     }
 
     private void PublishChatMessage(TwitchChatMessage twitchChatMessage)
