@@ -42,7 +42,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
         }
 
         return this._streamStates.GetOrAdd(key: streamer,
-                                           new TwitchChannelState(streamerName: streamer,
+                                           new TwitchChannelState(streamerStreamer: streamer,
                                                                   options: this._options,
                                                                   userInfoService: this._userInfoService,
                                                                   twitchStreamDataManager: this._twitchStreamDataManager,
