@@ -57,14 +57,6 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         this._onlineSubscription.Dispose();
     }
 
-    public void Enable(in Streamer streamer)
-    {
-        if (this._channels.TryAdd(key: streamer, value: true))
-        {
-            Interlocked.Increment(location: ref this._version);
-        }
-    }
-
     /// <inheritdoc />
     public Task UpdateAsync()
     {
@@ -81,6 +73,16 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
 
         return this._lsm.UpdateLiveStreamersAsync();
+    }
+
+    public async Task EnableAsync(Streamer streamer)
+    {
+        if (this._channels.TryAdd(key: streamer, value: true))
+        {
+            Interlocked.Increment(location: ref this._version);
+
+            await this.UpdateAsync();
+        }
     }
 
     private async Task OnStreamOnlineAsync(OnStreamOnlineArgs e, CancellationToken cancellationToken)

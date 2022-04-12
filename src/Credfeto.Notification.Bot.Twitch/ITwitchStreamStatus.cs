@@ -12,7 +12,7 @@ public interface ITwitchStreamStatus
     ///     Enables a streamer;
     /// </summary>
     /// <param name="streamer">Streamer.</param>
-    void Enable(in Streamer streamer);
+    Task EnableAsync(Streamer streamer);
 
     /// <summary>
     ///     Updates the status.

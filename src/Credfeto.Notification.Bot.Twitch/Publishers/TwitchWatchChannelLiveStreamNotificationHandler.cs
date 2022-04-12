@@ -23,8 +23,7 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandler : INotificat
     {
         Streamer streamer = notification.Info.UserName.ToStreamer();
         this._logger.LogInformation($"{streamer}: Enabling for live status checks");
-        this._twitchStreamStatus.Enable(streamer);
 
-        return Task.CompletedTask;
+        return this._twitchStreamStatus.EnableAsync(streamer);
     }
 }
