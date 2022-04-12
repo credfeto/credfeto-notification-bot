@@ -20,12 +20,11 @@ using NonBlocking;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
+using TwitchLib.Client.Interfaces;
 using TwitchLib.Client.Models;
-using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Events;
-using TwitchLib.Communication.Models;
-using TwitchLib.PubSub;
 using TwitchLib.PubSub.Events;
+using TwitchLib.PubSub.Interfaces;
 using OnLogArgs = TwitchLib.Client.Events.OnLogArgs;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
@@ -37,7 +36,7 @@ public sealed class TwitchChat : ITwitchChat
     private readonly IMediator _mediator;
 
     private readonly TwitchBotOptions _options;
-    private readonly TwitchPubSub _pubSub;
+    private readonly ITwitchPubSub _pubSub;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
@@ -51,6 +50,8 @@ public sealed class TwitchChat : ITwitchChat
                       ITwitchChannelManager twitchChannelManager,
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IMediator mediator,
+                      ITwitchClient twitchClient,
+                      ITwitchPubSub twitchPubSub,
                       ILogger<TwitchChat> logger)
     {
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
@@ -59,8 +60,8 @@ public sealed class TwitchChat : ITwitchChat
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
-
-        this._pubSub = new();
+        this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
+        this._pubSub = twitchPubSub ?? throw new ArgumentNullException(nameof(twitchPubSub));
 
         this._userMappings = new(StringComparer.InvariantCultureIgnoreCase);
 
@@ -74,15 +75,8 @@ public sealed class TwitchChat : ITwitchChat
                                  .ToList();
 
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
-        TwitchClient client = new(new WebSocketClient(new ClientOptions
-                                                      {
-                                                          MessagesAllowedInPeriod = 750,
-                                                          ThrottlingPeriod = TimeSpan.FromSeconds(30),
-                                                          ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
-                                                      })) { OverrideBeingHostedCheck = true, AutoReListenOnException = false };
 
-        client.Initialize(credentials: credentials, channels: channels);
-        this._client = client;
+        this._client.Initialize(credentials: credentials, channels: channels);
 
         // FOLLOWS
 

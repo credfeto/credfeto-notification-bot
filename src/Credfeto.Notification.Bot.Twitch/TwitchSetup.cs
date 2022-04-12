@@ -1,8 +1,16 @@
-﻿using Credfeto.Notification.Bot.Twitch.Actions;
+﻿using System;
+using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.BackgroundServices;
 using Credfeto.Notification.Bot.Twitch.Services;
 using Microsoft.Extensions.DependencyInjection;
+using TwitchLib.Client;
+using TwitchLib.Client.Interfaces;
+using TwitchLib.Communication.Clients;
+using TwitchLib.Communication.Interfaces;
+using TwitchLib.Communication.Models;
+using TwitchLib.PubSub;
+using TwitchLib.PubSub.Interfaces;
 
 namespace Credfeto.Notification.Bot.Twitch;
 
@@ -20,12 +28,30 @@ public static class TwitchSetup
         return services.AddServices()
                        .AddActions()
                        .AddHttpClients()
-                       .AddBackgroundServices();
+                       .AddBackgroundServices()
+                       .AddTwitchLib();
     }
 
     private static IServiceCollection AddHttpClients(this IServiceCollection services)
     {
         return ChannelFollowCount.RegisterHttpClient(services);
+    }
+
+    private static IServiceCollection AddTwitchLib(this IServiceCollection services)
+    {
+        return services.AddSingleton<ITwitchPubSub, TwitchPubSub>()
+                       .AddSingleton<ITwitchClient, TwitchClient>()
+                       .AddSingleton(_ => CreateWebSocketClient());
+    }
+
+    private static IClient CreateWebSocketClient()
+    {
+        IClient client = new WebSocketClient(new ClientOptions
+                                             {
+                                                 MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30), ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
+                                             });
+
+        return client;
     }
 
     private static IServiceCollection AddActions(this IServiceCollection services)
