@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
@@ -50,18 +49,9 @@ public sealed class TwitchChat : ITwitchChat
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
 
-        List<string> channels = new[]
-                                {
-                                    this._options.Authentication.UserName
-                                }.Concat(this._options.Channels.Select(channel => channel.ChannelName))
-                                 .Concat(this._options.Heists)
-                                 .Select(c => c.ToLowerInvariant())
-                                 .Distinct()
-                                 .ToList();
-
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
 
-        this._client.Initialize(credentials: credentials, channels: channels);
+        this._client.Initialize(credentials: credentials, channels: new() { this._options.Authentication.UserName });
 
         // HEALTH
         Observable.FromEventPattern<OnConnectedArgs>(addHandler: h => this._client.OnConnected += h, removeHandler: h => this._client.OnConnected -= h)
@@ -166,6 +156,22 @@ public sealed class TwitchChat : ITwitchChat
 
         this._client.Connect();
         this._connected = true;
+    }
+
+    public void JoinChat(Streamer streamer)
+    {
+        this._client.JoinChannel(streamer.Value);
+    }
+
+    public void LeaveChat(Streamer streamer)
+    {
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._options.Authentication.UserName, y: streamer.Value))
+        {
+            // never leave own channel.
+            return;
+        }
+
+        this._client.LeaveChannel(streamer.Value);
     }
 
     public Task UpdateAsync()
