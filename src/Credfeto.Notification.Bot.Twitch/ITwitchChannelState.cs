@@ -7,6 +7,8 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface ITwitchChannelState
 {
+    Streamer Streamer { get; }
+
     Task OnlineAsync(string gameName, in DateTime startDate);
 
     void Offline();

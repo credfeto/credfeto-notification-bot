@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
@@ -11,7 +10,7 @@ using Credfeto.Notification.Bot.Twitch.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TwitchLib.Api;
+using NonBlocking;
 using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Events.LiveStreamMonitor;
 
@@ -19,29 +18,23 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchStreamStatus : ITwitchStreamStatus
 {
-    private readonly TwitchAPI _api;
+    private readonly ConcurrentDictionary<Streamer, bool> _channels;
     private readonly ILogger<TwitchStreamStatus> _logger;
     private readonly LiveStreamMonitorService _lsm;
     private readonly IMediator _mediator;
-    private readonly TwitchBotOptions _options;
+    private int _lastVersion;
+    private int _version;
 
     public TwitchStreamStatus(IOptions<TwitchBotOptions> options, IMediator mediator, ILogger<TwitchStreamStatus> logger)
     {
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
-        List<string> channels = new[]
-                                {
-                                    this._options.Authentication.UserName
-                                }.Concat(this._options.Channels.Select(c => c.ChannelName))
-                                 .Select(c => c.ToLowerInvariant())
-                                 .Distinct()
-                                 .ToList();
+        this._version = 0;
+        this._lastVersion = 0;
+        this._channels = new();
 
-        this._api = this._options.ConfigureTwitchApi();
-        this._lsm = new(this._api);
-        this._lsm.SetChannelsByName(channels);
+        this._lsm = new(options.Value.ConfigureTwitchApi());
 
         Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
@@ -56,9 +49,29 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus
                   .Subscribe();
     }
 
+    public void Enable(in Streamer streamer)
+    {
+        if (this._channels.TryAdd(key: streamer, value: true))
+        {
+            Interlocked.Increment(location: ref this._version);
+        }
+    }
+
     /// <inheritdoc />
     public Task UpdateAsync()
     {
+        if (this._channels.IsEmpty)
+        {
+            return Task.CompletedTask;
+        }
+
+        if (this._lastVersion != this._version)
+        {
+            this._lsm.SetChannelsByName(this._channels.Keys.Select(c => c.Value)
+                                            .ToList());
+            this._lastVersion = this._version;
+        }
+
         return this._lsm.UpdateLiveStreamersAsync();
     }
 

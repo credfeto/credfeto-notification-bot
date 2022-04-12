@@ -1,8 +1,10 @@
 ﻿using System;
+using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.BackgroundServices;
 using Credfeto.Notification.Bot.Twitch.Services;
+using Credfeto.Notification.Bot.Twitch.Startup;
 using Microsoft.Extensions.DependencyInjection;
 using TwitchLib.Client;
 using TwitchLib.Client.Interfaces;
@@ -25,11 +27,12 @@ public static class TwitchSetup
     /// <param name="services">The Service collection to add the services to.</param>
     public static IServiceCollection AddTwitch(this IServiceCollection services)
     {
-        return services.AddServices()
+        return services.AddTwitchLib()
+                       .AddServices()
                        .AddActions()
                        .AddHttpClients()
-                       .AddBackgroundServices()
-                       .AddTwitchLib();
+                       .AddStartupServices()
+                       .AddBackgroundServices();
     }
 
     private static IServiceCollection AddHttpClients(this IServiceCollection services)
@@ -67,6 +70,7 @@ public static class TwitchSetup
                        .AddSingleton<ITwitchChat, TwitchChat>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
                        .AddSingleton<IUserInfoService, UserInfoService>()
+                       .AddSingleton<ITwitchFollowerDetector, TwitchFollowerDetector>()
                        .AddSingleton<IChannelFollowCount, ChannelFollowCount>()
                        .AddSingleton<IFollowerMilestone, FollowerMilestone>();
     }
@@ -75,5 +79,10 @@ public static class TwitchSetup
     {
         return services.AddHostedService<UpdateTwitchLiveStatusWorker>()
                        .AddHostedService<RestoreTwitchChatConnectionWorker>();
+    }
+
+    private static IServiceCollection AddStartupServices(this IServiceCollection services)
+    {
+        return services.AddSingleton<IRunOnStartup, TwitchChannelStartup>();
     }
 }

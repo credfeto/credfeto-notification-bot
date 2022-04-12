@@ -19,20 +19,19 @@ public sealed class TwitchChannelState : ITwitchChannelState
     private readonly ILogger _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
-    private readonly Streamer _streamerName;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
 
     private ActiveStream? _stream;
 
-    public TwitchChannelState(in Streamer streamerName,
+    public TwitchChannelState(in Streamer streamerStreamer,
                               TwitchBotOptions options,
                               IUserInfoService userInfoService,
                               ITwitchStreamDataManager twitchStreamDataManager,
                               IMediator mediator,
                               [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
-        this._streamerName = streamerName;
+        this.Streamer = streamerStreamer;
         this._options = options ?? throw new ArgumentNullException(nameof(options));
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
@@ -40,31 +39,33 @@ public sealed class TwitchChannelState : ITwitchChannelState
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    public Streamer Streamer { get; }
+
     public Task OnlineAsync(string gameName, in DateTime startDate)
     {
-        this._logger.LogInformation($"{this._streamerName}: Going Online...");
+        this._logger.LogInformation($"{this.Streamer}: Going Online...");
         this._stream = new(gameName: gameName, startedAt: startDate);
 
-        return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this._streamerName, streamStartDate: startDate);
+        return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this.Streamer, streamStartDate: startDate);
     }
 
     public void Offline()
     {
-        this._logger.LogInformation($"{this._streamerName}: Going Offline...");
+        this._logger.LogInformation($"{this.Streamer}: Going Offline...");
         this._stream = null;
     }
 
     public void ClearChat()
     {
-        this._logger.LogInformation($"{this._streamerName}: Potential incident - chat cleared.");
+        this._logger.LogInformation($"{this.Streamer}: Potential incident - chat cleared.");
         this._stream?.AddIncident();
     }
 
     public async Task RaidedAsync(Viewer raider, int viewerCount, CancellationToken cancellationToken)
     {
-        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this._streamerName))
+        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this.Streamer))
         {
-            await this._mediator.Publish(new TwitchStreamRaided(streamer: this._streamerName, raider: raider, viewerCount: viewerCount), cancellationToken: cancellationToken);
+            await this._mediator.Publish(new TwitchStreamRaided(streamer: this.Streamer, raider: raider, viewerCount: viewerCount), cancellationToken: cancellationToken);
         }
     }
 
@@ -72,14 +73,14 @@ public sealed class TwitchChannelState : ITwitchChannelState
     {
         if (this._stream == null)
         {
-            this._logger.LogDebug($"{this._streamerName}: Message from {user} while stream offline");
+            this._logger.LogDebug($"{this.Streamer}: Message from {user} while stream offline");
 
             return;
         }
 
-        if (!this._options.IsModChannel(this._streamerName))
+        if (!this._options.IsModChannel(this.Streamer))
         {
-            this._logger.LogDebug($"{this._streamerName}: Message from {user} that not modding for");
+            this._logger.LogDebug($"{this.Streamer}: Message from {user} that not modding for");
 
             return;
         }
@@ -89,19 +90,19 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return;
         }
 
-        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._streamerName, y: user))
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this.Streamer, y: user))
         {
-            this._logger.LogDebug($"{this._streamerName}: Message from {user} that not modding for");
+            this._logger.LogDebug($"{this.Streamer}: Message from {user} that not modding for");
 
             return;
         }
 
         if (bits != 0)
         {
-            this._logger.LogDebug($"{this._streamerName}: {user} Gave {bits}");
+            this._logger.LogDebug($"{this.Streamer}: {user} Gave {bits}");
             this._stream.AddBitGifter(user: user, bits: bits);
 
-            await this._mediator.Publish(new TwitchBitsGift(streamer: this._streamerName, user: user, bits: bits), cancellationToken: cancellationToken);
+            await this._mediator.Publish(new TwitchBitsGift(streamer: this.Streamer, user: user, bits: bits), cancellationToken: cancellationToken);
         }
 
         if (this._options.IsIgnoredUser(user))
@@ -115,18 +116,18 @@ public sealed class TwitchChannelState : ITwitchChannelState
         }
 
         // note that this covers disconnections of the bot
-        bool firstTimeInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: this._streamerName, streamStartDate: this._stream.StartedAt, username: user);
+        bool firstTimeInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user);
 
         if (!firstTimeInStream)
         {
             return;
         }
 
-        bool isRegular = await this.IsRegularChatterAsync(streamer: this._streamerName, username: user);
+        bool isRegular = await this.IsRegularChatterAsync(streamer: this.Streamer, username: user);
 
-        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this._streamerName, streamStartDate: this._stream.StartedAt, username: user);
+        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user);
 
-        await this._mediator.Publish(new TwitchStreamNewChatter(streamer: this._streamerName, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
+        await this._mediator.Publish(new TwitchStreamNewChatter(streamer: this.Streamer, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
     }
 
     public Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken)
@@ -138,7 +139,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         this._stream.GiftedSub(giftedBy: giftedBy, count: count);
 
-        return this._mediator.Publish(new TwitchGiftSubMultiple(streamer: this._streamerName, user: giftedBy, count: count), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchGiftSubMultiple(streamer: this.Streamer, user: giftedBy, count: count), cancellationToken: cancellationToken);
     }
 
     public Task GiftedSubAsync(Viewer giftedBy, string months, in CancellationToken cancellationToken)
@@ -155,7 +156,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchGiftSubSingle(streamer: this._streamerName, user: giftedBy), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchGiftSubSingle(streamer: this.Streamer, user: giftedBy), cancellationToken: cancellationToken);
     }
 
     public Task ContinuedSubAsync(Viewer user, in CancellationToken cancellationToken)
@@ -196,7 +197,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchNewPaidSub(streamer: this._streamerName, user: user), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchNewPaidSub(streamer: this.Streamer, user: user), cancellationToken: cancellationToken);
     }
 
     public Task NewSubscriberPrimeAsync(Viewer user, in CancellationToken cancellationToken)
@@ -213,7 +214,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchNewPrimeSub(streamer: this._streamerName, user: user), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchNewPrimeSub(streamer: this.Streamer, user: user), cancellationToken: cancellationToken);
     }
 
     public Task ResubscribePaidAsync(Viewer user, int months, in CancellationToken cancellationToken)
@@ -230,7 +231,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchPaidReSub(streamer: this._streamerName, user: user), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchPaidReSub(streamer: this.Streamer, user: user), cancellationToken: cancellationToken);
     }
 
     public Task ResubscribePrimeAsync(Viewer user, int months, in CancellationToken cancellationToken)
@@ -247,13 +248,13 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return Task.CompletedTask;
         }
 
-        return this._mediator.Publish(new TwitchPrimeReSub(streamer: this._streamerName, user: user), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new TwitchPrimeReSub(streamer: this.Streamer, user: user), cancellationToken: cancellationToken);
     }
 
     public async Task NewFollowerAsync(Viewer user, CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"{this._streamerName}: Followed by {user}");
-        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: this._streamerName, username: user);
+        this._logger.LogInformation($"{this.Streamer}: Followed by {user}");
+        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: this.Streamer, username: user);
 
         TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user);
 
@@ -261,11 +262,11 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            model = new(streamer: this._streamerName, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
+            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
         }
         else
         {
-            model = new(streamer: this._streamerName, user: user, this._stream != null, isStreamer: false, accountCreated: DateTime.MinValue, followCount: followCount);
+            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: false, accountCreated: DateTime.MinValue, followCount: followCount);
         }
 
         await this._mediator.Publish(notification: model, cancellationToken: cancellationToken);
