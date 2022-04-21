@@ -9,6 +9,8 @@ public interface ITwitchChannelState
 {
     Streamer Streamer { get; }
 
+    bool IsOnline { get; }
+
     Task OnlineAsync(string gameName, in DateTime startDate);
 
     void Offline();

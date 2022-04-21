@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
 
-[DebuggerDisplay("{_streamerName}")]
+[DebuggerDisplay("{Streamer}")]
 public sealed class TwitchChannelState : ITwitchChannelState
 {
     private readonly ILogger _logger;
@@ -40,6 +40,8 @@ public sealed class TwitchChannelState : ITwitchChannelState
     }
 
     public Streamer Streamer { get; }
+
+    public bool IsOnline => this._stream != null;
 
     public Task OnlineAsync(string gameName, in DateTime startDate)
     {
