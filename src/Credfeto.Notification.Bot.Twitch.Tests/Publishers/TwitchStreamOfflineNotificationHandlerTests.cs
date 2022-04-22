@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;

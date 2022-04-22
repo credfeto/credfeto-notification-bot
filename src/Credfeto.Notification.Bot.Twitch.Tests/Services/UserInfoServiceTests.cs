@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Options;

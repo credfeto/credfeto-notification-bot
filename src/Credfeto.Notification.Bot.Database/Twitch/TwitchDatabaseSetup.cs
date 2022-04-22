@@ -4,6 +4,7 @@ using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
 using Credfeto.Notification.Bot.Database.Twitch.DataManagers;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Credfeto.Notification.Bot.Database.Twitch;

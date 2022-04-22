@@ -7,6 +7,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;

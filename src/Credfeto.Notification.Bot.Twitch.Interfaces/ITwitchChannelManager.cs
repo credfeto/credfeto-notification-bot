@@ -1,6 +1,6 @@
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
-namespace Credfeto.Notification.Bot.Twitch;
+namespace Credfeto.Notification.Bot.Twitch.Interfaces;
 
 /// <summary>
 ///     Twitch stream

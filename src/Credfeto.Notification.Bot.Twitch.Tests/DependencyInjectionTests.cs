@@ -2,6 +2,7 @@ using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
 using MediatR;

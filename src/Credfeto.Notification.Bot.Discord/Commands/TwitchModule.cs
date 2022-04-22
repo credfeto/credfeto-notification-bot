@@ -2,9 +2,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-using Credfeto.Notification.Bot.Twitch;
-using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Discord;
 using Discord.Commands;
 

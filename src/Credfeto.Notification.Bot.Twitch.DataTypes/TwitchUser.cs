@@ -1,8 +1,7 @@
 using System;
 using System.Diagnostics;
-using Credfeto.Notification.Bot.Twitch.DataTypes;
 
-namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
+namespace Credfeto.Notification.Bot.Twitch.DataTypes;
 
 /// <summary>
 ///     A Twitch user.

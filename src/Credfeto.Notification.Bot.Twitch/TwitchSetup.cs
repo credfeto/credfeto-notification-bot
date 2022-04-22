@@ -3,6 +3,7 @@ using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.BackgroundServices;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Services;
 using Credfeto.Notification.Bot.Twitch.Startup;
 using Microsoft.Extensions.DependencyInjection;
