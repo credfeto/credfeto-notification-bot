@@ -130,7 +130,11 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user);
 
-        await this._mediator.Publish(new TwitchStreamNewChatter(streamer: this.Streamer, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
+        if (!this._options.IsIgnoredUser(user))
+        {
+            // no point in welcoming ignored users
+            await this._mediator.Publish(new TwitchStreamNewChatter(streamer: this.Streamer, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
+        }
     }
 
     public Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken)
