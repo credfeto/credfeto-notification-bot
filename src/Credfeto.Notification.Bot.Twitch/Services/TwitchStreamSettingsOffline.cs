@@ -4,7 +4,7 @@ using Credfeto.Notification.Bot.Twitch.Interfaces;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
-public sealed class TwitchStreamSettingsOffline : TwitchStreamSettingsBase, ITwitchStreamSettings
+internal sealed class TwitchStreamSettingsOffline : TwitchStreamSettingsBase, ITwitchStreamSettings
 {
     public TwitchStreamSettingsOffline(TwitchBotOptions options, in Streamer streamer)
         : base(options: options, streamer: streamer)

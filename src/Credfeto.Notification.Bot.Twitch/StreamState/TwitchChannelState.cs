@@ -51,7 +51,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
     public Task OnlineAsync(string gameName, in DateTime startDate)
     {
         this._logger.LogInformation($"{this.Streamer}: Going Online...");
-        this._stream = new(gameName: gameName, startedAt: startDate, new TwitchStreamSettingsOnline(options: this._options, streamer: this.Streamer));
+        this._stream = new(gameName: gameName, startedAt: startDate, new TwitchStreamSettingsOnline(options: this._options, streamer: this.Streamer, logger: this._logger));
 
         return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this.Streamer, streamStartDate: startDate);
     }

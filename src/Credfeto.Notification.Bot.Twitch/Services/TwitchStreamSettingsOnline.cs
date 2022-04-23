@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
-public sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITwitchStreamSettings
+internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITwitchStreamSettings
 {
     private readonly ILogger _logger;
     private readonly Streamer _streamer;
@@ -23,18 +23,20 @@ public sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITwit
 
     public bool OverrideWelcomes(bool value)
     {
-        if (this.CanOverrideWelcomes)
+        if (!this.CanOverrideWelcomes)
         {
-            if (this.WelcomesEnabled != value)
-            {
-                this.WelcomesEnabled = value;
-                this._logger.LogWarning($"{this._streamer}: Regular chatter welcomes have been {AsEnabled(value)}.");
-            }
+            return false;
+        }
 
+        if (this.WelcomesEnabled == value)
+        {
             return true;
         }
 
-        return false;
+        this.WelcomesEnabled = value;
+        this._logger.LogWarning($"{this._streamer}: Regular chatter welcomes have been {AsEnabled(value)}.");
+
+        return true;
     }
 
     private static string AsEnabled(bool value)
