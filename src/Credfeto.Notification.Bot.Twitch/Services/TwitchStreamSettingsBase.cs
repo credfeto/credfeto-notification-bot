@@ -14,5 +14,9 @@ public abstract class TwitchStreamSettingsBase
 
     protected TwitchModChannel ModChannel { get; }
 
-    protected bool CanOverrideWelcomes => !this.ModChannel.Welcome.Enabled;
+    protected bool CanOverrideChatWelcomes => !this.ModChannel.Welcome.Enabled;
+
+    protected bool CanOverrideRaidWelcomes => !this.ModChannel.Raids.Enabled;
+
+    protected bool CanOverrideThanks => !this.ModChannel.Thanks.Enabled;
 }

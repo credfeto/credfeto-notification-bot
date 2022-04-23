@@ -16,25 +16,67 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
     {
         this._streamer = streamer;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this.WelcomesEnabled = this.ModChannel.Welcome.Enabled;
+        this.ChatWelcomesEnabled = this.ModChannel.Welcome.Enabled;
+        this.RaidWelcomesEnabled = this.ModChannel.Raids.Enabled;
+        this.ThanksEnabled = this.ModChannel.Thanks.Enabled;
     }
 
-    public bool WelcomesEnabled { get; private set; }
+    public bool ChatWelcomesEnabled { get; private set; }
 
     public bool OverrideWelcomes(bool value)
     {
-        if (!this.CanOverrideWelcomes)
+        if (!this.CanOverrideChatWelcomes)
         {
             return false;
         }
 
-        if (this.WelcomesEnabled == value)
+        if (this.ChatWelcomesEnabled == value)
         {
             return true;
         }
 
-        this.WelcomesEnabled = value;
+        this.ChatWelcomesEnabled = value;
         this._logger.LogWarning($"{this._streamer}: Regular chatter welcomes have been {AsEnabled(value)}.");
+
+        return true;
+    }
+
+    public bool RaidWelcomesEnabled { get; private set; }
+
+    public bool OverrideRaidWelcomes(bool value)
+    {
+        if (!this.CanOverrideRaidWelcomes)
+        {
+            return false;
+        }
+
+        if (this.RaidWelcomesEnabled == value)
+        {
+            return true;
+        }
+
+        this.RaidWelcomesEnabled = value;
+        this._logger.LogWarning($"{this._streamer}: Raid welcomes have been {AsEnabled(value)}.");
+
+        return true;
+    }
+
+    public bool ThanksEnabled { get; private set; }
+
+    public bool OverrideThanks(bool value)
+    {
+        if (!this.CanOverrideThanks)
+        {
+            return false;
+        }
+
+        if (this.ThanksEnabled == value)
+        {
+            return true;
+        }
+
+        this.ThanksEnabled = value;
+        this._logger.LogWarning($"{this._streamer}: Thanks have been {AsEnabled(value)}.");
 
         return true;
     }

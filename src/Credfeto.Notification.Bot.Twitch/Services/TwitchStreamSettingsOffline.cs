@@ -9,12 +9,28 @@ internal sealed class TwitchStreamSettingsOffline : TwitchStreamSettingsBase, IT
     public TwitchStreamSettingsOffline(TwitchBotOptions options, in Streamer streamer)
         : base(options: options, streamer: streamer)
     {
-        this.WelcomesEnabled = this.ModChannel.Welcome.Enabled;
+        this.ChatWelcomesEnabled = this.ModChannel.Welcome.Enabled;
+        this.RaidWelcomesEnabled = this.ModChannel.Raids.Enabled;
+        this.ThanksEnabled = this.ModChannel.Thanks.Enabled;
     }
 
-    public bool WelcomesEnabled { get; }
+    public bool ChatWelcomesEnabled { get; }
 
     public bool OverrideWelcomes(bool value)
+    {
+        return false;
+    }
+
+    public bool RaidWelcomesEnabled { get; }
+
+    public bool OverrideRaidWelcomes(bool value)
+    {
+        return false;
+    }
+
+    public bool ThanksEnabled { get; }
+
+    public bool OverrideThanks(bool value)
     {
         return false;
     }

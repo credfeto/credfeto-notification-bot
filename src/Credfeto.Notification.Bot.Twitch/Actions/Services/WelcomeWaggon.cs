@@ -25,7 +25,7 @@ public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
     {
         ITwitchChannelState channel = this._twitchChannelManager.GetStreamer(streamer);
 
-        if (!channel.Settings.WelcomesEnabled)
+        if (!channel.Settings.ChatWelcomesEnabled)
         {
             return;
         }

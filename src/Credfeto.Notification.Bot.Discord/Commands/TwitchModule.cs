@@ -57,7 +57,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
                                         .WithUrl($"https://twitch.tv/{streamerStatus.Streamer}")
                                         .AddField(name: "Online", value: streamerStatus.IsOnline)
                                         .AddField(name: "Followers", value: followCount)
-                                        .AddField(name: "Welcome regulars", value: streamerStatus.Settings.WelcomesEnabled)
+                                        .AddField(name: "Welcome regulars", value: streamerStatus.Settings.ChatWelcomesEnabled)
                                         .Build();
 
         await this.ReplyAsync(embed: embed);

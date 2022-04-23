@@ -26,7 +26,7 @@ public sealed class WelcomeWaggonTests : TestBase
         ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
 
         ITwitchChannelState channel = GetSubstitute<ITwitchChannelState>();
-        channel.Settings.WelcomesEnabled.Returns(true);
+        channel.Settings.ChatWelcomesEnabled.Returns(true);
         twitchChannelManager.GetStreamer(Streamer)
                             .Returns(channel);
 
