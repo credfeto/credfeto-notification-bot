@@ -2,33 +2,30 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
-using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
-using Credfeto.Notification.Bot.Twitch.Extensions;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
 public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
 {
     private readonly ILogger<WelcomeWaggon> _logger;
-    private readonly TwitchBotOptions _options;
+    private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public WelcomeWaggon(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<WelcomeWaggon> logger)
+    public WelcomeWaggon(ITwitchChannelManager twitchChannelManager, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<WelcomeWaggon> logger)
         : base(twitchChatMessageChannel)
     {
+        this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-        this._options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
     public async Task IssueWelcomeAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
+        ITwitchChannelState channel = this._twitchChannelManager.GetChannel(streamer);
 
-        if (modChannel?.Welcome.Enabled != true)
+        if (!channel.Settings.WelcomesEnabled)
         {
             return;
         }

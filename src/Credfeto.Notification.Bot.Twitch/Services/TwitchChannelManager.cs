@@ -2,6 +2,7 @@ using System;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using MediatR;
@@ -37,6 +38,11 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     /// <inheritdoc />
     public ITwitchChannelState GetChannel(Streamer streamer)
     {
+        if (!this._options.IsModChannel(streamer))
+        {
+            throw new ArgumentOutOfRangeException(nameof(streamer), actualValue: streamer, message: "The streamer is not a mod channel");
+        }
+
         if (this._streamStates.TryGetValue(key: streamer, out TwitchChannelState? state))
         {
             return state;

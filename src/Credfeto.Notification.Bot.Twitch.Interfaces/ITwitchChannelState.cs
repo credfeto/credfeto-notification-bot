@@ -11,6 +11,8 @@ public interface ITwitchChannelState
 
     bool IsOnline { get; }
 
+    ITwitchStreamSettings Settings { get; }
+
     Task OnlineAsync(string gameName, in DateTime startDate);
 
     void Offline();

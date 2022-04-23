@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using NonBlocking;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
@@ -18,10 +19,11 @@ internal sealed class ActiveStream
 
     private int _incidents;
 
-    public ActiveStream(string gameName, in DateTime startedAt)
+    public ActiveStream(string gameName, in DateTime startedAt, ITwitchStreamSettings settings)
     {
         this.GameName = gameName;
         this.StartedAt = startedAt;
+        this.Settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
         this._incidents = 0;
         this._raiders = new();
@@ -35,6 +37,8 @@ internal sealed class ActiveStream
     public string GameName { get; }
 
     public DateTime StartedAt { get; }
+
+    public ITwitchStreamSettings Settings { get; }
 
     public bool AddRaider(in Viewer raider, int viewerCount)
     {

@@ -9,6 +9,7 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -19,6 +20,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 {
     private readonly ILogger _logger;
     private readonly IMediator _mediator;
+    private readonly ITwitchStreamSettings _offlineStreamSettings;
     private readonly TwitchBotOptions _options;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
     private readonly IUserInfoService _userInfoService;
@@ -38,6 +40,8 @@ public sealed class TwitchChannelState : ITwitchChannelState
         this._twitchStreamDataManager = twitchStreamDataManager ?? throw new ArgumentNullException(nameof(twitchStreamDataManager));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+        this._offlineStreamSettings = new TwitchStreamSettingsOffline(options: this._options, streamer: this.Streamer);
     }
 
     public Streamer Streamer { get; }
@@ -47,7 +51,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
     public Task OnlineAsync(string gameName, in DateTime startDate)
     {
         this._logger.LogInformation($"{this.Streamer}: Going Online...");
-        this._stream = new(gameName: gameName, startedAt: startDate);
+        this._stream = new(gameName: gameName, startedAt: startDate, new TwitchStreamSettingsOnline(options: this._options, streamer: this.Streamer));
 
         return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this.Streamer, streamStartDate: startDate);
     }
@@ -275,6 +279,8 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         await this._mediator.Publish(notification: model, cancellationToken: cancellationToken);
     }
+
+    public ITwitchStreamSettings Settings => this._stream?.Settings ?? this._offlineStreamSettings;
 
     private async Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username)
     {

@@ -3,11 +3,10 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
-using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
-using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -24,10 +23,14 @@ public sealed class WelcomeWaggonTests : TestBase
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
 
-        IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Streamer.ToString(), Welcome = new() { Enabled = true } } } });
+        ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
 
-        this._welcomeWaggon = new WelcomeWaggon(options: options, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<WelcomeWaggon>());
+        ITwitchChannelState channel = GetSubstitute<ITwitchChannelState>();
+        channel.Settings.WelcomesEnabled.Returns(true);
+        twitchChannelManager.GetChannel(Streamer)
+                            .Returns(channel);
+
+        this._welcomeWaggon = new WelcomeWaggon(twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<WelcomeWaggon>());
     }
 
     [Fact]
