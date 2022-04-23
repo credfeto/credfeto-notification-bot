@@ -20,9 +20,9 @@ public sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITwit
         {
             this.WelcomesEnabled = value;
 
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 }
