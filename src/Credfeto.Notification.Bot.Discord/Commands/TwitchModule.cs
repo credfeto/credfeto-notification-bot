@@ -29,7 +29,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     ///     Gets the status of a streamer
     /// </summary>
     [Command("status")]
-    [Summary(text: "Shows the status of the service")]
+    [Summary(text: "Shows the status of a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
     public async Task StatusAsync(string streamer)
     {
@@ -60,5 +60,25 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
                                         .Build();
 
         await this.ReplyAsync(embed: embed);
+    }
+
+    /// <summary>
+    ///     Gets the status of a streamer
+    /// </summary>
+    [Command("welcome")]
+    [Summary(text: "Enables or disables the welcome messages for a streamer")]
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
+    public async Task WelcomeWaggonAsync(string streamer, bool enabled = true)
+    {
+        ITwitchChannelState channel = this._twitchChannelManager.GetChannel(Streamer.FromString(streamer));
+
+        if (channel.Settings.OverrideWelcomes(enabled))
+        {
+            await this.ReplyAsync($"Welcomes for regular {streamer} chatters are now {(enabled ? "enabled" : "disabled")}");
+        }
+        else
+        {
+            await this.ReplyAsync($"Welcomes for regular {streamer} chatters unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+        }
     }
 }
