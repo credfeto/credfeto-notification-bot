@@ -23,7 +23,7 @@ public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
 
     public async Task IssueWelcomeAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        ITwitchChannelState channel = this._twitchChannelManager.GetChannel(streamer);
+        ITwitchChannelState channel = this._twitchChannelManager.GetStreamer(streamer);
 
         if (!channel.Settings.WelcomesEnabled)
         {

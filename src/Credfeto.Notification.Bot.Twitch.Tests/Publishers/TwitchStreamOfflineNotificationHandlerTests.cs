@@ -30,13 +30,13 @@ public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        this._twitchChannelManager.GetChannel(Streamer)
+        this._twitchChannelManager.GetStreamer(Streamer)
             .Returns(this._twitchChannelState);
 
         await this._notificationHandler.Handle(new(streamer: Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.Received(1)
-            .GetChannel(Streamer);
+            .GetStreamer(Streamer);
 
         this._twitchChannelState.Received(1)
             .Offline();

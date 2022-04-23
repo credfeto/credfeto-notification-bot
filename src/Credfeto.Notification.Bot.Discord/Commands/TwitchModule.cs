@@ -45,7 +45,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         int followCount = await this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: s, cancellationToken: CancellationToken.None);
 
-        ITwitchChannelState streamerStatus = this._twitchChannelManager.GetChannel(s);
+        ITwitchChannelState streamerStatus = this._twitchChannelManager.GetStreamer(s);
 
         string title = $"{streamerStatus.Streamer} Current Status.";
 
@@ -57,6 +57,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
                                         .WithUrl($"https://twitch.tv/{streamerStatus.Streamer}")
                                         .AddField(name: "Online", value: streamerStatus.IsOnline)
                                         .AddField(name: "Followers", value: followCount)
+                                        .AddField(name: "Welcome regulars", value: streamerStatus.Settings.WelcomesEnabled)
                                         .Build();
 
         await this.ReplyAsync(embed: embed);
@@ -70,7 +71,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
     public async Task WelcomeWaggonAsync(string streamer, bool enabled = true)
     {
-        ITwitchChannelState channel = this._twitchChannelManager.GetChannel(Streamer.FromString(streamer));
+        ITwitchChannelState channel = this._twitchChannelManager.GetStreamer(Streamer.FromString(streamer));
 
         if (channel.Settings.OverrideWelcomes(enabled))
         {

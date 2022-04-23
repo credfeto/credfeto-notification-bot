@@ -32,7 +32,7 @@ public sealed class TwitchStreamOfflineNotificationHandler : INotificationHandle
     {
         this._logger.LogWarning($"{notification.Streamer}: Stopped streaming \"{notification.Title}\" ({notification.GameName}) at {notification.StartedAt}");
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(notification.Streamer);
+        ITwitchChannelState state = this._twitchChannelManager.GetStreamer(notification.Streamer);
 
         try
         {

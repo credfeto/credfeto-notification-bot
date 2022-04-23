@@ -36,7 +36,7 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
     }
 
     /// <inheritdoc />
-    public ITwitchChannelState GetChannel(Streamer streamer)
+    public ITwitchChannelState GetStreamer(Streamer streamer)
     {
         if (!this._options.IsModChannel(streamer))
         {

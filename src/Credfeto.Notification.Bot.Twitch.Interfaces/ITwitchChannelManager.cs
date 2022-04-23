@@ -12,5 +12,5 @@ public interface ITwitchChannelManager
     /// </summary>
     /// <param name="streamer">The channel name.</param>
     /// <returns></returns>
-    ITwitchChannelState GetChannel(Streamer streamer);
+    ITwitchChannelState GetStreamer(Streamer streamer);
 }

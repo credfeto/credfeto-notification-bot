@@ -27,7 +27,7 @@ public sealed class WelcomeWaggonTests : TestBase
 
         ITwitchChannelState channel = GetSubstitute<ITwitchChannelState>();
         channel.Settings.WelcomesEnabled.Returns(true);
-        twitchChannelManager.GetChannel(Streamer)
+        twitchChannelManager.GetStreamer(Streamer)
                             .Returns(channel);
 
         this._welcomeWaggon = new WelcomeWaggon(twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<WelcomeWaggon>());

@@ -176,7 +176,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
             return Task.CompletedTask;
         }
 
-        ITwitchChannelState state = this._twitchChannelManager.GetChannel(channelName);
+        ITwitchChannelState state = this._twitchChannelManager.GetStreamer(channelName);
 
         return state.NewFollowerAsync(user: user, cancellationToken: cancellationToken);
     }
