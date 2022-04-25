@@ -84,4 +84,38 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
             await this.ReplyAsync($"Welcomes for regular {streamer} chatters unchanged. Status: {(enabled ? "enabled" : "disabled")}");
         }
     }
+
+    /// <summary>
+    ///     Gets the status of a streamer
+    /// </summary>
+    [Command("thanks")]
+    [Summary(text: "Enables or disables the thanks for a streamer")]
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
+    public async Task ThanksAsync(string streamer, bool enabled = true)
+    {
+        ITwitchChannelState channel = this._twitchChannelManager.GetStreamer(Streamer.FromString(streamer));
+
+        if (channel.Settings.OverrideThanks(enabled))
+        {
+            await this.ReplyAsync($"Thanks for {streamer} gifts  are now {(enabled ? "enabled" : "disabled")}");
+        }
+        else
+        {
+            await this.ReplyAsync($"Thanks for {streamer} gifts unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+        }
+    }
+
+    /// <summary>
+    ///     Turns automod on/off for a streamer
+    /// </summary>
+    [Command("automod")]
+    [Summary(text: "Enables or disables automod for a streamer")]
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
+    public async Task AutoModAsync(string streamer, bool enabled = true)
+    {
+        await this.StatusAsync(streamer);
+        await this.WelcomeWaggonAsync(streamer: streamer, enabled: enabled);
+        await this.ThanksAsync(streamer: streamer, enabled: enabled);
+        await this.StatusAsync(streamer);
+    }
 }
