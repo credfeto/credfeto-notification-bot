@@ -5,6 +5,7 @@ using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Options;
@@ -30,7 +31,13 @@ public sealed class ContributionThanksTests : TestBase
         IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Streamer.ToString(), Thanks = new() { Enabled = true } } } });
 
-        this._contributionThanks = new ContributionThanks(options: options,
+        ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
+        ITwitchChannelState twitchChannelState = GetSubstitute<ITwitchChannelState>();
+        twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
+                            .Returns(twitchChannelState);
+        twitchChannelState.Settings.ThanksEnabled.Returns(true);
+
+        this._contributionThanks = new ContributionThanks(twitchChannelManager: twitchChannelManager,
                                                           twitchChatMessageChannel: this._twitchChatMessageChannel,
                                                           currentTimeSource: this._currentTimeSource,
                                                           this.GetTypedLogger<ContributionThanks>());

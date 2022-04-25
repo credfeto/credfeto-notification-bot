@@ -2,12 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
-using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
-using Credfeto.Notification.Bot.Twitch.Extensions;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NonBlocking;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
@@ -19,25 +17,25 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     private readonly ConcurrentDictionary<Streamer, SubDonorTracker> _donors;
     private readonly ILogger<ContributionThanks> _logger;
-    private readonly TwitchBotOptions _options;
+    private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public ContributionThanks(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ICurrentTimeSource currentTimeSource, ILogger<ContributionThanks> logger)
+    public ContributionThanks(ITwitchChannelManager twitchChannelManager,
+                              IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                              ICurrentTimeSource currentTimeSource,
+                              ILogger<ContributionThanks> logger)
         : base(twitchChatMessageChannel)
     {
+        this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._currentTimeSource = currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         this._donors = new();
         this._donorLock = new(1);
-
-        this._options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
     public async Task ThankForBitsAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
-
-        if (modChannel?.Thanks.Enabled != true)
+        if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
@@ -49,9 +47,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public async Task ThankForNewPrimeSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
-
-        if (modChannel?.Thanks.Enabled != true)
+        if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
@@ -63,9 +59,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public async Task ThankForPrimeReSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
-
-        if (modChannel?.Thanks.Enabled != true)
+        if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
@@ -77,9 +71,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public async Task ThankForPaidReSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
-
-        if (modChannel?.Thanks.Enabled != true)
+        if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
@@ -91,9 +83,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public async Task ThankForNewPaidSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
-
-        if (modChannel?.Thanks.Enabled != true)
+        if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
@@ -105,9 +95,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public async Task ThankForMultipleGiftSubsAsync(Streamer streamer, Viewer giftedBy, int count, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
-
-        if (modChannel?.Thanks.Enabled != true)
+        if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
@@ -126,9 +114,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public async Task ThankForGiftingSubAsync(Streamer streamer, Viewer giftedBy, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
-
-        if (modChannel?.Thanks.Enabled != true)
+        if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
@@ -147,9 +133,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
     public Task ThankForFollowAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
-
-        if (modChannel?.Thanks.Enabled != true)
+        if (!this.IsThanksEnabled(streamer))
         {
             return Task.CompletedTask;
         }
@@ -157,6 +141,12 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._logger.LogInformation($"{streamer}: Thanks @{user} for following");
 
         return Task.CompletedTask;
+    }
+
+    private bool IsThanksEnabled(in Streamer streamer)
+    {
+        return this._twitchChannelManager.GetStreamer(streamer)
+                   .Settings.ThanksEnabled;
     }
 
     private async Task<bool> WasLastSubDonorAsync(Streamer streamer, Viewer giftedBy)
