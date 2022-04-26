@@ -62,6 +62,7 @@ public static class TwitchSetup
                        .AddSingleton<IHeistJoiner, HeistJoiner>()
                        .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
                        .AddSingleton<IContributionThanks, ContributionThanks>()
+                       .AddSingleton<IHoster, Hoster>()
                        .AddSingleton<IWelcomeWaggon, WelcomeWaggon>();
     }
 
