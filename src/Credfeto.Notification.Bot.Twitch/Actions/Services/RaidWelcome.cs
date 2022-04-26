@@ -2,33 +2,30 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
-using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
-using Credfeto.Notification.Bot.Twitch.Extensions;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
 public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
 {
     private readonly ILogger<RaidWelcome> _logger;
-    private readonly TwitchBotOptions _options;
+    private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public RaidWelcome(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<RaidWelcome> logger)
+    public RaidWelcome(ITwitchChannelManager twitchChannelManager, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<RaidWelcome> logger)
         : base(twitchChatMessageChannel)
     {
+        this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-        this._options = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
     public async Task IssueRaidWelcomeAsync(Streamer streamer, Viewer raider, CancellationToken cancellationToken)
     {
-        TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
+        ITwitchChannelState modChannel = this._twitchChannelManager.GetStreamer(streamer);
 
-        if (modChannel?.Raids.Enabled != true)
+        if (modChannel.Settings.RaidWelcomesEnabled)
         {
             return;
         }

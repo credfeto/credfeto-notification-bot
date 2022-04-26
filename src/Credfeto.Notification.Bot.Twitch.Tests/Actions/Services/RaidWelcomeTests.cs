@@ -5,6 +5,7 @@ using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Options;
@@ -26,7 +27,13 @@ public sealed class RaidWelcomeTests : TestBase
         IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Streamer.ToString(), Raids = new() { Enabled = true } } } });
 
-        this._raidWelcome = new RaidWelcome(options: options, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
+        ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
+        ITwitchChannelState twitchChannelState = GetSubstitute<ITwitchChannelState>();
+        twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
+                            .Returns(twitchChannelState);
+        twitchChannelState.Settings.RaidWelcomesEnabled.Returns(true);
+
+        this._raidWelcome = new RaidWelcome(twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
     }
 
     [Fact]
