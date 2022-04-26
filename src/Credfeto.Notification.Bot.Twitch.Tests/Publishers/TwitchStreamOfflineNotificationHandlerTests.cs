@@ -1,11 +1,13 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -24,7 +26,12 @@ public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
         this._twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
         this._twitchChannelState = GetSubstitute<ITwitchChannelState>();
 
-        this._notificationHandler = new TwitchStreamOfflineNotificationHandler(twitchChannelManager: this._twitchChannelManager, this.GetTypedLogger<TwitchStreamOfflineNotificationHandler>());
+        IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
+        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Streamer.Value } } });
+
+        this._notificationHandler = new TwitchStreamOfflineNotificationHandler(options: options,
+                                                                               twitchChannelManager: this._twitchChannelManager,
+                                                                               this.GetTypedLogger<TwitchStreamOfflineNotificationHandler>());
     }
 
     [Fact]

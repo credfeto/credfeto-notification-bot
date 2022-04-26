@@ -25,7 +25,7 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
     {
         ITwitchChannelState modChannel = this._twitchChannelManager.GetStreamer(streamer);
 
-        if (modChannel.Settings.RaidWelcomesEnabled)
+        if (!modChannel.Settings.RaidWelcomesEnabled)
         {
             return;
         }
