@@ -158,6 +158,8 @@ public sealed class TwitchChat : ITwitchChat
 
         this._client.Connect();
         this._connected = true;
+
+        this._client.JoinChannel(this._options.Authentication.UserName);
     }
 
     public void JoinChat(Streamer streamer)

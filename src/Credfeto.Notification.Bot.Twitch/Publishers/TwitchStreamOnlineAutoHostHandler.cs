@@ -18,6 +18,6 @@ public sealed class TwitchStreamOnlineAutoHostHandler : INotificationHandler<Twi
 
     public Task Handle(TwitchStreamOnline notification, CancellationToken cancellationToken)
     {
-        return this._twitchChat.StreamOnlineAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
+        return this._twitchChat.StreamOnlineAsync(streamer: notification.Streamer, streamStartTime: notification.StartedAt, cancellationToken: cancellationToken);
     }
 }
