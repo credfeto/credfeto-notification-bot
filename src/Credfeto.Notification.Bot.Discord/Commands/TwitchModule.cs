@@ -88,6 +88,26 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     /// <summary>
     ///     Gets the status of a streamer
     /// </summary>
+    [Command("raid")]
+    [Summary(text: "Enables or disables the raid welcome messages for a streamer")]
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
+    public async Task RaidWelcomesAsync(string streamer, bool enabled = true)
+    {
+        ITwitchChannelState channel = this._twitchChannelManager.GetStreamer(Streamer.FromString(streamer));
+
+        if (channel.Settings.OverrideRaidWelcomes(enabled))
+        {
+            await this.ReplyAsync($"Raid Welcomes for regular {streamer} chatters are now {(enabled ? "enabled" : "disabled")}");
+        }
+        else
+        {
+            await this.ReplyAsync($"Raid Welcomes for regular {streamer} chatters unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+        }
+    }
+
+    /// <summary>
+    ///     Gets the status of a streamer
+    /// </summary>
     [Command("thanks")]
     [Summary(text: "Enables or disables the thanks for a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
@@ -115,6 +135,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     {
         await this.StatusAsync(streamer);
         await this.WelcomeWaggonAsync(streamer: streamer, enabled: enabled);
+        await this.RaidWelcomesAsync(streamer: streamer, enabled: enabled);
         await this.ThanksAsync(streamer: streamer, enabled: enabled);
         await this.StatusAsync(streamer);
     }
