@@ -16,11 +16,13 @@ public sealed class Hoster : MessageSenderBase, IHoster
     private readonly Streamer _bot;
     private readonly ILogger<Hoster> _logger;
     private readonly ConcurrentDictionary<Streamer, DateTime> _streamers;
+    private readonly ITwitchChat _twitchChat;
     private Streamer? _hosting;
 
-    public Hoster(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<Hoster> logger)
+    public Hoster(IOptions<TwitchBotOptions> options, ITwitchChat twitchChat, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<Hoster> logger)
         : base(twitchChatMessageChannel)
     {
+        this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         this._streamers = new();
@@ -28,12 +30,17 @@ public sealed class Hoster : MessageSenderBase, IHoster
         this._bot = Streamer.FromString((options ?? throw new ArgumentNullException(nameof(options))).Value.Authentication.UserName);
     }
 
-    public Task StreamOnlineAsync(Streamer streamer, DateTime streamStartTime, CancellationToken cancellationToken)
+    public async Task StreamOnlineAsync(Streamer streamer, DateTime streamStartTime, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{streamer}: hosting for stream [Online]");
-        this._streamers.TryAdd(key: streamer, value: streamStartTime);
 
-        return this.UpdateHostingAsync(cancellationToken);
+        if (!this._streamers.TryAdd(key: streamer, value: streamStartTime))
+        {
+            this._twitchChat.JoinChat(streamer);
+            await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken: cancellationToken);
+        }
+
+        await this.UpdateHostingAsync(cancellationToken);
     }
 
     public Task StreamOfflineAsync(Streamer streamer, CancellationToken cancellationToken)
