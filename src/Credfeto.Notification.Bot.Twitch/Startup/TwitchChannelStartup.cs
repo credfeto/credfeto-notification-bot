@@ -20,17 +20,20 @@ public sealed class TwitchChannelStartup : IRunOnStartup
     private readonly ILogger<TwitchChannelStartup> _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
-    private readonly ITwitchChannelManager _twitchChannelManager;
+    private readonly ITwitchChat _twitchChat;
+    private readonly ITwitchFollowerDetector _twitchFollowerDetector;
     private readonly IUserInfoService _userInfoService;
 
     public TwitchChannelStartup(IOptions<TwitchBotOptions> options,
                                 IUserInfoService userInfoService,
-                                ITwitchChannelManager twitchChannelManager,
+                                ITwitchChat twitchChat,
+                                ITwitchFollowerDetector twitchFollowerDetector,
                                 IMediator mediator,
                                 ILogger<TwitchChannelStartup> logger)
     {
         this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
-        this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
+        this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
+        this._twitchFollowerDetector = twitchFollowerDetector ?? throw new ArgumentNullException(nameof(twitchFollowerDetector));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
@@ -47,6 +50,11 @@ public sealed class TwitchChannelStartup : IRunOnStartup
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        // Explicitly join the bot's own channel
+        this._twitchChat.JoinChat(Streamer.FromString(this._options.Authentication.UserName));
+        this._logger.LogDebug(this._twitchFollowerDetector.GetType()
+                                  .FullName);
+
         foreach (Streamer streamer in this._channels)
         {
             this._logger.LogInformation($"Looking for channel {streamer}");
