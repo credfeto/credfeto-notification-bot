@@ -30,17 +30,16 @@ public sealed class Hoster : MessageSenderBase, IHoster
 
     public Task StreamOnlineAsync(Streamer streamer, DateTime streamStartTime, CancellationToken cancellationToken)
     {
-        if (!this._streamers.TryAdd(key: streamer, value: streamStartTime))
-        {
-            // already streaming
-            return Task.CompletedTask;
-        }
+        this._logger.LogInformation($"{streamer}: hosting for stream [Online]");
+        this._streamers.TryAdd(key: streamer, value: streamStartTime);
 
         return this.UpdateHostingAsync(cancellationToken);
     }
 
     public Task StreamOfflineAsync(Streamer streamer, CancellationToken cancellationToken)
     {
+        this._logger.LogInformation($"{streamer}: hosting for stream [Offline]");
+
         this._streamers.TryRemove(key: streamer, value: out _);
 
         return this.UpdateHostingAsync(cancellationToken);
