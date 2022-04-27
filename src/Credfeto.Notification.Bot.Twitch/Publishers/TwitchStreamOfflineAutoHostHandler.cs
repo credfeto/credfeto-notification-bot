@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-public sealed class TwitchStreamOfflineAutoHostHandler : INotificationHandler<TwitchStreamOnline>
+public sealed class TwitchStreamOfflineAutoHostHandler : INotificationHandler<TwitchStreamOffline>
 {
     private readonly IHoster _twitchChat;
 
@@ -16,7 +16,7 @@ public sealed class TwitchStreamOfflineAutoHostHandler : INotificationHandler<Tw
         this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
     }
 
-    public Task Handle(TwitchStreamOnline notification, CancellationToken cancellationToken)
+    public Task Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
     {
         return this._twitchChat.StreamOfflineAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
     }
