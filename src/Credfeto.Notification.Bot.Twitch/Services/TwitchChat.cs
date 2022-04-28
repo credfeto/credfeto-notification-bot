@@ -200,7 +200,7 @@ public sealed class TwitchChat : ITwitchChat
     {
         try
         {
-            this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> @{this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
+            this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> {this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
 
             this._client.SendMessage(channel: twitchChatMessage.Streamer.Value, message: twitchChatMessage.Message);
         }
