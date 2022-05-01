@@ -21,4 +21,6 @@ public abstract class TwitchStreamSettingsBase
     protected bool CanOverrideThanks => !this.ModChannel.Thanks.Enabled;
 
     protected bool CanOverrideAnnounceMilestones => this.ModChannel.MileStones.Enabled;
+
+    protected bool CanOverrideShoutOuts => this.ModChannel.ShoutOuts.Enabled;
 }

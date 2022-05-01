@@ -19,16 +19,15 @@ public sealed class UserInfoService : IUserInfoService
 
     private readonly ConcurrentDictionary<Viewer, TwitchUser?> _cache;
     private readonly ILogger<UserInfoService> _logger;
-    private readonly TwitchBotOptions _options;
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
 
     public UserInfoService(IOptions<TwitchBotOptions> options, ITwitchStreamerDataManager twitchStreamerDataManager, ILogger<UserInfoService> logger)
     {
         this._twitchStreamerDataManager = twitchStreamerDataManager ?? throw new ArgumentNullException(nameof(twitchStreamerDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+        TwitchBotOptions apiOptions = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
-        this._api = this._options.ConfigureTwitchApi();
+        this._api = apiOptions.ConfigureTwitchApi();
 
         this._cache = new();
     }

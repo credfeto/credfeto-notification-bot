@@ -4,8 +4,8 @@ using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.Configuration;
-using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Options;
@@ -53,7 +53,20 @@ public sealed class ShoutoutJoinerTests : TestBase
 
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
 
-        this._shoutoutJoiner = new ShoutoutJoiner(options: options, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<ShoutoutJoiner>());
+        ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
+        ITwitchChannelState shoutOutsEnabled = GetSubstitute<ITwitchChannelState>();
+        shoutOutsEnabled.Settings.ShoutOutsEnabled.Returns(true);
+        twitchChannelManager.GetStreamer(StreamerShoutOutsEnabled)
+                            .Returns(shoutOutsEnabled);
+        ITwitchChannelState shoutOutsDisabled = GetSubstitute<ITwitchChannelState>();
+        shoutOutsDisabled.Settings.ShoutOutsEnabled.Returns(false);
+        twitchChannelManager.GetStreamer(StreamerShoutOutsDisabled)
+                            .Returns(shoutOutsDisabled);
+
+        this._shoutoutJoiner = new ShoutoutJoiner(options: options,
+                                                  twitchChannelManager: twitchChannelManager,
+                                                  twitchChatMessageChannel: this._twitchChatMessageChannel,
+                                                  this.GetTypedLogger<ShoutoutJoiner>());
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)

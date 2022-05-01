@@ -20,9 +20,28 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
         this.RaidWelcomesEnabled = this.ModChannel.Raids.Enabled;
         this.ThanksEnabled = this.ModChannel.Thanks.Enabled;
         this.AnnounceMilestonesEnabled = this.ModChannel.MileStones.Enabled;
+        this.ShoutOutsEnabled = this.ModChannel.ShoutOuts.Enabled;
     }
 
     public bool ChatWelcomesEnabled { get; private set; }
+
+    public bool OverrideShoutOuts(bool value)
+    {
+        if (!this.CanOverrideShoutOuts)
+        {
+            return false;
+        }
+
+        if (this.ShoutOutsEnabled == value)
+        {
+            return true;
+        }
+
+        this.ShoutOutsEnabled = value;
+        this._logger.LogWarning($"{this._streamer}: Shout-Outs have been {AsEnabled(value)}.");
+
+        return true;
+    }
 
     public bool OverrideWelcomes(bool value)
     {
@@ -82,7 +101,9 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
         return true;
     }
 
-    public bool AnnounceMilestonesEnabled { get; }
+    public bool AnnounceMilestonesEnabled { get; private set; }
+
+    public bool ShoutOutsEnabled { get; private set; }
 
     public bool OverrideMilestonesEnabled(bool value)
     {
@@ -96,7 +117,7 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
             return true;
         }
 
-        this.ThanksEnabled = value;
+        this.AnnounceMilestonesEnabled = value;
         this._logger.LogWarning($"{this._streamer}: Milestone announcements have been {AsEnabled(value)}.");
 
         return true;

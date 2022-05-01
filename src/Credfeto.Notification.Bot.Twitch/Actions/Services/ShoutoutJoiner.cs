@@ -3,9 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
-using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
-using Credfeto.Notification.Bot.Twitch.Extensions;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,11 +15,14 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 {
     private readonly ILogger<ShoutoutJoiner> _logger;
     private readonly TwitchBotOptions _options;
+    private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public ShoutoutJoiner(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<ShoutoutJoiner> logger)
+    public ShoutoutJoiner(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<ShoutoutJoiner> logger)
         : base(twitchChatMessageChannel)
     {
+        this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
@@ -28,41 +30,48 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
     {
         try
         {
-            TwitchModChannel? modChannel = this._options.GetModChannel(streamer);
+            ITwitchChannelState channelState = this._twitchChannelManager.GetStreamer(streamer);
 
-            if (modChannel?.ShoutOuts.Enabled != true)
+            if (!channelState.Settings.ShoutOutsEnabled)
             {
                 return false;
             }
 
-            TwitchFriendChannel? twitchFriendChannel =
-                modChannel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
+            TwitchModChannel? channel = this._options.Channels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: streamer.Value));
 
-            if (twitchFriendChannel == null)
+            if (channel != null)
             {
-                if (isRegular)
-                {
-                    await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
+                TwitchFriendChannel? twitchFriendChannel =
+                    channel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
 
-                    return true;
+                if (twitchFriendChannel == null)
+                {
+                    this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "NEW");
+
+                    return false;
                 }
 
-                this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "NEW");
+                if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
+                {
+                    await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
+                }
+                else
+                {
+                    await this.SendMessageAsync(streamer: streamer, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
+                    this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
+                }
 
-                return false;
+                return true;
             }
 
-            if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
+            if (isRegular)
             {
-                await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
-            }
-            else
-            {
-                await this.SendMessageAsync(streamer: streamer, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
-                this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
+                await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
+
+                return true;
             }
 
-            return true;
+            return false;
         }
         catch (Exception exception)
         {

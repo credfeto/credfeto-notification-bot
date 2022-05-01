@@ -10,6 +10,10 @@ public interface ITwitchStreamSettings
 
     bool AnnounceMilestonesEnabled { get; }
 
+    bool ShoutOutsEnabled { get; }
+
+    bool OverrideShoutOuts(bool value);
+
     bool OverrideWelcomes(bool value);
 
     bool OverrideRaidWelcomes(bool value);
