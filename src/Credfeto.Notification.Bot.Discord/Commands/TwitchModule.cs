@@ -60,6 +60,8 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
                                         .AddField(name: "Welcome regulars", value: streamerStatus.Settings.ChatWelcomesEnabled)
                                         .AddField(name: "Welcome raiders", value: streamerStatus.Settings.RaidWelcomesEnabled)
                                         .AddField(name: "Thank sub/bit", value: streamerStatus.Settings.ThanksEnabled)
+                                        .AddField(name: "Shoutout", value: streamerStatus.Settings.ShoutOutsEnabled)
+                                        .AddField(name: "Milestone Announcements", value: streamerStatus.Settings.AnnounceMilestonesEnabled)
                                         .Build();
 
         await this.ReplyAsync(embed: embed);
