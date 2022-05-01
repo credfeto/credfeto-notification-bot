@@ -128,7 +128,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     }
 
     /// <summary>
-    ///     Gets the status of a streamer
+    ///     Enables or disables announcing milestones for a streamer
     /// </summary>
     [Command("milestones")]
     [Summary(text: "Enables or disables announcing milestones for a streamer")]
@@ -148,6 +148,26 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     }
 
     /// <summary>
+    ///     Enables or disables auto-shout-outs for a streamer
+    /// </summary>
+    [Command("shoutouts")]
+    [Summary(text: "Enables or disables auto shout-outs for a streamer")]
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
+    public async Task ShoutoutsEnabledAsync(string streamer, bool enabled = true)
+    {
+        ITwitchChannelState channel = this._twitchChannelManager.GetStreamer(Streamer.FromString(streamer));
+
+        if (channel.Settings.OverrideShoutOuts(enabled))
+        {
+            await this.ReplyAsync($"Auto-Shoutouts for {streamer} gifts  are now {(enabled ? "enabled" : "disabled")}");
+        }
+        else
+        {
+            await this.ReplyAsync($"Auto-Shoutouts for {streamer} gifts unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+        }
+    }
+
+    /// <summary>
     ///     Turns automod on/off for a streamer
     /// </summary>
     [Command("automod")]
@@ -160,6 +180,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         await this.RaidWelcomesAsync(streamer: streamer, enabled: enabled);
         await this.ThanksAsync(streamer: streamer, enabled: enabled);
         await this.MilestonesEnabledAsync(streamer: streamer, enabled: enabled);
+        await this.ShoutoutsEnabledAsync(streamer: streamer, enabled: enabled);
         await this.StatusAsync(streamer);
     }
 }
