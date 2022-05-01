@@ -44,24 +44,20 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
                 TwitchFriendChannel? twitchFriendChannel =
                     channel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
 
-                if (twitchFriendChannel == null)
+                if (twitchFriendChannel != null)
                 {
-                    this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "NEW");
+                    if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
+                    {
+                        await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
+                    }
+                    else
+                    {
+                        await this.SendMessageAsync(streamer: streamer, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
+                        this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
+                    }
 
-                    return false;
+                    return true;
                 }
-
-                if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
-                {
-                    await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
-                }
-                else
-                {
-                    await this.SendMessageAsync(streamer: streamer, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
-                    this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
-                }
-
-                return true;
             }
 
             if (isRegular)
@@ -70,6 +66,8 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
                 return true;
             }
+
+            this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "NEW");
 
             return false;
         }
