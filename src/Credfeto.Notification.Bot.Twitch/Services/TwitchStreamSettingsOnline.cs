@@ -23,7 +23,7 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
         this.ShoutOutsEnabled = this.ModChannel.ShoutOuts.Enabled;
     }
 
-    public bool ChatWelcomesEnabled { get; private set; }
+    public bool ShoutOutsEnabled { get; private set; }
 
     public bool OverrideShoutOuts(bool value)
     {
@@ -42,6 +42,8 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
 
         return true;
     }
+
+    public bool ChatWelcomesEnabled { get; private set; }
 
     public bool OverrideWelcomes(bool value)
     {
@@ -102,8 +104,6 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
     }
 
     public bool AnnounceMilestonesEnabled { get; private set; }
-
-    public bool ShoutOutsEnabled { get; private set; }
 
     public bool OverrideMilestonesEnabled(bool value)
     {
