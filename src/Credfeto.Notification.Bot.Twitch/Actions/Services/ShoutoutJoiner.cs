@@ -39,25 +39,21 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
             TwitchModChannel? channel = this._options.Channels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: streamer.Value));
 
-            if (channel != null)
+            TwitchFriendChannel? twitchFriendChannel = channel?.ShoutOuts.FriendChannels?.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
+
+            if (twitchFriendChannel != null)
             {
-                TwitchFriendChannel? twitchFriendChannel =
-                    channel.ShoutOuts.FriendChannels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
-
-                if (twitchFriendChannel != null)
+                if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
                 {
-                    if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
-                    {
-                        await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
-                    }
-                    else
-                    {
-                        await this.SendMessageAsync(streamer: streamer, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
-                        this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
-                    }
-
-                    return true;
+                    await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
                 }
+                else
+                {
+                    await this.SendMessageAsync(streamer: streamer, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
+                    this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
+                }
+
+                return true;
             }
 
             if (isRegular)
