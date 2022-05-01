@@ -12,6 +12,7 @@ internal sealed class TwitchStreamSettingsOffline : TwitchStreamSettingsBase, IT
         this.ChatWelcomesEnabled = this.ModChannel.Welcome.Enabled;
         this.RaidWelcomesEnabled = this.ModChannel.Raids.Enabled;
         this.ThanksEnabled = this.ModChannel.Thanks.Enabled;
+        this.AnnounceMilestonesEnabled = this.ModChannel.MileStones.Enabled;
     }
 
     public bool ChatWelcomesEnabled { get; }
@@ -31,6 +32,13 @@ internal sealed class TwitchStreamSettingsOffline : TwitchStreamSettingsBase, IT
     public bool ThanksEnabled { get; }
 
     public bool OverrideThanks(bool value)
+    {
+        return false;
+    }
+
+    public bool AnnounceMilestonesEnabled { get; }
+
+    public bool OverrideMilestonesEnabled(bool value)
     {
         return false;
     }

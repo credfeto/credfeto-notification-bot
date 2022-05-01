@@ -19,6 +19,7 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
         this.ChatWelcomesEnabled = this.ModChannel.Welcome.Enabled;
         this.RaidWelcomesEnabled = this.ModChannel.Raids.Enabled;
         this.ThanksEnabled = this.ModChannel.Thanks.Enabled;
+        this.AnnounceMilestonesEnabled = this.ModChannel.MileStones.Enabled;
     }
 
     public bool ChatWelcomesEnabled { get; private set; }
@@ -77,6 +78,26 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
 
         this.ThanksEnabled = value;
         this._logger.LogWarning($"{this._streamer}: Thanks have been {AsEnabled(value)}.");
+
+        return true;
+    }
+
+    public bool AnnounceMilestonesEnabled { get; }
+
+    public bool OverrideMilestonesEnabled(bool value)
+    {
+        if (!this.CanOverrideAnnounceMilestones)
+        {
+            return false;
+        }
+
+        if (this.AnnounceMilestonesEnabled == value)
+        {
+            return true;
+        }
+
+        this.ThanksEnabled = value;
+        this._logger.LogWarning($"{this._streamer}: Milestone announcements have been {AsEnabled(value)}.");
 
         return true;
     }

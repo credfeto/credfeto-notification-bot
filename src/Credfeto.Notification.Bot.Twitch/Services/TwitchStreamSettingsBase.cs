@@ -19,4 +19,6 @@ public abstract class TwitchStreamSettingsBase
     protected bool CanOverrideRaidWelcomes => !this.ModChannel.Raids.Enabled;
 
     protected bool CanOverrideThanks => !this.ModChannel.Thanks.Enabled;
+
+    protected bool CanOverrideAnnounceMilestones => this.ModChannel.MileStones.Enabled;
 }

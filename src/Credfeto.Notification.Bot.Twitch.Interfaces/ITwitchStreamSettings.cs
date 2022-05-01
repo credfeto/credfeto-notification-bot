@@ -8,9 +8,13 @@ public interface ITwitchStreamSettings
 
     bool ThanksEnabled { get; }
 
+    bool AnnounceMilestonesEnabled { get; }
+
     bool OverrideWelcomes(bool value);
 
     bool OverrideRaidWelcomes(bool value);
 
     bool OverrideThanks(bool value);
+
+    bool OverrideMilestonesEnabled(bool value);
 }

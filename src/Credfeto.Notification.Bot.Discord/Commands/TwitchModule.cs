@@ -106,10 +106,10 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     }
 
     /// <summary>
-    ///     Gets the status of a streamer
+    ///     Enables/disables thanks for gifts or subs to streamer
     /// </summary>
     [Command("thanks")]
-    [Summary(text: "Enables or disables the thanks for a streamer")]
+    [Summary(text: "Enables or disables thanks for a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
     public async Task ThanksAsync(string streamer, bool enabled = true)
     {
@@ -126,6 +126,26 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     }
 
     /// <summary>
+    ///     Gets the status of a streamer
+    /// </summary>
+    [Command("milestones")]
+    [Summary(text: "Enables or disables announcing milestones for a streamer")]
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
+    public async Task MilestonesEnabledAsync(string streamer, bool enabled = true)
+    {
+        ITwitchChannelState channel = this._twitchChannelManager.GetStreamer(Streamer.FromString(streamer));
+
+        if (channel.Settings.OverrideMilestonesEnabled(enabled))
+        {
+            await this.ReplyAsync($"Milestone announcements for {streamer} gifts  are now {(enabled ? "enabled" : "disabled")}");
+        }
+        else
+        {
+            await this.ReplyAsync($"Milestone announcements for {streamer} gifts unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+        }
+    }
+
+    /// <summary>
     ///     Turns automod on/off for a streamer
     /// </summary>
     [Command("automod")]
@@ -137,6 +157,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         await this.WelcomeWaggonAsync(streamer: streamer, enabled: enabled);
         await this.RaidWelcomesAsync(streamer: streamer, enabled: enabled);
         await this.ThanksAsync(streamer: streamer, enabled: enabled);
+        await this.MilestonesEnabledAsync(streamer: streamer, enabled: enabled);
         await this.StatusAsync(streamer);
     }
 }
