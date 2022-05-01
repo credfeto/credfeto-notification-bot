@@ -109,6 +109,7 @@ public sealed class TwitchChat : ITwitchChat
         // SUBS
         Observable.FromEventPattern<OnNewSubscriberArgs>(addHandler: h => this._client.OnNewSubscriber += h, removeHandler: h => this._client.OnNewSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
+                  .Where(e => this._options.IsSelf(Viewer.FromString(e.Subscriber.Channel)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnNewSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
@@ -116,6 +117,7 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnReSubscriberArgs>(addHandler: h => this._client.OnReSubscriber += h, removeHandler: h => this._client.OnReSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
+                  .Where(e => this._options.IsSelf(Viewer.FromString(e.ReSubscriber.Channel)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnReSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
@@ -123,6 +125,7 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h, removeHandler: h => this._client.OnCommunitySubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
+                  .Where(e => this._options.IsSelf(Viewer.FromString(e.GiftedSubscription.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnCommunitySubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
@@ -130,6 +133,7 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnGiftedSubscriptionArgs>(addHandler: h => this._client.OnGiftedSubscription += h, removeHandler: h => this._client.OnGiftedSubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
+                  .Where(e => this._options.IsSelf(Viewer.FromString(e.GiftedSubscription.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnGiftedSubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
@@ -138,6 +142,7 @@ public sealed class TwitchChat : ITwitchChat
         Observable.FromEventPattern<OnContinuedGiftedSubscriptionArgs>(addHandler: h => this._client.OnContinuedGiftedSubscription += h,
                                                                        removeHandler: h => this._client.OnContinuedGiftedSubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
+                  .Where(e => this._options.IsSelf(Viewer.FromString(e.ContinuedGiftedSubscription.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnContinuedGiftedSubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
@@ -145,6 +150,7 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h, removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
+                  .Where(e => this._options.IsSelf(Viewer.FromString(e.PrimePaidSubscriber.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnPrimePaidSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
