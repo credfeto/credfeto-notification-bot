@@ -79,11 +79,12 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideWelcomes(enabled))
         {
-            await this.ReplyAsync($"Welcomes for regular {streamer} chatters are now {(enabled ? "enabled" : "disabled")}");
+            await this.ReplyAsync($"Welcomes for regular {streamer} chatters are now {enabled.AsEnabledDisabled()}");
         }
         else
         {
-            await this.ReplyAsync($"Welcomes for regular {streamer} chatters unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+            bool status = channel.Settings.ChatWelcomesEnabled;
+            await this.ReplyAsync($"Welcomes for regular {streamer} chatters unchanged. Status: {status.AsEnabledDisabled()}");
         }
     }
 
@@ -99,11 +100,12 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideRaidWelcomes(enabled))
         {
-            await this.ReplyAsync($"Raid Welcomes for regular {streamer} chatters are now {(enabled ? "enabled" : "disabled")}");
+            await this.ReplyAsync($"Raid Welcomes for regular {streamer} chatters are now {enabled.AsEnabledDisabled()}");
         }
         else
         {
-            await this.ReplyAsync($"Raid Welcomes for regular {streamer} chatters unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+            bool status = channel.Settings.RaidWelcomesEnabled;
+            await this.ReplyAsync($"Raid Welcomes for regular {streamer} chatters unchanged. Status: {status.AsEnabledDisabled()}");
         }
     }
 
@@ -119,11 +121,12 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideThanks(enabled))
         {
-            await this.ReplyAsync($"Thanks for {streamer} gifts  are now {(enabled ? "enabled" : "disabled")}");
+            await this.ReplyAsync($"Thanks for {streamer} gifts  are now {enabled.AsEnabledDisabled()}");
         }
         else
         {
-            await this.ReplyAsync($"Thanks for {streamer} gifts unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+            bool status = channel.Settings.ThanksEnabled;
+            await this.ReplyAsync($"Thanks for {streamer} gifts unchanged. Status: {status.AsEnabledDisabled()}");
         }
     }
 
@@ -139,11 +142,12 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideMilestonesEnabled(enabled))
         {
-            await this.ReplyAsync($"Milestone announcements for {streamer} gifts  are now {(enabled ? "enabled" : "disabled")}");
+            await this.ReplyAsync($"Milestone announcements for {streamer} gifts  are now {enabled.AsEnabledDisabled()}");
         }
         else
         {
-            await this.ReplyAsync($"Milestone announcements for {streamer} gifts unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+            bool status = channel.Settings.AnnounceMilestonesEnabled;
+            await this.ReplyAsync($"Milestone announcements for {streamer} gifts unchanged. Status: {status.AsEnabledDisabled()}");
         }
     }
 
@@ -159,11 +163,12 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideShoutOuts(enabled))
         {
-            await this.ReplyAsync($"Auto-Shoutouts for {streamer} gifts  are now {(enabled ? "enabled" : "disabled")}");
+            await this.ReplyAsync($"Auto-Shoutouts for {streamer} gifts  are now {enabled.AsEnabledDisabled()}");
         }
         else
         {
-            await this.ReplyAsync($"Auto-Shoutouts for {streamer} gifts unchanged. Status: {(enabled ? "enabled" : "disabled")}");
+            bool status = channel.Settings.ShoutOutsEnabled;
+            await this.ReplyAsync($"Auto-Shoutouts for {streamer} gifts unchanged. Status: {status.AsEnabledDisabled()}");
         }
     }
 
