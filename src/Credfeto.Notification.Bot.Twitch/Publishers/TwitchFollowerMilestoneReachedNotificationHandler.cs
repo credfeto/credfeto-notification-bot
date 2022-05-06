@@ -34,7 +34,10 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : MessageS
             return;
         }
 
-        await this.SendMessageAsync(streamer: notification.Streamer, $"/me @{notification.Streamer} Woo! {notification.MilestoneReached} followers reached!", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: notification.Streamer,
+                                    priority: MessagePriority.ASAP,
+                                    $"/me @{notification.Streamer} Woo! {notification.MilestoneReached} followers reached!",
+                                    cancellationToken: cancellationToken);
 
         this._logger.LogWarning($"{notification.Streamer}: Woo!! New follower milestone reached {notification.MilestoneReached}");
     }

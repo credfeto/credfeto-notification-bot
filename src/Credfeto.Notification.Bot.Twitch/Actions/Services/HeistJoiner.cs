@@ -21,7 +21,7 @@ public sealed class HeistJoiner : MessageSenderBase, IHeistJoiner
     public async Task JoinHeistAsync(Streamer streamer, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{streamer}: Heist Starting!");
-        await this.SendMessageAsync(streamer: streamer, message: "!heist all", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: "!heist all", cancellationToken: cancellationToken);
         this._logger.LogInformation($"{streamer}: Heist Starting! - Join Sent");
     }
 }

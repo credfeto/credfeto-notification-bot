@@ -49,7 +49,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
                 }
                 else
                 {
-                    await this.SendMessageAsync(streamer: streamer, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
+                    await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
                     this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
                 }
 
@@ -77,7 +77,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
     private async Task SendStandardShoutoutAsync(Streamer streamer, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
     {
-        await this.SendMessageAsync(streamer: streamer, $"!so @{visitingStreamer.UserName}", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, $"!so @{visitingStreamer.UserName}", cancellationToken: cancellationToken);
         this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: code);
     }
 

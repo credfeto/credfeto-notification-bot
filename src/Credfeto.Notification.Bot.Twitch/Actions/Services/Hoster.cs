@@ -84,7 +84,7 @@ public sealed class Hoster : MessageSenderBase, IHoster
 
         // TODO: Issue Host Stream Command
         this._logger.LogWarning($"Requesting host of {active}");
-        await this.SendMessageAsync(streamer: this._bot, $"/host @{active}", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: this._bot, priority: MessagePriority.SLOW, $"/host @{active}", cancellationToken: cancellationToken);
 
         this._hosting = active;
 

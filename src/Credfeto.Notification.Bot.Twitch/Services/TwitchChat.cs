@@ -158,7 +158,7 @@ public sealed class TwitchChat : ITwitchChat
 
         this._twitchChatMessageChannel.ReadAllAsync(CancellationToken.None)
             .ToObservable()
-            .Delay(TimeSpan.FromSeconds(1))
+            .Delay(d => Observable.Return(CalculateWithJitter(d)))
             .Where(this.IsConnectedToChat)
             .Subscribe(onNext: this.PublishChatMessage);
 
@@ -195,6 +195,24 @@ public sealed class TwitchChat : ITwitchChat
         }
 
         return Task.CompletedTask;
+    }
+
+    private static TimeSpan CalculateWithJitter(TwitchChatMessage twitchChatMessage)
+    {
+        static int GetMaxSeconds(MessagePriority messagePriority)
+        {
+            return messagePriority switch
+            {
+                MessagePriority.ASAP => 2,
+                MessagePriority.NATURAL => 20,
+                MessagePriority.SLOW => 60,
+                _ => throw new ArgumentOutOfRangeException(nameof(messagePriority), actualValue: messagePriority, message: "Unknown message priority")
+            };
+        }
+
+        double delay = Jitter.WithJitter((int)twitchChatMessage.Priority, GetMaxSeconds(twitchChatMessage.Priority));
+
+        return TimeSpan.FromSeconds(delay);
     }
 
     private bool IsConnectedToChat(TwitchChatMessage chatMessage)

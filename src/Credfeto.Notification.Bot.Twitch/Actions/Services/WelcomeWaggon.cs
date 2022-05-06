@@ -30,7 +30,7 @@ public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, $"Hi @{user}", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Hi @{user}", cancellationToken: cancellationToken);
         this._logger.LogInformation($"{streamer}: Hi {user}!");
     }
 }

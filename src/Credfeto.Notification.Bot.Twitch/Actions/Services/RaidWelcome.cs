@@ -35,9 +35,9 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
 GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
 
-        await this.SendMessageAsync(streamer: streamer, message: raidWelcome, cancellationToken: cancellationToken);
-        await this.SendMessageAsync(streamer: streamer, $"Thanks @{raider} for the raid", cancellationToken: cancellationToken);
-        await this.SendMessageAsync(streamer: streamer, $"!so @{raider}", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.ASAP, message: raidWelcome, cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{raider} for the raid", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, $"!so @{raider}", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: {raider} is raiding!");
     }

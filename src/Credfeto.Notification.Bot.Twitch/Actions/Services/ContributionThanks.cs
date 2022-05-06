@@ -40,7 +40,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for the bits", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for the bits", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for for the bits");
     }
@@ -52,7 +52,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for subscribing (Prime)");
     }
@@ -64,7 +64,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for resubscribing (Prime)");
     }
@@ -76,7 +76,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for resubscribing (Paid)");
     }
@@ -88,7 +88,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for subscribing (Paid)");
     }
@@ -107,7 +107,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, $"Thanks @{giftedBy} for gifting subs", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{giftedBy} for gifting subs", cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting subs");
     }
@@ -128,7 +128,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, $"Thanks @{giftedBy} for gifting sub", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{giftedBy} for gifting sub", cancellationToken: cancellationToken);
     }
 
     public Task ThankForFollowAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
