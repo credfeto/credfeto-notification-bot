@@ -203,9 +203,9 @@ public sealed class TwitchChat : ITwitchChat
         {
             return messagePriority switch
             {
-                MessagePriority.ASAP => 2,
-                MessagePriority.NATURAL => 20,
-                MessagePriority.SLOW => 60,
+                MessagePriority.ASAP => 2 * (int)MessagePriority.ASAP,
+                MessagePriority.NATURAL => 3 * (int)MessagePriority.NATURAL,
+                MessagePriority.SLOW => 6 * (int)MessagePriority.SLOW,
                 _ => throw new ArgumentOutOfRangeException(nameof(messagePriority), actualValue: messagePriority, message: "Unknown message priority")
             };
         }
