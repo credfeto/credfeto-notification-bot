@@ -46,7 +46,6 @@ public sealed class TwitchStreamNewChatterNotificationHandler : INotificationHan
 
             if (notification.IsRegular)
             {
-                this._logger.LogInformation($"{notification.Streamer}: Hi @{twitchUser.UserName}");
                 await this._welcomeWaggon.IssueWelcomeAsync(streamer: notification.Streamer, user: twitchUser.UserName, cancellationToken: cancellationToken);
             }
 
