@@ -14,6 +14,7 @@ using Credfeto.Notification.Bot.Twitch.StreamState;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NonBlocking;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
@@ -26,6 +27,9 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 public sealed class TwitchChat : ITwitchChat
 {
     private readonly TwitchClient _client;
+
+    private readonly ConcurrentDictionary<Streamer, string> _lastMessage = new();
+    private readonly object _lastMessageLock = new();
     private readonly ILogger<TwitchChat> _logger;
     private readonly IMediator _mediator;
 
@@ -222,15 +226,28 @@ public sealed class TwitchChat : ITwitchChat
 
     private void PublishChatMessage(TwitchChatMessage twitchChatMessage)
     {
-        try
+        lock (this._lastMessageLock)
         {
-            this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> {this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
+            if (this._lastMessage.TryGetValue(key: twitchChatMessage.Streamer, out string? lastMessage) &&
+                StringComparer.InvariantCultureIgnoreCase.Equals(x: lastMessage, y: twitchChatMessage.Message))
+            {
+                return;
+            }
 
-            this._client.SendMessage(channel: twitchChatMessage.Streamer.Value, message: twitchChatMessage.Message);
-        }
-        catch (Exception exception)
-        {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{twitchChatMessage.Streamer}: Failed to publish message : {exception.Message}");
+            this._lastMessage.TryRemove(key: twitchChatMessage.Streamer, value: out _);
+
+            try
+            {
+                this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> {this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
+
+                this._client.SendMessage(channel: twitchChatMessage.Streamer.Value, message: twitchChatMessage.Message);
+
+                this._lastMessage.TryAdd(key: twitchChatMessage.Streamer, value: twitchChatMessage.Message);
+            }
+            catch (Exception exception)
+            {
+                this._logger.LogError(new(exception.HResult), exception: exception, $"{twitchChatMessage.Streamer}: Failed to publish message : {exception.Message}");
+            }
         }
     }
 
