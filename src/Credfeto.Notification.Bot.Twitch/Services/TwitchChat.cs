@@ -29,7 +29,7 @@ public sealed class TwitchChat : ITwitchChat
     private readonly TwitchClient _client;
 
     private readonly ConcurrentDictionary<Streamer, string> _lastMessage = new();
-    private readonly object _lastMessageLock = new();
+    private readonly SemaphoreSlim _lastMessageLock;
     private readonly ILogger<TwitchChat> _logger;
     private readonly IMediator _mediator;
 
@@ -53,6 +53,8 @@ public sealed class TwitchChat : ITwitchChat
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
+
+        this._lastMessageLock = new(initialCount: 1, maxCount: 1);
 
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
 
@@ -123,7 +125,7 @@ public sealed class TwitchChat : ITwitchChat
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Where(e => !this._options.IsSelf(Viewer.FromString(e.ReSubscriber.Channel)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
-                  .Select(e => Observable.FromAsync(cancellationToken => this.OnReSubscriberAsync(e: e, cancellationToken: cancellationToken)))
+                  .Select(e => Observable.FromAsync(cancellationToken => this.OnReSubscribeAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
                   .Subscribe();
 
@@ -164,7 +166,9 @@ public sealed class TwitchChat : ITwitchChat
             .ToObservable()
             .Delay(d => Observable.Return(CalculateWithJitter(d)))
             .Where(this.IsConnectedToChat)
-            .Subscribe(onNext: this.PublishChatMessage);
+            .Select(message => Observable.FromAsync(cancellationToken => this.PublishChatMessageAsync(twitchChatMessage: message, cancellationToken: cancellationToken)))
+            .Concat()
+            .Subscribe();
 
         this._client.Connect();
         this._connected = true;
@@ -224,9 +228,11 @@ public sealed class TwitchChat : ITwitchChat
         return this._client.JoinedChannels.Any(joinedChannel => StringComparer.InvariantCultureIgnoreCase.Equals(x: chatMessage.Streamer.Value, y: joinedChannel.Channel));
     }
 
-    private void PublishChatMessage(TwitchChatMessage twitchChatMessage)
+    private async Task PublishChatMessageAsync(TwitchChatMessage twitchChatMessage, CancellationToken cancellationToken)
     {
-        lock (this._lastMessageLock)
+        await this._lastMessageLock.WaitAsync(cancellationToken);
+
+        try
         {
             if (this._lastMessage.TryGetValue(key: twitchChatMessage.Streamer, out string? lastMessage) &&
                 StringComparer.InvariantCultureIgnoreCase.Equals(x: lastMessage, y: twitchChatMessage.Message))
@@ -236,18 +242,19 @@ public sealed class TwitchChat : ITwitchChat
 
             this._lastMessage.TryRemove(key: twitchChatMessage.Streamer, value: out _);
 
-            try
-            {
-                this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> {this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
+            this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> {this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
 
-                this._client.SendMessage(channel: twitchChatMessage.Streamer.Value, message: twitchChatMessage.Message);
+            this._client.SendMessage(channel: twitchChatMessage.Streamer.Value, message: twitchChatMessage.Message);
 
-                this._lastMessage.TryAdd(key: twitchChatMessage.Streamer, value: twitchChatMessage.Message);
-            }
-            catch (Exception exception)
-            {
-                this._logger.LogError(new(exception.HResult), exception: exception, $"{twitchChatMessage.Streamer}: Failed to publish message : {exception.Message}");
-            }
+            this._lastMessage.TryAdd(key: twitchChatMessage.Streamer, value: twitchChatMessage.Message);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{twitchChatMessage.Streamer}: Failed to publish message : {exception.Message}");
+        }
+        finally
+        {
+            this._lastMessageLock.Release();
         }
     }
 
@@ -454,7 +461,7 @@ public sealed class TwitchChat : ITwitchChat
         return state.NewSubscriberPrimeAsync(Viewer.FromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
     }
 
-    private Task OnReSubscriberAsync(OnReSubscriberArgs e, in CancellationToken cancellationToken)
+    private Task OnReSubscribeAsync(OnReSubscriberArgs e, in CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.LogInformation($"{streamer}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
