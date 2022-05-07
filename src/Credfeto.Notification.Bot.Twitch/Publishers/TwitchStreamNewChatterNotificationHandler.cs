@@ -51,7 +51,14 @@ public sealed class TwitchStreamNewChatterNotificationHandler : INotificationHan
 
             if (twitchUser.IsStreamer)
             {
-                await this._shoutoutJoiner.IssueShoutoutAsync(streamer: notification.Streamer, visitingStreamer: twitchUser, isRegular: notification.IsRegular, cancellationToken: cancellationToken);
+                if (notification.Streamer != twitchUser.UserName.ToStreamer())
+                {
+                    // Only shoutout streamers, IF they're not the streamer themselves
+                    await this._shoutoutJoiner.IssueShoutoutAsync(streamer: notification.Streamer,
+                                                                  visitingStreamer: twitchUser,
+                                                                  isRegular: notification.IsRegular,
+                                                                  cancellationToken: cancellationToken);
+                }
             }
         }
         catch (Exception exception)
