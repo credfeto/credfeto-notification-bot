@@ -115,7 +115,7 @@ public sealed class TwitchChat : ITwitchChat
         // SUBS
         Observable.FromEventPattern<OnNewSubscriberArgs>(addHandler: h => this._client.OnNewSubscriber += h, removeHandler: h => this._client.OnNewSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => !this._options.IsSelf(Viewer.FromString(e.Subscriber.Channel)))
+                  .Where(e => !this._options.IsSelf(Viewer.FromString(e.Subscriber.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnNewSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
@@ -123,7 +123,7 @@ public sealed class TwitchChat : ITwitchChat
 
         Observable.FromEventPattern<OnReSubscriberArgs>(addHandler: h => this._client.OnReSubscriber += h, removeHandler: h => this._client.OnReSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
-                  .Where(e => !this._options.IsSelf(Viewer.FromString(e.ReSubscriber.Channel)))
+                  .Where(e => !this._options.IsSelf(Viewer.FromString(e.ReSubscriber.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
                   .Select(e => Observable.FromAsync(cancellationToken => this.OnReSubscribeAsync(e: e, cancellationToken: cancellationToken)))
                   .Concat()
