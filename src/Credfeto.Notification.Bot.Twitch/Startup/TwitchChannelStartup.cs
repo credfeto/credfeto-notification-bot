@@ -50,6 +50,9 @@ public sealed class TwitchChannelStartup : IRunOnStartup
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        // Explicitly give some time for things to initialize
+        await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken: cancellationToken);
+
         // Explicitly join the bot's own channel
         this._twitchChat.JoinChat(Streamer.FromString(this._options.Authentication.UserName));
         this._logger.LogDebug(this._twitchFollowerDetector.GetType()

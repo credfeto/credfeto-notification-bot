@@ -164,7 +164,7 @@ public sealed class TwitchChat : ITwitchChat
 
         this._twitchChatMessageChannel.ReadAllAsync(CancellationToken.None)
             .ToObservable()
-            .Delay(d => CalculateWithJitter(d))
+            .Delay(d => Observable.Timer(this.CalculateWithJitter(d)))
             .Where(this.IsConnectedToChat)
             .Select(message => Observable.FromAsync(cancellationToken => this.PublishChatMessageAsync(twitchChatMessage: message, cancellationToken: cancellationToken)))
             .Concat()
@@ -205,7 +205,7 @@ public sealed class TwitchChat : ITwitchChat
         return Task.CompletedTask;
     }
 
-    private static IObservable<TimeSpan> CalculateWithJitter(TwitchChatMessage twitchChatMessage)
+    private TimeSpan CalculateWithJitter(TwitchChatMessage twitchChatMessage)
     {
         static int GetMaxSeconds(MessagePriority messagePriority)
         {
@@ -218,14 +218,13 @@ public sealed class TwitchChat : ITwitchChat
             };
         }
 
-        double delay = Jitter.WithJitter((int)twitchChatMessage.Priority, GetMaxSeconds(twitchChatMessage.Priority));
+        MessagePriority priority = twitchChatMessage.Priority;
 
-        TimeSpan span = TimeSpan.FromSeconds(delay);
+        double delay = Jitter.WithJitter((int)priority, GetMaxSeconds(priority));
 
-        return new[]
-               {
-                   span
-               }.ToObservable();
+        this._logger.LogDebug($"{twitchChatMessage.Streamer}: Delaying message for {delay} seconds for: {twitchChatMessage.Message}");
+
+        return TimeSpan.FromSeconds(delay);
     }
 
     private bool IsConnectedToChat(TwitchChatMessage chatMessage)

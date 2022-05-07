@@ -13,10 +13,10 @@ public enum MessagePriority
     /// <summary>
     ///     Pretend to be human.
     /// </summary>
-    NATURAL = 30,
+    NATURAL = 15,
 
     /// <summary>
     ///     Don't care, just do as and when.
     /// </summary>
-    SLOW = 120
+    SLOW = 30
 }
