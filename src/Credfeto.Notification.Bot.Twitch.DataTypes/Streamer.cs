@@ -12,7 +12,7 @@ public readonly partial struct Streamer
         return new(username.ToLowerInvariant());
     }
 
-    public Viewer ToUser()
+    public Viewer ToViewer()
     {
         return new(this.Value);
     }

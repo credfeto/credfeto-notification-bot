@@ -1,8 +1,10 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
+using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
 using MediatR;
@@ -76,5 +78,33 @@ public sealed class TwitchChannelManagerTests : TestBase
         twitchChannelState.Offline();
 
         Assert.False(condition: twitchChannelState.IsOnline, userMessage: "Should be offline");
+    }
+
+    [Fact]
+    public async Task StreamRaidedWhenOnlineAsync()
+    {
+        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
+
+        await twitchChannelState.OnlineAsync(gameName: "FunGame", new(year: 2020, month: 1, day: 1));
+
+        Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
+
+        await twitchChannelState.RaidedAsync(Guest1.ToViewer(), viewerCount: 12, cancellationToken: CancellationToken.None);
+
+        await this._mediator.Received(1)
+                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12), cancellationToken: CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task StreamRaidedWhenOfflineAsync()
+    {
+        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
+
+        Assert.False(condition: twitchChannelState.IsOnline, userMessage: "Should be offline");
+
+        await twitchChannelState.RaidedAsync(Guest1.ToViewer(), viewerCount: 12, cancellationToken: CancellationToken.None);
+
+        await this._mediator.DidNotReceive()
+                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12), cancellationToken: CancellationToken.None);
     }
 }

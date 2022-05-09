@@ -34,7 +34,7 @@ public sealed class UserInfoService : IUserInfoService
 
     public Task<TwitchUser?> GetUserAsync(Streamer userName)
     {
-        return this.GetUserAsync(userName.ToUser());
+        return this.GetUserAsync(userName.ToViewer());
     }
 
     public async Task<TwitchUser?> GetUserAsync(Viewer userName)
