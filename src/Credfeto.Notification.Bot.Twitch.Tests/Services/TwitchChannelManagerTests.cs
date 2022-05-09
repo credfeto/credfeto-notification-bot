@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -19,6 +20,9 @@ public sealed class TwitchChannelManagerTests : TestBase
     private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private static readonly Streamer Guest1 = Streamer.FromString(nameof(Guest1));
     private static readonly Streamer Guest2 = Streamer.FromString(nameof(Guest2));
+    private static readonly Viewer Ignored = Viewer.FromString(nameof(Ignored));
+
+    private static readonly DateTime StreamStartDate = new(year: 2020, month: 1, day: 1);
 
     private readonly IMediator _mediator;
     private readonly ITwitchChannelManager _twitchChannelManager;
@@ -35,6 +39,8 @@ public sealed class TwitchChannelManagerTests : TestBase
         options.Value.Returns(new TwitchBotOptions
                               {
                                   Authentication = new() { ClientId = "Invalid", ClientSecret = "Invalid", ClientAccessToken = "Invalid" },
+                                  IgnoredUsers = new() { Ignored.Value },
+                                  Milestones = new() { Followers = new() { 10, 20, 30 }, Subscribers = new() { 10, 20, 30 } },
                                   Channels = new()
                                              {
                                                  new()
@@ -68,12 +74,12 @@ public sealed class TwitchChannelManagerTests : TestBase
     {
         ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
 
-        await twitchChannelState.OnlineAsync(gameName: "FunGame", new(year: 2020, month: 1, day: 1));
+        await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate);
 
         Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
 
         await this._twitchStreamerDataManager.Received(1)
-                  .RecordStreamStartAsync(streamer: Streamer, new(year: 2020, month: 1, day: 1));
+                  .RecordStreamStartAsync(streamer: Streamer, streamStartDate: StreamStartDate);
 
         twitchChannelState.Offline();
 
@@ -85,7 +91,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     {
         ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
 
-        await twitchChannelState.OnlineAsync(gameName: "FunGame", new(year: 2020, month: 1, day: 1));
+        await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate);
 
         Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
 
@@ -107,4 +113,67 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this._mediator.DidNotReceive()
                   .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12), cancellationToken: CancellationToken.None);
     }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task FirstChatMessageWhenOnlineAsync(bool isRegular)
+    {
+        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
+
+        await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate);
+
+        Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
+
+        this.MockIsRegularChatter(isRegular);
+        this.MockIsFirstMessageInStream(true);
+
+        await twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
+
+        await this._mediator.DidNotReceive()
+                  .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer()), cancellationToken: CancellationToken.None);
+
+        await this._twitchStreamerDataManager.Received(1)
+                  .IsRegularChatterAsync(streamer: Streamer, Guest1.ToViewer());
+
+        await this._twitchStreamerDataManager.Received(1)
+                  .IsFirstMessageInStreamAsync(streamer: Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer());
+
+        await this._mediator.Received(1)
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+    }
+
+    private void MockIsFirstMessageInStream(bool isFirstMessage)
+    {
+        this._twitchStreamerDataManager.IsFirstMessageInStreamAsync(streamer: Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer())
+            .Returns(isFirstMessage);
+    }
+
+    private void MockIsRegularChatter(bool isRegularChatter)
+    {
+        this._twitchStreamerDataManager.IsRegularChatterAsync(streamer: Streamer, Guest1.ToViewer())
+            .Returns(isRegularChatter);
+    }
+
+    /*
+ *     Task ChatMessageAsync(Viewer user, string message, int bits, CancellationToken cancellationToken);
+
+    Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken);
+
+    Task GiftedSubAsync(Viewer giftedBy, string months, in CancellationToken cancellationToken);
+
+    Task ContinuedSubAsync(Viewer user, in CancellationToken cancellationToken);
+
+    Task PrimeToPaidAsync(Viewer user, in CancellationToken cancellationToken);
+
+    Task NewSubscriberPaidAsync(Viewer user, in CancellationToken cancellationToken);
+
+    Task NewSubscriberPrimeAsync(Viewer user, in CancellationToken cancellationToken);
+
+    Task ResubscribePaidAsync(Viewer user, int months, in CancellationToken cancellationToken);
+
+    Task ResubscribePrimeAsync(Viewer user, int months, in CancellationToken cancellationToken);
+
+    Task NewFollowerAsync(Viewer user, CancellationToken cancellationToken);
+ */
 }
