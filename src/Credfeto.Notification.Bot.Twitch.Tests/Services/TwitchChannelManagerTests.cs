@@ -149,6 +149,26 @@ public sealed class TwitchChannelManagerTests : TestBase
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
+    public async Task SubsequentChatMessageWithBitsWhenOnlineAsync(bool isRegular)
+    {
+        ITwitchChannelState twitchChannelState = await this.GetOnlineStreamAsync();
+
+        this.MockIsRegularChatter(isRegular);
+        this.MockIsFirstMessageInStream(false);
+
+        await twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", bits: 123, cancellationToken: CancellationToken.None);
+
+        await this.ReceivedBitGiftNotificationAsync(Guest1.ToViewer(), amount: 124);
+        await this.DidNotReceiveCheckForIsRegularChatterAsync();
+        await this.ReceivedCheckForFirstMessageInStreamAsync();
+
+        await this._mediator.DidNotReceive()
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
     public async Task FirstChatMessageByIgnoredUserWhenOnlineAsync(bool isRegular)
     {
         ITwitchChannelState twitchChannelState = await this.GetOnlineStreamAsync();
@@ -190,6 +210,12 @@ public sealed class TwitchChannelManagerTests : TestBase
     {
         return this._mediator.DidNotReceive()
                    .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer()), cancellationToken: CancellationToken.None);
+    }
+
+    private Task ReceivedBitGiftNotificationAsync(Viewer viewer, int amount)
+    {
+        return this._mediator.DidNotReceive()
+                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == Streamer && t.User == viewer && t.Bits == amount), cancellationToken: CancellationToken.None);
     }
 
     private Task ReceivedCheckForFirstMessageInStreamAsync()
