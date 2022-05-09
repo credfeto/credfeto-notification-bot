@@ -97,9 +97,9 @@ public sealed class TwitchChannelState : ITwitchChannelState
             return;
         }
 
-        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this.Streamer, y: user))
+        if (this.Streamer == user.ToStreamer())
         {
-            this._logger.LogDebug($"{this.Streamer}: Message from {user} that not modding for");
+            this._logger.LogDebug($"{this.Streamer}: Message from streamer themselves");
 
             return;
         }
