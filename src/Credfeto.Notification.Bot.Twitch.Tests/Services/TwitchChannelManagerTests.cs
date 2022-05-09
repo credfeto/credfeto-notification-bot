@@ -62,13 +62,19 @@ public sealed class TwitchChannelManagerTests : TestBase
     }
 
     [Fact]
-    public async Task StreamOnlineAsync()
+    public async Task StreamOnlineOfflineAsync()
     {
         ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
 
         await twitchChannelState.OnlineAsync(gameName: "FunGame", new(year: 2020, month: 1, day: 1));
 
+        Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
+
         await this._twitchStreamerDataManager.Received(1)
                   .RecordStreamStartAsync(streamer: Streamer, new(year: 2020, month: 1, day: 1));
+
+        twitchChannelState.Offline();
+
+        Assert.False(condition: twitchChannelState.IsOnline, userMessage: "Should be offline");
     }
 }
