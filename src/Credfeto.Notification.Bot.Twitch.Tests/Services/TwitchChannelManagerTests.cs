@@ -72,11 +72,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     [Fact]
     public async Task StreamOnlineOfflineAsync()
     {
-        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
-
-        await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate);
-
-        Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
+        ITwitchChannelState twitchChannelState = await this.GetOnlineStreamAsync();
 
         await this._twitchStreamerDataManager.Received(1)
                   .RecordStreamStartAsync(streamer: Streamer, streamStartDate: StreamStartDate);
@@ -89,11 +85,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     [Fact]
     public async Task StreamRaidedWhenOnlineAsync()
     {
-        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
-
-        await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate);
-
-        Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
+        ITwitchChannelState twitchChannelState = await this.GetOnlineStreamAsync();
 
         await twitchChannelState.RaidedAsync(Guest1.ToViewer(), viewerCount: 12, cancellationToken: CancellationToken.None);
 
@@ -119,28 +111,79 @@ public sealed class TwitchChannelManagerTests : TestBase
     [InlineData(false)]
     public async Task FirstChatMessageWhenOnlineAsync(bool isRegular)
     {
+        ITwitchChannelState twitchChannelState = await this.GetOnlineStreamAsync();
+
+        this.MockIsRegularChatter(isRegular);
+        this.MockIsFirstMessageInStream(true);
+
+        await SendChatMessageAsync(twitchChannelState);
+
+        await this.DidNotReceiveBitGiftNotificationAsync();
+        await this.ReceivedCheckForIsRegularChatterAsync();
+        await this.ReceivedCheckForFirstMessageInStreamAsync();
+
+        await this._mediator.Received(1)
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task SubsequentChatMessageWhenOnlineAsync(bool isRegular)
+    {
+        ITwitchChannelState twitchChannelState = await this.GetOnlineStreamAsync();
+
+        this.MockIsRegularChatter(isRegular);
+        this.MockIsFirstMessageInStream(false);
+
+        await SendChatMessageAsync(twitchChannelState);
+
+        await this.DidNotReceiveBitGiftNotificationAsync();
+        await this.DidNotReceiveCheckForIsRegularChatterAsync();
+        await this.ReceivedCheckForFirstMessageInStreamAsync();
+
+        await this._mediator.DidNotReceive()
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+    }
+
+    private Task DidNotReceiveBitGiftNotificationAsync()
+    {
+        return this._mediator.DidNotReceive()
+                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer()), cancellationToken: CancellationToken.None);
+    }
+
+    private Task ReceivedCheckForFirstMessageInStreamAsync()
+    {
+        return this._twitchStreamerDataManager.Received(1)
+                   .IsFirstMessageInStreamAsync(streamer: Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer());
+    }
+
+    private Task ReceivedCheckForIsRegularChatterAsync()
+    {
+        return this._twitchStreamerDataManager.Received(1)
+                   .IsRegularChatterAsync(streamer: Streamer, Guest1.ToViewer());
+    }
+
+    private Task DidNotReceiveCheckForIsRegularChatterAsync()
+    {
+        return this._twitchStreamerDataManager.DidNotReceive()
+                   .IsRegularChatterAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>());
+    }
+
+    private static Task SendChatMessageAsync(ITwitchChannelState twitchChannelState)
+    {
+        return twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
+    }
+
+    private async Task<ITwitchChannelState> GetOnlineStreamAsync()
+    {
         ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
 
         await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate);
 
         Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
 
-        this.MockIsRegularChatter(isRegular);
-        this.MockIsFirstMessageInStream(true);
-
-        await twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
-
-        await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer()), cancellationToken: CancellationToken.None);
-
-        await this._twitchStreamerDataManager.Received(1)
-                  .IsRegularChatterAsync(streamer: Streamer, Guest1.ToViewer());
-
-        await this._twitchStreamerDataManager.Received(1)
-                  .IsFirstMessageInStreamAsync(streamer: Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer());
-
-        await this._mediator.Received(1)
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+        return twitchChannelState;
     }
 
     private void MockIsFirstMessageInStream(bool isFirstMessage)
