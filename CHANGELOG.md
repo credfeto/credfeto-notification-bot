@@ -34,6 +34,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated AsyncFixer to 1.6.0
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.2.0
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.39.0.47922
+- FF-1429 - Updated FunFair.CodeAnalysis to 5.8.2.1317
 ### Removed
 ### Deployment Changes
 
