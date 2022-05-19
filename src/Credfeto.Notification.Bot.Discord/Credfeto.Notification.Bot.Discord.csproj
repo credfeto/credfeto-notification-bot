@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-        <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
-        <EnablePackageValidation>true</EnablePackageValidation>
-        <Features>strict;flow-analysis</Features>
-        <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
-        <ImplicitUsings>disable</ImplicitUsings>
-        <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
-        <IsPackable>false</IsPackable>
-        <IsPublishable>false</IsPublishable>
-        <LangVersion>latest</LangVersion>
-        <NoWarn>CS1591</NoWarn>
+      <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+      <RunAOTCompilation>true</RunAOTCompilation>
+      <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
+      <EnablePackageValidation>true</EnablePackageValidation>
+      <Features>strict;flow-analysis</Features>
+      <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
+      <ImplicitUsings>disable</ImplicitUsings>
+      <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+      <IsPackable>false</IsPackable>
+      <IsPublishable>false</IsPublishable>
+      <LangVersion>latest</LangVersion>
+      <NoWarn>CS1591</NoWarn>
         <Nullable>enable</Nullable>
         <OutputType>Library</OutputType>
         <TargetFramework>net6.0</TargetFramework>
