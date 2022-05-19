@@ -3,7 +3,7 @@
       <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
       <RunAOTCompilation>true</RunAOTCompilation>
       <RunAOTCompilation>true</RunAOTCompilation>
-      <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
+
       <Features>strict;flow-analysis</Features>
       <GenerateNeutralResourcesLanguageAttribute>true</GenerateNeutralResourcesLanguageAttribute>
       <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
