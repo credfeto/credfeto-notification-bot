@@ -86,7 +86,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     {
         TwitchUser visitingStreamer = new(id: "123456", userName: VisitingChannel, isStreamer: true, new(year: 2020, month: 1, day: 1));
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: false, cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled,
+                                                      visitingStreamer: visitingStreamer,
+                                                      isRegular: false,
+                                                      cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
     }
@@ -96,7 +99,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     {
         TwitchUser visitingStreamer = new(id: "123456", userName: VisitingChannel, isStreamer: true, new(year: 2020, month: 1, day: 1));
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsDisabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsDisabled,
+                                                      visitingStreamer: visitingStreamer,
+                                                      isRegular: true,
+                                                      cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
     }
@@ -106,7 +112,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     {
         TwitchUser visitingStreamer = new(id: "123456", userName: VisitingChannel, isStreamer: true, new(year: 2020, month: 1, day: 1));
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled,
+                                                      visitingStreamer: visitingStreamer,
+                                                      isRegular: true,
+                                                      cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"!so @{VisitingChannel}");
     }
@@ -116,7 +125,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     {
         TwitchUser visitingStreamer = new(id: "123456", userName: VisitingChannelFriendWithNoMessage, isStreamer: true, new(year: 2020, month: 1, day: 1));
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled,
+                                                      visitingStreamer: visitingStreamer,
+                                                      isRegular: true,
+                                                      cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"!so @{VisitingChannelFriendWithNoMessage}");
     }
@@ -126,7 +138,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     {
         TwitchUser visitingStreamer = new(id: "123456", userName: VisitingChannelFriendWithMessage, isStreamer: true, new(year: 2020, month: 1, day: 1));
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled,
+                                                      visitingStreamer: visitingStreamer,
+                                                      isRegular: true,
+                                                      cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync("Check out this weird and wonderful streamer!");
     }

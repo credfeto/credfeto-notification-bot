@@ -9,9 +9,6 @@ using Discord.Commands;
 
 namespace Credfeto.Notification.Bot.Discord.Commands;
 
-/// <summary>
-///     Twitch Command module
-/// </summary>
 public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 {
     private readonly IChannelFollowCount _channelFollowCount;
@@ -25,9 +22,6 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
     }
 
-    /// <summary>
-    ///     Gets the status of a streamer
-    /// </summary>
     [Command("status")]
     [Summary(text: "Shows the status of a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
@@ -67,9 +61,6 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         await this.ReplyAsync(embed: embed);
     }
 
-    /// <summary>
-    ///     Gets the status of a streamer
-    /// </summary>
     [Command("welcome")]
     [Summary(text: "Enables or disables the welcome messages for a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
@@ -88,9 +79,6 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         }
     }
 
-    /// <summary>
-    ///     Gets the status of a streamer
-    /// </summary>
     [Command("raid")]
     [Summary(text: "Enables or disables the raid welcome messages for a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
@@ -109,9 +97,6 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         }
     }
 
-    /// <summary>
-    ///     Enables/disables thanks for gifts or subs to streamer
-    /// </summary>
     [Command("thanks")]
     [Summary(text: "Enables or disables thanks for a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
@@ -130,9 +115,6 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         }
     }
 
-    /// <summary>
-    ///     Enables or disables announcing milestones for a streamer
-    /// </summary>
     [Command("milestones")]
     [Summary(text: "Enables or disables announcing milestones for a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
@@ -151,9 +133,6 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         }
     }
 
-    /// <summary>
-    ///     Enables or disables auto-shout-outs for a streamer
-    /// </summary>
     [Command("shoutouts")]
     [Summary(text: "Enables or disables auto shout-outs for a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]
@@ -172,9 +151,6 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
         }
     }
 
-    /// <summary>
-    ///     Turns automod on/off for a streamer
-    /// </summary>
     [Command("automod")]
     [Summary(text: "Enables or disables automod for a streamer")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Add unit tests")]

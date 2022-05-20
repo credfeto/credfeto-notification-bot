@@ -1,20 +1,12 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Credfeto.Notification.Bot.Database.Dapper;
 
-/// <summary>
-///     Calculates delay retries.
-/// </summary>
 public static class RetryDelayCalculator
 {
     private static readonly Random RandomNumberGenerator = new();
 
-    /// <summary>
-    ///     Calculate the retry delay based on the current number of attempts
-    /// </summary>
-    /// <param name="attempts">The number of attempts</param>
-    /// <returns>The time to wait before the next attempt</returns>
     public static TimeSpan Calculate(int attempts)
     {
         // do a fast first retry, then exponential backoff
@@ -23,12 +15,6 @@ public static class RetryDelayCalculator
             : TimeSpan.FromSeconds(CalculateBackoff(attempts));
     }
 
-    /// <summary>
-    ///     Calculate the retry delay based on the current number of attempts
-    /// </summary>
-    /// <param name="attempts">The number of attempts</param>
-    /// <param name="maxJitterSeconds">The maximum number of seconds for jitter.</param>
-    /// <returns>The time to wait before the next attempt</returns>
     public static TimeSpan CalculateWithJitter(int attempts, int maxJitterSeconds)
     {
         // do a fast first retry, then exponential backoff

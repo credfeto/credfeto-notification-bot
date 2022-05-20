@@ -11,9 +11,6 @@ using Polly;
 
 namespace Credfeto.Notification.Bot.Database.Dapper;
 
-/// <summary>
-///     Basic Database implementation.
-/// </summary>
 public abstract class Database : IDatabase
 {
     private const int MAX_RETRIES = 3;
@@ -34,27 +31,26 @@ public abstract class Database : IDatabase
                                                                    });
     }
 
-    /// <inheritdoc />
     public async Task<int> ExecuteAsync(string storedProcedure)
     {
         using (IDbConnection connection = this.GetConnection())
         {
             // ReSharper disable once AccessToDisposedClosure
-            return await this.ExecuteWithRetriesAsync(func: () => InternalExecuteAsync(storedProcedure: storedProcedure, param: null, connection: connection), context: storedProcedure);
+            return await this.ExecuteWithRetriesAsync(func: () => InternalExecuteAsync(storedProcedure: storedProcedure, param: null, connection: connection),
+                                                      context: storedProcedure);
         }
     }
 
-    /// <inheritdoc />
     public async Task<int> ExecuteAsync<TQueryParameters>(string storedProcedure, TQueryParameters param)
     {
         using (IDbConnection connection = this.GetConnection())
         {
             // ReSharper disable once AccessToDisposedClosure
-            return await this.ExecuteWithRetriesAsync(func: () => InternalExecuteAsync(storedProcedure: storedProcedure, param: param, connection: connection), context: storedProcedure);
+            return await this.ExecuteWithRetriesAsync(func: () => InternalExecuteAsync(storedProcedure: storedProcedure, param: param, connection: connection),
+                                                      context: storedProcedure);
         }
     }
 
-    /// <inheritdoc />
     public async Task<int> ExecuteArbitrarySqlAsync(string sql)
     {
         using (IDbConnection connection = this.GetConnection())
@@ -64,7 +60,6 @@ public abstract class Database : IDatabase
         }
     }
 
-    /// <inheritdoc />
     public async Task<TResult> QuerySingleAsync<TSourceObject, TResult>(IObjectBuilder<TSourceObject, TResult> builder, string storedProcedure)
         where TSourceObject : class, new() where TResult : class
     {
@@ -73,8 +68,9 @@ public abstract class Database : IDatabase
         return ExtractUnique(builder: builder, result: result);
     }
 
-    /// <inheritdoc />
-    public async Task<TResult> QuerySingleAsync<TQueryParameters, TSourceObject, TResult>(IObjectBuilder<TSourceObject, TResult> builder, string storedProcedure, TQueryParameters param)
+    public async Task<TResult> QuerySingleAsync<TQueryParameters, TSourceObject, TResult>(IObjectBuilder<TSourceObject, TResult> builder,
+                                                                                          string storedProcedure,
+                                                                                          TQueryParameters param)
         where TSourceObject : class, new() where TResult : class
     {
         IReadOnlyList<TSourceObject> result = await this.InternalQueryAsync<TSourceObject>(storedProcedure: storedProcedure, param: param);
@@ -82,7 +78,6 @@ public abstract class Database : IDatabase
         return ExtractUnique(builder: builder, result: result);
     }
 
-    /// <inheritdoc />
     public async Task<TResult?> QuerySingleOrDefaultAsync<TSourceObject, TResult>(IObjectBuilder<TSourceObject, TResult> builder, string storedProcedure)
         where TSourceObject : class, new() where TResult : class
     {
@@ -91,8 +86,9 @@ public abstract class Database : IDatabase
         return builder.Build(result.SingleOrDefault());
     }
 
-    /// <inheritdoc />
-    public async Task<TResult?> QuerySingleOrDefaultAsync<TQueryParameters, TSourceObject, TResult>(IObjectBuilder<TSourceObject, TResult> builder, string storedProcedure, TQueryParameters param)
+    public async Task<TResult?> QuerySingleOrDefaultAsync<TQueryParameters, TSourceObject, TResult>(IObjectBuilder<TSourceObject, TResult> builder,
+                                                                                                    string storedProcedure,
+                                                                                                    TQueryParameters param)
         where TSourceObject : class, new() where TResult : class
     {
         IReadOnlyList<TSourceObject> result = await this.InternalQueryAsync<TSourceObject>(storedProcedure: storedProcedure, param: param);
@@ -100,7 +96,6 @@ public abstract class Database : IDatabase
         return builder.Build(result.SingleOrDefault());
     }
 
-    /// <inheritdoc />
     public async Task<IReadOnlyList<TResult>> QueryAsync<TSourceObject, TResult>(IObjectCollectionBuilder<TSourceObject, TResult> builder, string storedProcedure)
         where TSourceObject : class, new() where TResult : class
     {
@@ -109,7 +104,6 @@ public abstract class Database : IDatabase
         return builder.Build(results);
     }
 
-    /// <inheritdoc />
     public async Task<IReadOnlyList<TResult>> QueryAsync<TQueryParameters, TSourceObject, TResult>(IObjectCollectionBuilder<TSourceObject, TResult> builder,
                                                                                                    string storedProcedure,
                                                                                                    TQueryParameters param)
@@ -120,7 +114,6 @@ public abstract class Database : IDatabase
         return builder.Build(results);
     }
 
-    /// <inheritdoc />
     public async Task<IReadOnlyList<TResult>> QueryArbitrarySqlAsync<TResult>(string sql)
         where TResult : new()
     {
@@ -176,8 +169,9 @@ public abstract class Database : IDatabase
         {
             // ReSharper disable once AccessToDisposedClosure - The IEnumerable is enumerated inside the using statement, connection can't be disposed before
             // that happens
-            IEnumerable<TReturn> result = await this.ExecuteWithRetriesAsync(func: () => connection.QueryAsync<TReturn>(sql: storedProcedure, param: param, commandType: CommandType.StoredProcedure),
-                                                                             context: storedProcedure);
+            IEnumerable<TReturn> result =
+                await this.ExecuteWithRetriesAsync(func: () => connection.QueryAsync<TReturn>(sql: storedProcedure, param: param, commandType: CommandType.StoredProcedure),
+                                                   context: storedProcedure);
 
             return result.ToArray();
         }

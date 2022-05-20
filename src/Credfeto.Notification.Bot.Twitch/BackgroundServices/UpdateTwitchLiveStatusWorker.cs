@@ -6,9 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.BackgroundServices;
 
-/// <summary>
-///     Live Status Background service.
-/// </summary>
 public sealed class UpdateTwitchLiveStatusWorker : BackgroundService
 {
     private static readonly TimeSpan Interval = TimeSpan.FromSeconds(30);
@@ -16,19 +13,12 @@ public sealed class UpdateTwitchLiveStatusWorker : BackgroundService
     private readonly ILogger<UpdateTwitchLiveStatusWorker> _logger;
     private readonly ITwitchStreamStatus _twitchStreamStatus;
 
-    /// <summary>
-    ///     Constructor
-    /// </summary>
-    /// <param name="twitchStreamStatus">Twitch Live status checks</param>
-    /// <param name="logger">Logging.</param>
-    /// <returns>Logging</returns>
     public UpdateTwitchLiveStatusWorker(ITwitchStreamStatus twitchStreamStatus, ILogger<UpdateTwitchLiveStatusWorker> logger)
     {
         this._twitchStreamStatus = twitchStreamStatus ?? throw new ArgumentNullException(nameof(twitchStreamStatus));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)

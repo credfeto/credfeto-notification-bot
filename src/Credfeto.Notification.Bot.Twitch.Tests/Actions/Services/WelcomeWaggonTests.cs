@@ -30,7 +30,9 @@ public sealed class WelcomeWaggonTests : TestBase
         twitchChannelManager.GetStreamer(Streamer)
                             .Returns(channel);
 
-        this._welcomeWaggon = new WelcomeWaggon(twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<WelcomeWaggon>());
+        this._welcomeWaggon = new WelcomeWaggon(twitchChannelManager: twitchChannelManager,
+                                                twitchChatMessageChannel: this._twitchChatMessageChannel,
+                                                this.GetTypedLogger<WelcomeWaggon>());
     }
 
     [Fact]

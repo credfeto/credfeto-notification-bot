@@ -35,7 +35,6 @@ public sealed class TwitchChannelManager : ITwitchChannelManager
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    /// <inheritdoc />
     public ITwitchChannelState GetStreamer(Streamer streamer)
     {
         if (!this._options.IsModChannel(streamer))

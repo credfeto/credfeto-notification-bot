@@ -11,9 +11,6 @@ using Polly.Retry;
 
 namespace Credfeto.Notification.Bot.Twitch.Resources;
 
-/// <summary>
-///     PollyHttpClientBuilderExtensions
-/// </summary>
 [SuppressMessage(category: "ReSharper", checkId: "UnusedType.Global", Justification = "TODO: Review")]
 public static class HttpClientBuilderExtensions
 {
@@ -44,14 +41,6 @@ public static class HttpClientBuilderExtensions
             : TimeSpan.FromSeconds(Math.Pow(x: 2, y: attempts));
     }
 
-    /// <summary>
-    ///     Adds a <see cref="PolicyHttpMessageHandler" /> which will surround request execution.
-    ///     The policy builder will be preconfigured to trigger application of the policy for requests
-    ///     that fail with conditions that indicate a transient failure.
-    /// </summary>
-    /// <param name="builder">The <see cref="IHttpClientBuilder" />.</param>
-    /// <param name="maxRetries">The maximum number of retries.</param>
-    /// <returns>An <see cref="IHttpClientBuilder" /> that can be used to configure the client.</returns>
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Review")]
     public static IHttpClientBuilder AddSensibleTransientHttpErrorPolicy(this IHttpClientBuilder builder, int maxRetries = 3)
     {

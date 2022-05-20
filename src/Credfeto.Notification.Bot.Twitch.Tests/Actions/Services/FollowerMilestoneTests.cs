@@ -44,7 +44,10 @@ public sealed class FollowerMilestoneTests : TestBase
                                                }
                               });
 
-        this._followerMileStone = new FollowerMilestone(options: options, mediator: this._mediator, twitchStreamDataManager: this._twitchStreamDataManager, this.GetTypedLogger<FollowerMilestone>());
+        this._followerMileStone = new FollowerMilestone(options: options,
+                                                        mediator: this._mediator,
+                                                        twitchStreamDataManager: this._twitchStreamDataManager,
+                                                        this.GetTypedLogger<FollowerMilestone>());
     }
 
     [Fact]
@@ -80,7 +83,8 @@ public sealed class FollowerMilestoneTests : TestBase
     private Task ReceivedPublishMessageAsync(int milestone, int nextMilestone)
     {
         return this._mediator.Received(1)
-                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone), Arg.Any<CancellationToken>());
+                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone),
+                            Arg.Any<CancellationToken>());
     }
 
     private Task DidNotReceivePublishMessageAsync()

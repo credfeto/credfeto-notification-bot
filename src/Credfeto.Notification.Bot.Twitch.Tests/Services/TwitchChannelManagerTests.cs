@@ -55,7 +55,8 @@ public sealed class TwitchChannelManagerTests : TestBase
                                                                      Enabled = true,
                                                                      FriendChannels = new()
                                                                                       {
-                                                                                          new() { Channel = Guest1.Value, Message = "!guest" }, new() { Channel = Guest2.Value, Message = null }
+                                                                                          new() { Channel = Guest1.Value, Message = "!guest" },
+                                                                                          new() { Channel = Guest2.Value, Message = null }
                                                                                       }
                                                                  }
                                                  }
@@ -90,7 +91,8 @@ public sealed class TwitchChannelManagerTests : TestBase
         await twitchChannelState.RaidedAsync(Guest1.ToViewer(), viewerCount: 12, cancellationToken: CancellationToken.None);
 
         await this._mediator.Received(1)
-                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12), cancellationToken: CancellationToken.None);
+                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12),
+                           cancellationToken: CancellationToken.None);
     }
 
     [Fact]
@@ -103,7 +105,8 @@ public sealed class TwitchChannelManagerTests : TestBase
         await twitchChannelState.RaidedAsync(Guest1.ToViewer(), viewerCount: 12, cancellationToken: CancellationToken.None);
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12), cancellationToken: CancellationToken.None);
+                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12),
+                           cancellationToken: CancellationToken.None);
     }
 
     [Theory]
@@ -123,7 +126,8 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this.ReceivedCheckForFirstMessageInStreamAsync();
 
         await this._mediator.Received(1)
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                           cancellationToken: CancellationToken.None);
     }
 
     [Theory]
@@ -143,7 +147,8 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this.ReceivedCheckForFirstMessageInStreamAsync();
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                           cancellationToken: CancellationToken.None);
     }
 
     [Theory]
@@ -163,7 +168,8 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this.ReceivedCheckForFirstMessageInStreamAsync();
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                           cancellationToken: CancellationToken.None);
     }
 
     [Theory]
@@ -183,7 +189,8 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this.DidNotReceiveCheckForFirstMessageInStreamAsync();
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                           cancellationToken: CancellationToken.None);
     }
 
     [Theory]
@@ -203,7 +210,8 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this.DidNotReceiveCheckForFirstMessageInStreamAsync();
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular), cancellationToken: CancellationToken.None);
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                           cancellationToken: CancellationToken.None);
     }
 
     private Task DidNotReceiveBitGiftNotificationAsync()

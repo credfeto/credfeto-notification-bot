@@ -15,7 +15,9 @@ public sealed class TwitchChannelChatConnectedNotificationHandler : INotificatio
     private readonly IFollowerMilestone _followerMilestone;
     private readonly ILogger<TwitchChannelChatConnectedNotificationHandler> _logger;
 
-    public TwitchChannelChatConnectedNotificationHandler(IChannelFollowCount channelFollowCount, IFollowerMilestone followerMilestone, ILogger<TwitchChannelChatConnectedNotificationHandler> logger)
+    public TwitchChannelChatConnectedNotificationHandler(IChannelFollowCount channelFollowCount,
+                                                         IFollowerMilestone followerMilestone,
+                                                         ILogger<TwitchChannelChatConnectedNotificationHandler> logger)
     {
         this._channelFollowCount = channelFollowCount ?? throw new ArgumentNullException(nameof(channelFollowCount));
         this._followerMilestone = followerMilestone ?? throw new ArgumentNullException(nameof(followerMilestone));

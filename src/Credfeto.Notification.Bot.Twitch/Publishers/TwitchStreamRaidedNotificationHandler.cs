@@ -8,26 +8,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-/// <summary>
-///     Twitch stream raided notification handler.
-/// </summary>
 public sealed class TwitchStreamRaidedNotificationHandler : INotificationHandler<TwitchStreamRaided>
 {
     private readonly ILogger<TwitchStreamRaidedNotificationHandler> _logger;
     private readonly IRaidWelcome _raidWelcome;
 
-    /// <summary>
-    ///     Constructor.
-    /// </summary>
-    /// <param name="raidWelcome">Raid welcome.</param>
-    /// <param name="logger">Logging</param>
     public TwitchStreamRaidedNotificationHandler(IRaidWelcome raidWelcome, ILogger<TwitchStreamRaidedNotificationHandler> logger)
     {
         this._raidWelcome = raidWelcome;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    /// <inheritdoc />
     public async Task Handle(TwitchStreamRaided notification, CancellationToken cancellationToken)
     {
         try

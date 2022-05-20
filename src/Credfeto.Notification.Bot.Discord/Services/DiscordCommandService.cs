@@ -10,9 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Discord.Services;
 
-/// <summary>
-///     Command handling service.
-/// </summary>
 public sealed class DiscordCommandService : DiscordLoggingBase, IRunOnStartup
 {
     private const string COMMAND_CHANNEL_NAME = "bot-commands";

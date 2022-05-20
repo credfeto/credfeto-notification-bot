@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
 
@@ -9,6 +10,6 @@ public sealed class TwitchFollowerMilestoneEntity
 
     public int Followers { get; init; }
 
-    // ReSharper disable once InconsistentNaming
+    [SuppressMessage(category: "ReSharper", checkId: "InconsistentNaming", Justification = "TODO: Review")]
     public bool Freshly_Reached { get; init; }
 }

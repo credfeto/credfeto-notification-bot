@@ -1,19 +1,13 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Credfeto.Notification.Bot.Server.Helpers;
 
-/// <summary>
-///     Application configuration helpers
-/// </summary>
 public static class ApplicationConfig
 {
     // really should be using AppContext.BaseDirectory, but this seems to break sometimes when running unit tests with dotnet-xuint.
 
-    /// <summary>
-    ///     The base path of the folder with the configuration files in them.
-    /// </summary>
     public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
 
     private static string LookupConfigurationFilesPath()

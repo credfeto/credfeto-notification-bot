@@ -22,7 +22,8 @@ public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
     {
         this._contributionThanks = GetSubstitute<IContributionThanks>();
 
-        this._notificationHandler = new TwitchGiftSubMultipleNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchGiftSubMultipleNotificationHandler>());
+        this._notificationHandler =
+            new TwitchGiftSubMultipleNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchGiftSubMultipleNotificationHandler>());
     }
 
     [Fact]

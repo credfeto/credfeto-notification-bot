@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchModChannel
 {
-    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
+    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
     public string ChannelName { get; init; } = default!;
 
     public TwitchChannelShoutout ShoutOuts { get; init; } = default!;

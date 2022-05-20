@@ -30,10 +30,9 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Streamer.Value } } });
 
-        this._notificationHandler = new TwitchStreamOnlineNotificationHandler(
-            options: options,
-            twitchChannelManager: this._twitchChannelManager,
-            this.GetTypedLogger<TwitchStreamOnlineNotificationHandler>());
+        this._notificationHandler = new TwitchStreamOnlineNotificationHandler(options: options,
+                                                                              twitchChannelManager: this._twitchChannelManager,
+                                                                              this.GetTypedLogger<TwitchStreamOnlineNotificationHandler>());
     }
 
     [Fact]
@@ -42,7 +41,8 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
         this._twitchChannelManager.GetStreamer(Streamer)
             .Returns(this._twitchChannelState);
 
-        await this._notificationHandler.Handle(new(streamer: Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
+                                               cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.Received(1)
             .GetStreamer(Streamer);

@@ -6,27 +6,15 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Discord.Services;
 
-/// <summary>
-///     Base class for discord bot
-/// </summary>
 public abstract class DiscordLoggingBase
 {
     private readonly ILogger _logger;
 
-    /// <summary>
-    ///     Constructor.
-    /// </summary>
-    /// <param name="logger">The logger</param>
     protected DiscordLoggingBase(ILogger logger)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    /// <summary>
-    ///     Logs the message
-    /// </summary>
-    /// <param name="arg"></param>
-    /// <returns></returns>
     protected Task LogAsync(LogMessage arg)
     {
         return arg.Severity switch

@@ -8,20 +8,12 @@ namespace Credfeto.Notification.Bot.Server.ServiceStartup;
 
 internal static class Logging
 {
-    /// <summary>
-    ///     Configures logging in dependency injection.
-    /// </summary>
-    /// <param name="services">The dependency injection collection to add the services to</param>
     public static IServiceCollection AddAppLogging(this IServiceCollection services)
     {
         // add logging to the services
         return services.AddLogging(AddFilters);
     }
 
-    /// <summary>
-    ///     Initialise logging.
-    /// </summary>
-    /// <param name="loggerFactory">The logger factory.</param>
     [SuppressMessage(category: "Microsoft.Reliability", checkId: "CA2000:DisposeObjectsBeforeLosingScope", Justification = "Lives for program lifetime")]
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Not easily testable as uses third party services")]
     public static void InitializeLogging(ILoggerFactory loggerFactory)

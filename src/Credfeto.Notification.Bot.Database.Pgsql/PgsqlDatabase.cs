@@ -8,9 +8,6 @@ using Polly;
 
 namespace Credfeto.Notification.Bot.Database.Pgsql;
 
-/// <summary>
-///     Postgresql DB
-/// </summary>
 public sealed class PgsqlDatabase : Dapper.Database
 {
     private readonly PgsqlServerConfiguration _configuration;

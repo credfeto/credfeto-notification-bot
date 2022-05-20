@@ -11,21 +11,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Discord.Services;
 
-/// <summary>
-///     Discord bot
-/// </summary>
 public sealed class DiscordBot : IDiscordBot
 {
     private readonly DiscordSocketClient _client;
     private readonly ILogger<DiscordBot> _logger;
     private readonly IMessageChannel<DiscordMessage> _messageChannel;
 
-    /// <summary>
-    ///     Constructor.
-    /// </summary>
-    /// <param name="discordSocketClient">Discord Socket client.</param>
-    /// <param name="messageChannel"></param>
-    /// <param name="logger">Logging.</param>
     public DiscordBot(DiscordSocketClient discordSocketClient, IMessageChannel<DiscordMessage> messageChannel, ILogger<DiscordBot> logger)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -41,7 +32,6 @@ public sealed class DiscordBot : IDiscordBot
             .Subscribe();
     }
 
-    /// <inheritdoc />
     public async Task PublishAsync(DiscordMessage message, CancellationToken cancellationToken)
     {
         await this._messageChannel.PublishAsync(message: message, cancellationToken: cancellationToken);

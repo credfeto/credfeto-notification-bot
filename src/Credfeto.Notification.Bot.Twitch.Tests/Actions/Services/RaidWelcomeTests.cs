@@ -33,7 +33,9 @@ public sealed class RaidWelcomeTests : TestBase
                             .Returns(twitchChannelState);
         twitchChannelState.Settings.RaidWelcomesEnabled.Returns(true);
 
-        this._raidWelcome = new RaidWelcome(twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
+        this._raidWelcome = new RaidWelcome(twitchChannelManager: twitchChannelManager,
+                                            twitchChatMessageChannel: this._twitchChatMessageChannel,
+                                            this.GetTypedLogger<RaidWelcome>());
     }
 
     [Fact]

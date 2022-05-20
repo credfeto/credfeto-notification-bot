@@ -11,22 +11,15 @@ using Microsoft.Extensions.Options;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-/// <summary>
-///     Twitch stream offline notification handler.
-/// </summary>
 public sealed class TwitchStreamOfflineNotificationHandler : INotificationHandler<TwitchStreamOffline>
 {
     private readonly ILogger<TwitchStreamOfflineNotificationHandler> _logger;
     private readonly TwitchBotOptions _options;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
-    /// <summary>
-    ///     Constructor.
-    /// </summary>
-    /// <param name="options">Twitch Bot options</param>
-    /// <param name="twitchChannelManager">Twitch Channel Manager.</param>
-    /// <param name="logger">Logging</param>
-    public TwitchStreamOfflineNotificationHandler(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, ILogger<TwitchStreamOfflineNotificationHandler> logger)
+    public TwitchStreamOfflineNotificationHandler(IOptions<TwitchBotOptions> options,
+                                                  ITwitchChannelManager twitchChannelManager,
+                                                  ILogger<TwitchStreamOfflineNotificationHandler> logger)
     {
         this._twitchChannelManager = twitchChannelManager;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -34,7 +27,6 @@ public sealed class TwitchStreamOfflineNotificationHandler : INotificationHandle
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    /// <inheritdoc />
     public Task Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
     {
         this._logger.LogWarning($"{notification.Streamer}: Stopped streaming \"{notification.Title}\" ({notification.GameName}) at {notification.StartedAt}");

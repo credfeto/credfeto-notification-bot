@@ -52,8 +52,9 @@ public sealed class FollowerMilestone : IFollowerMilestone
 
         if (milestoneFreshlyReached)
         {
-            await this._mediator.Publish(new TwitchFollowerMilestoneReached(streamer: streamer, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
-                                         cancellationToken: cancellationToken);
+            await this._mediator.Publish(
+                new TwitchFollowerMilestoneReached(streamer: streamer, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
+                cancellationToken: cancellationToken);
             this._logger.LogWarning($"{streamer}: Woo!! New follower milestone reached {lastMileStoneReached}");
         }
     }
