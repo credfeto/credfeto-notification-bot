@@ -11,21 +11,18 @@
     <IsPackable>false</IsPackable>
     <IsPublishable>true</IsPublishable>
     <LangVersion>latest</LangVersion>
-    <NoWarn/>
+    <NoWarn />
     <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
     <RuntimeIdentifiers>win-x64;win10-x64;win81-x64;osx.10.12-x64;linux-x64;linux-arm64</RuntimeIdentifiers>
     <TargetFramework>net6.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
-    <TreatSpecificWarningsAsErrors/>
+    <TreatSpecificWarningsAsErrors />
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
-    <WarningsAsErrors/>
-
-
+    <WarningsAsErrors />
     <IsTrimmable>false</IsTrimmable>
     <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
-
   </PropertyGroup>
   <PropertyGroup>
     <ServerGarbageCollection>false</ServerGarbageCollection>
