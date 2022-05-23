@@ -18,12 +18,6 @@ internal static class OptionsExtensions
         return options.GetModChannel(streamer) != null;
     }
 
-    public static bool RaidWelcomeEnabled(this TwitchBotOptions options, in Streamer streamer)
-    {
-        return options.GetModChannel(streamer)
-                      ?.Raids.Enabled ?? false;
-    }
-
     public static TwitchAPI ConfigureTwitchApi(this TwitchBotOptions options)
     {
         return new()

@@ -70,7 +70,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public async Task RaidedAsync(Viewer raider, int viewerCount, CancellationToken cancellationToken)
     {
-        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true && this._options.RaidWelcomeEnabled(this.Streamer))
+        if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true)
         {
             await this._mediator.Publish(new TwitchStreamRaided(streamer: this.Streamer, raider: raider, viewerCount: viewerCount), cancellationToken: cancellationToken);
         }
@@ -270,12 +270,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            model = new(streamer: this.Streamer,
-                        user: user,
-                        this._stream != null,
-                        isStreamer: twitchUser.IsStreamer,
-                        accountCreated: twitchUser.DateCreated,
-                        followCount: followCount);
+            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
         }
         else
         {
