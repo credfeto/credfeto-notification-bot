@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -7,6 +8,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -22,8 +24,7 @@ public sealed class TwitchNewPaidSubNotificationHandlerTests : TestBase
     {
         this._contributionThanks = GetSubstitute<IContributionThanks>();
 
-        this._notificationHandler =
-            new TwitchNewPaidSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchNewPaidSubNotificationHandler>());
+        this._notificationHandler = new TwitchNewPaidSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchNewPaidSubNotificationHandler>());
     }
 
     [Fact]
@@ -31,10 +32,21 @@ public sealed class TwitchNewPaidSubNotificationHandlerTests : TestBase
     {
         await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
 
-        await this.ThankForNewPaidSubAsync();
+        await this.ReceivedThankForNewPaidSubAsync();
     }
 
-    private Task ThankForNewPaidSubAsync()
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        this._contributionThanks.ThankForNewPaidSubAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
+            .Throws<TimeoutException>();
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedThankForNewPaidSubAsync();
+    }
+
+    private Task ReceivedThankForNewPaidSubAsync()
     {
         return this._contributionThanks.Received(1)
                    .ThankForNewPaidSubAsync(streamer: Streamer, user: Subscriber, Arg.Any<CancellationToken>());
