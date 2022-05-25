@@ -22,6 +22,7 @@ public sealed class ContributionThanksTests : TestBase
 
     private readonly IContributionThanks _contributionThanks;
     private readonly ICurrentTimeSource _currentTimeSource;
+    private readonly ITwitchChannelState _twitchChannelState;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
     public ContributionThanksTests()
@@ -32,15 +33,19 @@ public sealed class ContributionThanksTests : TestBase
         options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Streamer.ToString(), Thanks = new() { Enabled = true } } } });
 
         ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
-        ITwitchChannelState twitchChannelState = GetSubstitute<ITwitchChannelState>();
+        this._twitchChannelState = GetSubstitute<ITwitchChannelState>();
         twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
-                            .Returns(twitchChannelState);
-        twitchChannelState.Settings.ThanksEnabled.Returns(true);
+                            .Returns(this._twitchChannelState);
 
         this._contributionThanks = new ContributionThanks(twitchChannelManager: twitchChannelManager,
                                                           twitchChatMessageChannel: this._twitchChatMessageChannel,
                                                           currentTimeSource: this._currentTimeSource,
                                                           this.GetTypedLogger<ContributionThanks>());
+    }
+
+    private void MockThanksEnabled(bool enabled)
+    {
+        this._twitchChannelState.Settings.ThanksEnabled.Returns(enabled);
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
@@ -70,6 +75,8 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThanksForBitsAsync()
     {
+        this.MockThanksEnabled(true);
+
         await this._contributionThanks.ThankForBitsAsync(streamer: Streamer, user: GiftingUser, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for the bits");
@@ -78,8 +85,22 @@ public sealed class ContributionThanksTests : TestBase
     }
 
     [Fact]
+    public async Task NoThanksForBitsAsync()
+    {
+        this.MockThanksEnabled(false);
+
+        await this._contributionThanks.ThankForBitsAsync(streamer: Streamer, user: GiftingUser, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
+
+        this.DidNotReceiveCurrentTime();
+    }
+
+    [Fact]
     public async Task ThankForGiftingOneSubAsync()
     {
+        this.MockThanksEnabled(true);
+
         await this._contributionThanks.ThankForGiftingSubAsync(streamer: Streamer, giftedBy: GiftingUser, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for gifting sub");
@@ -88,8 +109,22 @@ public sealed class ContributionThanksTests : TestBase
     }
 
     [Fact]
+    public async Task NoThankForGiftingOneSubAsync()
+    {
+        this.MockThanksEnabled(false);
+
+        await this._contributionThanks.ThankForGiftingSubAsync(streamer: Streamer, giftedBy: GiftingUser, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
+
+        this.DidNotReceiveCurrentTime();
+    }
+
+    [Fact]
     public async Task ThankForGiftingMultipleSubsAsync()
     {
+        this.MockThanksEnabled(true);
+
         await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for gifting subs");
@@ -98,8 +133,22 @@ public sealed class ContributionThanksTests : TestBase
     }
 
     [Fact]
+    public async Task NoThanksForGiftingMultipleSubsAsync()
+    {
+        this.MockThanksEnabled(false);
+
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
+
+        this.DidNotReceiveCurrentTime();
+    }
+
+    [Fact]
     public async Task ThankForNewPaidSubAsync()
     {
+        this.MockThanksEnabled(true);
+
         await this._contributionThanks.ThankForNewPaidSubAsync(streamer: Streamer, user: User, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{User} for subscribing");
@@ -108,8 +157,22 @@ public sealed class ContributionThanksTests : TestBase
     }
 
     [Fact]
+    public async Task NoThanksForNewPaidSubAsync()
+    {
+        this.MockThanksEnabled(false);
+
+        await this._contributionThanks.ThankForNewPaidSubAsync(streamer: Streamer, user: User, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
+
+        this.DidNotReceiveCurrentTime();
+    }
+
+    [Fact]
     public async Task ThankForNewPrimeSubAsync()
     {
+        this.MockThanksEnabled(true);
+
         await this._contributionThanks.ThankForNewPrimeSubAsync(streamer: Streamer, user: User, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{User} for subscribing");
@@ -118,8 +181,22 @@ public sealed class ContributionThanksTests : TestBase
     }
 
     [Fact]
+    public async Task NoThanksForNewPrimeSubAsync()
+    {
+        this.MockThanksEnabled(false);
+
+        await this._contributionThanks.ThankForNewPrimeSubAsync(streamer: Streamer, user: User, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
+
+        this.DidNotReceiveCurrentTime();
+    }
+
+    [Fact]
     public async Task ThankForPaidReSubAsync()
     {
+        this.MockThanksEnabled(true);
+
         await this._contributionThanks.ThankForPaidReSubAsync(streamer: Streamer, user: User, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{User} for resubscribing");
@@ -128,11 +205,37 @@ public sealed class ContributionThanksTests : TestBase
     }
 
     [Fact]
+    public async Task NoThanksForPaidReSubAsync()
+    {
+        this.MockThanksEnabled(false);
+
+        await this._contributionThanks.ThankForPaidReSubAsync(streamer: Streamer, user: User, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
+
+        this.DidNotReceiveCurrentTime();
+    }
+
+    [Fact]
     public async Task ThankForPrimeReSubAsync()
     {
+        this.MockThanksEnabled(true);
+
         await this._contributionThanks.ThankForPrimeReSubAsync(streamer: Streamer, user: User, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{User} for resubscribing");
+
+        this.DidNotReceiveCurrentTime();
+    }
+
+    [Fact]
+    public async Task NoThanksForPrimeReSubAsync()
+    {
+        this.MockThanksEnabled(false);
+
+        await this._contributionThanks.ThankForPrimeReSubAsync(streamer: Streamer, user: User, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
 
         this.DidNotReceiveCurrentTime();
     }
