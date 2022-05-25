@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -7,6 +8,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -28,6 +30,17 @@ public sealed class TwitchBitsGiftNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
+        await this._notificationHandler.Handle(new(streamer: Streamer, user: GiftedBy, bits: 404), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedThankForBitsAsync();
+    }
+
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        this._contributionThanks.ThankForBitsAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
+            .Throws<TimeoutException>();
+
         await this._notificationHandler.Handle(new(streamer: Streamer, user: GiftedBy, bits: 404), cancellationToken: CancellationToken.None);
 
         await this.ReceivedThankForBitsAsync();
