@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -40,6 +41,24 @@ public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
     {
         this._twitchChannelManager.GetStreamer(Streamer)
             .Returns(this._twitchChannelState);
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
+
+        this._twitchChannelManager.Received(1)
+            .GetStreamer(Streamer);
+
+        this._twitchChannelState.Received(1)
+            .Offline();
+    }
+
+    [Fact]
+    public async Task HandleModChannelExceptionAsync()
+    {
+        this._twitchChannelManager.GetStreamer(Streamer)
+            .Returns(this._twitchChannelState);
+
+        this._twitchChannelState.When(x => x.Offline())
+            .Do(_ => throw new ArithmeticException());
 
         await this._notificationHandler.Handle(new(streamer: Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
 
