@@ -23,6 +23,7 @@ public sealed class RaidWelcomeTests : LoggingTestBase
     private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private static readonly Viewer Raider = Viewer.FromString(nameof(Raider));
     private readonly IRaidWelcome _raidWelcome;
+    private readonly ITwitchChannelState _twitchChannelState;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
     public RaidWelcomeTests(ITestOutputHelper output)
@@ -31,10 +32,10 @@ public sealed class RaidWelcomeTests : LoggingTestBase
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
 
         ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
-        ITwitchChannelState twitchChannelState = GetSubstitute<ITwitchChannelState>();
+
+        this._twitchChannelState = GetSubstitute<ITwitchChannelState>();
         twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
-                            .Returns(twitchChannelState);
-        twitchChannelState.Settings.RaidWelcomesEnabled.Returns(true);
+                            .Returns(this._twitchChannelState);
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions
@@ -65,6 +66,8 @@ public sealed class RaidWelcomeTests : LoggingTestBase
     [Fact]
     public async Task IssueRaidWelcomeAsync()
     {
+        this._twitchChannelState.Settings.RaidWelcomesEnabled.Returns(true);
+
         await this._raidWelcome.IssueRaidWelcomeAsync(streamer: Streamer, raider: Raider, cancellationToken: CancellationToken.None);
 
         const string raidWelcome = @"
@@ -77,6 +80,17 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
         await this.ReceivedPublishMessageAsync($"Thanks @{Raider} for the raid");
         await this.ReceivedPublishMessageAsync($"!so @{Raider}");
         await this.ReceivedPublishMessageAsync(CALM_DOWN_MSG);
+    }
+
+    [Fact]
+    public async Task IssueRaidWelcomeNonModChannelAsync()
+    {
+        this._twitchChannelState.Settings.RaidWelcomesEnabled.Returns(false);
+
+        await this._raidWelcome.IssueRaidWelcomeAsync(streamer: Streamer, raider: Raider, cancellationToken: CancellationToken.None);
+
+        await this._twitchChatMessageChannel.DidNotReceive()
+                  .PublishAsync(Arg.Any<TwitchChatMessage>(), Arg.Any<CancellationToken>());
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
