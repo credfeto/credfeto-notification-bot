@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -7,6 +8,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -22,8 +24,7 @@ public sealed class TwitchGiftSubSingleNotificationHandlerTests : TestBase
     {
         this._contributionThanks = GetSubstitute<IContributionThanks>();
 
-        this._notificationHandler =
-            new TwitchGiftSubSingleNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchGiftSubSingleNotificationHandler>());
+        this._notificationHandler = new TwitchGiftSubSingleNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchGiftSubSingleNotificationHandler>());
     }
 
     [Fact]
@@ -31,10 +32,21 @@ public sealed class TwitchGiftSubSingleNotificationHandlerTests : TestBase
     {
         await this._notificationHandler.Handle(new(streamer: Streamer, user: GiftedBy), cancellationToken: CancellationToken.None);
 
-        await this.ThankForGiftingSubAsync();
+        await this.ReceivedThankForGiftingSubAsync();
     }
 
-    private Task ThankForGiftingSubAsync()
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        this._contributionThanks.ThankForGiftingSubAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
+            .Throws<TimeoutException>();
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, user: GiftedBy), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedThankForGiftingSubAsync();
+    }
+
+    private Task ReceivedThankForGiftingSubAsync()
     {
         return this._contributionThanks.Received(1)
                    .ThankForGiftingSubAsync(streamer: Streamer, giftedBy: GiftedBy, Arg.Any<CancellationToken>());
