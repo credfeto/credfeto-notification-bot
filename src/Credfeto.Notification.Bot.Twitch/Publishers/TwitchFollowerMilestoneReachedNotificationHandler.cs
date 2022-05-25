@@ -29,7 +29,7 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : MessageS
     {
         ITwitchChannelState channelState = this._twitchChannelManager.GetStreamer(notification.Streamer);
 
-        if (channelState.Settings.AnnounceMilestonesEnabled)
+        if (!channelState.Settings.AnnounceMilestonesEnabled)
         {
             return;
         }

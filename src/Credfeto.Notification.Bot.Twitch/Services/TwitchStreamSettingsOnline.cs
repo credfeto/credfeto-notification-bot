@@ -22,12 +22,12 @@ internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITw
         this.AnnounceMilestonesEnabled = this.ModChannel.MileStones.Enabled;
         this.ShoutOutsEnabled = this.ModChannel.ShoutOuts.Enabled;
 
-        this._logger.LogWarning($"Online status for {this._streamer}:");
-        this._logger.LogWarning($"Chat Welcomes: {this.ChatWelcomesEnabled}:");
-        this._logger.LogWarning($"Raid Welcomes: {this.RaidWelcomesEnabled}:");
-        this._logger.LogWarning($"Thanks: {this.RaidWelcomesEnabled}:");
-        this._logger.LogWarning($"Milestones: {this.AnnounceMilestonesEnabled}:");
-        this._logger.LogWarning($"Shout-Outs: {this.ShoutOutsEnabled}:");
+        this._logger.LogWarning($"Online status for {this._streamer}");
+        this._logger.LogWarning($"Chat Welcomes: {this.ChatWelcomesEnabled}");
+        this._logger.LogWarning($"Raid Welcomes: {this.RaidWelcomesEnabled}");
+        this._logger.LogWarning($"Thanks: {this.RaidWelcomesEnabled}");
+        this._logger.LogWarning($"Milestones: {this.AnnounceMilestonesEnabled}");
+        this._logger.LogWarning($"Shout-Outs: {this.ShoutOutsEnabled}");
     }
 
     public bool ShoutOutsEnabled { get; private set; }
