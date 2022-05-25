@@ -10,6 +10,7 @@ using FunFair.Test.Common;
 using MediatR;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -42,6 +43,24 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
     {
         this._twitchChannelManager.GetStreamer(Streamer)
             .Returns(this._twitchChannelState);
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
+
+        this._twitchChannelManager.Received(1)
+            .GetStreamer(Streamer);
+
+        await this._twitchChannelState.Received(1)
+                  .OnlineAsync(gameName: "IRL", new(year: 2020, month: 1, day: 1));
+    }
+
+    [Fact]
+    public async Task HandleWhenModChannelExceptionAsync()
+    {
+        this._twitchChannelManager.GetStreamer(Streamer)
+            .Returns(this._twitchChannelState);
+
+        this._twitchChannelState.OnlineAsync(Arg.Any<string>(), Arg.Any<DateTime>())
+            .Throws<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
 
