@@ -66,14 +66,14 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
         this._logger.LogInformation($"{streamer}: {raider} is raiding!");
     }
 
-    private async Task SendSlowMessageAsync(Streamer streamer, string message, CancellationToken cancellationToken)
+    private ValueTask SendSlowMessageAsync(in Streamer streamer, string message, in CancellationToken cancellationToken)
     {
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, message: message, cancellationToken: cancellationToken);
+        return this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, message: message, cancellationToken: cancellationToken);
     }
 
-    private async Task SendImmediateMessageAsync(Streamer streamer, string message, CancellationToken cancellationToken)
+    private ValueTask SendImmediateMessageAsync(in Streamer streamer, string message, in CancellationToken cancellationToken)
     {
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.ASAP, message: message, cancellationToken: cancellationToken);
+        return this.SendMessageAsync(streamer: streamer, priority: MessagePriority.ASAP, message: message, cancellationToken: cancellationToken);
     }
 
     private TwitchModChannel? GetStreamerSettings(Streamer streamer)
