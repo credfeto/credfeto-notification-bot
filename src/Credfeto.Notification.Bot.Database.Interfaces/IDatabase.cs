@@ -29,9 +29,7 @@ public interface IDatabase
         where TSourceObject : class, new() where TResult : class;
 
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Review")]
-    Task<TResult?> QuerySingleOrDefaultAsync<TQueryParameters, TSourceObject, TResult>(IObjectBuilder<TSourceObject, TResult> builder,
-                                                                                       string storedProcedure,
-                                                                                       TQueryParameters param)
+    Task<TResult?> QuerySingleOrDefaultAsync<TQueryParameters, TSourceObject, TResult>(IObjectBuilder<TSourceObject, TResult> builder, string storedProcedure, TQueryParameters param)
         where TSourceObject : class, new() where TResult : class;
 
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Review")]
@@ -39,9 +37,7 @@ public interface IDatabase
         where TSourceObject : class, new() where TResult : class;
 
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Review")]
-    Task<IReadOnlyList<TResult>> QueryAsync<TQueryParameters, TSourceObject, TResult>(IObjectCollectionBuilder<TSourceObject, TResult> builder,
-                                                                                      string storedProcedure,
-                                                                                      TQueryParameters param)
+    Task<IReadOnlyList<TResult>> QueryAsync<TQueryParameters, TSourceObject, TResult>(IObjectCollectionBuilder<TSourceObject, TResult> builder, string storedProcedure, TQueryParameters param)
         where TSourceObject : class, new() where TResult : class;
 
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Review")]

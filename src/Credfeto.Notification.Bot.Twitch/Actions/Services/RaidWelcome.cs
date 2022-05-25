@@ -43,30 +43,37 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
         TwitchChannelRaids? raidSettings = this.GetStreamerSettings(streamer)
                                                ?.Raids;
 
-        if (raidSettings != null)
+        if (raidSettings?.Immediate != null)
         {
-            if (raidSettings.Immediate != null)
+            foreach (string message in raidSettings.Immediate)
             {
-                foreach (string message in raidSettings.Immediate)
-                {
-                    await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.ASAP, message: message, cancellationToken: cancellationToken);
-                }
-            }
-
-            if (raidSettings.CalmDown != null)
-            {
-                foreach (string message in raidSettings.CalmDown)
-                {
-                    await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, message: message, cancellationToken: cancellationToken);
-                }
+                await this.SendImmediateMessageAsync(streamer: streamer, message: message, cancellationToken: cancellationToken);
             }
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.ASAP, message: raidWelcome, cancellationToken: cancellationToken);
+        await this.SendImmediateMessageAsync(streamer: streamer, raidWelcome.Trim(), cancellationToken: cancellationToken);
         await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{raider} for the raid", cancellationToken: cancellationToken);
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, $"!so @{raider}", cancellationToken: cancellationToken);
+        await this.SendSlowMessageAsync(streamer: streamer, $"!so @{raider}", cancellationToken: cancellationToken);
+
+        if (raidSettings?.CalmDown != null)
+        {
+            foreach (string message in raidSettings.CalmDown)
+            {
+                await this.SendSlowMessageAsync(streamer: streamer, message: message, cancellationToken: cancellationToken);
+            }
+        }
 
         this._logger.LogInformation($"{streamer}: {raider} is raiding!");
+    }
+
+    private async Task SendSlowMessageAsync(Streamer streamer, string message, CancellationToken cancellationToken)
+    {
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, message: message, cancellationToken: cancellationToken);
+    }
+
+    private async Task SendImmediateMessageAsync(Streamer streamer, string message, CancellationToken cancellationToken)
+    {
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.ASAP, message: message, cancellationToken: cancellationToken);
     }
 
     private TwitchModChannel? GetStreamerSettings(Streamer streamer)

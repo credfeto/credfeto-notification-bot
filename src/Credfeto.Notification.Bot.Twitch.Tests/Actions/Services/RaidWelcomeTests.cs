@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
@@ -11,17 +12,21 @@ using FunFair.Test.Common;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
-public sealed class RaidWelcomeTests : TestBase
+public sealed class RaidWelcomeTests : LoggingTestBase
 {
+    private const string IMMEDIATE_MSG = "!raiders";
+    private const string CALM_DOWN_MSG = "!tag";
     private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private static readonly Viewer Raider = Viewer.FromString(nameof(Raider));
     private readonly IRaidWelcome _raidWelcome;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
-    public RaidWelcomeTests()
+    public RaidWelcomeTests(ITestOutputHelper output)
+        : base(output)
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
 
@@ -43,11 +48,11 @@ public sealed class RaidWelcomeTests : TestBase
                                                              {
                                                                  Immediate = new[]
                                                                              {
-                                                                                 "!raiders"
+                                                                                 IMMEDIATE_MSG
                                                                              },
                                                                  CalmDown = new[]
                                                                             {
-                                                                                "!tag"
+                                                                                CALM_DOWN_MSG
                                                                             }
                                                              }
                                                  }
@@ -67,16 +72,17 @@ public sealed class RaidWelcomeTests : TestBase
 GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
 
-        await this.ReceivedPublishMessageAsync("!raiders");
-        await this.ReceivedPublishMessageAsync(raidWelcome);
+        await this.ReceivedPublishMessageAsync(IMMEDIATE_MSG);
+        await this.ReceivedPublishMessageAsync(raidWelcome.Trim());
         await this.ReceivedPublishMessageAsync($"Thanks @{Raider} for the raid");
         await this.ReceivedPublishMessageAsync($"!so @{Raider}");
-        await this.ReceivedPublishMessageAsync("!tag");
+        await this.ReceivedPublishMessageAsync(CALM_DOWN_MSG);
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
     {
         return this._twitchChatMessageChannel.Received(1)
-                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == Streamer && t.Message == expectedMessage), Arg.Any<CancellationToken>());
+                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == Streamer && StringComparer.InvariantCultureIgnoreCase.Equals(t.Message.Trim(), expectedMessage)),
+                                 Arg.Any<CancellationToken>());
     }
 }
