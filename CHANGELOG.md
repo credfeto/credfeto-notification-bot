@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 - Support for ARM64
 ### Fixed
+- Added test to ensure that milestones do not get announced when they are disabled
 ### Changed
 - FF-3881 - Updated DotNet SDK to 6.0.102
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.36.0.43782
