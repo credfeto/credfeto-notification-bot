@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -7,6 +8,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -30,10 +32,21 @@ public sealed class TwitchPaidReSubNotificationHandlerTests : TestBase
     {
         await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
 
-        await this.ThankForPaidReSubAsync();
+        await this.ReceivedThankForPaidReSubAsync();
     }
 
-    private Task ThankForPaidReSubAsync()
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        this._contributionThanks.ThankForPaidReSubAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
+            .Throws<TimeoutException>();
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedThankForPaidReSubAsync();
+    }
+
+    private Task ReceivedThankForPaidReSubAsync()
     {
         return this._contributionThanks.Received(1)
                    .ThankForPaidReSubAsync(streamer: Streamer, user: Subscriber, Arg.Any<CancellationToken>());
