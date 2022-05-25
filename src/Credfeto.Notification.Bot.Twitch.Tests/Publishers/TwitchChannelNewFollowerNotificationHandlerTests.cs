@@ -9,6 +9,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -44,19 +45,39 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
         this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: Streamer, Arg.Any<CancellationToken>())
             .Returns(followerCount);
 
-        await this._notificationHandler.Handle(
-            new(streamer: Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
-            cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();
 
         await this.ReceivedIssueMilestoneUpdateAsync(followerCount);
     }
 
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        const bool streamOnline = false;
+        this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: Streamer, Arg.Any<CancellationToken>())
+            .Throws<TimeoutException>();
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
+                                               cancellationToken: CancellationToken.None);
+
+        await this.ReceivedGetCurrentFollowerCountAsync();
+
+        await this.DidNotReceiveIssueMilestoneUpdateAsync();
+    }
+
     private Task ReceivedIssueMilestoneUpdateAsync(int followerCount)
     {
         return this._followerMilestone.Received(1)
                    .IssueMilestoneUpdateAsync(streamer: Streamer, followers: followerCount, Arg.Any<CancellationToken>());
+    }
+
+    private Task DidNotReceiveIssueMilestoneUpdateAsync()
+    {
+        return this._followerMilestone.DidNotReceive()
+                   .IssueMilestoneUpdateAsync(Arg.Any<Streamer>(), Arg.Any<int>(), Arg.Any<CancellationToken>());
     }
 
     private Task ReceivedGetCurrentFollowerCountAsync()
