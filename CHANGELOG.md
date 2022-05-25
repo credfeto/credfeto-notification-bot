@@ -7,6 +7,16 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 
 ## [Unreleased]
 ### Added
+### Fixed
+### Changed
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.2] - 2022-05-26
+### Added
 - Support for ARM64
 ### Fixed
 - Added test to ensure that milestones do not get announced when they are disabled
@@ -38,10 +48,5 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.39.0.47922
 - FF-3881 - Updated DotNet SDK to 6.0.300
 - FF-1429 - Updated FunFair.Test.Common to 5.9.5.1833
-### Removed
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [0.0.0] - Project created
