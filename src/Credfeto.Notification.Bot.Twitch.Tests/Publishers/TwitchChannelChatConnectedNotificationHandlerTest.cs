@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -8,6 +9,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -46,10 +48,29 @@ public sealed class TwitchChannelChatConnectedNotificationHandlerTests : TestBas
         await this.ReceivedIssueMilestoneUpdateAsync(followerCount);
     }
 
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: Streamer, Arg.Any<CancellationToken>())
+            .Throws<TimeoutException>();
+
+        await this._notificationHandler.Handle(new(streamer: Streamer), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedGetCurrentFollowerCountAsync();
+
+        await this.DidNotReceiveIssueMilestoneUpdateAsync();
+    }
+
     private Task ReceivedIssueMilestoneUpdateAsync(int followerCount)
     {
         return this._followerMilestone.Received(1)
                    .IssueMilestoneUpdateAsync(streamer: Streamer, followers: followerCount, Arg.Any<CancellationToken>());
+    }
+
+    private Task DidNotReceiveIssueMilestoneUpdateAsync()
+    {
+        return this._followerMilestone.DidNotReceive()
+                   .IssueMilestoneUpdateAsync(Arg.Any<Streamer>(), Arg.Any<int>(), Arg.Any<CancellationToken>());
     }
 
     private Task ReceivedGetCurrentFollowerCountAsync()
