@@ -9,6 +9,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReturnsExtensions;
 using Xunit;
 
@@ -128,5 +129,18 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         await this.ReceivedGetUserAsync();
         await this.ReceivedWelcomeAsync();
         await this.ReceivedIssueShoutoutAsync();
+    }
+
+    [Fact]
+    public async Task HandleForGetUserErrorAsync()
+    {
+        this._userInfoService.GetUserAsync(User)
+            .Throws<ArgumentOutOfRangeException>();
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, user: User, isRegular: true), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedGetUserAsync();
+        await this.DidNotReceiveWelcomeAsync();
+        await this.DidNotReceiveIssueShoutoutAsync();
     }
 }
