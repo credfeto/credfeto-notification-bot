@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -7,6 +8,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -24,6 +26,18 @@ public sealed class TwitchStreamRaidedNotificationHandlerTests : TestBase
         this._raidWelcome = GetSubstitute<IRaidWelcome>();
 
         this._notificationHandler = new TwitchStreamRaidedNotificationHandler(raidWelcome: this._raidWelcome, this.GetTypedLogger<TwitchStreamRaidedNotificationHandler>());
+    }
+
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        this._raidWelcome.IssueRaidWelcomeAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
+            .Throws<ArgumentOutOfRangeException>();
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, raider: Raider, viewerCount: 254643), cancellationToken: CancellationToken.None);
+
+        await this._raidWelcome.Received(1)
+                  .IssueRaidWelcomeAsync(streamer: Streamer, raider: Raider, Arg.Any<CancellationToken>());
     }
 
     [Fact]
