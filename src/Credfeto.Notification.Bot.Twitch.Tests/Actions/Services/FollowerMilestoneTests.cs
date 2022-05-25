@@ -44,10 +44,19 @@ public sealed class FollowerMilestoneTests : TestBase
                                                }
                               });
 
-        this._followerMileStone = new FollowerMilestone(options: options,
-                                                        mediator: this._mediator,
-                                                        twitchStreamDataManager: this._twitchStreamDataManager,
-                                                        this.GetTypedLogger<FollowerMilestone>());
+        this._followerMileStone = new FollowerMilestone(options: options, mediator: this._mediator, twitchStreamDataManager: this._twitchStreamDataManager, this.GetTypedLogger<FollowerMilestone>());
+    }
+
+    [Fact]
+    public async Task FollowerMileStoneReachedNewStreamerZeroAsync()
+    {
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: 1)
+            .Returns(true);
+
+        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: Streamer, followers: 1, cancellationToken: CancellationToken.None);
+
+        await this.DidNotReceivePublishMessageAsync();
+        await this.DidNotReceiveUpdateMilestoneAsync();
     }
 
     [Fact]
@@ -59,7 +68,7 @@ public sealed class FollowerMilestoneTests : TestBase
         await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: Streamer, followers: 101, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync(milestone: 100, nextMilestone: 1000);
-        await this.ReceivedUpdateMilestoneAsync();
+        await this.ReceivedUpdateMilestoneAsync(100);
     }
 
     [Fact]
@@ -71,20 +80,25 @@ public sealed class FollowerMilestoneTests : TestBase
         await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: Streamer, followers: 101, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
-        await this.ReceivedUpdateMilestoneAsync();
+        await this.ReceivedUpdateMilestoneAsync(100);
     }
 
-    private Task<bool> ReceivedUpdateMilestoneAsync()
+    private Task ReceivedUpdateMilestoneAsync(int followerCount)
     {
         return this._twitchStreamDataManager.Received(1)
-                   .UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: 100);
+                   .UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: followerCount);
+    }
+
+    private Task DidNotReceiveUpdateMilestoneAsync()
+    {
+        return this._twitchStreamDataManager.DidNotReceive()
+                   .UpdateFollowerMilestoneAsync(Arg.Any<Streamer>(), Arg.Any<int>());
     }
 
     private Task ReceivedPublishMessageAsync(int milestone, int nextMilestone)
     {
         return this._mediator.Received(1)
-                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone),
-                            Arg.Any<CancellationToken>());
+                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone), Arg.Any<CancellationToken>());
     }
 
     private Task DidNotReceivePublishMessageAsync()
