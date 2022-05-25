@@ -24,8 +24,6 @@ public sealed class RaidWelcomeTests : TestBase
     public RaidWelcomeTests()
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
-        IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = Streamer.ToString(), Raids = new() { Enabled = true } } } });
 
         ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
         ITwitchChannelState twitchChannelState = GetSubstitute<ITwitchChannelState>();
@@ -33,9 +31,30 @@ public sealed class RaidWelcomeTests : TestBase
                             .Returns(twitchChannelState);
         twitchChannelState.Settings.RaidWelcomesEnabled.Returns(true);
 
-        this._raidWelcome = new RaidWelcome(twitchChannelManager: twitchChannelManager,
-                                            twitchChatMessageChannel: this._twitchChatMessageChannel,
-                                            this.GetTypedLogger<RaidWelcome>());
+        IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
+        options.Value.Returns(new TwitchBotOptions
+                              {
+                                  Channels = new()
+                                             {
+                                                 new()
+                                                 {
+                                                     ChannelName = Streamer.Value,
+                                                     Raids = new()
+                                                             {
+                                                                 Immediate = new[]
+                                                                             {
+                                                                                 "!raiders"
+                                                                             },
+                                                                 CalmDown = new[]
+                                                                            {
+                                                                                "!tip"
+                                                                            }
+                                                             }
+                                                 }
+                                             }
+                              });
+
+        this._raidWelcome = new RaidWelcome(options: options, twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
     }
 
     [Fact]
