@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -7,6 +8,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -21,13 +23,23 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
     {
         this._heistJoiner = GetSubstitute<IHeistJoiner>();
 
-        this._notificationHandler =
-            new StreamLabsHeistStartingNotificationHandler(heistJoiner: this._heistJoiner, this.GetTypedLogger<StreamLabsHeistStartingNotificationHandler>());
+        this._notificationHandler = new StreamLabsHeistStartingNotificationHandler(heistJoiner: this._heistJoiner, this.GetTypedLogger<StreamLabsHeistStartingNotificationHandler>());
     }
 
     [Fact]
     public async Task HandleAsync()
     {
+        await this._notificationHandler.Handle(new(Streamer), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedJoinHeistAsync();
+    }
+
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        this._heistJoiner.JoinHeistAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
+            .Throws<TimeoutException>();
+
         await this._notificationHandler.Handle(new(Streamer), cancellationToken: CancellationToken.None);
 
         await this.ReceivedJoinHeistAsync();
