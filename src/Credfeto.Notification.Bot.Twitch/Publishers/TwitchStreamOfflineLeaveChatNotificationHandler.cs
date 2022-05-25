@@ -17,7 +17,7 @@ public sealed class TwitchStreamOfflineLeaveChatNotificationHandler : INotificat
 
     public Task Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
     {
-        this._twitchChat.JoinChat(notification.Streamer);
+        this._twitchChat.LeaveChat(notification.Streamer);
 
         return Task.CompletedTask;
     }
