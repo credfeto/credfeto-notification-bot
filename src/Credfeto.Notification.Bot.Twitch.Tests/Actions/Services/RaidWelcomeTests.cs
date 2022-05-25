@@ -47,7 +47,7 @@ public sealed class RaidWelcomeTests : TestBase
                                                                              },
                                                                  CalmDown = new[]
                                                                             {
-                                                                                "!tip"
+                                                                                "!tag"
                                                                             }
                                                              }
                                                  }
@@ -67,9 +67,11 @@ public sealed class RaidWelcomeTests : TestBase
 GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
 
+        await this.ReceivedPublishMessageAsync("!raiders");
         await this.ReceivedPublishMessageAsync(raidWelcome);
         await this.ReceivedPublishMessageAsync($"Thanks @{Raider} for the raid");
         await this.ReceivedPublishMessageAsync($"!so @{Raider}");
+        await this.ReceivedPublishMessageAsync("!tag");
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
