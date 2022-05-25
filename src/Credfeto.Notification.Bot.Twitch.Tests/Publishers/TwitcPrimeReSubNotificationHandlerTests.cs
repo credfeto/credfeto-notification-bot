@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -7,6 +8,7 @@ using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
 using MediatR;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -22,8 +24,7 @@ public sealed class TwitchPrimeReSubNotificationHandlerTests : TestBase
     {
         this._contributionThanks = GetSubstitute<IContributionThanks>();
 
-        this._notificationHandler =
-            new TwitchPrimeReSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchPrimeReSubNotificationHandler>());
+        this._notificationHandler = new TwitchPrimeReSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchPrimeReSubNotificationHandler>());
     }
 
     [Fact]
@@ -31,10 +32,21 @@ public sealed class TwitchPrimeReSubNotificationHandlerTests : TestBase
     {
         await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
 
-        await this.ThankForPrimeReSubAsync();
+        await this.ReceivedThankForPrimeReSubAsync();
     }
 
-    private Task ThankForPrimeReSubAsync()
+    [Fact]
+    public async Task HandleExceptionAsync()
+    {
+        this._contributionThanks.ThankForPrimeReSubAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
+            .Throws<TimeoutException>();
+
+        await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedThankForPrimeReSubAsync();
+    }
+
+    private Task ReceivedThankForPrimeReSubAsync()
     {
         return this._contributionThanks.Received(1)
                    .ThankForPrimeReSubAsync(streamer: Streamer, user: Subscriber, Arg.Any<CancellationToken>());
