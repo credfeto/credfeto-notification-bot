@@ -23,7 +23,8 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
     {
         this._heistJoiner = GetSubstitute<IHeistJoiner>();
 
-        this._notificationHandler = new StreamLabsHeistStartingNotificationHandler(heistJoiner: this._heistJoiner, this.GetTypedLogger<StreamLabsHeistStartingNotificationHandler>());
+        this._notificationHandler =
+            new StreamLabsHeistStartingNotificationHandler(heistJoiner: this._heistJoiner, this.GetTypedLogger<StreamLabsHeistStartingNotificationHandler>());
     }
 
     [Fact]

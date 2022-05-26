@@ -17,7 +17,10 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
     private readonly TwitchBotOptions _options;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public RaidWelcome(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<RaidWelcome> logger)
+    public RaidWelcome(IOptions<TwitchBotOptions> options,
+                       ITwitchChannelManager twitchChannelManager,
+                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                       ILogger<RaidWelcome> logger)
         : base(twitchChatMessageChannel)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));

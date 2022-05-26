@@ -28,8 +28,9 @@ public sealed class TwitchWatchChannelFollowerNotificationHandlerTests : TestBas
         this._options = GetSubstitute<IOptions<TwitchBotOptions>>();
         this._options.Value.Returns(new TwitchBotOptions { Channels = new() { new() { ChannelName = ModdingForStreamer.Value } } });
 
-        this._notificationHandler =
-            new TwitchWatchChannelFollowerNotificationHandler(options: this._options, followerDetector: this._followerDetector, this.GetTypedLogger<TwitchWatchChannelFollowerNotificationHandler>());
+        this._notificationHandler = new TwitchWatchChannelFollowerNotificationHandler(options: this._options,
+                                                                                      followerDetector: this._followerDetector,
+                                                                                      this.GetTypedLogger<TwitchWatchChannelFollowerNotificationHandler>());
     }
 
     [Fact]

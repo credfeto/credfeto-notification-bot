@@ -60,7 +60,10 @@ public sealed class RaidWelcomeTests : LoggingTestBase
                                              }
                               });
 
-        this._raidWelcome = new RaidWelcome(options: options, twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
+        this._raidWelcome = new RaidWelcome(options: options,
+                                            twitchChannelManager: twitchChannelManager,
+                                            twitchChatMessageChannel: this._twitchChatMessageChannel,
+                                            this.GetTypedLogger<RaidWelcome>());
     }
 
     [Fact]

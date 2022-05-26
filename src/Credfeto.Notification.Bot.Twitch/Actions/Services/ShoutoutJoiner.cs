@@ -17,7 +17,10 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
     private readonly TwitchBotOptions _options;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public ShoutoutJoiner(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<ShoutoutJoiner> logger)
+    public ShoutoutJoiner(IOptions<TwitchBotOptions> options,
+                          ITwitchChannelManager twitchChannelManager,
+                          IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                          ILogger<ShoutoutJoiner> logger)
         : base(twitchChatMessageChannel)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
@@ -75,12 +78,16 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
     {
         TwitchModChannel? channel = this._options.Channels.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: streamer.Value));
 
-        TwitchFriendChannel? twitchFriendChannel = channel?.ShoutOuts.FriendChannels?.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
+        TwitchFriendChannel? twitchFriendChannel =
+            channel?.ShoutOuts.FriendChannels?.Find(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
 
         return twitchFriendChannel;
     }
 
-    private async Task<bool> IssueFriendChannelShoutoutAsync(Streamer streamer, TwitchUser visitingStreamer, TwitchFriendChannel twitchFriendChannel, CancellationToken cancellationToken)
+    private async Task<bool> IssueFriendChannelShoutoutAsync(Streamer streamer,
+                                                             TwitchUser visitingStreamer,
+                                                             TwitchFriendChannel twitchFriendChannel,
+                                                             CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
         {

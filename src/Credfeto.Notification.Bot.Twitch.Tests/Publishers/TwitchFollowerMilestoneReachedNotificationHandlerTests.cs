@@ -46,7 +46,8 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandlerTests : Tes
         await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
 
         await this._twitchChatMessageChannel.Received(1)
-                  .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == Streamer && t.Message == $"/me @{notification.Streamer} Woo! {notification.MilestoneReached} followers reached!"),
+                  .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == Streamer &&
+                                                               t.Message == $"/me @{notification.Streamer} Woo! {notification.MilestoneReached} followers reached!"),
                                 Arg.Any<CancellationToken>());
     }
 

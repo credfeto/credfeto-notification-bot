@@ -45,8 +45,9 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
         this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: Streamer, Arg.Any<CancellationToken>())
             .Returns(followerCount);
 
-        await this._notificationHandler.Handle(new(streamer: Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(
+            new(streamer: Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
+            cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();
 
@@ -60,8 +61,9 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
         this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: Streamer, Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
-        await this._notificationHandler.Handle(new(streamer: Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(
+            new(streamer: Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
+            cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();
 

@@ -25,7 +25,8 @@ public sealed class TwitchNewPrimeSubNotificationHandlerTests : TestBase
     {
         this._contributionThanks = GetSubstitute<IContributionThanks>();
 
-        this._notificationHandler = new TwitchNewPrimeSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchNewPrimeSubNotificationHandler>());
+        this._notificationHandler =
+            new TwitchNewPrimeSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchNewPrimeSubNotificationHandler>());
     }
 
     [Fact]
