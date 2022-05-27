@@ -1,21 +1,26 @@
-using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchAuthentication
 {
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string OAuthToken { get; init; } = default!;
+    [JsonConstructor]
+    public TwitchAuthentication(string oAuthToken, string userName, string clientId, string clientSecret, string clientAccessToken)
+    {
+        this.OAuthToken = oAuthToken;
+        this.UserName = userName;
+        this.ClientId = clientId;
+        this.ClientSecret = clientSecret;
+        this.ClientAccessToken = clientAccessToken;
+    }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string UserName { get; init; } = default!;
+    public string OAuthToken { get; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string ClientId { get; init; } = default!;
+    public string UserName { get; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string ClientSecret { get; init; } = default!;
+    public string ClientId { get; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string ClientAccessToken { get; init; } = default!;
+    public string ClientSecret { get; }
+
+    public string ClientAccessToken { get; }
 }

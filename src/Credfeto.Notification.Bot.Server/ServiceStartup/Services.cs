@@ -39,10 +39,9 @@ internal static class Services
 
     private static IServiceCollection AddConfiguration(this IServiceCollection services)
     {
-        //Microsoft.Extensions.Configuration.Binder.
         IConfigurationRoot configurationRoot = LoadConfigFile();
 
-        JsonSerializerContext jsonSerializerContext = ServerSerializationContext.Default;
+        JsonSerializerContext jsonSerializerContext = ServerConfigurationSerializationContext.Default;
 
         return services.AddOptions()
                        .WithConfiguration<PgsqlServerConfiguration>(configurationRoot: configurationRoot, key: "Database:Postgres", jsonSerializerContext: jsonSerializerContext)

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
@@ -23,7 +24,8 @@ public sealed class UserInfoServiceTests : TestBase
         this._twitchStreamerDataManager = GetSubstitute<ITwitchStreamerDataManager>();
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions { Authentication = new() { ClientId = "Invalid", ClientSecret = "Invalid", ClientAccessToken = "Invalid" } });
+        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, new(), new(), new(), new(new(), new())));
+
         this._userInfoService = new UserInfoService(options: options, twitchStreamerDataManager: this._twitchStreamerDataManager, this.GetTypedLogger<UserInfoService>());
     }
 

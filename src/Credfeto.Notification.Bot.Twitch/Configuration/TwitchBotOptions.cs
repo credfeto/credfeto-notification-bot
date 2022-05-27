@@ -1,22 +1,27 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchBotOptions
 {
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public TwitchAuthentication Authentication { get; init; } = default!;
+    [JsonConstructor]
+    public TwitchBotOptions(TwitchAuthentication authentication, List<TwitchModChannel> channels, List<string> heists, List<string> ignoredUsers, TwitchMilestones milestones)
+    {
+        this.Authentication = authentication;
+        this.Channels = channels;
+        this.Heists = heists;
+        this.IgnoredUsers = ignoredUsers;
+        this.Milestones = milestones;
+    }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public List<TwitchModChannel> Channels { get; init; } = default!;
+    public TwitchAuthentication Authentication { get; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public List<string> Heists { get; init; } = default!;
+    public List<TwitchModChannel> Channels { get; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public List<string> IgnoredUsers { get; init; } = default!;
+    public List<string> Heists { get; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public TwitchMilestones Milestones { get; init; } = default!;
+    public List<string> IgnoredUsers { get; }
+
+    public TwitchMilestones Milestones { get; }
 }

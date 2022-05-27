@@ -28,6 +28,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Mocks\Credfeto.Notification.Bot.Mocks.csproj"/>
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>

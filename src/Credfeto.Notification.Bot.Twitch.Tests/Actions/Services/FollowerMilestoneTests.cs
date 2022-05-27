@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -27,22 +28,21 @@ public sealed class FollowerMilestoneTests : TestBase
         this._mediator = GetSubstitute<IMediator>();
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions
-                              {
-                                  Milestones = new()
-                                               {
-                                                   Followers = new()
-                                                               {
-                                                                   1,
-                                                                   10,
-                                                                   100,
-                                                                   1000,
-                                                                   2000,
-                                                                   3000,
-                                                                   4000
-                                                               }
-                                               }
-                              });
+        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
+                                                   new(),
+                                                   new(),
+                                                   new(),
+                                                   new(new()
+                                                       {
+                                                           1,
+                                                           10,
+                                                           100,
+                                                           1000,
+                                                           2000,
+                                                           3000,
+                                                           4000
+                                                       },
+                                                       new())));
 
         this._followerMileStone = new FollowerMilestone(options: options,
                                                         mediator: this._mediator,

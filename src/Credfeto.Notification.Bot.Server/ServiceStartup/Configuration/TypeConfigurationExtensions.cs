@@ -1,13 +1,10 @@
 using System;
 using System.Buffers;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
-using Credfeto.Notification.Bot.Database.Pgsql;
-using Credfeto.Notification.Bot.Discord;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -123,18 +120,4 @@ public static class TypeConfigurationExtensions
     {
         return jsonSerializerOptions.PropertyNamingPolicy?.ConvertName(name) ?? name;
     }
-}
-
-[SuppressMessage(category: "ReSharper", checkId: "PartialTypeWithSinglePart", Justification = "Required for JsonSerializerContext")]
-[JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Serialization | JsonSourceGenerationMode.Metadata,
-                             PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
-                             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                             WriteIndented = false,
-                             IncludeFields = false)]
-[JsonSerializable(typeof(DiscordBotOptions))]
-
-//[JsonSerializable(typeof(TwitchBotOptions))]
-[JsonSerializable(typeof(PgsqlServerConfiguration))]
-internal sealed partial class ServerSerializationContext : JsonSerializerContext
-{
 }
