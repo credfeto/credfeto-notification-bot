@@ -1,9 +1,16 @@
-using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Discord;
 
+[DebuggerDisplay("{Token}")]
 public sealed class DiscordBotOptions
 {
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string Token { get; init; } = default!;
+    [JsonConstructor]
+    public DiscordBotOptions(string token)
+    {
+        this.Token = token;
+    }
+
+    public string Token { get; }
 }

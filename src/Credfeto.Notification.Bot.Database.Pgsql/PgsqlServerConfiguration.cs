@@ -1,9 +1,16 @@
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Database.Pgsql;
 
 [DebuggerDisplay("{ConnectionString}")]
 public sealed class PgsqlServerConfiguration
 {
-    public string ConnectionString { get; init; } = default!;
+    [JsonConstructor]
+    public PgsqlServerConfiguration(string connectionString)
+    {
+        this.ConnectionString = connectionString;
+    }
+
+    public string ConnectionString { get; }
 }
