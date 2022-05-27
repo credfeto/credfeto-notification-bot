@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
@@ -15,7 +16,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchNewPaidSubNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private static readonly Viewer Subscriber = Viewer.FromString(nameof(Subscriber));
     private readonly IContributionThanks _contributionThanks;
     private readonly INotificationHandler<TwitchNewPaidSub> _notificationHandler;
@@ -31,7 +31,7 @@ public sealed class TwitchNewPaidSubNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
 
         await this.ReceivedThankForNewPaidSubAsync();
     }
@@ -42,7 +42,7 @@ public sealed class TwitchNewPaidSubNotificationHandlerTests : TestBase
         this._contributionThanks.ThankForNewPaidSubAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
-        await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
 
         await this.ReceivedThankForNewPaidSubAsync();
     }
@@ -50,6 +50,6 @@ public sealed class TwitchNewPaidSubNotificationHandlerTests : TestBase
     private Task ReceivedThankForNewPaidSubAsync()
     {
         return this._contributionThanks.Received(1)
-                   .ThankForNewPaidSubAsync(streamer: Streamer, user: Subscriber, Arg.Any<CancellationToken>());
+                   .ThankForNewPaidSubAsync(streamer: MockReferenceData.Streamer, user: Subscriber, Arg.Any<CancellationToken>());
     }
 }

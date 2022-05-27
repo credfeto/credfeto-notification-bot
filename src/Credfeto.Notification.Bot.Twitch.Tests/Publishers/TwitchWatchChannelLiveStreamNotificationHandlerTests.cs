@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
@@ -13,7 +14,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchWatchChannelLiveStreamNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private static readonly Viewer Viewer = Viewer.FromString(nameof(Streamer));
 
     private readonly INotificationHandler<TwitchWatchChannel> _notificationHandler;
@@ -34,6 +34,6 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandlerTests : TestB
         await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
 
         await this._twitchStreamStatus.Received(1)
-                  .EnableAsync(Streamer);
+                  .EnableAsync(MockReferenceData.Streamer);
     }
 }

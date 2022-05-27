@@ -17,7 +17,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class FollowerMilestoneTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private readonly IFollowerMilestone _followerMileStone;
     private readonly IMediator _mediator;
     private readonly ITwitchStreamDataManager _twitchStreamDataManager;
@@ -30,19 +29,9 @@ public sealed class FollowerMilestoneTests : TestBase
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
                                                    new(),
-                                                   new(),
-                                                   new(),
-                                                   new(new()
-                                                       {
-                                                           1,
-                                                           10,
-                                                           100,
-                                                           1000,
-                                                           2000,
-                                                           3000,
-                                                           4000
-                                                       },
-                                                       new())));
+                                                   heists: MockReferenceData.Heists,
+                                                   ignoredUsers: MockReferenceData.IgnoredUsers,
+                                                   milestones: MockReferenceData.TwitchMilestones));
 
         this._followerMileStone = new FollowerMilestone(options: options,
                                                         mediator: this._mediator,
@@ -53,10 +42,10 @@ public sealed class FollowerMilestoneTests : TestBase
     [Fact]
     public async Task FollowerMileStoneReachedNewStreamerZeroAsync()
     {
-        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: 1)
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 1)
             .Returns(true);
 
-        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: Streamer, followers: 1, cancellationToken: CancellationToken.None);
+        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: MockReferenceData.Streamer, followers: 1, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
         await this.DidNotReceiveUpdateMilestoneAsync();
@@ -65,10 +54,10 @@ public sealed class FollowerMilestoneTests : TestBase
     [Fact]
     public async Task FollowerMileStoneReachedForTheFirstTimeAsync()
     {
-        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: 100)
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 100)
             .Returns(true);
 
-        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: Streamer, followers: 101, cancellationToken: CancellationToken.None);
+        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: MockReferenceData.Streamer, followers: 101, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync(milestone: 100, nextMilestone: 1000);
         await this.ReceivedUpdateMilestoneAsync(100);
@@ -77,10 +66,10 @@ public sealed class FollowerMilestoneTests : TestBase
     [Fact]
     public async Task FollowerMileStoneReachedButAlreadyMetTimeAsync()
     {
-        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: 100)
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 100)
             .Returns(false);
 
-        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: Streamer, followers: 101, cancellationToken: CancellationToken.None);
+        await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: MockReferenceData.Streamer, followers: 101, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
         await this.ReceivedUpdateMilestoneAsync(100);
@@ -89,7 +78,7 @@ public sealed class FollowerMilestoneTests : TestBase
     private Task ReceivedUpdateMilestoneAsync(int followerCount)
     {
         return this._twitchStreamDataManager.Received(1)
-                   .UpdateFollowerMilestoneAsync(streamer: Streamer, followerCount: followerCount);
+                   .UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: followerCount);
     }
 
     private Task DidNotReceiveUpdateMilestoneAsync()
@@ -101,7 +90,7 @@ public sealed class FollowerMilestoneTests : TestBase
     private Task ReceivedPublishMessageAsync(int milestone, int nextMilestone)
     {
         return this._mediator.Received(1)
-                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone),
+                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == MockReferenceData.Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone),
                             Arg.Any<CancellationToken>());
     }
 

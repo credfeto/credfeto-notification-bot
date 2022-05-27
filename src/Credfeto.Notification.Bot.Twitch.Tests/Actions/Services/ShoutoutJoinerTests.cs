@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
@@ -30,29 +31,30 @@ public sealed class ShoutoutJoinerTests : TestBase
     public ShoutoutJoinerTests()
     {
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions
-                              {
-                                  Channels = new()
-                                             {
-                                                 new()
-                                                 {
-                                                     ChannelName = StreamerShoutOutsEnabled.ToString(),
-                                                     ShoutOuts = new()
+        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
+                                                   milestones: MockReferenceData.TwitchMilestones,
+                                                   ignoredUsers: MockReferenceData.IgnoredUsers,
+                                                   heists: MockReferenceData.Heists,
+                                                   channels: new()
+                                                             {
+                                                                 new()
                                                                  {
-                                                                     Enabled = true,
-                                                                     FriendChannels = new()
-                                                                                      {
-                                                                                          new()
-                                                                                          {
-                                                                                              Channel = VisitingChannelFriendWithMessage.ToString(),
-                                                                                              Message = "Check out this weird and wonderful streamer!"
-                                                                                          },
-                                                                                          new() { Channel = VisitingChannelFriendWithNoMessage.ToString(), Message = null }
-                                                                                      }
+                                                                     ChannelName = StreamerShoutOutsEnabled.ToString(),
+                                                                     ShoutOuts = new()
+                                                                                 {
+                                                                                     Enabled = true,
+                                                                                     FriendChannels = new()
+                                                                                                      {
+                                                                                                          new()
+                                                                                                          {
+                                                                                                              Channel = VisitingChannelFriendWithMessage.ToString(),
+                                                                                                              Message = "Check out this weird and wonderful streamer!"
+                                                                                                          },
+                                                                                                          new() { Channel = VisitingChannelFriendWithNoMessage.ToString(), Message = null }
+                                                                                                      }
+                                                                                 }
                                                                  }
-                                                 }
-                                             }
-                              });
+                                                             }));
 
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
 

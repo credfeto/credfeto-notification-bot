@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
@@ -15,7 +16,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchBitsGiftNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private static readonly Viewer GiftedBy = Viewer.FromString(nameof(GiftedBy));
     private readonly IContributionThanks _contributionThanks;
     private readonly INotificationHandler<TwitchBitsGift> _notificationHandler;
@@ -30,7 +30,7 @@ public sealed class TwitchBitsGiftNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: Streamer, user: GiftedBy, bits: 404), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: GiftedBy, bits: 404), cancellationToken: CancellationToken.None);
 
         await this.ReceivedThankForBitsAsync();
     }
@@ -41,7 +41,7 @@ public sealed class TwitchBitsGiftNotificationHandlerTests : TestBase
         this._contributionThanks.ThankForBitsAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
-        await this._notificationHandler.Handle(new(streamer: Streamer, user: GiftedBy, bits: 404), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: GiftedBy, bits: 404), cancellationToken: CancellationToken.None);
 
         await this.ReceivedThankForBitsAsync();
     }
@@ -49,6 +49,6 @@ public sealed class TwitchBitsGiftNotificationHandlerTests : TestBase
     private Task ReceivedThankForBitsAsync()
     {
         return this._contributionThanks.Received(1)
-                   .ThankForBitsAsync(streamer: Streamer, user: GiftedBy, Arg.Any<CancellationToken>());
+                   .ThankForBitsAsync(streamer: MockReferenceData.Streamer, user: GiftedBy, Arg.Any<CancellationToken>());
     }
 }

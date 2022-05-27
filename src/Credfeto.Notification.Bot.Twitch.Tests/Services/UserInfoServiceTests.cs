@@ -24,7 +24,11 @@ public sealed class UserInfoServiceTests : TestBase
         this._twitchStreamerDataManager = GetSubstitute<ITwitchStreamerDataManager>();
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, new(), new(), new(), new(new(), new())));
+        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
+                                                   milestones: MockReferenceData.TwitchMilestones,
+                                                   ignoredUsers: MockReferenceData.IgnoredUsers,
+                                                   heists: MockReferenceData.Heists,
+                                                   channels: new()));
 
         this._userInfoService = new UserInfoService(options: options, twitchStreamerDataManager: this._twitchStreamerDataManager, this.GetTypedLogger<UserInfoService>());
     }

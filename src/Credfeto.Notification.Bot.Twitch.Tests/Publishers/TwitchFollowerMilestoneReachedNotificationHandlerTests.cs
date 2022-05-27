@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
-using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
@@ -15,8 +15,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchFollowerMilestoneReachedNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
-
     private readonly INotificationHandler<TwitchFollowerMilestoneReached> _notificationHandler;
     private readonly ITwitchChannelManager _twitchChannelManager;
     private readonly ITwitchChannelState _twitchChannelState;
@@ -27,7 +25,7 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandlerTests : Tes
         this._twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
         this._twitchChannelState = GetSubstitute<ITwitchChannelState>();
 
-        this._twitchChannelManager.GetStreamer(Streamer)
+        this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer)
             .Returns(this._twitchChannelState);
 
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
@@ -42,11 +40,11 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandlerTests : Tes
     {
         this._twitchChannelState.Settings.AnnounceMilestonesEnabled.Returns(true);
 
-        TwitchFollowerMilestoneReached notification = new(streamer: Streamer, milestoneReached: 100, nextMilestone: 200, progress: 0);
+        TwitchFollowerMilestoneReached notification = new(streamer: MockReferenceData.Streamer, milestoneReached: 100, nextMilestone: 200, progress: 0);
         await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
 
         await this._twitchChatMessageChannel.Received(1)
-                  .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == Streamer &&
+                  .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == MockReferenceData.Streamer &&
                                                                t.Message == $"/me @{notification.Streamer} Woo! {notification.MilestoneReached} followers reached!"),
                                 Arg.Any<CancellationToken>());
     }
@@ -56,7 +54,7 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandlerTests : Tes
     {
         this._twitchChannelState.Settings.AnnounceMilestonesEnabled.Returns(false);
 
-        TwitchFollowerMilestoneReached notification = new(streamer: Streamer, milestoneReached: 100, nextMilestone: 200, progress: 0);
+        TwitchFollowerMilestoneReached notification = new(streamer: MockReferenceData.Streamer, milestoneReached: 100, nextMilestone: 200, progress: 0);
         await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
 
         await this._twitchChatMessageChannel.DidNotReceive()

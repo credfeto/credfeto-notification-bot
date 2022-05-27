@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
@@ -20,7 +21,6 @@ public sealed class RaidWelcomeTests : LoggingTestBase
 {
     private const string IMMEDIATE_MSG = "!raiders";
     private const string CALM_DOWN_MSG = "!tag";
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private static readonly Viewer Raider = Viewer.FromString(nameof(Raider));
     private readonly IRaidWelcome _raidWelcome;
     private readonly ITwitchChannelState _twitchChannelState;
@@ -38,27 +38,28 @@ public sealed class RaidWelcomeTests : LoggingTestBase
                             .Returns(this._twitchChannelState);
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions
-                              {
-                                  Channels = new()
-                                             {
-                                                 new()
-                                                 {
-                                                     ChannelName = Streamer.Value,
-                                                     Raids = new()
+        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
+                                                   milestones: MockReferenceData.TwitchMilestones,
+                                                   ignoredUsers: MockReferenceData.IgnoredUsers,
+                                                   heists: MockReferenceData.Heists,
+                                                   channels: new()
                                                              {
-                                                                 Immediate = new[]
+                                                                 new()
+                                                                 {
+                                                                     ChannelName = MockReferenceData.Streamer.Value,
+                                                                     Raids = new()
                                                                              {
-                                                                                 IMMEDIATE_MSG
-                                                                             },
-                                                                 CalmDown = new[]
-                                                                            {
-                                                                                CALM_DOWN_MSG
-                                                                            }
-                                                             }
-                                                 }
-                                             }
-                              });
+                                                                                 Immediate = new[]
+                                                                                             {
+                                                                                                 IMMEDIATE_MSG
+                                                                                             },
+                                                                                 CalmDown = new[]
+                                                                                            {
+                                                                                                CALM_DOWN_MSG
+                                                                                            }
+                                                                             }
+                                                                 }
+                                                             }));
 
         this._raidWelcome = new RaidWelcome(options: options,
                                             twitchChannelManager: twitchChannelManager,
@@ -71,7 +72,7 @@ public sealed class RaidWelcomeTests : LoggingTestBase
     {
         this._twitchChannelState.Settings.RaidWelcomesEnabled.Returns(true);
 
-        await this._raidWelcome.IssueRaidWelcomeAsync(streamer: Streamer, raider: Raider, cancellationToken: CancellationToken.None);
+        await this._raidWelcome.IssueRaidWelcomeAsync(streamer: MockReferenceData.Streamer, raider: Raider, cancellationToken: CancellationToken.None);
 
         const string raidWelcome = @"
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
@@ -90,7 +91,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
     {
         this._twitchChannelState.Settings.RaidWelcomesEnabled.Returns(false);
 
-        await this._raidWelcome.IssueRaidWelcomeAsync(streamer: Streamer, raider: Raider, cancellationToken: CancellationToken.None);
+        await this._raidWelcome.IssueRaidWelcomeAsync(streamer: MockReferenceData.Streamer, raider: Raider, cancellationToken: CancellationToken.None);
 
         await this._twitchChatMessageChannel.DidNotReceive()
                   .PublishAsync(Arg.Any<TwitchChatMessage>(), Arg.Any<CancellationToken>());
@@ -99,7 +100,7 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
     {
         return this._twitchChatMessageChannel.Received(1)
-                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == Streamer && StringComparer.InvariantCultureIgnoreCase.Equals(t.Message.Trim(), expectedMessage)),
+                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == MockReferenceData.Streamer && StringComparer.InvariantCultureIgnoreCase.Equals(t.Message.Trim(), expectedMessage)),
                                  Arg.Any<CancellationToken>());
     }
 }
