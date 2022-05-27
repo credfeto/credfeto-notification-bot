@@ -24,20 +24,26 @@ internal static class Services
 
         Log.Logger = CreateLogger();
 
-        IConfigurationRoot configurationRoot = LoadConfigFile();
-
-        services.AddOptions()
+        services.AddConfiguration()
                 .AddMediatR(typeof(Program), typeof(DiscordSetup), typeof(TwitchSetup))
                 .AddAppLogging()
                 .AddResources()
-                .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
                 .AddPostgresql()
                 .AddDatabaseShared()
                 .AddApplicationDatabase()
-                .Configure<DiscordBotOptions>(configurationRoot.GetSection("Discord"))
                 .AddDiscord()
-                .Configure<TwitchBotOptions>(configurationRoot.GetSection("Twitch"))
                 .AddTwitch();
+    }
+
+    private static IServiceCollection AddConfiguration(this IServiceCollection services)
+    {
+        //Microsoft.Extensions.Configuration.Binder.
+        IConfigurationRoot configurationRoot = LoadConfigFile();
+
+        return services.AddOptions()
+                       .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
+                       .Configure<DiscordBotOptions>(configurationRoot.GetSection("Discord"))
+                       .Configure<TwitchBotOptions>(configurationRoot.GetSection("Twitch"));
     }
 
     private static Logger CreateLogger()
