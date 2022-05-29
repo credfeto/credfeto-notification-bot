@@ -37,23 +37,17 @@ public sealed class ShoutoutJoinerTests : TestBase
                                                    heists: MockReferenceData.Heists,
                                                    channels: new()
                                                              {
-                                                                 new()
-                                                                 {
-                                                                     ChannelName = StreamerShoutOutsEnabled.ToString(),
-                                                                     ShoutOuts = new()
-                                                                                 {
-                                                                                     Enabled = true,
-                                                                                     FriendChannels = new()
-                                                                                                      {
-                                                                                                          new()
-                                                                                                          {
-                                                                                                              Channel = VisitingChannelFriendWithMessage.ToString(),
-                                                                                                              Message = "Check out this weird and wonderful streamer!"
-                                                                                                          },
-                                                                                                          new() { Channel = VisitingChannelFriendWithNoMessage.ToString(), Message = null }
-                                                                                                      }
-                                                                                 }
-                                                                 }
+                                                                 new(StreamerShoutOutsEnabled.ToString(),
+                                                                     new(enabled: true,
+                                                                         new()
+                                                                         {
+                                                                             new(VisitingChannelFriendWithMessage.ToString(), message: "Check out this weird and wonderful streamer!"),
+                                                                             new(VisitingChannelFriendWithNoMessage.ToString(), message: null)
+                                                                         }),
+                                                                     raids: MockReferenceData.TwitchChannelRaids,
+                                                                     thanks: MockReferenceData.TwitchChannelThanks,
+                                                                     mileStones: MockReferenceData.TwitchChanelMileStone,
+                                                                     welcome: MockReferenceData.TwitchChannelWelcome)
                                                              }));
 
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();

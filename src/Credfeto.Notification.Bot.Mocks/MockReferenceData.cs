@@ -7,8 +7,9 @@ namespace Credfeto.Notification.Bot.Mocks;
 
 public static class MockReferenceData
 {
-    public static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
-    public static readonly Viewer Ignored = Viewer.FromString(nameof(Ignored));
+    public static MockBase<Streamer> Streamer { get; } = new MockStreamer();
+
+    public static MockBase<Viewer> Ignored { get; } = new MockViewer();
 
     public static MockBase<TwitchAuthentication> TwitchAuthentication { get; } = new MockTwitchAuthentication();
 
@@ -27,4 +28,14 @@ public static class MockReferenceData
     public static List<string> IgnoredUsers { get; } = new();
 
     public static List<string> Heists { get; } = new();
+
+    public static MockBase<TwitchChannelShoutout> TwitchChannelShoutout { get; } = new MockTwitchChannelShoutout();
+
+    public static MockBase<TwitchChannelRaids> TwitchChannelRaids { get; } = new MockTwitchChannelRaids();
+
+    public static MockBase<TwitchChannelThanks> TwitchChannelThanks { get; } = new MockTwitchChannelThanks();
+
+    public static MockBase<TwitchChannelMileStone> TwitchChanelMileStone { get; } = new MockTwitchChanelMileStone();
+
+    public static MockBase<TwitchChannelWelcome> TwitchChannelWelcome { get; } = new MockTwitchChannelWelcome();
 }

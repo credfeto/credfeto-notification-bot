@@ -36,12 +36,12 @@ public sealed class TwitchChannelManagerTests : TestBase
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                   ignoredUsers: new() { MockReferenceData.Ignored.Value },
+                                                   ignoredUsers: new() { ((Viewer)MockReferenceData.Ignored).Value },
                                                    milestones: new(new() { 10, 20, 30 }, new() { 10, 20, 30 }),
                                                    heists: MockReferenceData.Heists,
                                                    channels: new()
                                                              {
-                                                                 new(channelName: MockReferenceData.Streamer.Value,
+                                                                 new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
                                                                      welcome: new(enabled: true),
                                                                      mileStones: new(enabled: true),
                                                                      raids: new(enabled: true, immediate: null, calmDown: null),
@@ -189,7 +189,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         this.MockIsRegularChatter(isRegular);
         this.MockIsFirstMessageInStream(true);
 
-        await twitchChannelState.ChatMessageAsync(MockReferenceData.Streamer.ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
+        await twitchChannelState.ChatMessageAsync(((Streamer)MockReferenceData.Streamer).ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceiveBitGiftNotificationAsync();
         await this.DidNotReceiveCheckForIsRegularChatterAsync();

@@ -35,7 +35,15 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
-                                                   channels: new() { new() { ChannelName = MockReferenceData.Streamer.Value } }));
+                                                   channels: new()
+                                                             {
+                                                                 new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
+                                                                     thanks: MockReferenceData.TwitchChannelThanks,
+                                                                     shoutOuts: MockReferenceData.TwitchChannelShoutout,
+                                                                     raids: MockReferenceData.TwitchChannelRaids,
+                                                                     mileStones: MockReferenceData.TwitchChanelMileStone,
+                                                                     welcome: MockReferenceData.TwitchChannelWelcome)
+                                                             }));
 
         this._notificationHandler = new TwitchStreamOnlineNotificationHandler(options: options,
                                                                               twitchChannelManager: this._twitchChannelManager,

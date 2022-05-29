@@ -44,21 +44,20 @@ public sealed class RaidWelcomeTests : LoggingTestBase
                                                    heists: MockReferenceData.Heists,
                                                    channels: new()
                                                              {
-                                                                 new()
-                                                                 {
-                                                                     ChannelName = MockReferenceData.Streamer.Value,
-                                                                     Raids = new()
-                                                                             {
-                                                                                 Immediate = new[]
-                                                                                             {
-                                                                                                 IMMEDIATE_MSG
-                                                                                             },
-                                                                                 CalmDown = new[]
-                                                                                            {
-                                                                                                CALM_DOWN_MSG
-                                                                                            }
-                                                                             }
-                                                                 }
+                                                                 new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
+                                                                     raids: new(enabled: false,
+                                                                                new[]
+                                                                                {
+                                                                                    IMMEDIATE_MSG
+                                                                                },
+                                                                                new[]
+                                                                                {
+                                                                                    CALM_DOWN_MSG
+                                                                                }),
+                                                                     shoutOuts: MockReferenceData.TwitchChannelShoutout,
+                                                                     thanks: MockReferenceData.TwitchChannelThanks,
+                                                                     mileStones: MockReferenceData.TwitchChanelMileStone,
+                                                                     welcome: MockReferenceData.TwitchChannelWelcome)
                                                              }));
 
         this._raidWelcome = new RaidWelcome(options: options,
