@@ -162,6 +162,10 @@
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Discord.Models project"
 
+ - name: "Mocks"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Mocks project"
+
  - name: "Server"
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Server project"
@@ -205,4 +209,8 @@
  - name: "Twitch.Tests"
    color: "0e8a16"
    description: "Changes in Credfeto.Notification.Bot.Twitch.Tests project"
+
+ - name: "Credfeto.NotificationBot.Shared.Configuration"
+   color: "96f7d2"
+   description: "Changes in Credfeto.NotificationBot.Shared.Configuration project"
 
