@@ -16,8 +16,8 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchWatchChannelFollowerNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer ModdingForStreamer = Streamer.FromString(nameof(ModdingForStreamer));
-    private static readonly Streamer RandomStreamer = Streamer.FromString(nameof(RandomStreamer));
+    private static readonly Streamer ModdingForStreamer = MockReferenceData.Streamer.Next();
+    private static readonly Streamer RandomStreamer = MockReferenceData.Streamer.Next();
     private readonly ITwitchFollowerDetector _followerDetector;
     private readonly INotificationHandler<TwitchWatchChannel> _notificationHandler;
     private readonly IOptions<TwitchBotOptions> _options;

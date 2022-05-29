@@ -18,7 +18,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 public sealed class ContributionThanksTests : TestBase
 {
     private static readonly Viewer GiftingUser = Viewer.FromString(nameof(GiftingUser));
-    private static readonly Viewer User = Viewer.FromString(nameof(User));
 
     private readonly IContributionThanks _contributionThanks;
     private readonly ICurrentTimeSource _currentTimeSource;
@@ -162,9 +161,9 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForNewPaidSubAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForNewPaidSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{User} for subscribing");
+        await this.ReceivedPublishMessageAsync($"Thanks @{MockReferenceData.Viewer} for subscribing");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -174,7 +173,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForNewPaidSubAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForNewPaidSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
 
@@ -186,9 +185,9 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForNewPrimeSubAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForNewPrimeSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{User} for subscribing");
+        await this.ReceivedPublishMessageAsync($"Thanks @{MockReferenceData.Viewer} for subscribing");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -198,7 +197,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForNewPrimeSubAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForNewPrimeSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
 
@@ -210,9 +209,9 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForPaidReSubAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForPaidReSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{User} for resubscribing");
+        await this.ReceivedPublishMessageAsync($"Thanks @{MockReferenceData.Viewer} for resubscribing");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -222,7 +221,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForPaidReSubAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForPaidReSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
 
@@ -234,9 +233,9 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForPrimeReSubAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForPrimeReSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Thanks @{User} for resubscribing");
+        await this.ReceivedPublishMessageAsync($"Thanks @{MockReferenceData.Viewer} for resubscribing");
 
         this.DidNotReceiveCurrentTime();
     }
@@ -246,7 +245,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForPrimeReSubAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForPrimeReSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
 
@@ -256,7 +255,7 @@ public sealed class ContributionThanksTests : TestBase
     [Fact]
     public async Task ThankForFollowAsync()
     {
-        await this._contributionThanks.ThankForFollowAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForFollowAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
 

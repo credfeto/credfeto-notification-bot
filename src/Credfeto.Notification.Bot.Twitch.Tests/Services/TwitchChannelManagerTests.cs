@@ -18,8 +18,8 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
 public sealed class TwitchChannelManagerTests : TestBase
 {
-    private static readonly Streamer Guest1 = Streamer.FromString(nameof(Guest1));
-    private static readonly Streamer Guest2 = Streamer.FromString(nameof(Guest2));
+    private static readonly Streamer Guest1 = MockReferenceData.Streamer.Next();
+    private static readonly Streamer Guest2 = MockReferenceData.Streamer.Next();
 
     private static readonly DateTime StreamStartDate = new(year: 2020, month: 1, day: 1);
 
@@ -36,7 +36,7 @@ public sealed class TwitchChannelManagerTests : TestBase
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                   ignoredUsers: new() { ((Viewer)MockReferenceData.Ignored).Value },
+                                                   ignoredUsers: new() { MockReferenceData.Ignored.Value },
                                                    milestones: new(new() { 10, 20, 30 }, new() { 10, 20, 30 }),
                                                    heists: MockReferenceData.Heists,
                                                    channels: new()

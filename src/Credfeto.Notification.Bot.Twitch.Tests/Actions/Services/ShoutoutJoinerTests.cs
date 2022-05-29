@@ -19,10 +19,10 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class ShoutoutJoinerTests : TestBase
 {
-    private static readonly Streamer StreamerShoutOutsEnabled = Streamer.FromString(nameof(StreamerShoutOutsEnabled));
-    private static readonly Streamer StreamerShoutOutsDisabled = Streamer.FromString(nameof(StreamerShoutOutsDisabled));
-    private static readonly Streamer StreamerShoutOutsException = Streamer.FromString(nameof(StreamerShoutOutsException));
-    private static readonly Viewer VisitingChannelFriendWithMessage = Viewer.FromString(nameof(VisitingChannelFriendWithMessage));
+    private static readonly Streamer StreamerShoutOutsEnabled = MockReferenceData.Streamer.Next();
+    private static readonly Streamer StreamerShoutOutsDisabled = MockReferenceData.Streamer.Next();
+    private static readonly Streamer StreamerShoutOutsException = MockReferenceData.Streamer.Next();
+    private static readonly Viewer VisitingChannelFriendWithMessage = MockReferenceData.Viewer.Next();
     private static readonly Viewer VisitingChannelFriendWithNoMessage = Viewer.FromString(nameof(VisitingChannelFriendWithNoMessage));
     private static readonly Viewer VisitingChannel = Viewer.FromString(nameof(VisitingChannel));
     private readonly IShoutoutJoiner _shoutoutJoiner;

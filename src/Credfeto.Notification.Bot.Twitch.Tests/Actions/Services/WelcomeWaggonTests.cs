@@ -4,7 +4,6 @@ using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
-using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
@@ -15,7 +14,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class WelcomeWaggonTests : TestBase
 {
-    private static readonly Viewer User = Viewer.FromString(nameof(User));
     private readonly ITwitchChannelState _twitchChannelState;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
     private readonly IWelcomeWaggon _welcomeWaggon;
@@ -40,9 +38,9 @@ public sealed class WelcomeWaggonTests : TestBase
     {
         this._twitchChannelState.Settings.ChatWelcomesEnabled.Returns(true);
 
-        await this._welcomeWaggon.IssueWelcomeAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._welcomeWaggon.IssueWelcomeAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"Hi @{User}");
+        await this.ReceivedPublishMessageAsync($"Hi @{MockReferenceData.Viewer}");
     }
 
     [Fact]
@@ -50,7 +48,7 @@ public sealed class WelcomeWaggonTests : TestBase
     {
         this._twitchChannelState.Settings.ChatWelcomesEnabled.Returns(false);
 
-        await this._welcomeWaggon.IssueWelcomeAsync(streamer: MockReferenceData.Streamer, user: User, cancellationToken: CancellationToken.None);
+        await this._welcomeWaggon.IssueWelcomeAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
     }

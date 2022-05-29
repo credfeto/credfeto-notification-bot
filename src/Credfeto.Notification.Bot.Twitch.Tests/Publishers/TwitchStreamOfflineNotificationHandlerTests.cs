@@ -17,7 +17,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer OtherStreamer = Streamer.FromString(nameof(OtherStreamer));
+    private static readonly Streamer OtherStreamer = MockReferenceData.Streamer.Next();
 
     private readonly INotificationHandler<TwitchStreamOffline> _notificationHandler;
     private readonly ITwitchChannelManager _twitchChannelManager;

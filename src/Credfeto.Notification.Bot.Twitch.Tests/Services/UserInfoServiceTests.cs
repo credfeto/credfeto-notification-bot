@@ -15,7 +15,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
 public sealed class UserInfoServiceTests : TestBase
 {
-    private static readonly Viewer Username = Viewer.FromString(nameof(Username));
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
     private readonly IUserInfoService _userInfoService;
 
@@ -36,12 +35,12 @@ public sealed class UserInfoServiceTests : TestBase
     [Fact]
     public async Task GetUserReturnsNullIfNotFoundAsync()
     {
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(Username);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(MockReferenceData.Viewer);
 
         Assert.Null(twitchUser);
 
         await this._twitchStreamerDataManager.Received(1)
-                  .GetByUserNameAsync(Username);
+                  .GetByUserNameAsync(MockReferenceData.Viewer);
 
         await this._twitchStreamerDataManager.DidNotReceive()
                   .AddStreamerAsync(Arg.Any<Streamer>(), Arg.Any<string>(), Arg.Any<DateTime>());

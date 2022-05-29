@@ -16,7 +16,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
 {
-    private static readonly Viewer GiftedBy = Viewer.FromString(nameof(GiftedBy));
     private readonly IContributionThanks _contributionThanks;
     private readonly INotificationHandler<TwitchGiftSubMultiple> _notificationHandler;
 
@@ -31,7 +30,7 @@ public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: GiftedBy, count: 42), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, count: 42), cancellationToken: CancellationToken.None);
 
         await this.ThankForMultipleGiftSubsAsync();
     }
@@ -42,7 +41,7 @@ public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
         this._contributionThanks.ThankForMultipleGiftSubsAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: GiftedBy, count: 42), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, count: 42), cancellationToken: CancellationToken.None);
 
         await this.ThankForMultipleGiftSubsAsync();
     }
@@ -50,6 +49,6 @@ public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
     private Task ThankForMultipleGiftSubsAsync()
     {
         return this._contributionThanks.Received(1)
-                   .ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftedBy, count: 42, Arg.Any<CancellationToken>());
+                   .ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: MockReferenceData.Viewer, count: 42, Arg.Any<CancellationToken>());
     }
 }

@@ -17,8 +17,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
 {
-    private static readonly Viewer User = Viewer.FromString(nameof(User));
-
     private readonly IChannelFollowCount _channelFollowCount;
     private readonly IFollowerMilestone _followerMilestone;
     private readonly INotificationHandler<TwitchChannelNewFollower> _notificationHandler;
@@ -46,7 +44,12 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
             .Returns(followerCount);
 
         await this._notificationHandler.Handle(
-            new(streamer: MockReferenceData.Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
+            new(streamer: MockReferenceData.Streamer,
+                                                   user: MockReferenceData.Viewer,
+                                                   streamOnline: streamOnline,
+                                                   isStreamer: false,
+                                                   accountCreated: DateTime.MinValue,
+                                                   followCount: 42),
             cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();
@@ -62,7 +65,12 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
             .Throws<TimeoutException>();
 
         await this._notificationHandler.Handle(
-            new(streamer: MockReferenceData.Streamer, user: User, streamOnline: streamOnline, isStreamer: false, accountCreated: DateTime.MinValue, followCount: 42),
+            new(streamer: MockReferenceData.Streamer,
+                                                   user: MockReferenceData.Viewer,
+                                                   streamOnline: streamOnline,
+                                                   isStreamer: false,
+                                                   accountCreated: DateTime.MinValue,
+                                                   followCount: 42),
             cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();

@@ -18,7 +18,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer NonStreamer = Streamer.FromString(nameof(NonStreamer));
+    private static readonly Streamer NonStreamer = MockReferenceData.Streamer.Next();
 
     private readonly INotificationHandler<TwitchStreamOnline> _notificationHandler;
 

@@ -9,7 +9,9 @@ public static class MockReferenceData
 {
     public static MockBase<Streamer> Streamer { get; } = new MockStreamer();
 
-    public static MockBase<Viewer> Ignored { get; } = new MockViewer();
+    public static MockBase<Viewer> Viewer { get; } = new MockViewer();
+
+    public static Viewer Ignored { get; } = Viewer.Next();
 
     public static MockBase<TwitchAuthentication> TwitchAuthentication { get; } = new MockTwitchAuthentication();
 
