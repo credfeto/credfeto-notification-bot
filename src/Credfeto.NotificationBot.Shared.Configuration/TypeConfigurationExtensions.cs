@@ -9,8 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Credfeto.Notification.Bot.Server.ServiceStartup.Configuration;
+namespace Credfeto.NotificationBot.Shared.Configuration;
 
+/// <summary>
+///     Extension methods on <see cref="IConfigurationRoot" />.
+/// </summary>
 public static class TypeConfigurationExtensions
 {
     public static IServiceCollection WithConfiguration<TSettings>(this IServiceCollection services, IConfigurationRoot configurationRoot, string key, JsonSerializerContext jsonSerializerContext)
@@ -58,14 +61,7 @@ public static class TypeConfigurationExtensions
 
             if (child.Path.EndsWith(value: ":0", comparisonType: StringComparison.Ordinal))
             {
-                writer.WriteStartArray();
-
-                foreach (IConfigurationSection? arrayChild in config.GetChildren())
-                {
-                    Serialize(config: arrayChild, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
-                }
-
-                writer.WriteEndArray();
+                SerialiseArray(config: config, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
 
                 return;
             }
@@ -73,21 +69,38 @@ public static class TypeConfigurationExtensions
             if (child.GetChildren()
                      .Any())
             {
-                writer.WritePropertyName(ConvertName(jsonSerializerOptions: jsonSerializerOptions, name: child.Key));
-                writer.WriteStartObject();
-                Serialize(config: child, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
-                writer.WriteEndObject();
+                SerialiseObject(writer: writer, jsonSerializerOptions: jsonSerializerOptions, child: child);
+
+                continue;
             }
-            else
-            {
-                Serialize(config: child, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
-            }
+
+            Serialize(config: child, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
         }
 
         if (!written && config is IConfigurationSection section)
         {
             SerializeSimpleProperty(writer: writer, jsonSerializerOptions: jsonSerializerOptions, section: section);
         }
+    }
+
+    private static void SerialiseObject(Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions, IConfigurationSection child)
+    {
+        writer.WritePropertyName(ConvertName(jsonSerializerOptions: jsonSerializerOptions, name: child.Key));
+        writer.WriteStartObject();
+        Serialize(config: child, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
+        writer.WriteEndObject();
+    }
+
+    private static void SerialiseArray(IConfiguration config, Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions)
+    {
+        writer.WriteStartArray();
+
+        foreach (IConfigurationSection? arrayChild in config.GetChildren())
+        {
+            Serialize(config: arrayChild, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
+        }
+
+        writer.WriteEndArray();
     }
 
     private static void SerializeSimpleProperty(Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions, IConfigurationSection section)
