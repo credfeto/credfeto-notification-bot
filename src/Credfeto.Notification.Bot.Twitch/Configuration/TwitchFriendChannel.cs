@@ -1,12 +1,17 @@
-using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchFriendChannel
 {
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string Channel { get; init; } = default!;
+    [JsonConstructor]
+    public TwitchFriendChannel(string channel, string? message)
+    {
+        this.Channel = channel;
+        this.Message = message;
+    }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string? Message { get; init; }
+    public string Channel { get; }
+
+    public string? Message { get; }
 }

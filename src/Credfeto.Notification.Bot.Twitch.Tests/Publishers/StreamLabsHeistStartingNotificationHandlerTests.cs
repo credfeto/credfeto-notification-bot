@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
@@ -15,7 +16,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
     private readonly IHeistJoiner _heistJoiner;
     private readonly INotificationHandler<StreamLabsHeistStarting> _notificationHandler;
 
@@ -30,7 +30,7 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(Streamer), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(MockReferenceData.Streamer), cancellationToken: CancellationToken.None);
 
         await this.ReceivedJoinHeistAsync();
     }
@@ -41,7 +41,7 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
         this._heistJoiner.JoinHeistAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
-        await this._notificationHandler.Handle(new(Streamer), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(MockReferenceData.Streamer), cancellationToken: CancellationToken.None);
 
         await this.ReceivedJoinHeistAsync();
     }
@@ -49,6 +49,6 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
     private Task ReceivedJoinHeistAsync()
     {
         return this._heistJoiner.Received(1)
-                   .JoinHeistAsync(streamer: Streamer, Arg.Any<CancellationToken>());
+                   .JoinHeistAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>());
     }
 }

@@ -1,13 +1,18 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchMilestones
 {
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public List<int> Followers { get; init; } = default!;
+    [JsonConstructor]
+    public TwitchMilestones(List<int> followers, List<int> subscribers)
+    {
+        this.Followers = followers;
+        this.Subscribers = subscribers;
+    }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public List<int> Subscribers { get; init; } = default!;
+    public List<int> Followers { get; }
+
+    public List<int> Subscribers { get; }
 }

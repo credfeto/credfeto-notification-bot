@@ -1,19 +1,29 @@
-using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchModChannel
 {
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public string ChannelName { get; init; } = default!;
+    [JsonConstructor]
+    public TwitchModChannel(string channelName, TwitchChannelShoutout shoutOuts, TwitchChannelRaids raids, TwitchChannelThanks thanks, TwitchChannelMileStone mileStones, TwitchChannelWelcome welcome)
+    {
+        this.ChannelName = channelName;
+        this.ShoutOuts = shoutOuts;
+        this.Raids = raids;
+        this.Thanks = thanks;
+        this.MileStones = mileStones;
+        this.Welcome = welcome;
+    }
 
-    public TwitchChannelShoutout ShoutOuts { get; init; } = default!;
+    public string ChannelName { get; }
 
-    public TwitchChannelRaids Raids { get; init; } = default!;
+    public TwitchChannelShoutout ShoutOuts { get; }
 
-    public TwitchChannelThanks Thanks { get; init; } = default!;
+    public TwitchChannelRaids Raids { get; }
 
-    public TwitchChannelMileStone MileStones { get; init; } = default!;
+    public TwitchChannelThanks Thanks { get; }
 
-    public TwitchChannelWelcome Welcome { get; init; } = default!;
+    public TwitchChannelMileStone MileStones { get; }
+
+    public TwitchChannelWelcome Welcome { get; }
 }

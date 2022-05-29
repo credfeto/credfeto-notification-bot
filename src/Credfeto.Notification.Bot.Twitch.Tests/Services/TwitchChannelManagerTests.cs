@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
@@ -17,10 +18,8 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
 public sealed class TwitchChannelManagerTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
-    private static readonly Streamer Guest1 = Streamer.FromString(nameof(Guest1));
-    private static readonly Streamer Guest2 = Streamer.FromString(nameof(Guest2));
-    private static readonly Viewer Ignored = Viewer.FromString(nameof(Ignored));
+    private static readonly Streamer Guest1 = MockReferenceData.Streamer.Next();
+    private static readonly Streamer Guest2 = MockReferenceData.Streamer.Next();
 
     private static readonly DateTime StreamStartDate = new(year: 2020, month: 1, day: 1);
 
@@ -36,32 +35,19 @@ public sealed class TwitchChannelManagerTests : TestBase
         this._mediator = GetSubstitute<IMediator>();
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions
-                              {
-                                  Authentication = new() { ClientId = "Invalid", ClientSecret = "Invalid", ClientAccessToken = "Invalid" },
-                                  IgnoredUsers = new() { Ignored.Value },
-                                  Milestones = new() { Followers = new() { 10, 20, 30 }, Subscribers = new() { 10, 20, 30 } },
-                                  Channels = new()
-                                             {
-                                                 new()
-                                                 {
-                                                     ChannelName = Streamer.Value,
-                                                     Welcome = new() { Enabled = true },
-                                                     MileStones = new() { Enabled = true },
-                                                     Raids = new() { Enabled = true },
-                                                     Thanks = new() { Enabled = true },
-                                                     ShoutOuts = new()
-                                                                 {
-                                                                     Enabled = true,
-                                                                     FriendChannels = new()
-                                                                                      {
-                                                                                          new() { Channel = Guest1.Value, Message = "!guest" },
-                                                                                          new() { Channel = Guest2.Value, Message = null }
-                                                                                      }
-                                                                 }
-                                                 }
-                                             }
-                              });
+        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
+                                                   ignoredUsers: new() { MockReferenceData.Ignored.Value },
+                                                   milestones: new(new() { 10, 20, 30 }, new() { 10, 20, 30 }),
+                                                   heists: MockReferenceData.Heists,
+                                                   channels: new()
+                                                             {
+                                                                 new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
+                                                                     welcome: new(enabled: true),
+                                                                     mileStones: new(enabled: true),
+                                                                     raids: new(enabled: true, immediate: null, calmDown: null),
+                                                                     thanks: new(enabled: true),
+                                                                     shoutOuts: new(enabled: true, new() { new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null) }))
+                                                             }));
 
         this._twitchChannelManager = new TwitchChannelManager(options: options,
                                                               userInfoService: this._userInfoService,
@@ -76,7 +62,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         ITwitchChannelState twitchChannelState = await this.GetOnlineStreamAsync();
 
         await this._twitchStreamerDataManager.Received(1)
-                  .RecordStreamStartAsync(streamer: Streamer, streamStartDate: StreamStartDate);
+                  .RecordStreamStartAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate);
 
         twitchChannelState.Offline();
 
@@ -91,21 +77,21 @@ public sealed class TwitchChannelManagerTests : TestBase
         await twitchChannelState.RaidedAsync(Guest1.ToViewer(), viewerCount: 12, cancellationToken: CancellationToken.None);
 
         await this._mediator.Received(1)
-                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12),
+                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == MockReferenceData.Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12),
                            cancellationToken: CancellationToken.None);
     }
 
     [Fact]
     public async Task StreamRaidedWhenOfflineAsync()
     {
-        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
+        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer);
 
         Assert.False(condition: twitchChannelState.IsOnline, userMessage: "Should be offline");
 
         await twitchChannelState.RaidedAsync(Guest1.ToViewer(), viewerCount: 12, cancellationToken: CancellationToken.None);
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12),
+                  .Publish(Arg.Is<TwitchStreamRaided>(t => t.Streamer == MockReferenceData.Streamer && t.Raider == Guest1.ToViewer() && t.ViewerCount == 12),
                            cancellationToken: CancellationToken.None);
     }
 
@@ -126,7 +112,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this.ReceivedCheckForFirstMessageInStreamAsync();
 
         await this._mediator.Received(1)
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == MockReferenceData.Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
                            cancellationToken: CancellationToken.None);
     }
 
@@ -147,7 +133,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this.ReceivedCheckForFirstMessageInStreamAsync();
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == MockReferenceData.Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
                            cancellationToken: CancellationToken.None);
     }
 
@@ -168,7 +154,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         await this.ReceivedCheckForFirstMessageInStreamAsync();
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == MockReferenceData.Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
                            cancellationToken: CancellationToken.None);
     }
 
@@ -182,14 +168,14 @@ public sealed class TwitchChannelManagerTests : TestBase
         this.MockIsRegularChatter(isRegular);
         this.MockIsFirstMessageInStream(true);
 
-        await twitchChannelState.ChatMessageAsync(user: Ignored, message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
+        await twitchChannelState.ChatMessageAsync(user: MockReferenceData.Ignored, message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceiveBitGiftNotificationAsync();
         await this.DidNotReceiveCheckForIsRegularChatterAsync();
         await this.DidNotReceiveCheckForFirstMessageInStreamAsync();
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == MockReferenceData.Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
                            cancellationToken: CancellationToken.None);
     }
 
@@ -203,33 +189,33 @@ public sealed class TwitchChannelManagerTests : TestBase
         this.MockIsRegularChatter(isRegular);
         this.MockIsFirstMessageInStream(true);
 
-        await twitchChannelState.ChatMessageAsync(Streamer.ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
+        await twitchChannelState.ChatMessageAsync(((Streamer)MockReferenceData.Streamer).ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceiveBitGiftNotificationAsync();
         await this.DidNotReceiveCheckForIsRegularChatterAsync();
         await this.DidNotReceiveCheckForFirstMessageInStreamAsync();
 
         await this._mediator.DidNotReceive()
-                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
+                  .Publish(Arg.Is<TwitchStreamNewChatter>(t => t.Streamer == MockReferenceData.Streamer && t.User == Guest1.ToViewer() && t.IsRegular == isRegular),
                            cancellationToken: CancellationToken.None);
     }
 
     private Task DidNotReceiveBitGiftNotificationAsync()
     {
         return this._mediator.DidNotReceive()
-                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == Streamer && t.User == Guest1.ToViewer()), cancellationToken: CancellationToken.None);
+                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == Guest1.ToViewer()), cancellationToken: CancellationToken.None);
     }
 
     private Task ReceivedBitGiftNotificationAsync(Viewer viewer, int amount)
     {
         return this._mediator.DidNotReceive()
-                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == Streamer && t.User == viewer && t.Bits == amount), cancellationToken: CancellationToken.None);
+                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount), cancellationToken: CancellationToken.None);
     }
 
     private Task ReceivedCheckForFirstMessageInStreamAsync()
     {
         return this._twitchStreamerDataManager.Received(1)
-                   .IsFirstMessageInStreamAsync(streamer: Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer());
+                   .IsFirstMessageInStreamAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer());
     }
 
     private Task DidNotReceiveCheckForFirstMessageInStreamAsync()
@@ -241,7 +227,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     private Task ReceivedCheckForIsRegularChatterAsync()
     {
         return this._twitchStreamerDataManager.Received(1)
-                   .IsRegularChatterAsync(streamer: Streamer, Guest1.ToViewer());
+                   .IsRegularChatterAsync(streamer: MockReferenceData.Streamer, Guest1.ToViewer());
     }
 
     private Task DidNotReceiveCheckForIsRegularChatterAsync()
@@ -257,7 +243,7 @@ public sealed class TwitchChannelManagerTests : TestBase
 
     private async Task<ITwitchChannelState> GetOnlineStreamAsync()
     {
-        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(Streamer);
+        ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer);
 
         await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate);
 
@@ -268,13 +254,13 @@ public sealed class TwitchChannelManagerTests : TestBase
 
     private void MockIsFirstMessageInStream(bool isFirstMessage)
     {
-        this._twitchStreamerDataManager.IsFirstMessageInStreamAsync(streamer: Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer())
+        this._twitchStreamerDataManager.IsFirstMessageInStreamAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer())
             .Returns(isFirstMessage);
     }
 
     private void MockIsRegularChatter(bool isRegularChatter)
     {
-        this._twitchStreamerDataManager.IsRegularChatterAsync(streamer: Streamer, Guest1.ToViewer())
+        this._twitchStreamerDataManager.IsRegularChatterAsync(streamer: MockReferenceData.Streamer, Guest1.ToViewer())
             .Returns(isRegularChatter);
     }
 

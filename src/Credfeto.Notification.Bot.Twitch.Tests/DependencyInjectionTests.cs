@@ -1,3 +1,4 @@
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -27,19 +28,11 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
                       .AddMockedService<IMessageChannel<TwitchChatMessage>>()
                       .AddMockedService<IOptions<TwitchBotOptions>>(options =>
                                                                     {
-                                                                        options.Value.Returns(new TwitchBotOptions
-                                                                                              {
-                                                                                                  Authentication = new()
-                                                                                                                   {
-                                                                                                                       ClientId = "Invalid",
-                                                                                                                       ClientAccessToken = "Invalid",
-                                                                                                                       ClientSecret = "Invalid",
-                                                                                                                       OAuthToken = "Invalid",
-                                                                                                                       UserName = "Invalid"
-                                                                                                                   },
-                                                                                                  Channels = new(),
-                                                                                                  Heists = new()
-                                                                                              });
+                                                                        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
+                                                                                                                   new(),
+                                                                                                                   new(),
+                                                                                                                   ignoredUsers: MockReferenceData.IgnoredUsers,
+                                                                                                                   milestones: MockReferenceData.TwitchMilestones));
                                                                     })
                       .AddMockedService<IMediator>()
                       .AddMockedService<ITwitchStreamDataManager>()

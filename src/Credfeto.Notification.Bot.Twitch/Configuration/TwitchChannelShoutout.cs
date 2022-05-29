@@ -1,12 +1,18 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchChannelShoutout
 {
-    public bool Enabled { get; init; }
+    [JsonConstructor]
+    public TwitchChannelShoutout(bool enabled, List<TwitchFriendChannel>? friendChannels)
+    {
+        this.Enabled = enabled;
+        this.FriendChannels = friendChannels;
+    }
 
-    [SuppressMessage(category: "ReSharper", checkId: "AutoPropertyCanBeMadeGetOnly.Global", Justification = "TODO: Review")]
-    public List<TwitchFriendChannel>? FriendChannels { get; init; }
+    public bool Enabled { get; }
+
+    public List<TwitchFriendChannel>? FriendChannels { get; }
 }

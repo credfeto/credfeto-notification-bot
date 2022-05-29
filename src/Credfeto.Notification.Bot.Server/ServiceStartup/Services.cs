@@ -1,4 +1,5 @@
-﻿using Credfeto.Notification.Bot.Database;
+﻿using System.Text.Json.Serialization;
+using Credfeto.Notification.Bot.Database;
 using Credfeto.Notification.Bot.Database.Pgsql;
 using Credfeto.Notification.Bot.Database.Shared;
 using Credfeto.Notification.Bot.Discord;
@@ -6,6 +7,7 @@ using Credfeto.Notification.Bot.Server.Helpers;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.NotificationBot.Shared.Configuration;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,20 +26,27 @@ internal static class Services
 
         Log.Logger = CreateLogger();
 
-        IConfigurationRoot configurationRoot = LoadConfigFile();
-
-        services.AddOptions()
+        services.AddConfiguration()
                 .AddMediatR(typeof(Program), typeof(DiscordSetup), typeof(TwitchSetup))
                 .AddAppLogging()
                 .AddResources()
-                .Configure<PgsqlServerConfiguration>(configurationRoot.GetSection("Database:Postgres"))
                 .AddPostgresql()
                 .AddDatabaseShared()
                 .AddApplicationDatabase()
-                .Configure<DiscordBotOptions>(configurationRoot.GetSection("Discord"))
                 .AddDiscord()
-                .Configure<TwitchBotOptions>(configurationRoot.GetSection("Twitch"))
                 .AddTwitch();
+    }
+
+    private static IServiceCollection AddConfiguration(this IServiceCollection services)
+    {
+        IConfigurationRoot configurationRoot = LoadConfigFile();
+
+        JsonSerializerContext jsonSerializerContext = ServerConfigurationSerializationContext.Default;
+
+        return services.AddOptions()
+                       .WithConfiguration<PgsqlServerConfiguration>(configurationRoot: configurationRoot, key: "Database:Postgres", jsonSerializerContext: jsonSerializerContext)
+                       .WithConfiguration<DiscordBotOptions>(configurationRoot: configurationRoot, key: "Discord", jsonSerializerContext: jsonSerializerContext)
+                       .WithConfiguration<TwitchBotOptions>(configurationRoot: configurationRoot, key: "Twitch", jsonSerializerContext: jsonSerializerContext);
     }
 
     private static Logger CreateLogger()

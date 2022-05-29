@@ -1,6 +1,14 @@
+using System.Text.Json.Serialization;
+
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchChannelThanks
 {
-    public bool Enabled { get; init; }
+    [JsonConstructor]
+    public TwitchChannelThanks(bool enabled)
+    {
+        this.Enabled = enabled;
+    }
+
+    public bool Enabled { get; }
 }

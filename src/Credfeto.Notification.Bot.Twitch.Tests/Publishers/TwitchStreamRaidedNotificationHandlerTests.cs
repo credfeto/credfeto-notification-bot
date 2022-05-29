@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
@@ -15,9 +16,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchStreamRaidedNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
-    private static readonly Viewer Raider = Viewer.FromString(nameof(Raider));
-
     private readonly INotificationHandler<TwitchStreamRaided> _notificationHandler;
     private readonly IRaidWelcome _raidWelcome;
 
@@ -34,18 +32,18 @@ public sealed class TwitchStreamRaidedNotificationHandlerTests : TestBase
         this._raidWelcome.IssueRaidWelcomeAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
             .Throws<ArgumentOutOfRangeException>();
 
-        await this._notificationHandler.Handle(new(streamer: Streamer, raider: Raider, viewerCount: 254643), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, viewerCount: 254643), cancellationToken: CancellationToken.None);
 
         await this._raidWelcome.Received(1)
-                  .IssueRaidWelcomeAsync(streamer: Streamer, raider: Raider, Arg.Any<CancellationToken>());
+                  .IssueRaidWelcomeAsync(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, Arg.Any<CancellationToken>());
     }
 
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: Streamer, raider: Raider, viewerCount: 254643), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, viewerCount: 254643), cancellationToken: CancellationToken.None);
 
         await this._raidWelcome.Received(1)
-                  .IssueRaidWelcomeAsync(streamer: Streamer, raider: Raider, Arg.Any<CancellationToken>());
+                  .IssueRaidWelcomeAsync(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, Arg.Any<CancellationToken>());
     }
 }

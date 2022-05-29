@@ -1,6 +1,14 @@
+using System.Text.Json.Serialization;
+
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchChannelMileStone
 {
-    public bool Enabled { get; init; }
+    [JsonConstructor]
+    public TwitchChannelMileStone(bool enabled)
+    {
+        this.Enabled = enabled;
+    }
+
+    public bool Enabled { get; }
 }

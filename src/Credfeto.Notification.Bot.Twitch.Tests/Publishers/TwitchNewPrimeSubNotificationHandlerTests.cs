@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
@@ -15,9 +16,6 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
 public sealed class TwitchNewPrimeSubNotificationHandlerTests : TestBase
 {
-    private static readonly Streamer Streamer = Streamer.FromString(nameof(Streamer));
-    private static readonly Viewer Subscriber = Viewer.FromString(nameof(Subscriber));
-
     private readonly IContributionThanks _contributionThanks;
     private readonly INotificationHandler<TwitchNewPrimeSub> _notificationHandler;
 
@@ -32,7 +30,7 @@ public sealed class TwitchNewPrimeSubNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer), cancellationToken: CancellationToken.None);
 
         await this.ReceivedThankForNewPrimeSubAsync();
     }
@@ -43,7 +41,7 @@ public sealed class TwitchNewPrimeSubNotificationHandlerTests : TestBase
         this._contributionThanks.ThankForNewPrimeSubAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
-        await this._notificationHandler.Handle(new(streamer: Streamer, user: Subscriber), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer), cancellationToken: CancellationToken.None);
 
         await this.ReceivedThankForNewPrimeSubAsync();
     }
@@ -51,6 +49,6 @@ public sealed class TwitchNewPrimeSubNotificationHandlerTests : TestBase
     private Task ReceivedThankForNewPrimeSubAsync()
     {
         return this._contributionThanks.Received(1)
-                   .ThankForNewPrimeSubAsync(streamer: Streamer, user: Subscriber, Arg.Any<CancellationToken>());
+                   .ThankForNewPrimeSubAsync(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, Arg.Any<CancellationToken>());
     }
 }

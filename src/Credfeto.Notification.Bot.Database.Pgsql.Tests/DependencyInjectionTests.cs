@@ -1,6 +1,8 @@
 ﻿using Credfeto.Notification.Bot.Database.Interfaces;
 using FunFair.Test.Common;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using NSubstitute;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,7 +17,8 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
 
     private static IServiceCollection Configure(IServiceCollection services)
     {
-        return services.AddPostgresql();
+        return services.AddMockedService<IOptions<PgsqlServerConfiguration>>(x => x.Value.Returns(new PgsqlServerConfiguration("Host=localhost;Database=test")))
+                       .AddPostgresql();
     }
 
     [Fact]
