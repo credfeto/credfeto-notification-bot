@@ -10,7 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated Discord.Net to 3.7.1
-- Added ability to use JSON serialiser with the jsoin serialiser decoders to read the settings from appsettings
+- Added ability to use JSON serialiser with the json serialiser decoders to read the settings from appsettings
 ### Removed
 ### Deployment Changes
 
