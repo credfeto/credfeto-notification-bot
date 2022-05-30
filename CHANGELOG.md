@@ -9,14 +9,17 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-1429 - Updated Discord.Net to 3.7.1
-- Added ability to use JSON serialiser with the json serialiser decoders to read the settings from appsettings
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.3] - 2022-05-30
+### Changed
+- FF-1429 - Updated Discord.Net to 3.7.1
+- Added ability to use JSON serialiser with the json serialiser decoders to read the settings from appsettings
+
 ## [0.0.2] - 2022-05-26
 ### Added
 - Support for ARM64
