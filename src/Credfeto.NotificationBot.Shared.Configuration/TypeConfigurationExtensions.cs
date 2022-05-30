@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -43,94 +44,149 @@ public static class TypeConfigurationExtensions
 
         using (Utf8JsonWriter jsonWriter = new(bufferWriter: bufferWriter, new() { Encoder = jsonSerializerOptions.Encoder, Indented = jsonSerializerOptions.WriteIndented, SkipValidation = false }))
         {
-            jsonWriter.WriteStartObject();
-            Serialize(config: section, writer: jsonWriter, jsonSerializerOptions: jsonSerializerOptions);
-            jsonWriter.WriteEndObject();
+            SerializeObject(config: section, writer: jsonWriter, jsonSerializerOptions: jsonSerializerOptions);
         }
 
         return Encoding.UTF8.GetString(bufferWriter.WrittenSpan);
     }
 
-    private static void Serialize(this IConfiguration config, Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions)
+    private static void SerializeObject(this IConfigurationSection config, Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions)
     {
-        bool written = false;
-
-        foreach (IConfigurationSection child in config.GetChildren())
+        using (new JsonObjectWriter(writer))
         {
-            written = true;
+            IReadOnlyList<IConfigurationSection> children = config.GetChildren()
+                                                                  .ToArray();
 
-            if (child.Path.EndsWith(value: ":0", comparisonType: StringComparison.Ordinal))
+            foreach (IConfigurationSection section in children)
             {
-                SerialiseArray(config: config, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
-
-                return;
+                SerialiseSection(section: section, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
             }
+        }
+    }
 
-            if (child.GetChildren()
-                     .Any())
+    private static void SerialiseSection(IConfigurationSection section, Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions)
+    {
+        IConfigurationSection? firstChild = section.GetChildren()
+                                                   .FirstOrDefault();
+
+        if (IsFirstArrayElement(section))
+        {
+            throw new ArgumentOutOfRangeException(nameof(section), actualValue: section.Path, message: "Cannot write array property name");
+        }
+
+        writer.WritePropertyName(ConvertName(jsonSerializerOptions: jsonSerializerOptions, name: section.Key));
+
+        if (firstChild != null)
+        {
+            if (IsFirstArrayElement(firstChild))
             {
-                SerialiseObject(writer: writer, jsonSerializerOptions: jsonSerializerOptions, child: child);
-
-                continue;
+                SerialiseArray(config: section, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
             }
-
-            Serialize(config: child, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
+            else
+            {
+                SerializeObject(config: section, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
+            }
         }
-
-        if (!written && config is IConfigurationSection section)
+        else
         {
-            SerializeSimpleProperty(writer: writer, jsonSerializerOptions: jsonSerializerOptions, section: section);
+            SerialiseTypedValue(configItem: section, writer: writer);
         }
     }
 
-    private static void SerialiseObject(Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions, IConfigurationSection child)
+    private static void SerialiseArray(IConfigurationSection config, Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions)
     {
-        writer.WritePropertyName(ConvertName(jsonSerializerOptions: jsonSerializerOptions, name: child.Key));
-        writer.WriteStartObject();
-        Serialize(config: child, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
-        writer.WriteEndObject();
-    }
-
-    private static void SerialiseArray(IConfiguration config, Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions)
-    {
-        writer.WriteStartArray();
-
-        foreach (IConfigurationSection? arrayChild in config.GetChildren())
+        using (new JsonArrayWriter(writer))
         {
-            Serialize(config: arrayChild, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
+            IReadOnlyList<IConfigurationSection> children = config.GetChildren()
+                                                                  .ToArray();
+
+            foreach (IConfigurationSection section in children)
+            {
+                if (section.GetChildren()
+                           .Any())
+                {
+                    SerializeObject(config: section, writer: writer, jsonSerializerOptions: jsonSerializerOptions);
+                }
+                else
+                {
+                    SerialiseTypedValue(configItem: section, writer: writer);
+                }
+            }
         }
-
-        writer.WriteEndArray();
     }
 
-    private static void SerializeSimpleProperty(Utf8JsonWriter writer, JsonSerializerOptions jsonSerializerOptions, IConfigurationSection section)
+    private static void SerialiseTypedValue(IConfigurationSection configItem, Utf8JsonWriter writer)
     {
-        if (bool.TryParse(value: section.Value, out bool boolean))
+        if (configItem.Value == null)
         {
-            writer.WriteBoolean(ConvertName(jsonSerializerOptions: jsonSerializerOptions, name: section.Key), value: boolean);
+            writer.WriteNullValue();
 
             return;
         }
 
-        if (decimal.TryParse(s: section.Value, out decimal real))
+        if (bool.TryParse(value: configItem.Value, out bool boolean))
         {
-            writer.WriteNumber(ConvertName(jsonSerializerOptions: jsonSerializerOptions, name: section.Key), value: real);
+            writer.WriteBooleanValue(value: boolean);
 
             return;
         }
 
-        if (long.TryParse(s: section.Value, out long integer))
+        if (decimal.TryParse(s: configItem.Value, out decimal real))
         {
-            writer.WriteNumber(ConvertName(jsonSerializerOptions: jsonSerializerOptions, name: section.Key), value: integer);
+            writer.WriteNumberValue(value: real);
 
             return;
         }
 
-        writer.WriteString(ConvertName(jsonSerializerOptions: jsonSerializerOptions, name: section.Key), value: section.Value);
+        if (long.TryParse(s: configItem.Value, out long integer))
+        {
+            writer.WriteNumberValue(value: integer);
+
+            return;
+        }
+
+        writer.WriteStringValue(value: configItem.Value);
     }
 
     private static string ConvertName(JsonSerializerOptions jsonSerializerOptions, string name)
     {
         return jsonSerializerOptions.PropertyNamingPolicy?.ConvertName(name) ?? name;
+    }
+
+    private static bool IsFirstArrayElement(IConfigurationSection section)
+    {
+        return section.Path.EndsWith(value: ":0", comparisonType: StringComparison.Ordinal);
+    }
+
+    private sealed class JsonObjectWriter : IDisposable
+    {
+        private readonly Utf8JsonWriter _writer;
+
+        public JsonObjectWriter(Utf8JsonWriter writer)
+        {
+            this._writer = writer;
+            this._writer.WriteStartObject();
+        }
+
+        public void Dispose()
+        {
+            this._writer.WriteEndObject();
+        }
+    }
+
+    private sealed class JsonArrayWriter : IDisposable
+    {
+        private readonly Utf8JsonWriter _writer;
+
+        public JsonArrayWriter(Utf8JsonWriter writer)
+        {
+            this._writer = writer;
+            this._writer.WriteStartArray();
+        }
+
+        public void Dispose()
+        {
+            this._writer.WriteEndArray();
+        }
     }
 }
