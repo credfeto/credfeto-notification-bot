@@ -9,13 +9,14 @@ internal static class Jitter
 
     public static double WithJitter(double delaySeconds, int maxSeconds)
     {
-        double nonJitterPeriod = delaySeconds - maxSeconds;
+        double minNonJitterPeriod = delaySeconds / 2.0d;
+        double nonJitterPeriod = delaySeconds - maxSeconds / 2.0d;
         double jitterRange = maxSeconds * 2;
 
-        if (nonJitterPeriod < 0)
+        if (nonJitterPeriod < minNonJitterPeriod)
         {
             jitterRange = delaySeconds;
-            nonJitterPeriod = delaySeconds / 2;
+            nonJitterPeriod = minNonJitterPeriod;
         }
 
         double jitter = CalculateJitterSeconds(jitterRange);

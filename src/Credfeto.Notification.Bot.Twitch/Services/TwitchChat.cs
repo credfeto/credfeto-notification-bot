@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -212,10 +213,7 @@ public sealed class TwitchChat : ITwitchChat
             this._connected = true;
         }
 
-        if (this._connected)
-        {
-            this.ReconnectToJoinedChats();
-        }
+        this.ReconnectToJoinedChats();
 
         return Task.CompletedTask;
     }
@@ -391,13 +389,13 @@ public sealed class TwitchChat : ITwitchChat
     private void ReconnectToJoinedChats()
     {
         // Join all the previously joined channels if not already connected
-        foreach (Streamer streamer in this._joinedStreamers.Keys.ToArray())
+        IReadOnlyList<Streamer> streamers = this._joinedStreamers.Keys.Where(streamer => !this.IsConnectedToChat(streamer))
+                                                .ToArray();
+
+        foreach (Streamer streamer in streamers)
         {
-            if (!this.IsConnectedToChat(streamer))
-            {
-                this._logger.LogInformation($"{streamer}: Reconnecting to chat...");
-                this.JoinChat(streamer);
-            }
+            this._logger.LogInformation($"{streamer}: Reconnecting to chat...");
+            this.JoinChat(streamer);
         }
     }
 
