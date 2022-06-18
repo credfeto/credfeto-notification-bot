@@ -29,7 +29,8 @@ public sealed class TwitchChat : ITwitchChat
 {
     private readonly TwitchClient _client;
 
-    private readonly ConcurrentDictionary<Streamer, string> _lastMessage = new();
+    private readonly ConcurrentDictionary<Streamer, bool> _joinedStreamers;
+    private readonly ConcurrentDictionary<Streamer, string> _lastMessage;
     private readonly SemaphoreSlim _lastMessageLock;
     private readonly ILogger<TwitchChat> _logger;
     private readonly IMediator _mediator;
@@ -57,10 +58,14 @@ public sealed class TwitchChat : ITwitchChat
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
 
         this._lastMessageLock = new(initialCount: 1, maxCount: 1);
+        this._joinedStreamers = new();
+        this._lastMessage = new();
 
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
 
         this._client.Initialize(credentials: credentials, channels: new() { this._options.Authentication.UserName });
+
+        this._joinedStreamers.TryAdd(Streamer.FromString(this._options.Authentication.UserName), value: true);
 
         // HEALTH
         Observable.FromEventPattern<OnConnectedArgs>(addHandler: h => this._client.OnConnected += h, removeHandler: h => this._client.OnConnected -= h)
@@ -82,8 +87,7 @@ public sealed class TwitchChat : ITwitchChat
                   .Subscribe();
 
         // STATE
-        Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h,
-                                                               removeHandler: h => this._client.OnChannelStateChanged -= h)
+        Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h, removeHandler: h => this._client.OnChannelStateChanged -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(onNext: this.Client_OnChannelStateChanged);
 
@@ -132,8 +136,7 @@ public sealed class TwitchChat : ITwitchChat
                   .Concat()
                   .Subscribe();
 
-        Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h,
-                                                                 removeHandler: h => this._client.OnCommunitySubscription -= h)
+        Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h, removeHandler: h => this._client.OnCommunitySubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Where(e => !this._options.IsSelf(Viewer.FromString(e.GiftedSubscription.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
@@ -158,8 +161,7 @@ public sealed class TwitchChat : ITwitchChat
                   .Concat()
                   .Subscribe();
 
-        Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h,
-                                                               removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
+        Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h, removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Where(e => !this._options.IsSelf(Viewer.FromString(e.PrimePaidSubscriber.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
@@ -183,6 +185,7 @@ public sealed class TwitchChat : ITwitchChat
 
     public void JoinChat(Streamer streamer)
     {
+        this._joinedStreamers.TryAdd(key: streamer, value: true);
         this._client.JoinChannel(streamer.Value);
     }
 
@@ -194,6 +197,8 @@ public sealed class TwitchChat : ITwitchChat
             return;
         }
 
+        this._joinedStreamers.TryRemove(key: streamer, out bool _);
+
         this._client.LeaveChannel(streamer.Value);
     }
 
@@ -201,10 +206,15 @@ public sealed class TwitchChat : ITwitchChat
     {
         if (!this._connected)
         {
-            this._logger.LogDebug("Reconnecting...");
+            this._logger.LogDebug("Chat Reconnecting...");
 
             //this._client.Connect();
             this._connected = true;
+        }
+
+        if (this._connected)
+        {
+            this.ReconnectToJoinedChats();
         }
 
         return Task.CompletedTask;
@@ -234,7 +244,12 @@ public sealed class TwitchChat : ITwitchChat
 
     private bool IsConnectedToChat(TwitchChatMessage chatMessage)
     {
-        return this._client.JoinedChannels.Any(joinedChannel => StringComparer.InvariantCultureIgnoreCase.Equals(x: chatMessage.Streamer.Value, y: joinedChannel.Channel));
+        return this.IsConnectedToChat(chatMessage.Streamer);
+    }
+
+    private bool IsConnectedToChat(Streamer streamer)
+    {
+        return this._client.JoinedChannels.Any(joinedChannel => StringComparer.InvariantCultureIgnoreCase.Equals(x: streamer.Value, y: joinedChannel.Channel));
     }
 
     private async Task PublishChatMessageAsync(TwitchChatMessage twitchChatMessage, CancellationToken cancellationToken)
@@ -313,9 +328,7 @@ public sealed class TwitchChat : ITwitchChat
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
-        return state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName),
-                                    months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration,
-                                    cancellationToken: cancellationToken);
+        return state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName), months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration, cancellationToken: cancellationToken);
     }
 
     private void Client_OnChannelStateChanged(OnChannelStateChangedArgs e)
@@ -363,14 +376,29 @@ public sealed class TwitchChat : ITwitchChat
 
     private void OnDisconnected(OnDisconnectedEventArgs e)
     {
-        this._logger.LogWarning("Disconnected :(");
+        this._logger.LogWarning("Chat Disconnected :(");
         this._connected = false;
     }
 
     private void OnReconnected(OnReconnectedEventArgs e)
     {
-        this._logger.LogWarning("Reconnected :)");
+        this._logger.LogWarning("Chat Reconnected :)");
         this._connected = true;
+
+        this.ReconnectToJoinedChats();
+    }
+
+    private void ReconnectToJoinedChats()
+    {
+        // Join all the previously joined channels if not already connected
+        foreach (Streamer streamer in this._joinedStreamers.Keys.ToArray())
+        {
+            if (!this.IsConnectedToChat(streamer))
+            {
+                this._logger.LogInformation($"{streamer}: Reconnecting to chat...");
+                this.JoinChat(streamer);
+            }
+        }
     }
 
     private Task OnRaidAsync(OnRaidNotificationArgs e, in CancellationToken cancellationToken)
@@ -453,8 +481,7 @@ public sealed class TwitchChat : ITwitchChat
     private static bool IsHeistStartingMessage(OnMessageReceivedArgs e)
     {
         return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
-               e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.",
-                                              comparisonType: StringComparison.Ordinal);
+               e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
     }
 
     private Task OnNewSubscriberAsync(OnNewSubscriberArgs e, in CancellationToken cancellationToken)
