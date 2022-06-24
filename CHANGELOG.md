@@ -19,7 +19,7 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 ## [0.0.3] - 2022-05-30
 ### Changed
 - FF-1429 - Updated Discord.Net to 3.7.1
-- Added ability to use JSON serialiser with the json serialiser decoders to read the settings from appsettings
+- Added ability to use JSON serializer with the JSON serializer decoders to read the settings from appsettings
 
 ## [0.0.2] - 2022-05-26
 ### Added
