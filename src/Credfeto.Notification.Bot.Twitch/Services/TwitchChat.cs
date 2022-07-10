@@ -450,9 +450,7 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
-        TwitchMarbles? marbles = this._options.Marbles?.FirstOrDefault(x => StringComparer.InvariantCultureIgnoreCase.Equals(x: x.Streamer, y: e.ChatMessage.Channel) &&
-                                                                            StringComparer.InvariantCultureIgnoreCase.Equals(x: x.Bot, y: e.ChatMessage.Username) &&
-                                                                            StringComparer.InvariantCultureIgnoreCase.Equals(x: x.Message, y: e.ChatMessage.Message));
+        TwitchMarbles? marbles = this._options.Marbles?.FirstOrDefault(x => IsHeistMessage(message: e, marbles: x));
 
         if (marbles != null)
         {
@@ -474,6 +472,13 @@ public sealed class TwitchChat : ITwitchChat
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
         await state.ChatMessageAsync(Viewer.FromString(e.ChatMessage.Username), message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
+    }
+
+    private static bool IsHeistMessage(OnMessageReceivedArgs message, TwitchMarbles marbles)
+    {
+        return StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Streamer, y: message.ChatMessage.Channel) &&
+               StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Bot, y: message.ChatMessage.Username) &&
+               StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Match, y: message.ChatMessage.Message);
     }
 
     private async Task<bool> JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
