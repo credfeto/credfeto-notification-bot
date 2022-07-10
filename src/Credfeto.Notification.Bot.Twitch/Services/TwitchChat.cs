@@ -450,6 +450,8 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
+        Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
+
         TwitchMarbles? marbles = this._options.Marbles?.FirstOrDefault(x => IsHeistMessage(message: e, marbles: x));
 
         if (marbles != null)
@@ -457,10 +459,10 @@ public sealed class TwitchChat : ITwitchChat
             // It was a heist message, no point in processing anything else.
             this._logger.LogWarning($"{e.ChatMessage.Channel}: Marbles detected from user: {e.ChatMessage.Username}");
 
+            await this.JoinMarblesGameAsync(streamer: streamer, cancellationToken: cancellationToken);
+
             return;
         }
-
-        Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
 
         if (!this._options.IsModChannel(streamer))
         {
@@ -472,6 +474,11 @@ public sealed class TwitchChat : ITwitchChat
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
         await state.ChatMessageAsync(Viewer.FromString(e.ChatMessage.Username), message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
+    }
+
+    private Task JoinMarblesGameAsync(in Streamer streamer, in CancellationToken cancellationToken)
+    {
+        return this._mediator.Publish(new StreamLabsMarblesStarting(streamer), cancellationToken: cancellationToken);
     }
 
     private static bool IsHeistMessage(OnMessageReceivedArgs message, TwitchMarbles marbles)
