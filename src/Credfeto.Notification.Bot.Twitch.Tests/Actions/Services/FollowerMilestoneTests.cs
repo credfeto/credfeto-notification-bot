@@ -30,13 +30,11 @@ public sealed class FollowerMilestoneTests : TestBase
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
                                                    new(),
                                                    heists: MockReferenceData.Heists,
+                                                   marbles: null,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    milestones: MockReferenceData.TwitchMilestones));
 
-        this._followerMileStone = new FollowerMilestone(options: options,
-                                                        mediator: this._mediator,
-                                                        twitchStreamDataManager: this._twitchStreamDataManager,
-                                                        this.GetTypedLogger<FollowerMilestone>());
+        this._followerMileStone = new FollowerMilestone(options: options, mediator: this._mediator, twitchStreamDataManager: this._twitchStreamDataManager, this.GetTypedLogger<FollowerMilestone>());
     }
 
     [Fact]

@@ -450,6 +450,18 @@ public sealed class TwitchChat : ITwitchChat
             }
         }
 
+        TwitchMarbles? marbles = this._options.Marbles?.FirstOrDefault(x => StringComparer.InvariantCultureIgnoreCase.Equals(x: x.Streamer, y: e.ChatMessage.Channel) &&
+                                                                            StringComparer.InvariantCultureIgnoreCase.Equals(x: x.Bot, y: e.ChatMessage.Username) &&
+                                                                            StringComparer.InvariantCultureIgnoreCase.Equals(x: x.Message, y: e.ChatMessage.Message));
+
+        if (marbles != null)
+        {
+            // It was a heist message, no point in processing anything else.
+            this._logger.LogWarning($"{e.ChatMessage.Channel}: Marbles detected from user: {e.ChatMessage.Username}");
+
+            return;
+        }
+
         Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
 
         if (!this._options.IsModChannel(streamer))

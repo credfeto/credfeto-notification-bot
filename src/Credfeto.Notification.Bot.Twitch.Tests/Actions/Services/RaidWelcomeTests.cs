@@ -42,6 +42,7 @@ public sealed class RaidWelcomeTests : LoggingTestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
+                                                   marbles: null,
                                                    channels: new()
                                                              {
                                                                  new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
@@ -60,10 +61,7 @@ public sealed class RaidWelcomeTests : LoggingTestBase
                                                                      welcome: MockReferenceData.TwitchChannelWelcome)
                                                              }));
 
-        this._raidWelcome = new RaidWelcome(options: options,
-                                            twitchChannelManager: twitchChannelManager,
-                                            twitchChatMessageChannel: this._twitchChatMessageChannel,
-                                            this.GetTypedLogger<RaidWelcome>());
+        this._raidWelcome = new RaidWelcome(options: options, twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
     }
 
     [Fact]
