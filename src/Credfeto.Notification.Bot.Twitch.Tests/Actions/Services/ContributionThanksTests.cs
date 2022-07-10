@@ -40,6 +40,7 @@ public sealed class ContributionThanksTests : TestBase
                                                     welcome: new(enabled: false))
                                             },
                                   heists: MockReferenceData.Heists,
+                                  marbles: null,
                                   authentication: MockReferenceData.TwitchAuthentication,
                                   ignoredUsers: MockReferenceData.IgnoredUsers,
                                   milestones: MockReferenceData.TwitchMilestones));

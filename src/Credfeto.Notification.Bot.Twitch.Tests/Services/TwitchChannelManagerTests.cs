@@ -39,6 +39,7 @@ public sealed class TwitchChannelManagerTests : TestBase
                                                    ignoredUsers: new() { MockReferenceData.Ignored.Value },
                                                    milestones: new(new() { 10, 20, 30 }, new() { 10, 20, 30 }),
                                                    heists: MockReferenceData.Heists,
+                                                   marbles: null,
                                                    channels: new()
                                                              {
                                                                  new(channelName: ((Streamer)MockReferenceData.Streamer).Value,

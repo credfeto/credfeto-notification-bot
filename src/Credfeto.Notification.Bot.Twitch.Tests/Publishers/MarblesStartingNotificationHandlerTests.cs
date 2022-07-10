@@ -14,16 +14,16 @@ using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
-public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
+public sealed class MarblesStartingNotificationHandlerTests : TestBase
 {
-    private readonly IHeistJoiner _heistJoiner;
-    private readonly INotificationHandler<StreamLabsHeistStarting> _notificationHandler;
+    private readonly IMarblesJoiner _marblesJoiner;
+    private readonly INotificationHandler<MarblesStarting> _notificationHandler;
 
-    public StreamLabsHeistStartingNotificationHandlerTests()
+    public MarblesStartingNotificationHandlerTests()
     {
-        this._heistJoiner = GetSubstitute<IHeistJoiner>();
+        this._marblesJoiner = GetSubstitute<IMarblesJoiner>();
 
-        this._notificationHandler = new StreamLabsHeistStartingNotificationHandler(heistJoiner: this._heistJoiner, this.GetTypedLogger<StreamLabsHeistStartingNotificationHandler>());
+        this._notificationHandler = new MarblesStartingNotificationHandler(marblesJoiner: this._marblesJoiner, this.GetTypedLogger<MarblesStartingNotificationHandler>());
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleExceptionAsync()
     {
-        this._heistJoiner.JoinHeistAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
+        this._marblesJoiner.JoinMarblesAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
         await this._notificationHandler.Handle(new(MockReferenceData.Streamer), cancellationToken: CancellationToken.None);
@@ -47,7 +47,7 @@ public sealed class StreamLabsHeistStartingNotificationHandlerTests : TestBase
 
     private Task ReceivedJoinHeistAsync()
     {
-        return this._heistJoiner.Received(1)
-                   .JoinHeistAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>());
+        return this._marblesJoiner.Received(1)
+                   .JoinMarblesAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>());
     }
 }

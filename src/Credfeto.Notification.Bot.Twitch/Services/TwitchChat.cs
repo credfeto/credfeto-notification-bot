@@ -259,7 +259,10 @@ public sealed class TwitchChat : ITwitchChat
             if (this._lastMessage.TryGetValue(key: twitchChatMessage.Streamer, out string? lastMessage) &&
                 StringComparer.InvariantCultureIgnoreCase.Equals(x: lastMessage, y: twitchChatMessage.Message))
             {
-                return;
+                if (!twitchChatMessage.Message.StartsWith(value: "!", comparisonType: StringComparison.Ordinal))
+                {
+                    return;
+                }
             }
 
             this._lastMessage.TryRemove(key: twitchChatMessage.Streamer, value: out _);
@@ -452,6 +455,18 @@ public sealed class TwitchChat : ITwitchChat
 
         Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
 
+        TwitchMarbles? marbles = this._options.Marbles?.FirstOrDefault(x => IsMarblesMessage(message: e, marbles: x));
+
+        if (marbles != null)
+        {
+            // It was a heist message, no point in processing anything else.
+            this._logger.LogWarning($"{e.ChatMessage.Channel}: Marbles detected from user: {e.ChatMessage.Username}");
+
+            await this.JoinMarblesGameAsync(streamer: streamer, cancellationToken: cancellationToken);
+
+            return;
+        }
+
         if (!this._options.IsModChannel(streamer))
         {
             return;
@@ -462,6 +477,24 @@ public sealed class TwitchChat : ITwitchChat
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
         await state.ChatMessageAsync(Viewer.FromString(e.ChatMessage.Username), message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
+    }
+
+    private Task JoinMarblesGameAsync(in Streamer streamer, in CancellationToken cancellationToken)
+    {
+        return this._mediator.Publish(new MarblesStarting(streamer), cancellationToken: cancellationToken);
+    }
+
+    private static bool IsMarblesMessage(OnMessageReceivedArgs message, TwitchMarbles marbles)
+    {
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Streamer, y: message.ChatMessage.Channel) &&
+            StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Bot, y: message.ChatMessage.Username))
+        {
+            bool match = StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Match, y: message.ChatMessage.Message);
+
+            return match;
+        }
+
+        return false;
     }
 
     private async Task<bool> JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
