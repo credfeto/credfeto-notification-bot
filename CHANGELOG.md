@@ -9,13 +9,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-3881 - Updated DotNet SDK to 6.0.301
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.4] - 2022-07-11
+### Added
+- Marbles start detection
+### Changed
+- FF-3881 - Updated DotNet SDK to 6.0.301
+
 ## [0.0.3] - 2022-05-30
 ### Changed
 - FF-1429 - Updated Discord.Net to 3.7.1
