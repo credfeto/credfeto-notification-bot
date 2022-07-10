@@ -71,13 +71,13 @@ public sealed class RaidWelcomeTests : LoggingTestBase
 
         await this._raidWelcome.IssueRaidWelcomeAsync(streamer: MockReferenceData.Streamer, raider: Raider, cancellationToken: CancellationToken.None);
 
-        const string raidWelcome = @"
+        string raidWelcome = @"
 ♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
 GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
+♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫".Trim();
 
         await this.ReceivedPublishMessageAsync(IMMEDIATE_MSG);
-        await this.ReceivedPublishMessageAsync(raidWelcome.Trim());
+        await this.ReceivedPublishMessageAsync(raidWelcome);
         await this.ReceivedPublishMessageAsync($"Thanks @{Raider} for the raid");
         await this.ReceivedPublishMessageAsync($"!so @{Raider}");
         await this.ReceivedPublishMessageAsync(CALM_DOWN_MSG);

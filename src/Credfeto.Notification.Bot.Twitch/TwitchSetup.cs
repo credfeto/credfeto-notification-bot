@@ -45,9 +45,7 @@ public static class TwitchSetup
     {
         return new WebSocketClient(new ClientOptions
                                    {
-                                       MessagesAllowedInPeriod = 750,
-                                       ThrottlingPeriod = TimeSpan.FromSeconds(30),
-                                       ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
+                                       MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30), ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
                                    });
     }
 
@@ -55,6 +53,7 @@ public static class TwitchSetup
     {
         return services.AddSingleton<IRaidWelcome, RaidWelcome>()
                        .AddSingleton<IHeistJoiner, HeistJoiner>()
+                       .AddSingleton<IMarblesJoiner, MarblesJoiner>()
                        .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
                        .AddSingleton<IContributionThanks, ContributionThanks>()
                        .AddSingleton<IHoster, Hoster>()

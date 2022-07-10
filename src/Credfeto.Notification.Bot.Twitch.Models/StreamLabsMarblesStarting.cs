@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
-public sealed class StreamLabsMarblesStarting : INotification
+public sealed class MarblesStarting : INotification
 {
-    public StreamLabsMarblesStarting(in Streamer streamer)
+    public MarblesStarting(in Streamer streamer)
     {
         this.Streamer = streamer;
     }

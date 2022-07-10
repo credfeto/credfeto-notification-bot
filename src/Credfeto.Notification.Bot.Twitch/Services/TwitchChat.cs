@@ -478,7 +478,7 @@ public sealed class TwitchChat : ITwitchChat
 
     private Task JoinMarblesGameAsync(in Streamer streamer, in CancellationToken cancellationToken)
     {
-        return this._mediator.Publish(new StreamLabsMarblesStarting(streamer), cancellationToken: cancellationToken);
+        return this._mediator.Publish(new MarblesStarting(streamer), cancellationToken: cancellationToken);
     }
 
     private static bool IsHeistMessage(OnMessageReceivedArgs message, TwitchMarbles marbles)
