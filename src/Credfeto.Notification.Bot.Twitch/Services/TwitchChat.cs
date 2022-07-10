@@ -259,7 +259,10 @@ public sealed class TwitchChat : ITwitchChat
             if (this._lastMessage.TryGetValue(key: twitchChatMessage.Streamer, out string? lastMessage) &&
                 StringComparer.InvariantCultureIgnoreCase.Equals(x: lastMessage, y: twitchChatMessage.Message))
             {
-                return;
+                if (!twitchChatMessage.Message.StartsWith(value: "!", comparisonType: StringComparison.Ordinal))
+                {
+                    return;
+                }
             }
 
             this._lastMessage.TryRemove(key: twitchChatMessage.Streamer, value: out _);
