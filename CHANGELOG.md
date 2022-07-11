@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- Only allow mod channels to be hosted
 ### Removed
 ### Deployment Changes
 

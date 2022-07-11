@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
@@ -13,6 +15,7 @@ namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
 public sealed class Hoster : MessageSenderBase, IHoster
 {
+    private readonly ImmutableHashSet<Streamer> _allowedHosts;
     private readonly Streamer _bot;
     private readonly ILogger<Hoster> _logger;
     private readonly ConcurrentDictionary<Streamer, DateTime> _streamers;
@@ -28,10 +31,21 @@ public sealed class Hoster : MessageSenderBase, IHoster
         this._streamers = new();
         this._hosting = null;
         this._bot = Streamer.FromString((options ?? throw new ArgumentNullException(nameof(options))).Value.Authentication.UserName);
+        this._allowedHosts = options.Value.Channels.Select(c => Streamer.FromString(c.ChannelName))
+                                    .Where(c => c != this._bot)
+                                    .Distinct()
+                                    .ToImmutableHashSet();
     }
 
     public async Task StreamOnlineAsync(Streamer streamer, DateTime streamStartTime, CancellationToken cancellationToken)
     {
+        if (!this._allowedHosts.Contains(streamer))
+        {
+            this._logger.LogWarning($"{streamer}: Not permitted to host");
+
+            return;
+        }
+
         this._logger.LogInformation($"{streamer}: hosting for stream [Online]");
 
         if (!this._streamers.TryAdd(key: streamer, value: streamStartTime))
