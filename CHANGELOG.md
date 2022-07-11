@@ -9,13 +9,16 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Only allow mod channels to be hosted
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.5] - 2022-07-11
+### Changed
+- Only allow mod channels to be hosted
+
 ## [0.0.4] - 2022-07-11
 ### Added
 - Marbles start detection
