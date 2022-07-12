@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -42,6 +43,9 @@ public sealed class TwitchChat : ITwitchChat
     [SuppressMessage(category: "ReSharper", checkId: "PrivateFieldCanBeConvertedToLocalVariable", Justification = "TODO: Review")]
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
+    private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
+    private readonly ConcurrentDictionary<TwitchMessageMatch, string> _twitchMessageTriggers;
+
     private bool _connected;
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
@@ -49,11 +53,13 @@ public sealed class TwitchChat : ITwitchChat
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IMediator mediator,
                       ITwitchClient twitchClient,
+                      ITwitchMessageTriggerDebounceFilter twitchMessageTriggerDebounceFilter,
                       ILogger<TwitchChat> logger)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this._twitchMessageTriggerDebounceFilter = twitchMessageTriggerDebounceFilter ?? throw new ArgumentNullException(nameof(twitchMessageTriggerDebounceFilter));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
@@ -61,6 +67,8 @@ public sealed class TwitchChat : ITwitchChat
         this._lastMessageLock = new(initialCount: 1, maxCount: 1);
         this._joinedStreamers = new();
         this._lastMessage = new();
+
+        this._twitchMessageTriggers = this.BuildMessageTriggers(heists: this._options.Heists, marbles: this._options.Marbles);
 
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
 
@@ -216,6 +224,33 @@ public sealed class TwitchChat : ITwitchChat
         this.ReconnectToJoinedChats();
 
         return Task.CompletedTask;
+    }
+
+    private ConcurrentDictionary<TwitchMessageMatch, string> BuildMessageTriggers(List<string> heists, List<TwitchMarbles> marbles)
+    {
+        ConcurrentDictionary<TwitchMessageMatch, string> triggers = new();
+
+        // Viewer streamLabs = Viewer.FromString("streamlabs");
+        foreach (string streamer in heists)
+        {
+            Trace.WriteLine($"Adding heist trigger: {streamer}");
+
+            //     // TODO: Add EndsWith support
+            //     // return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
+            //     //        e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
+            //
+            //     TwitchMessageMatch trigger = new(Streamer.FromString(streamer), streamLabs, message: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.");
+            //     this._twitchMessageTriggers.TryAdd(key: trigger, value: "!heist all");
+        }
+
+        foreach (TwitchMarbles marble in marbles)
+        {
+            Trace.WriteLine($"Adding marbles trigger: {marble.Streamer}");
+            TwitchMessageMatch trigger = new(Streamer.FromString(marble.Streamer), Viewer.FromString(marble.Bot), message: marble.Match);
+            this._twitchMessageTriggers.TryAdd(key: trigger, value: "!play");
+        }
+
+        return triggers;
     }
 
     private TimeSpan CalculateWithJitter(TwitchChatMessage twitchChatMessage)

@@ -64,6 +64,7 @@ public static class TwitchSetup
     {
         return services.AddSingleton<ITwitchChannelManager, TwitchChannelManager>()
                        .AddSingleton<ITwitchChat, TwitchChat>()
+                       .AddSingleton<ITwitchMessageTriggerDebounceFilter, TwitchMessageTriggerDebounceFilter>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
                        .AddSingleton<IUserInfoService, UserInfoService>()
                        .AddSingleton<ITwitchFollowerDetector, TwitchFollowerDetector>()
