@@ -14,12 +14,13 @@ using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
-public sealed class MarblesStartingNotificationHandlerTests : TestBase
+public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
 {
+    private const string MESSAGE = "!hello";
     private readonly IMarblesJoiner _marblesJoiner;
     private readonly INotificationHandler<MarblesStarting> _notificationHandler;
 
-    public MarblesStartingNotificationHandlerTests()
+    public CustomTriggeredMessageNotificationHandlerTests()
     {
         this._marblesJoiner = GetSubstitute<IMarblesJoiner>();
 
@@ -29,7 +30,7 @@ public sealed class MarblesStartingNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(MockReferenceData.Streamer), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, message: MESSAGE), cancellationToken: CancellationToken.None);
 
         await this.ReceivedJoinHeistAsync();
     }
@@ -40,7 +41,7 @@ public sealed class MarblesStartingNotificationHandlerTests : TestBase
         this._marblesJoiner.JoinMarblesAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
-        await this._notificationHandler.Handle(new(MockReferenceData.Streamer), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, message: MESSAGE), cancellationToken: CancellationToken.None);
 
         await this.ReceivedJoinHeistAsync();
     }
