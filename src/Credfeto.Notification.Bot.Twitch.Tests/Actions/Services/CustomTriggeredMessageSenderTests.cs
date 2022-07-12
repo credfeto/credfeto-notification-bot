@@ -24,11 +24,13 @@ public sealed class CustomTriggeredMessageSenderTests : TestBase
     }
 
     [Fact]
-    public async Task JoinHeistAsync()
+    public async Task SendAsync()
     {
-        await this._customTriggeredMessageSender.JoinMarblesAsync(streamer: MockReferenceData.Streamer, cancellationToken: CancellationToken.None);
+        const string message = "!hello";
 
-        await this.ReceivedPublishMessageAsync("!play");
+        await this._customTriggeredMessageSender.SendAsync(streamer: MockReferenceData.Streamer, message: message, cancellationToken: CancellationToken.None);
+
+        await this.ReceivedPublishMessageAsync(message);
     }
 
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)

@@ -18,10 +18,10 @@ public sealed class CustomTriggeredMessageSender : MessageSenderBase, ICustomTri
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task JoinMarblesAsync(Streamer streamer, CancellationToken cancellationToken)
+    public async Task SendAsync(Streamer streamer, string message, CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"{streamer}: Marbles Starting!");
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: "!play", cancellationToken: cancellationToken);
-        this._logger.LogInformation($"{streamer}: Marbles Starting! - Join Sent");
+        this._logger.LogInformation($"{streamer}: Custom message triggered [Sending]: {message}");
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
+        this._logger.LogInformation($"{streamer}: Custom message triggered [Sent]: {message}");
     }
 }

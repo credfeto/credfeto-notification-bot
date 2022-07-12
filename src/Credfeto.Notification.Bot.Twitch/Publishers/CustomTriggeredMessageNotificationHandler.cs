@@ -23,11 +23,11 @@ public sealed class CustomTriggeredMessageNotificationHandler : INotificationHan
     {
         try
         {
-            await this._customTriggeredMessageSender.JoinMarblesAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
+            await this._customTriggeredMessageSender.SendAsync(streamer: notification.Streamer, message: notification.Message, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to join marbles");
+            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to send custom message");
         }
     }
 }

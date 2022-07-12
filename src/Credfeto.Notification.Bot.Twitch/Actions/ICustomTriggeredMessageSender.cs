@@ -6,5 +6,5 @@ namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface ICustomTriggeredMessageSender
 {
-    Task JoinMarblesAsync(Streamer streamer, CancellationToken cancellationToken);
+    Task SendAsync(Streamer streamer, string message, CancellationToken cancellationToken);
 }

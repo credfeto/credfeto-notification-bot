@@ -39,7 +39,7 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleExceptionAsync()
     {
-        this._customTriggeredMessageSender.JoinMarblesAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
+        this._customTriggeredMessageSender.SendAsync(Arg.Any<Streamer>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, message: MESSAGE), cancellationToken: CancellationToken.None);
@@ -50,6 +50,6 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     private Task ReceivedJoinHeistAsync()
     {
         return this._customTriggeredMessageSender.Received(1)
-                   .JoinMarblesAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>());
+                   .SendAsync(streamer: MockReferenceData.Streamer, message: MESSAGE, Arg.Any<CancellationToken>());
     }
 }
