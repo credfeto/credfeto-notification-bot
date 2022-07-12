@@ -4,7 +4,7 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions;
 
-public interface IMarblesJoiner
+public interface ICustomTriggeredMessageSender
 {
     Task JoinMarblesAsync(Streamer streamer, CancellationToken cancellationToken);
 }

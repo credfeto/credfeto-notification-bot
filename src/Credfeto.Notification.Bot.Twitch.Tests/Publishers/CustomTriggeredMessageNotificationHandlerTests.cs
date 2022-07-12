@@ -17,14 +17,15 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
 {
     private const string MESSAGE = "!hello";
-    private readonly IMarblesJoiner _marblesJoiner;
+    private readonly ICustomTriggeredMessageSender _customTriggeredMessageSender;
     private readonly INotificationHandler<CustomTriggeredMessage> _notificationHandler;
 
     public CustomTriggeredMessageNotificationHandlerTests()
     {
-        this._marblesJoiner = GetSubstitute<IMarblesJoiner>();
+        this._customTriggeredMessageSender = GetSubstitute<ICustomTriggeredMessageSender>();
 
-        this._notificationHandler = new CustomTriggeredMessageNotificationHandler(marblesJoiner: this._marblesJoiner, this.GetTypedLogger<CustomTriggeredMessageNotificationHandler>());
+        this._notificationHandler =
+            new CustomTriggeredMessageNotificationHandler(customTriggeredMessageSender: this._customTriggeredMessageSender, this.GetTypedLogger<CustomTriggeredMessageNotificationHandler>());
     }
 
     [Fact]
@@ -38,7 +39,7 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleExceptionAsync()
     {
-        this._marblesJoiner.JoinMarblesAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
+        this._customTriggeredMessageSender.JoinMarblesAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, message: MESSAGE), cancellationToken: CancellationToken.None);
@@ -48,7 +49,7 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
 
     private Task ReceivedJoinHeistAsync()
     {
-        return this._marblesJoiner.Received(1)
+        return this._customTriggeredMessageSender.Received(1)
                    .JoinMarblesAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>());
     }
 }

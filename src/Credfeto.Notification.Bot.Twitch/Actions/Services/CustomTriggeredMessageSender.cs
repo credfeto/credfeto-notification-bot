@@ -8,11 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Actions.Services;
 
-public sealed class MarblesJoiner : MessageSenderBase, IMarblesJoiner
+public sealed class CustomTriggeredMessageSender : MessageSenderBase, ICustomTriggeredMessageSender
 {
-    private readonly ILogger<MarblesJoiner> _logger;
+    private readonly ILogger<CustomTriggeredMessageSender> _logger;
 
-    public MarblesJoiner(IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<MarblesJoiner> logger)
+    public CustomTriggeredMessageSender(IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<CustomTriggeredMessageSender> logger)
         : base(twitchChatMessageChannel)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));

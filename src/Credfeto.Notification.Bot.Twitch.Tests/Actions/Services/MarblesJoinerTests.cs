@@ -11,22 +11,22 @@ using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
-public sealed class MarblesJoinerTests : TestBase
+public sealed class CustomTriggeredMessageSenderTests : TestBase
 {
-    private readonly IMarblesJoiner _marblesJoiner;
+    private readonly ICustomTriggeredMessageSender _customTriggeredMessageSender;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
-    public MarblesJoinerTests()
+    public CustomTriggeredMessageSenderTests()
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
 
-        this._marblesJoiner = new MarblesJoiner(twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<MarblesJoiner>());
+        this._customTriggeredMessageSender = new CustomTriggeredMessageSender(twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<CustomTriggeredMessageSender>());
     }
 
     [Fact]
     public async Task JoinHeistAsync()
     {
-        await this._marblesJoiner.JoinMarblesAsync(streamer: MockReferenceData.Streamer, cancellationToken: CancellationToken.None);
+        await this._customTriggeredMessageSender.JoinMarblesAsync(streamer: MockReferenceData.Streamer, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync("!play");
     }

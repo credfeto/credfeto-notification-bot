@@ -53,7 +53,7 @@ public static class TwitchSetup
     {
         return services.AddSingleton<IRaidWelcome, RaidWelcome>()
                        .AddSingleton<IHeistJoiner, HeistJoiner>()
-                       .AddSingleton<IMarblesJoiner, MarblesJoiner>()
+                       .AddSingleton<ICustomTriggeredMessageSender, CustomTriggeredMessageSender>()
                        .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
                        .AddSingleton<IContributionThanks, ContributionThanks>()
                        .AddSingleton<IHoster, Hoster>()

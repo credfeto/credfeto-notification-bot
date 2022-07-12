@@ -10,12 +10,12 @@ namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
 public sealed class CustomTriggeredMessageNotificationHandler : INotificationHandler<CustomTriggeredMessage>
 {
+    private readonly ICustomTriggeredMessageSender _customTriggeredMessageSender;
     private readonly ILogger<CustomTriggeredMessageNotificationHandler> _logger;
-    private readonly IMarblesJoiner _marblesJoiner;
 
-    public CustomTriggeredMessageNotificationHandler(IMarblesJoiner marblesJoiner, ILogger<CustomTriggeredMessageNotificationHandler> logger)
+    public CustomTriggeredMessageNotificationHandler(ICustomTriggeredMessageSender customTriggeredMessageSender, ILogger<CustomTriggeredMessageNotificationHandler> logger)
     {
-        this._marblesJoiner = marblesJoiner ?? throw new ArgumentNullException(nameof(marblesJoiner));
+        this._customTriggeredMessageSender = customTriggeredMessageSender ?? throw new ArgumentNullException(nameof(customTriggeredMessageSender));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -23,7 +23,7 @@ public sealed class CustomTriggeredMessageNotificationHandler : INotificationHan
     {
         try
         {
-            await this._marblesJoiner.JoinMarblesAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
+            await this._customTriggeredMessageSender.JoinMarblesAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
