@@ -56,10 +56,14 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
         {
             TimeSpan timeSinceLastMatch = now - this._lastMatch;
 
-            if (timeSinceLastMatch > minIntervalBetweenMatches && now > this._lastMatch)
+            if (now > this._lastMatch)
             {
+                // Always move forwards in time... in case tracking item is being spammed
                 this._lastMatch = now;
+            }
 
+            if (timeSinceLastMatch > minIntervalBetweenMatches)
+            {
                 return true;
             }
 
