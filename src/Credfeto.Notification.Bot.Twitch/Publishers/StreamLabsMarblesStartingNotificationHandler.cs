@@ -8,18 +8,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-public sealed class MarblesStartingNotificationHandler : INotificationHandler<MarblesStarting>
+public sealed class CustomTriggeredMessageNotificationHandler : INotificationHandler<CustomTriggeredMessage>
 {
-    private readonly ILogger<MarblesStartingNotificationHandler> _logger;
+    private readonly ILogger<CustomTriggeredMessageNotificationHandler> _logger;
     private readonly IMarblesJoiner _marblesJoiner;
 
-    public MarblesStartingNotificationHandler(IMarblesJoiner marblesJoiner, ILogger<MarblesStartingNotificationHandler> logger)
+    public CustomTriggeredMessageNotificationHandler(IMarblesJoiner marblesJoiner, ILogger<CustomTriggeredMessageNotificationHandler> logger)
     {
         this._marblesJoiner = marblesJoiner ?? throw new ArgumentNullException(nameof(marblesJoiner));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Handle(MarblesStarting notification, CancellationToken cancellationToken)
+    public async Task Handle(CustomTriggeredMessage notification, CancellationToken cancellationToken)
     {
         try
         {

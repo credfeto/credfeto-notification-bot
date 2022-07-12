@@ -18,13 +18,13 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
 {
     private const string MESSAGE = "!hello";
     private readonly IMarblesJoiner _marblesJoiner;
-    private readonly INotificationHandler<MarblesStarting> _notificationHandler;
+    private readonly INotificationHandler<CustomTriggeredMessage> _notificationHandler;
 
     public CustomTriggeredMessageNotificationHandlerTests()
     {
         this._marblesJoiner = GetSubstitute<IMarblesJoiner>();
 
-        this._notificationHandler = new MarblesStartingNotificationHandler(marblesJoiner: this._marblesJoiner, this.GetTypedLogger<MarblesStartingNotificationHandler>());
+        this._notificationHandler = new CustomTriggeredMessageNotificationHandler(marblesJoiner: this._marblesJoiner, this.GetTypedLogger<CustomTriggeredMessageNotificationHandler>());
     }
 
     [Fact]

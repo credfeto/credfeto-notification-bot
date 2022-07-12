@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
-public sealed class MarblesStarting : INotification
+public sealed class CustomTriggeredMessage : INotification
 {
-    public MarblesStarting(in Streamer streamer, string message)
+    public CustomTriggeredMessage(in Streamer streamer, string message)
     {
         this.Streamer = streamer;
         this.Message = message ?? throw new ArgumentNullException(nameof(message));

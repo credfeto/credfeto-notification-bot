@@ -59,7 +59,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         }
 
         this._logger.LogInformation($"{trigger.Streamer}: Matched... {trigger.Chatter}: {trigger.Message}");
-        await this._mediator.Publish(new MarblesStarting(streamer: trigger.Streamer, message: command), cancellationToken: cancellationToken);
+        await this._mediator.Publish(new CustomTriggeredMessage(streamer: trigger.Streamer, message: command), cancellationToken: cancellationToken);
 
         return true;
     }
