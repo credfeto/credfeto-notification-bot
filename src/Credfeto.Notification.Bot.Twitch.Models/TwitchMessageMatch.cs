@@ -4,7 +4,7 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
-[DebuggerDisplay("{Streamer.Value}\\{Chatter.Value}: {Message}")]
+[DebuggerDisplay("{Streamer.Value}: {Chatter.Value} - {Message}")]
 public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
 {
     public TwitchMessageMatch(in Streamer streamer, in Viewer chatter, string message)

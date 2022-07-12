@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -43,8 +42,7 @@ public sealed class TwitchChat : ITwitchChat
     [SuppressMessage(category: "ReSharper", checkId: "PrivateFieldCanBeConvertedToLocalVariable", Justification = "TODO: Review")]
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
-    private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
-    private readonly ConcurrentDictionary<TwitchMessageMatch, string> _twitchMessageTriggers;
+    private readonly ITwitchCustomMessageHandler _twitchCustomMessageHandler;
 
     private bool _connected;
 
@@ -53,13 +51,13 @@ public sealed class TwitchChat : ITwitchChat
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IMediator mediator,
                       ITwitchClient twitchClient,
-                      ITwitchMessageTriggerDebounceFilter twitchMessageTriggerDebounceFilter,
+                      ITwitchCustomMessageHandler twitchCustomMessageHandler,
                       ILogger<TwitchChat> logger)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this._twitchMessageTriggerDebounceFilter = twitchMessageTriggerDebounceFilter ?? throw new ArgumentNullException(nameof(twitchMessageTriggerDebounceFilter));
+        this._twitchCustomMessageHandler = twitchCustomMessageHandler ?? throw new ArgumentNullException(nameof(twitchCustomMessageHandler));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
@@ -67,8 +65,6 @@ public sealed class TwitchChat : ITwitchChat
         this._lastMessageLock = new(initialCount: 1, maxCount: 1);
         this._joinedStreamers = new();
         this._lastMessage = new();
-
-        this._twitchMessageTriggers = this.BuildMessageTriggers(heists: this._options.Heists, marbles: this._options.Marbles);
 
         ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
 
@@ -224,33 +220,6 @@ public sealed class TwitchChat : ITwitchChat
         this.ReconnectToJoinedChats();
 
         return Task.CompletedTask;
-    }
-
-    private ConcurrentDictionary<TwitchMessageMatch, string> BuildMessageTriggers(List<string> heists, List<TwitchMarbles> marbles)
-    {
-        ConcurrentDictionary<TwitchMessageMatch, string> triggers = new();
-
-        // Viewer streamLabs = Viewer.FromString("streamlabs");
-        foreach (string streamer in heists)
-        {
-            Trace.WriteLine($"Adding heist trigger: {streamer}");
-
-            //     // TODO: Add EndsWith support
-            //     // return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
-            //     //        e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
-            //
-            //     TwitchMessageMatch trigger = new(Streamer.FromString(streamer), streamLabs, message: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.");
-            //     this._twitchMessageTriggers.TryAdd(key: trigger, value: "!heist all");
-        }
-
-        foreach (TwitchMarbles marble in marbles)
-        {
-            Trace.WriteLine($"Adding marbles trigger: {marble.Streamer}");
-            TwitchMessageMatch trigger = new(Streamer.FromString(marble.Streamer), Viewer.FromString(marble.Bot), message: marble.Match);
-            this._twitchMessageTriggers.TryAdd(key: trigger, value: "!play");
-        }
-
-        return triggers;
     }
 
     private TimeSpan CalculateWithJitter(TwitchChatMessage twitchChatMessage)
@@ -479,6 +448,7 @@ public sealed class TwitchChat : ITwitchChat
             return;
         }
 
+        // TODO: Move to the custom message handler and deprecate the heist specific code
         if (this._options.Heists.Contains(e.ChatMessage.Channel))
         {
             if (await this.JoinHeistAsync(e: e, cancellationToken: cancellationToken))
@@ -489,16 +459,14 @@ public sealed class TwitchChat : ITwitchChat
         }
 
         Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
+        Viewer viewer = Viewer.FromString(e.ChatMessage.Username);
 
-        TwitchMarbles? marbles = this._options.Marbles?.FirstOrDefault(x => IsMarblesMessage(message: e, marbles: x));
+        TwitchIncomingMessage incomingMessage = new(Streamer: streamer, Chatter: viewer, Message: e.ChatMessage.Message);
 
-        if (marbles != null)
+        bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(message: incomingMessage, cancellationToken: cancellationToken);
+
+        if (handled)
         {
-            // It was a heist message, no point in processing anything else.
-            this._logger.LogWarning($"{e.ChatMessage.Channel}: Marbles detected from user: {e.ChatMessage.Username}");
-
-            await this.JoinMarblesGameAsync(streamer: streamer, cancellationToken: cancellationToken);
-
             return;
         }
 
@@ -512,24 +480,6 @@ public sealed class TwitchChat : ITwitchChat
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
         await state.ChatMessageAsync(Viewer.FromString(e.ChatMessage.Username), message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
-    }
-
-    private Task JoinMarblesGameAsync(in Streamer streamer, in CancellationToken cancellationToken)
-    {
-        return this._mediator.Publish(new MarblesStarting(streamer), cancellationToken: cancellationToken);
-    }
-
-    private static bool IsMarblesMessage(OnMessageReceivedArgs message, TwitchMarbles marbles)
-    {
-        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Streamer, y: message.ChatMessage.Channel) &&
-            StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Bot, y: message.ChatMessage.Username))
-        {
-            bool match = StringComparer.InvariantCultureIgnoreCase.Equals(x: marbles.Match, y: message.ChatMessage.Message);
-
-            return match;
-        }
-
-        return false;
     }
 
     private async Task<bool> JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
