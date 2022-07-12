@@ -448,6 +448,9 @@ public sealed class TwitchChat : ITwitchChat
             return;
         }
 
+        // TODO: Consider using a mediator and just publishing a TwitchIncomingMessage and letting whatever is interested pick it up
+        // and handle it.
+
         // TODO: Move to the custom message handler and deprecate the heist specific code
         if (this._options.Heists.Contains(e.ChatMessage.Channel))
         {
