@@ -49,6 +49,20 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
 
         Assert.True(condition: handled, userMessage: "Should have been handled");
 
+        this.ReceivedCanSend();
+        await this.DidNotReceiveSendCustomMessageAsync();
+    }
+
+    [Fact]
+    public async Task NonMatchingMessageShouldNotSendAsync()
+    {
+        TwitchIncomingMessage misMatchMessage = new(Streamer: MockReferenceData.Streamer, MockReferenceData.Viewer.Next(), Message: "Does Not Match");
+
+        bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(message: misMatchMessage, cancellationToken: CancellationToken.None);
+
+        Assert.False(condition: handled, userMessage: "Should not have been handled");
+
+        this.DidNotReceiveCanSend();
         await this.DidNotReceiveSendCustomMessageAsync();
     }
 
@@ -60,7 +74,20 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
 
         Assert.True(condition: handled, userMessage: "Should have been handled");
 
+        this.ReceivedCanSend();
         await this.ReceivedSendCustomMessageAsync();
+    }
+
+    private void ReceivedCanSend()
+    {
+        this._twitchMessageTriggerDebounceFilter.Received(1)
+            .CanSend(Arg.Any<TwitchMessageMatch>());
+    }
+
+    private void DidNotReceiveCanSend()
+    {
+        this._twitchMessageTriggerDebounceFilter.DidNotReceive()
+            .CanSend(Arg.Any<TwitchMessageMatch>());
     }
 
     private Task ReceivedSendCustomMessageAsync()
