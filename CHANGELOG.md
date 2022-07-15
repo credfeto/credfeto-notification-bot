@@ -7,16 +7,20 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 
 ## [Unreleased]
 ### Added
-- More generic trigger support
 ### Fixed
 ### Changed
-- FF-3881 - Updated DotNet SDK to 6.0.302
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.6] - 2022-07-15
+### Added
+- More generic trigger support
+### Changed
+- FF-3881 - Updated DotNet SDK to 6.0.302
+
 ## [0.0.5] - 2022-07-11
 ### Changed
 - Only allow mod channels to be hosted
