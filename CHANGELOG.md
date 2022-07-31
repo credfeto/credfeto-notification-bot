@@ -15,6 +15,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated NSubstitute to 4.4.0
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.8.3.1353
 - FF-1429 - Updated Roslynator.Analyzers to 4.1.1
+- FF-1429 - Updated SonarAnalyzer.CSharp to 8.42.0.51121
 ### Removed
 ### Deployment Changes
 
