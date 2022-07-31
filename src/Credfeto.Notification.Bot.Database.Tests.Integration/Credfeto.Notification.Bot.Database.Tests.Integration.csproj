@@ -45,12 +45,12 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Pgsql\Credfeto.Notification.Bot.Database.Pgsql.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
-    <ProjectReference Include="..\Credfeto.NotificationBot.Shared.Configuration\Credfeto.NotificationBot.Shared.Configuration.csproj"/>
+    <ProjectReference Include="..\Credfeto.NotificationBot.Shared.Configuration\Credfeto.NotificationBot.Shared.Configuration.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FunFair.Test.Common" Version="5.9.5.1833" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
-    <PackageReference Include="NSubstitute" Version="4.3.0" />
+    <PackageReference Include="NSubstitute" Version="4.4.0" />
     <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.36" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
