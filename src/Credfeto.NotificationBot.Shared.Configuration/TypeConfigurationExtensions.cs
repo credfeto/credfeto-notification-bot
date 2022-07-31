@@ -12,12 +12,12 @@ using Microsoft.Extensions.Options;
 
 namespace Credfeto.NotificationBot.Shared.Configuration;
 
-/// <summary>
-///     Extension methods on <see cref="IConfigurationRoot" />.
-/// </summary>
 public static class TypeConfigurationExtensions
 {
-    public static IServiceCollection WithConfiguration<TSettings>(this IServiceCollection services, IConfigurationRoot configurationRoot, string key, JsonSerializerContext jsonSerializerContext)
+    public static IServiceCollection WithConfiguration<TSettings>(this IServiceCollection services,
+                                                                  IConfigurationRoot configurationRoot,
+                                                                  string key,
+                                                                  JsonSerializerContext jsonSerializerContext)
         where TSettings : class
     {
         IConfigurationSection section = configurationRoot.GetSection(key);
@@ -42,7 +42,8 @@ public static class TypeConfigurationExtensions
     {
         ArrayBufferWriter<byte> bufferWriter = new(jsonSerializerOptions.DefaultBufferSize);
 
-        using (Utf8JsonWriter jsonWriter = new(bufferWriter: bufferWriter, new() { Encoder = jsonSerializerOptions.Encoder, Indented = jsonSerializerOptions.WriteIndented, SkipValidation = false }))
+        using (Utf8JsonWriter jsonWriter = new(bufferWriter: bufferWriter,
+                                               new() { Encoder = jsonSerializerOptions.Encoder, Indented = jsonSerializerOptions.WriteIndented, SkipValidation = false }))
         {
             SerializeObject(config: section, writer: jsonWriter, jsonSerializerOptions: jsonSerializerOptions);
         }

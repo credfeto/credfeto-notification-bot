@@ -61,7 +61,10 @@ public sealed class RaidWelcomeTests : LoggingTestBase
                                                                      welcome: MockReferenceData.TwitchChannelWelcome)
                                                              }));
 
-        this._raidWelcome = new RaidWelcome(options: options, twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
+        this._raidWelcome = new RaidWelcome(options: options,
+                                            twitchChannelManager: twitchChannelManager,
+                                            twitchChatMessageChannel: this._twitchChatMessageChannel,
+                                            this.GetTypedLogger<RaidWelcome>());
     }
 
     [Fact]
@@ -97,7 +100,8 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
     {
         return this._twitchChatMessageChannel.Received(1)
-                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == MockReferenceData.Streamer && StringComparer.InvariantCultureIgnoreCase.Equals(t.Message.Trim(), expectedMessage)),
+                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == MockReferenceData.Streamer &&
+                                                                StringComparer.InvariantCultureIgnoreCase.Equals(t.Message.Trim(), expectedMessage)),
                                  Arg.Any<CancellationToken>());
     }
 }

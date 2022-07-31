@@ -22,7 +22,9 @@ internal static class IntegrationTestStartup
 
             return services.AddSingleton(configurationRoot)
                            .AddOptions()
-                           .WithConfiguration<PgsqlServerConfiguration>(configurationRoot: configurationRoot, key: "Database:Postgres", jsonSerializerContext: jsonSerializerContext)
+                           .WithConfiguration<PgsqlServerConfiguration>(configurationRoot: configurationRoot,
+                                                                        key: "Database:Postgres",
+                                                                        jsonSerializerContext: jsonSerializerContext)
                            .AddPostgresql()
                            .AddApplicationDatabase()
                            .AddResources();

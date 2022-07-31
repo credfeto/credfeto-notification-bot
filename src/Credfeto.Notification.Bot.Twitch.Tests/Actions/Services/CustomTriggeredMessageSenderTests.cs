@@ -20,7 +20,8 @@ public sealed class CustomTriggeredMessageSenderTests : TestBase
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
 
-        this._customTriggeredMessageSender = new CustomTriggeredMessageSender(twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<CustomTriggeredMessageSender>());
+        this._customTriggeredMessageSender =
+            new CustomTriggeredMessageSender(twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<CustomTriggeredMessageSender>());
     }
 
     [Fact]

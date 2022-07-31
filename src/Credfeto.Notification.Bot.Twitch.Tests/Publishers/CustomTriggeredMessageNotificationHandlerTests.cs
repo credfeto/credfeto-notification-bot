@@ -24,8 +24,8 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     {
         this._customTriggeredMessageSender = GetSubstitute<ICustomTriggeredMessageSender>();
 
-        this._notificationHandler =
-            new CustomTriggeredMessageNotificationHandler(customTriggeredMessageSender: this._customTriggeredMessageSender, this.GetTypedLogger<CustomTriggeredMessageNotificationHandler>());
+        this._notificationHandler = new CustomTriggeredMessageNotificationHandler(customTriggeredMessageSender: this._customTriggeredMessageSender,
+                                                                                  this.GetTypedLogger<CustomTriggeredMessageNotificationHandler>());
     }
 
     [Fact]

@@ -34,7 +34,10 @@ public sealed class FollowerMilestoneTests : TestBase
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    milestones: MockReferenceData.TwitchMilestones));
 
-        this._followerMileStone = new FollowerMilestone(options: options, mediator: this._mediator, twitchStreamDataManager: this._twitchStreamDataManager, this.GetTypedLogger<FollowerMilestone>());
+        this._followerMileStone = new FollowerMilestone(options: options,
+                                                        mediator: this._mediator,
+                                                        twitchStreamDataManager: this._twitchStreamDataManager,
+                                                        this.GetTypedLogger<FollowerMilestone>());
     }
 
     [Fact]
@@ -88,7 +91,8 @@ public sealed class FollowerMilestoneTests : TestBase
     private Task ReceivedPublishMessageAsync(int milestone, int nextMilestone)
     {
         return this._mediator.Received(1)
-                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == MockReferenceData.Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone),
+                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == MockReferenceData.Streamer && t.MilestoneReached == milestone &&
+                                                                        t.NextMilestone == nextMilestone),
                             Arg.Any<CancellationToken>());
     }
 

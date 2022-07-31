@@ -43,14 +43,13 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
         this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>())
             .Returns(followerCount);
 
-        await this._notificationHandler.Handle(
-            new(streamer: MockReferenceData.Streamer,
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer,
                                                    user: MockReferenceData.Viewer,
                                                    streamOnline: streamOnline,
                                                    isStreamer: false,
                                                    accountCreated: DateTime.MinValue,
                                                    followCount: 42),
-            cancellationToken: CancellationToken.None);
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();
 
@@ -64,14 +63,13 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
         this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>())
             .Throws<TimeoutException>();
 
-        await this._notificationHandler.Handle(
-            new(streamer: MockReferenceData.Streamer,
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer,
                                                    user: MockReferenceData.Viewer,
                                                    streamOnline: streamOnline,
                                                    isStreamer: false,
                                                    accountCreated: DateTime.MinValue,
                                                    followCount: 42),
-            cancellationToken: CancellationToken.None);
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetCurrentFollowerCountAsync();
 

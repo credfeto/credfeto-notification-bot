@@ -66,7 +66,8 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
     private static bool IsMatch(TwitchIncomingMessage message, TwitchMessageMatch trigger)
     {
-        return trigger.Streamer == message.Streamer && trigger.Chatter == message.Chatter && StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Message, y: trigger.Message);
+        return trigger.Streamer == message.Streamer && trigger.Chatter == message.Chatter &&
+               StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Message, y: trigger.Message);
     }
 
     private static ConcurrentDictionary<TwitchMessageMatch, string> BuildMessageTriggers(List<string> heists, List<TwitchMarbles>? marbles)

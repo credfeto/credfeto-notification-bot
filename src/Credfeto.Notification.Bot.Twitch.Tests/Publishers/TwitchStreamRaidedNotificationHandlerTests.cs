@@ -32,7 +32,8 @@ public sealed class TwitchStreamRaidedNotificationHandlerTests : TestBase
         this._raidWelcome.IssueRaidWelcomeAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
             .Throws<ArgumentOutOfRangeException>();
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, viewerCount: 254643), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, viewerCount: 254643),
+                                               cancellationToken: CancellationToken.None);
 
         await this._raidWelcome.Received(1)
                   .IssueRaidWelcomeAsync(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, Arg.Any<CancellationToken>());
@@ -41,7 +42,8 @@ public sealed class TwitchStreamRaidedNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, viewerCount: 254643), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, viewerCount: 254643),
+                                               cancellationToken: CancellationToken.None);
 
         await this._raidWelcome.Received(1)
                   .IssueRaidWelcomeAsync(streamer: MockReferenceData.Streamer, raider: MockReferenceData.Viewer, Arg.Any<CancellationToken>());
