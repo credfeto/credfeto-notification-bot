@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <EnablePackageValidation>true</EnablePackageValidation>
@@ -11,15 +11,15 @@
     <IsPublishable>false</IsPublishable>
     <IsTrimmable>true</IsTrimmable>
     <LangVersion>latest</LangVersion>
-    <NoWarn/>
+    <NoWarn />
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <RunAOTCompilation>true</RunAOTCompilation>
     <TargetFramework>net6.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
-    <TreatSpecificWarningsAsErrors/>
+    <TreatSpecificWarningsAsErrors />
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors/>
+    <WarningsAsErrors />
   </PropertyGroup>
   <PropertyGroup>
     <AnalysisLevel>latest</AnalysisLevel>
@@ -30,18 +30,18 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0"/>
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All"/>
-    <PackageReference Include="FunFair.CodeAnalysis" Version="5.8.2.1317" PrivateAssets="All"/>
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.2.32" PrivateAssets="All"/>
-    <PackageReference Include="Philips.CodeAnalysis.DuplicateCodeAnalyzer" Version="1.1.6" PrivateAssets="All"/>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.1.0" PrivateAssets="All"/>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.39.0.47922" PrivateAssets="All"/>
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All"/>
-    <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All"/>
+    <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" />
+    <PackageReference Include="FunFair.CodeAnalysis" Version="5.8.3.1353" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.2.32" PrivateAssets="All" />
+    <PackageReference Include="Philips.CodeAnalysis.DuplicateCodeAnalyzer" Version="1.1.6" PrivateAssets="All" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.1.1" PrivateAssets="All" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.42.0.51121" PrivateAssets="All" />
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
+    <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>
