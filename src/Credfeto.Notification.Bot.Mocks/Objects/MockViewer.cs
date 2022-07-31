@@ -1,3 +1,4 @@
+using System;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using FunFair.Test.Common.Mocks;
 

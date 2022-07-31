@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Credfeto.Notification.Bot.Mocks.Objects;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
