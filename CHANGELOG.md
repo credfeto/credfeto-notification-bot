@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated Discord.Net to 3.7.2
+- FF-1429 - Updated Microsoft.Extensions to 6.0.7
 ### Removed
 ### Deployment Changes
 
