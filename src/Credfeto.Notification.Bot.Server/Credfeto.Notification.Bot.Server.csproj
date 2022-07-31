@@ -55,7 +55,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Discord\Credfeto.Notification.Bot.Discord.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
-    <ProjectReference Include="..\Credfeto.NotificationBot.Shared.Configuration\Credfeto.NotificationBot.Shared.Configuration.csproj"/>
+    <ProjectReference Include="..\Credfeto.NotificationBot.Shared.Configuration\Credfeto.NotificationBot.Shared.Configuration.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
@@ -69,14 +69,14 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All"/>
-    <PackageReference Include="FunFair.CodeAnalysis" Version="5.8.2.1317" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.2.32" PrivateAssets="All"/>
-    <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.15" PrivateAssets="All"/>
-    <PackageReference Include="Philips.CodeAnalysis.DuplicateCodeAnalyzer" Version="1.1.6" PrivateAssets="All"/>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.1.0" PrivateAssets="All"/>
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.39.0.47922" PrivateAssets="All"/>
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All"/>
-    <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All"/>
+    <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" />
+    <PackageReference Include="FunFair.CodeAnalysis" Version="5.8.3.1353" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.2.32" PrivateAssets="All" />
+    <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.15" PrivateAssets="All" />
+    <PackageReference Include="Philips.CodeAnalysis.DuplicateCodeAnalyzer" Version="1.1.6" PrivateAssets="All" />
+    <PackageReference Include="Roslynator.Analyzers" Version="4.1.0" PrivateAssets="All" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.39.0.47922" PrivateAssets="All" />
+    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
+    <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
   </ItemGroup>
 </Project>
