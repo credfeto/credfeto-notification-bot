@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FunFair.Test.Common to 6.0.1.1951
 - FF-1429 - Updated xunit.analyzers to 1.0.0
 - FF-1429 - Updated xunit to 2.4.2
+- FF-1429 - Updated FunFair.Test.Common to 6.0.2.1981
 ### Removed
 ### Deployment Changes
 
