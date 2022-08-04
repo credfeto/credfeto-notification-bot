@@ -7,6 +7,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 
 ## [Unreleased]
 ### Added
+- Ability to generate different messages rather than a single message for each type
 ### Fixed
 ### Changed
 - FF-1429 - Updated Discord.Net to 3.7.2
