@@ -21,6 +21,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated xunit to 2.4.2
 - FF-1429 - Updated FunFair.Test.Common to 6.0.2.1981
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.43.0.51858
+- FF-1429 - Updated Npgsql to 6.0.6
 ### Removed
 ### Deployment Changes
 
