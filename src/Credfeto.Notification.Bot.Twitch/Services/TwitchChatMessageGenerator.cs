@@ -48,6 +48,21 @@ public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
                                                                                "Thanks @{0} for resubscribing!"
                                                                            };
 
+    private static readonly IReadOnlyList<string> ThankGiftMultipleSubsMessages = new[]
+                                                                                  {
+                                                                                      "Thanks @{0} for gifting subs!"
+                                                                                  };
+
+    private static readonly IReadOnlyList<string> ThankGiftOneSubMessages = new[]
+                                                                            {
+                                                                                "Thanks @{0} for gifting sub!"
+                                                                            };
+
+    private static readonly IReadOnlyList<string> WelcomeMessages = new[]
+                                                                    {
+                                                                        "Hi @{0}"
+                                                                    };
+
     private readonly IRandomNumberGenerator _randomNumberGenerator;
 
     public TwitchChatMessageGenerator(IRandomNumberGenerator randomNumberGenerator)
@@ -92,17 +107,23 @@ public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
 
     public string ThanksForGiftingMultipleSubs(in Viewer giftedBy)
     {
-        return $"Thanks @{giftedBy} for gifting subs";
+        string formatString = this.GetMessage(ThankGiftMultipleSubsMessages);
+
+        return string.Format(format: formatString, arg0: giftedBy.Value);
     }
 
     public string ThanksForGiftingOneSub(in Viewer giftedBy)
     {
-        return $"Thanks @{giftedBy} for gifting sub";
+        string formatString = this.GetMessage(ThankGiftOneSubMessages);
+
+        return string.Format(format: formatString, arg0: giftedBy.Value);
     }
 
     public string WelcomeMessage(in Viewer user)
     {
-        return $"Hi @{user}";
+        string formatString = this.GetMessage(WelcomeMessages);
+
+        return string.Format(format: formatString, arg0: user.Value);
     }
 
     private string GetMessage(IReadOnlyList<string> messages)

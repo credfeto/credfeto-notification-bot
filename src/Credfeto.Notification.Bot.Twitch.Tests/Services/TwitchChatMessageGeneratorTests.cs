@@ -108,6 +108,45 @@ public sealed class TwitchChatMessageGeneratorTests : TestBase
         this.ReceivedGetRandomNumber();
     }
 
+    [Theory]
+    [InlineData(0, "Thanks @viewer for gifting subs!")]
+    [InlineData(1, "Thanks @viewer for gifting subs!")] // should have looped back to 0 with this
+    public void ThanksForGiftingMultipleSubs(int number, string message)
+    {
+        this.MockRandomNumberGenerator(number);
+
+        string result = this._twitchChatMessageGenerator.ThanksForGiftingMultipleSubs(Viewer);
+        Assert.Equal(expected: message, actual: result);
+
+        this.ReceivedGetRandomNumber();
+    }
+
+    [Theory]
+    [InlineData(0, "Thanks @viewer for gifting sub!")]
+    [InlineData(1, "Thanks @viewer for gifting sub!")] // should have looped back to 0 with this
+    public void ThanksForGiftingOneSub(int number, string message)
+    {
+        this.MockRandomNumberGenerator(number);
+
+        string result = this._twitchChatMessageGenerator.ThanksForGiftingOneSub(Viewer);
+        Assert.Equal(expected: message, actual: result);
+
+        this.ReceivedGetRandomNumber();
+    }
+
+    [Theory]
+    [InlineData(0, "Hi @viewer")]
+    [InlineData(1, "Hi @viewer")] // should have looped back to 0 with this
+    public void WelcomeMessage(int number, string message)
+    {
+        this.MockRandomNumberGenerator(number);
+
+        string result = this._twitchChatMessageGenerator.WelcomeMessage(Viewer);
+        Assert.Equal(expected: message, actual: result);
+
+        this.ReceivedGetRandomNumber();
+    }
+
     private void MockRandomNumberGenerator(int number)
     {
         this._randomNumberGenerator.Next(Arg.Any<int>())
