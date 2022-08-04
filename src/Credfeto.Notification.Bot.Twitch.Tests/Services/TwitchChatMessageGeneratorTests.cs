@@ -136,7 +136,10 @@ public sealed class TwitchChatMessageGeneratorTests : TestBase
 
     [Theory]
     [InlineData(0, "Hi @viewer")]
-    [InlineData(1, "Hi @viewer")] // should have looped back to 0 with this
+    [InlineData(1, "Hi, @viewer")]
+    [InlineData(2, "@viewer, Hi!")]
+    [InlineData(3, "Hey, @viewer!")]
+    [InlineData(4, "Hi @viewer")] // should have looped back to 0 with this
     public void WelcomeMessage(int number, string message)
     {
         this.MockRandomNumberGenerator(number);

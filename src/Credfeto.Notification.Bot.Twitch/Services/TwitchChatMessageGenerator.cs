@@ -60,7 +60,10 @@ public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
 
     private static readonly IReadOnlyList<string> WelcomeMessages = new[]
                                                                     {
-                                                                        "Hi @{0}"
+                                                                        "Hi @{0}",
+                                                                        "Hi, @{0}",
+                                                                        "@{0}, Hi!",
+                                                                        "Hey, @{0}!"
                                                                     };
 
     private readonly IRandomNumberGenerator _randomNumberGenerator;
