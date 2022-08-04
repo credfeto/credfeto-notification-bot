@@ -17,6 +17,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Actions.Services;
 
 public sealed class ContributionThanksTests : TestBase
 {
+    private const int BITS_GIVEN = 42;
     private static readonly Viewer GiftingUser = Viewer.FromString(nameof(GiftingUser));
 
     private readonly IContributionThanks _contributionThanks;
@@ -52,7 +53,7 @@ public sealed class ContributionThanksTests : TestBase
                             .Returns(this._twitchChannelState);
 
         this._twitchChatMessageGenerator = GetSubstitute<ITwitchChatMessageGenerator>();
-        this._twitchChatMessageGenerator.ThanksForBits(Arg.Any<Viewer>())
+        this._twitchChatMessageGenerator.ThanksForBits(Arg.Any<Viewer>(), Arg.Any<int>())
             .Returns(x =>
                      {
                          Viewer user = x.Arg<Viewer>();
@@ -145,7 +146,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForBitsAsync(streamer: MockReferenceData.Streamer, user: GiftingUser, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForBitsAsync(streamer: MockReferenceData.Streamer, user: GiftingUser, bitsGiven: BITS_GIVEN, cancellationToken: CancellationToken.None);
 
         this.ReceivedThanksForBits();
 
@@ -157,13 +158,13 @@ public sealed class ContributionThanksTests : TestBase
     private void ReceivedThanksForBits()
     {
         this._twitchChatMessageGenerator.Received(1)
-            .ThanksForBits(GiftingUser);
+            .ThanksForBits(giftedBy: GiftingUser, bitsGiven: BITS_GIVEN);
     }
 
     private void DidNotReceiveThanksForBits()
     {
         this._twitchChatMessageGenerator.DidNotReceive()
-            .ThanksForBits(Arg.Any<Viewer>());
+            .ThanksForBits(Arg.Any<Viewer>(), Arg.Any<int>());
     }
 
     private void ReceivedThanksForNewPaidSub()
@@ -243,7 +244,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForBitsAsync(streamer: MockReferenceData.Streamer, user: GiftingUser, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForBitsAsync(streamer: MockReferenceData.Streamer, user: GiftingUser, bitsGiven: BITS_GIVEN, cancellationToken: CancellationToken.None);
 
         this.DidNotReceiveThanksForBits();
         await this.DidNotReceivePublishMessageAsync();

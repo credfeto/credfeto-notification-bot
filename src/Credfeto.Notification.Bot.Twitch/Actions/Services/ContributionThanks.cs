@@ -36,14 +36,14 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._donorLock = new(1);
     }
 
-    public async Task ThankForBitsAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
+    public async Task ThankForBitsAsync(Streamer streamer, Viewer user, int bitsGiven, CancellationToken cancellationToken)
     {
         if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
 
-        string message = this._twitchChatMessageGenerator.ThanksForBits(user);
+        string message = this._twitchChatMessageGenerator.ThanksForBits(giftedBy: user, bitsGiven: bitsGiven);
         await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for for the bits");

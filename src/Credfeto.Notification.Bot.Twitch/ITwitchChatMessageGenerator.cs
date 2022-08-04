@@ -4,7 +4,7 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface ITwitchChatMessageGenerator
 {
-    string ThanksForBits(in Viewer giftedBy);
+    string ThanksForBits(in Viewer giftedBy, int bitsGiven);
 
     string ThanksForNewPrimeSub(in Viewer user);
 

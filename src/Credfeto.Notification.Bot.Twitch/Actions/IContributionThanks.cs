@@ -6,7 +6,7 @@ namespace Credfeto.Notification.Bot.Twitch.Actions;
 
 public interface IContributionThanks
 {
-    Task ThankForBitsAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken);
+    Task ThankForBitsAsync(Streamer streamer, Viewer user, int bitsGiven, CancellationToken cancellationToken);
 
     Task ThankForNewPrimeSubAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken);
 
