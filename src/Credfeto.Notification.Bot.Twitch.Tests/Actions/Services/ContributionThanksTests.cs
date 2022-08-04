@@ -23,6 +23,7 @@ public sealed class ContributionThanksTests : TestBase
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ITwitchChannelState _twitchChannelState;
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
+    private readonly ITwitchChatMessageGenerator _twitchChatMessageGenerator;
 
     public ContributionThanksTests()
     {
@@ -50,10 +51,20 @@ public sealed class ContributionThanksTests : TestBase
         twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
                             .Returns(this._twitchChannelState);
 
+        this._twitchChatMessageGenerator = GetSubstitute<ITwitchChatMessageGenerator>();
+        this._twitchChatMessageGenerator.ThanksForBits(Arg.Any<Viewer>())
+            .Returns(x =>
+                     {
+                         Viewer user = x.Arg<Viewer>();
+
+                         return $"Thanks @{user} for the bits";
+                     });
+
         this._contributionThanks = new ContributionThanks(twitchChannelManager: twitchChannelManager,
                                                           twitchChatMessageChannel: this._twitchChatMessageChannel,
                                                           currentTimeSource: this._currentTimeSource,
-                                                          this.GetTypedLogger<ContributionThanks>());
+                                                          twitchChatMessageGenerator: this._twitchChatMessageGenerator,
+                                                          logger: this.GetTypedLogger<ContributionThanks>());
     }
 
     private void MockThanksEnabled(bool enabled)
@@ -92,9 +103,23 @@ public sealed class ContributionThanksTests : TestBase
 
         await this._contributionThanks.ThankForBitsAsync(streamer: MockReferenceData.Streamer, user: GiftingUser, cancellationToken: CancellationToken.None);
 
+        this.ReceivedThanksForBits();
+
         await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for the bits");
 
         this.DidNotReceiveCurrentTime();
+    }
+
+    private void ReceivedThanksForBits()
+    {
+        this._twitchChatMessageGenerator.Received(1)
+            .ThanksForBits(GiftingUser);
+    }
+
+    private void DidNotReceiveThanksForBits()
+    {
+        this._twitchChatMessageGenerator.DidNotReceive()
+            .ThanksForBits(GiftingUser);
     }
 
     [Fact]
@@ -104,6 +129,7 @@ public sealed class ContributionThanksTests : TestBase
 
         await this._contributionThanks.ThankForBitsAsync(streamer: MockReferenceData.Streamer, user: GiftingUser, cancellationToken: CancellationToken.None);
 
+        this.DidNotReceiveThanksForBits();
         await this.DidNotReceivePublishMessageAsync();
 
         this.DidNotReceiveCurrentTime();
@@ -138,10 +164,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer,
-                                                                     giftedBy: GiftingUser,
-                                                                     count: 27,
-                                                                     cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for gifting subs");
 
@@ -153,10 +176,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer,
-                                                                     giftedBy: GiftingUser,
-                                                                     count: 27,
-                                                                     cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
 

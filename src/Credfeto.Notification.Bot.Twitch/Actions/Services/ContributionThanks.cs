@@ -18,14 +18,17 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
     private readonly ConcurrentDictionary<Streamer, SubDonorTracker> _donors;
     private readonly ILogger<ContributionThanks> _logger;
     private readonly ITwitchChannelManager _twitchChannelManager;
+    private readonly ITwitchChatMessageGenerator _twitchChatMessageGenerator;
 
     public ContributionThanks(ITwitchChannelManager twitchChannelManager,
                               IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                              ITwitchChatMessageGenerator twitchChatMessageGenerator,
                               ICurrentTimeSource currentTimeSource,
                               ILogger<ContributionThanks> logger)
         : base(twitchChatMessageChannel)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
+        this._twitchChatMessageGenerator = twitchChatMessageGenerator ?? throw new ArgumentNullException(nameof(twitchChatMessageGenerator));
         this._currentTimeSource = currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -40,7 +43,8 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for the bits", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.ThanksForBits(user);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for for the bits");
     }
