@@ -13,10 +13,18 @@ public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
                                                                           "Thanks @{0} for the bits! You're awesome!",
                                                                           "Thanks @{0} for bits!",
                                                                           "Thanks @{0} for giving {1} bits!",
+                                                                          "Thanks @{0} for the {1} bits!",
                                                                           "@{0}, Thanks for the bits!",
                                                                           "@{0}, Thanks for bits!",
                                                                           "@{0}, Thanks for the bits! You're awesome!",
-                                                                          "@{0}, Thanks for giving {1} bits!"
+                                                                          "@{0}, Thanks for the {1} bits! You're awesome!",
+                                                                          "@{0}, Thanks for giving {1} bits!",
+                                                                          "Thank you for the bits @{0}! VirtualHug",
+                                                                          "Thank you for the {1} bits @{0}! VirtualHug",
+                                                                          "Thanks for the bits @{0}!",
+                                                                          "Thanks for the {1} bits @{0}!",
+                                                                          "Thank you for cheering the bits @{0}!",
+                                                                          "Thank you for cheering {1} bits @{0}"
                                                                       };
 
     private readonly IRandomNumberGenerator _randomNumberGenerator;

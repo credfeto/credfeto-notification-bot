@@ -26,6 +26,7 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     {
         return service.AddMockedService<ICurrentTimeSource>()
                       .AddMockedService<IMessageChannel<TwitchChatMessage>>()
+                      .AddMockedService<IRandomNumberGenerator>()
                       .AddMockedService<IOptions<TwitchBotOptions>>(options =>
                                                                     {
                                                                         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,

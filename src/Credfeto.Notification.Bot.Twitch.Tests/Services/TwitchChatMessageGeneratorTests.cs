@@ -26,10 +26,19 @@ public sealed class TwitchChatMessageGeneratorTests : TestBase
     [InlineData(1, "Thanks @viewer for the bits! You're awesome!")]
     [InlineData(2, "Thanks @viewer for bits!")]
     [InlineData(3, "Thanks @viewer for giving 1000 bits!")]
-    [InlineData(4, "@viewer, Thanks for the bits!")]
-    [InlineData(5, "@viewer, Thanks for bits!")]
-    [InlineData(6, "@viewer, Thanks for the bits! You're awesome!")]
-    [InlineData(7, "@viewer, Thanks for giving 1000 bits!")]
+    [InlineData(4, "Thanks @viewer for the 1000 bits!")]
+    [InlineData(5, "@viewer, Thanks for the bits!")]
+    [InlineData(6, "@viewer, Thanks for bits!")]
+    [InlineData(7, "@viewer, Thanks for the bits! You're awesome!")]
+    [InlineData(8, "@viewer, Thanks for the 1000 bits! You're awesome!")]
+    [InlineData(9, "@viewer, Thanks for giving 1000 bits!")]
+    [InlineData(10, "Thank you for the bits @viewer! VirtualHug")]
+    [InlineData(11, "Thank you for the 1000 bits @viewer! VirtualHug")]
+    [InlineData(12, "Thanks for the bits @viewer!")]
+    [InlineData(13, "Thanks for the 1000 bits @viewer!")]
+    [InlineData(14, "Thank you for cheering the bits @viewer!")]
+    [InlineData(15, "Thank you for cheering 1000 bits @viewer")]
+    [InlineData(16, "Thanks @viewer for the bits!")] // should have looped back to 0 with this
     public void ThankForBits(int number, string message)
     {
         this.MockRandomNumberGenerator(number);

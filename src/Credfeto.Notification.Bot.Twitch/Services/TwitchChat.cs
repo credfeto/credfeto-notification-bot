@@ -28,6 +28,7 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChat : ITwitchChat
 {
+    private const string ANONYMOUS_CHEERER_USERNAME = "ananonymouscheerer";
     private readonly TwitchClient _client;
 
     private readonly ConcurrentDictionary<Streamer, bool> _joinedStreamers;
@@ -92,8 +93,7 @@ public sealed class TwitchChat : ITwitchChat
                   .Subscribe();
 
         // STATE
-        Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h,
-                                                               removeHandler: h => this._client.OnChannelStateChanged -= h)
+        Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h, removeHandler: h => this._client.OnChannelStateChanged -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Subscribe(onNext: this.Client_OnChannelStateChanged);
 
@@ -142,8 +142,7 @@ public sealed class TwitchChat : ITwitchChat
                   .Concat()
                   .Subscribe();
 
-        Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h,
-                                                                 removeHandler: h => this._client.OnCommunitySubscription -= h)
+        Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h, removeHandler: h => this._client.OnCommunitySubscription -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Where(e => !this._options.IsSelf(Viewer.FromString(e.GiftedSubscription.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
@@ -168,8 +167,7 @@ public sealed class TwitchChat : ITwitchChat
                   .Concat()
                   .Subscribe();
 
-        Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h,
-                                                               removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
+        Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h, removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
                   .Select(messageEvent => messageEvent.EventArgs)
                   .Where(e => !this._options.IsSelf(Viewer.FromString(e.PrimePaidSubscriber.DisplayName)))
                   .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
@@ -336,9 +334,7 @@ public sealed class TwitchChat : ITwitchChat
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
-        return state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName),
-                                    months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration,
-                                    cancellationToken: cancellationToken);
+        return state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName), months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration, cancellationToken: cancellationToken);
     }
 
     private void Client_OnChannelStateChanged(OnChannelStateChangedArgs e)
@@ -450,6 +446,13 @@ public sealed class TwitchChat : ITwitchChat
     {
         if (StringComparer.InvariantCultureIgnoreCase.Equals(x: e.ChatMessage.Username, y: this._options.Authentication.UserName))
         {
+            // skip messages from self
+            return;
+        }
+
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: e.ChatMessage.Username, y: ANONYMOUS_CHEERER_USERNAME))
+        {
+            // Skip anonymous cheerers
             return;
         }
 
@@ -505,8 +508,7 @@ public sealed class TwitchChat : ITwitchChat
     private static bool IsHeistStartingMessage(OnMessageReceivedArgs e)
     {
         return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
-               e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.",
-                                              comparisonType: StringComparison.Ordinal);
+               e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
     }
 
     private Task OnNewSubscriberAsync(OnNewSubscriberArgs e, in CancellationToken cancellationToken)
