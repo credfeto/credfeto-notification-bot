@@ -45,9 +45,7 @@ public static class TwitchSetup
     {
         return new WebSocketClient(new ClientOptions
                                    {
-                                       MessagesAllowedInPeriod = 750,
-                                       ThrottlingPeriod = TimeSpan.FromSeconds(30),
-                                       ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
+                                       MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30), ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
                                    });
     }
 
@@ -72,7 +70,8 @@ public static class TwitchSetup
                        .AddSingleton<IUserInfoService, UserInfoService>()
                        .AddSingleton<ITwitchFollowerDetector, TwitchFollowerDetector>()
                        .AddSingleton<IChannelFollowCount, ChannelFollowCount>()
-                       .AddSingleton<IFollowerMilestone, FollowerMilestone>();
+                       .AddSingleton<IFollowerMilestone, FollowerMilestone>()
+                       .AddSingleton<ITwitchChatMessageGenerator, TwitchChatMessageGenerator>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
