@@ -38,4 +38,9 @@ public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
     {
         return $"Thanks @{giftedBy} for gifting sub";
     }
+
+    public string WelcomeMessage(in Viewer user)
+    {
+        return $"Hi @{user}";
+    }
 }

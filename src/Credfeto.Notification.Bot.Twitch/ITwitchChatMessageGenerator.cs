@@ -17,4 +17,6 @@ public interface ITwitchChatMessageGenerator
     string ThanksForGiftingMultipleSubs(in Viewer giftedBy);
 
     string ThanksForGiftingOneSub(in Viewer giftedBy);
+
+    string WelcomeMessage(in Viewer user);
 }
