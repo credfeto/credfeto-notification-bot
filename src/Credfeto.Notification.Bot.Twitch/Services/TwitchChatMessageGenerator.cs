@@ -27,6 +27,27 @@ public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
                                                                           "Thank you for cheering {1} bits @{0}"
                                                                       };
 
+    private static readonly IReadOnlyList<string> ThankNewPrimeSubMessages = new[]
+                                                                             {
+                                                                                 "Thanks @{0} for subscribing!",
+                                                                                 "Thanks @{0} for subscribing and using your prime sub here!"
+                                                                             };
+
+    private static readonly IReadOnlyList<string> ThankNewPaidSubMessages = new[]
+                                                                            {
+                                                                                "Thanks @{0} for subscribing!"
+                                                                            };
+
+    private static readonly IReadOnlyList<string> ThankPrimeReSubMessages = new[]
+                                                                            {
+                                                                                "Thanks @{0} for resubscribing!"
+                                                                            };
+
+    private static readonly IReadOnlyList<string> ThankPaidReSubMessages = new[]
+                                                                           {
+                                                                               "Thanks @{0} for resubscribing!"
+                                                                           };
+
     private readonly IRandomNumberGenerator _randomNumberGenerator;
 
     public TwitchChatMessageGenerator(IRandomNumberGenerator randomNumberGenerator)
@@ -43,22 +64,30 @@ public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
 
     public string ThanksForNewPrimeSub(in Viewer user)
     {
-        return $"Thanks @{user} for subscribing";
+        string formatString = this.GetMessage(ThankNewPrimeSubMessages);
+
+        return string.Format(format: formatString, arg0: user.Value);
     }
 
     public string ThanksForPrimeReSub(in Viewer user)
     {
-        return $"Thanks @{user} for resubscribing";
+        string formatString = this.GetMessage(ThankPrimeReSubMessages);
+
+        return string.Format(format: formatString, arg0: user.Value);
     }
 
     public string ThanksForPaidReSub(in Viewer user)
     {
-        return $"Thanks @{user} for resubscribing";
+        string formatString = this.GetMessage(ThankPaidReSubMessages);
+
+        return string.Format(format: formatString, arg0: user.Value);
     }
 
     public string ThanksForNewPaidSub(in Viewer user)
     {
-        return $"Thanks @{user} for subscribing";
+        string formatString = this.GetMessage(ThankNewPaidSubMessages);
+
+        return string.Format(format: formatString, arg0: user.Value);
     }
 
     public string ThanksForGiftingMultipleSubs(in Viewer giftedBy)
