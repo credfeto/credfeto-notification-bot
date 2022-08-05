@@ -18,14 +18,17 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
     private readonly ConcurrentDictionary<Streamer, SubDonorTracker> _donors;
     private readonly ILogger<ContributionThanks> _logger;
     private readonly ITwitchChannelManager _twitchChannelManager;
+    private readonly ITwitchChatMessageGenerator _twitchChatMessageGenerator;
 
     public ContributionThanks(ITwitchChannelManager twitchChannelManager,
                               IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                              ITwitchChatMessageGenerator twitchChatMessageGenerator,
                               ICurrentTimeSource currentTimeSource,
                               ILogger<ContributionThanks> logger)
         : base(twitchChatMessageChannel)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
+        this._twitchChatMessageGenerator = twitchChatMessageGenerator ?? throw new ArgumentNullException(nameof(twitchChatMessageGenerator));
         this._currentTimeSource = currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -33,14 +36,15 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
         this._donorLock = new(1);
     }
 
-    public async Task ThankForBitsAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)
+    public async Task ThankForBitsAsync(Streamer streamer, Viewer user, int bitsGiven, CancellationToken cancellationToken)
     {
         if (!this.IsThanksEnabled(streamer))
         {
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for the bits", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.ThanksForBits(giftedBy: user, bitsGiven: bitsGiven);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for for the bits");
     }
@@ -52,7 +56,8 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.ThanksForNewPrimeSub(user);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for subscribing (Prime)");
     }
@@ -64,7 +69,8 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.ThanksForPrimeReSub(user);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for resubscribing (Prime)");
     }
@@ -76,7 +82,8 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for resubscribing", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.ThanksForPaidReSub(user);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for resubscribing (Paid)");
     }
@@ -88,7 +95,8 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{user} for subscribing", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.ThanksForNewPaidSub(user);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{user} for subscribing (Paid)");
     }
@@ -107,7 +115,8 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{giftedBy} for gifting subs", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.ThanksForGiftingMultipleSubs(giftedBy);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
 
         this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting subs");
     }
@@ -128,7 +137,8 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{giftedBy} for gifting sub", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.ThanksForGiftingOneSub(giftedBy);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
     }
 
     public Task ThankForFollowAsync(Streamer streamer, Viewer user, CancellationToken cancellationToken)

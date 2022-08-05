@@ -13,11 +13,16 @@ public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
 {
     private readonly ILogger<WelcomeWaggon> _logger;
     private readonly ITwitchChannelManager _twitchChannelManager;
+    private readonly ITwitchChatMessageGenerator _twitchChatMessageGenerator;
 
-    public WelcomeWaggon(ITwitchChannelManager twitchChannelManager, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<WelcomeWaggon> logger)
+    public WelcomeWaggon(ITwitchChannelManager twitchChannelManager,
+                         IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                         ITwitchChatMessageGenerator twitchChatMessageGenerator,
+                         ILogger<WelcomeWaggon> logger)
         : base(twitchChatMessageChannel)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
+        this._twitchChatMessageGenerator = twitchChatMessageGenerator ?? throw new ArgumentNullException(nameof(twitchChatMessageGenerator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -30,7 +35,8 @@ public sealed class WelcomeWaggon : MessageSenderBase, IWelcomeWaggon
             return;
         }
 
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Hi @{user}", cancellationToken: cancellationToken);
+        string message = this._twitchChatMessageGenerator.WelcomeMessage(user);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
         this._logger.LogInformation($"{streamer}: Hi {user}!");
     }
 }

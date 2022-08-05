@@ -10,6 +10,7 @@ public static class ResourceSetup
         return services.AddSingleton<ICurrentTimeSource, CurrentTimeSource>()
                        .AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>))
                        .AddSingleton<IRunOnStartup, ProcessStartup>()
+                       .AddSingleton<IRandomNumberGenerator, DefaultRandomNumberGenerator>()
                        .AddHostedService<StartupService>();
     }
 }

@@ -47,11 +47,7 @@ public sealed class TwitchChannelManagerTests : TestBase
                                                                      mileStones: new(enabled: true),
                                                                      raids: new(enabled: true, immediate: null, calmDown: null),
                                                                      thanks: new(enabled: true),
-                                                                     shoutOuts: new(enabled: true,
-                                                                                    new()
-                                                                                    {
-                                                                                        new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null)
-                                                                                    }))
+                                                                     shoutOuts: new(enabled: true, new() { new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null) }))
                                                              }));
 
         this._twitchChannelManager = new TwitchChannelManager(options: options,
@@ -214,8 +210,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     private Task ReceivedBitGiftNotificationAsync(Viewer viewer, int amount)
     {
         return this._mediator.DidNotReceive()
-                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount),
-                            cancellationToken: CancellationToken.None);
+                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount), cancellationToken: CancellationToken.None);
     }
 
     private Task ReceivedCheckForFirstMessageInStreamAsync()
@@ -269,26 +264,4 @@ public sealed class TwitchChannelManagerTests : TestBase
         this._twitchStreamerDataManager.IsRegularChatterAsync(streamer: MockReferenceData.Streamer, Guest1.ToViewer())
             .Returns(isRegularChatter);
     }
-
-    /*
- *     Task ChatMessageAsync(Viewer user, string message, int bits, CancellationToken cancellationToken);
-
-    Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken);
-
-    Task GiftedSubAsync(Viewer giftedBy, string months, in CancellationToken cancellationToken);
-
-    Task ContinuedSubAsync(Viewer user, in CancellationToken cancellationToken);
-
-    Task PrimeToPaidAsync(Viewer user, in CancellationToken cancellationToken);
-
-    Task NewSubscriberPaidAsync(Viewer user, in CancellationToken cancellationToken);
-
-    Task NewSubscriberPrimeAsync(Viewer user, in CancellationToken cancellationToken);
-
-    Task ResubscribePaidAsync(Viewer user, int months, in CancellationToken cancellationToken);
-
-    Task ResubscribePrimeAsync(Viewer user, int months, in CancellationToken cancellationToken);
-
-    Task NewFollowerAsync(Viewer user, CancellationToken cancellationToken);
- */
 }
