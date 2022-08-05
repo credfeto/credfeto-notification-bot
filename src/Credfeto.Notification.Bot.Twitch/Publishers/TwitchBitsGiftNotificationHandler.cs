@@ -23,7 +23,10 @@ public sealed class TwitchBitsGiftNotificationHandler : INotificationHandler<Twi
     {
         try
         {
-            await this._contributionThanks.ThankForBitsAsync(streamer: notification.Streamer, user: notification.User, bitsGiven: notification.Bits, cancellationToken: cancellationToken);
+            await this._contributionThanks.ThankForBitsAsync(streamer: notification.Streamer,
+                                                             user: notification.User,
+                                                             bitsGiven: notification.Bits,
+                                                             cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
