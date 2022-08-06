@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using FluentValidation.Results;
 
-namespace Credfeto.NotificationBot.Shared.Configuration;
+namespace Credfeto.Notification.Bot.Shared.Configuration;
 
 public sealed class ConfigurationErrorsException : Exception
 {

@@ -73,7 +73,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Mocks", "Credfeto.Notification.Bot.Mocks\Credfeto.Notification.Bot.Mocks.csproj", "{9F7AD925-F8AF-40AB-A405-6095D4846157}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.NotificationBot.Shared.Configuration", "Credfeto.NotificationBot.Shared.Configuration\Credfeto.NotificationBot.Shared.Configuration.csproj", "{ABED01F2-1C95-4C2F-94B9-F56FA999198C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Shared.Configuration", "Credfeto.Notification.Bot.Shared.Configuration\Credfeto.Notification.Bot.Shared.Configuration.csproj", "{ABED01F2-1C95-4C2F-94B9-F56FA999198C}"
 EndProject
 Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution

@@ -1,7 +1,7 @@
 using System.IO;
 using Credfeto.Notification.Bot.Database.Pgsql;
 using Credfeto.Notification.Bot.Shared;
-using Credfeto.NotificationBot.Shared.Configuration;
+using Credfeto.Notification.Bot.Shared.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

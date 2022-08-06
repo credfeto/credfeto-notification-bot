@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Credfeto.NotificationBot.Shared.Configuration;
+namespace Credfeto.Notification.Bot.Shared.Configuration;
 
 public static class TypeConfigurationExtensions
 {
@@ -20,13 +20,13 @@ public static class TypeConfigurationExtensions
                                                                               IConfigurationRoot configurationRoot,
                                                                               string key,
                                                                               JsonSerializerContext jsonSerializerContext)
-        where TValidator : class, IValidator<TSettings>, new()
-        where TSettings : class
+        where TValidator : class, IValidator<TSettings>, new() where TSettings : class
     {
         IValidator<TSettings> validator = new TValidator();
 
         return services.WithConfiguration(configurationRoot, key, jsonSerializerContext, validator);
     }
+
     public static IServiceCollection WithConfiguration<TSettings>(this IServiceCollection services,
                                                                   IConfigurationRoot configurationRoot,
                                                                   string key,

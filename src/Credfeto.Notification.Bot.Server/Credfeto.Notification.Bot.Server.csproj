@@ -55,7 +55,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Discord\Credfeto.Notification.Bot.Discord.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
-    <ProjectReference Include="..\Credfeto.NotificationBot.Shared.Configuration\Credfeto.NotificationBot.Shared.Configuration.csproj" />
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared.Configuration\Credfeto.Notification.Bot.Shared.Configuration.csproj"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.1.0" />
