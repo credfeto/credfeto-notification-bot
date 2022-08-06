@@ -7,6 +7,7 @@ using Credfeto.Notification.Bot.Server.Helpers;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Credfeto.Notification.Bot.Twitch.Configuration.Validators;
 using Credfeto.NotificationBot.Shared.Configuration;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -44,9 +45,11 @@ internal static class Services
         JsonSerializerContext jsonSerializerContext = ServerConfigurationSerializationContext.Default;
 
         return services.AddOptions()
-                       .WithConfiguration<PgsqlServerConfiguration>(configurationRoot: configurationRoot, key: "Database:Postgres", jsonSerializerContext: jsonSerializerContext)
-                       .WithConfiguration<DiscordBotOptions>(configurationRoot: configurationRoot, key: "Discord", jsonSerializerContext: jsonSerializerContext)
-                       .WithConfiguration<TwitchBotOptions>(configurationRoot: configurationRoot, key: "Twitch", jsonSerializerContext: jsonSerializerContext);
+                       .WithConfiguration<PgsqlServerConfigurationValidator, PgsqlServerConfiguration>(configurationRoot: configurationRoot,
+                                                                                                       key: "Database:Postgres",
+                                                                                                       jsonSerializerContext: jsonSerializerContext)
+                       .WithConfiguration<DiscordBotOptionsValidator, DiscordBotOptions>(configurationRoot: configurationRoot, key: "Discord", jsonSerializerContext: jsonSerializerContext)
+                       .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot, key: "Twitch", jsonSerializerContext: jsonSerializerContext);
     }
 
     private static Logger CreateLogger()

@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text.Json.Serialization;
 using Credfeto.Notification.Bot.Database.Pgsql;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.NotificationBot.Shared.Configuration;
@@ -18,13 +17,12 @@ internal static class IntegrationTestStartup
         {
             IConfigurationRoot configurationRoot = BuildConfiguration();
 
-            JsonSerializerContext jsonSerializerContext = DatabaseConfigurationSerializationContext.Default;
-
             return services.AddSingleton(configurationRoot)
                            .AddOptions()
-                           .WithConfiguration<PgsqlServerConfiguration>(configurationRoot: configurationRoot,
-                                                                        key: "Database:Postgres",
-                                                                        jsonSerializerContext: jsonSerializerContext)
+                           .WithConfiguration(configurationRoot: configurationRoot,
+                                              key: "Database:Postgres",
+                                              validator: new PgsqlServerConfigurationValidator(),
+                                              jsonSerializerContext: DatabaseConfigurationSerializationContext.Default)
                            .AddPostgresql()
                            .AddApplicationDatabase()
                            .AddResources();

@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -14,10 +16,22 @@ namespace Credfeto.NotificationBot.Shared.Configuration;
 
 public static class TypeConfigurationExtensions
 {
+    public static IServiceCollection WithConfiguration<TValidator, TSettings>(this IServiceCollection services,
+                                                                              IConfigurationRoot configurationRoot,
+                                                                              string key,
+                                                                              JsonSerializerContext jsonSerializerContext)
+        where TValidator : class, IValidator<TSettings>, new()
+        where TSettings : class
+    {
+        IValidator<TSettings> validator = new TValidator();
+
+        return services.WithConfiguration(configurationRoot, key, jsonSerializerContext, validator);
+    }
     public static IServiceCollection WithConfiguration<TSettings>(this IServiceCollection services,
                                                                   IConfigurationRoot configurationRoot,
                                                                   string key,
-                                                                  JsonSerializerContext jsonSerializerContext)
+                                                                  JsonSerializerContext jsonSerializerContext,
+                                                                  IValidator<TSettings> validator)
         where TSettings : class
     {
         IConfigurationSection section = configurationRoot.GetSection(key);
@@ -33,17 +47,29 @@ public static class TypeConfigurationExtensions
 
         TSettings settings = JsonSerializer.Deserialize(json: result, jsonTypeInfo: typeInfo) ?? throw new JsonException("Could not deserialize options");
 
+        Validate(validator: validator, settings: settings);
+
         IOptions<TSettings> toRegister = Options.Create(settings);
 
         return services.AddSingleton(toRegister);
+    }
+
+    private static void Validate<TSettings>(IValidator<TSettings> validator, TSettings settings)
+        where TSettings : class
+    {
+        ValidationResult validationResult = validator.Validate(settings);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ConfigurationErrorsException(validationResult.Errors);
+        }
     }
 
     private static string ToJson(this IConfigurationSection section, JsonSerializerOptions jsonSerializerOptions)
     {
         ArrayBufferWriter<byte> bufferWriter = new(jsonSerializerOptions.DefaultBufferSize);
 
-        using (Utf8JsonWriter jsonWriter = new(bufferWriter: bufferWriter,
-                                               new() { Encoder = jsonSerializerOptions.Encoder, Indented = jsonSerializerOptions.WriteIndented, SkipValidation = false }))
+        using (Utf8JsonWriter jsonWriter = new(bufferWriter: bufferWriter, new() { Encoder = jsonSerializerOptions.Encoder, Indented = jsonSerializerOptions.WriteIndented, SkipValidation = false }))
         {
             SerializeObject(config: section, writer: jsonWriter, jsonSerializerOptions: jsonSerializerOptions);
         }
