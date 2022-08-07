@@ -6,6 +6,7 @@ public sealed class DiscordBotOptionsValidator : AbstractValidator<DiscordBotOpt
 {
     public DiscordBotOptionsValidator()
     {
-        this.RuleFor(x => x.Token).NotEmpty();
+        this.RuleFor(x => x.Token)
+            .NotEmpty();
     }
 }

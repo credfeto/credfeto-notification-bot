@@ -8,6 +8,7 @@ public sealed class TwitchFriendChannelValidator : AbstractValidator<TwitchFrien
     {
         this.RuleFor(x => x.Channel)
             .NotEmpty();
+
         // this.RuleFor(x => x.Message)
         //     .Null()
         //     .NotEmpty();

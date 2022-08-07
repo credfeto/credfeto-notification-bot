@@ -54,8 +54,8 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Shared\Credfeto.Notification.Bot.Database.Shared.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Discord\Credfeto.Notification.Bot.Discord.csproj" />
+    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared.Configuration\Credfeto.Notification.Bot.Shared.Configuration.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared.Configuration\Credfeto.Notification.Bot.Shared.Configuration.csproj"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.1.0" />
@@ -80,5 +80,4 @@
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" />
   </ItemGroup>
-
 </Project>
