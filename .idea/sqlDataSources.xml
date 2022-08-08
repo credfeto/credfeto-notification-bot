@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="b10ae086-d5d8-4cc5-9836-1fc7ceac1906" name="DDL Mapping">
+      <data-sources db="282976ad-0328-400c-b67d-8e3176389de6" ddl="09b5bd1a-cde3-4a3b-a63f-b1d4b8f18b34" />
+    </mapping>
+  </component>
+  <component name="SqlDataSourceStorage">
+    <option name="dataSources">
+      <list>
+        <State>
+          <option name="id" value="09b5bd1a-cde3-4a3b-a63f-b1d4b8f18b34" />
+          <option name="name" value="postgres@localhost (DDL)" />
+          <option name="languageId" value="PostgreSQL" />
+          <option name="urls">
+            <array>
+              <option value="file://$PROJECT_DIR$/db" />
+            </array>
+          </option>
+          <option name="scopes">
+            <map>
+              <entry key="$PROJECT_DIR$/db" value="twitch" />
+            </map>
+          </option>
+        </State>
+      </list>
+    </option>
+  </component>
+</project>
