@@ -35,10 +35,9 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         return this._database.ExecuteAsync(storedProcedure: "twitch.stream_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
     }
 
-    public Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username, string viewerId)
+    public Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert",
-                                           new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
     }
 
     public async Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
