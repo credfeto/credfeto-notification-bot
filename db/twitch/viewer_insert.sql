@@ -22,7 +22,7 @@ BEGIN
     where id = id_
       and username <> username_;
 
-
+    -- add viewer if not exists
     INSERT INTO twitch.viewer (username,
                                id,
                                date_created)

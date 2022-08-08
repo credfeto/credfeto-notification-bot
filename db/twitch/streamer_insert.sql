@@ -33,6 +33,7 @@ BEGIN
     where username = username_
        or id = id_;
 
+    -- add streamer if not exists
     INSERT INTO twitch.streamer (username,
                                  id,
                                  date_created)
