@@ -79,4 +79,14 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
         return follower.FollowCount;
     }
+
+    public Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTime streamStartDate)
+    {
+        return Task.FromResult<StreamSettings?>(null);
+    }
+
+    public Task UpdateSettingsAsync(Streamer streamer, DateTime streamStartDate, StreamSettings settings)
+    {
+        return Task.CompletedTask;
+    }
 }

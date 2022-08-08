@@ -17,4 +17,8 @@ public interface ITwitchStreamDataManager
     Task<bool> UpdateFollowerMilestoneAsync(Streamer streamer, int followerCount);
 
     Task<int> RecordNewFollowerAsync(Streamer streamer, Viewer username);
+
+    Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTime streamStartDate);
+
+    Task UpdateSettingsAsync(Streamer streamer, DateTime streamStartDate, StreamSettings settings);
 }

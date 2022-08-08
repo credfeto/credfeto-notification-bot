@@ -48,12 +48,42 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public bool IsOnline => this._stream != null;
 
-    public Task OnlineAsync(string gameName, in DateTime startDate)
+    public async Task OnlineAsync(string gameName, DateTime startDate)
     {
         this._logger.LogInformation($"{this.Streamer}: Going Online...");
-        this._stream = new(gameName: gameName, startedAt: startDate, new TwitchStreamSettingsOnline(options: this._options, streamer: this.Streamer, logger: this._logger));
+        ActiveStream stream = new(gameName: gameName, startedAt: startDate, new TwitchStreamSettingsOnline(options: this._options, streamer: this.Streamer, logger: this._logger));
+        this._stream = stream;
+        await this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this.Streamer, streamStartDate: startDate);
 
-        return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this.Streamer, streamStartDate: startDate);
+        StreamSettings? settings = await this._twitchStreamDataManager.GetSettingsAsync(streamer: this.Streamer, streamStartDate: startDate);
+
+        if (settings != null)
+        {
+            stream.Settings.OverrideWelcomes(settings.ChatWelcomesEnabled);
+            stream.Settings.OverrideRaidWelcomes(settings.RaidWelcomesEnabled);
+            stream.Settings.OverrideMilestonesEnabled(settings.AnnounceMilestonesEnabled);
+            stream.Settings.OverrideShoutOuts(settings.ShoutOutsEnabled);
+            stream.Settings.OverrideThanks(settings.ThanksEnabled);
+
+            if (settings.ChatWelcomesEnabled != stream.Settings.ChatWelcomesEnabled || settings.RaidWelcomesEnabled != stream.Settings.RaidWelcomesEnabled ||
+                settings.AnnounceMilestonesEnabled != stream.Settings.AnnounceMilestonesEnabled || settings.ShoutOutsEnabled != stream.Settings.ShoutOutsEnabled ||
+                settings.ThanksEnabled != stream.Settings.ThanksEnabled)
+            {
+                await this.SaveStreamSettingsInternalAsync(stream);
+            }
+        }
+    }
+
+    public Task SaveStreamSettingsAsync()
+    {
+        ActiveStream? stream = this._stream;
+
+        if (stream == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        return this.SaveStreamSettingsInternalAsync(stream);
     }
 
     public void Offline()
@@ -275,12 +305,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            model = new(streamer: this.Streamer,
-                        user: user,
-                        this._stream != null,
-                        isStreamer: twitchUser.IsStreamer,
-                        accountCreated: twitchUser.DateCreated,
-                        followCount: followCount);
+            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
         }
         else
         {
@@ -291,6 +316,19 @@ public sealed class TwitchChannelState : ITwitchChannelState
     }
 
     public ITwitchStreamSettings Settings => this._stream?.Settings ?? this._offlineStreamSettings;
+
+    private Task SaveStreamSettingsInternalAsync(ActiveStream stream)
+    {
+        StreamSettings newSettings = new(chatWelcomesEnabled: stream.Settings.ChatWelcomesEnabled,
+                                         raidWelcomesEnabled: stream.Settings.RaidWelcomesEnabled,
+                                         thanksEnabled: stream.Settings.ThanksEnabled,
+                                         announceMilestonesEnabled: stream.Settings.AnnounceMilestonesEnabled,
+                                         shoutOutsEnabled: stream.Settings.ShoutOutsEnabled);
+
+        this._logger.LogInformation($"{this.Streamer}: Settings changed, updating...");
+
+        return this._twitchStreamDataManager.UpdateSettingsAsync(streamer: this.Streamer, streamStartDate: stream.StartedAt, settings: newSettings);
+    }
 
     private async Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username)
     {

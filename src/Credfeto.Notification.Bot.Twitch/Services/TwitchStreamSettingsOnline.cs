@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
+[DebuggerDisplay("Chat: {ChatWelcomesEnabled} Raid: {RaidWelcomesEnabled} Thanks: {ThanksEnabled} Shoutouts: {ShoutOutsEnabled} Milestones: {AnnounceMilestonesEnabled}")]
 internal sealed class TwitchStreamSettingsOnline : TwitchStreamSettingsBase, ITwitchStreamSettings
 {
     private readonly ILogger _logger;

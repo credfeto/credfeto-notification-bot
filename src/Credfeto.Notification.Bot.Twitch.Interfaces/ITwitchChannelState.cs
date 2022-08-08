@@ -13,7 +13,9 @@ public interface ITwitchChannelState
 
     ITwitchStreamSettings Settings { get; }
 
-    Task OnlineAsync(string gameName, in DateTime startDate);
+    Task SaveStreamSettingsAsync();
+
+    Task OnlineAsync(string gameName, DateTime startDate);
 
     void Offline();
 

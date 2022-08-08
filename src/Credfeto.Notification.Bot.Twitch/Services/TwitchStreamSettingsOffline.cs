@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
+[DebuggerDisplay("Chat: {ChatWelcomesEnabled} Raid: {RaidWelcomesEnabled} Thanks: {ThanksEnabled} Shoutouts: {ShoutOutsEnabled} Milestones: {AnnounceMilestonesEnabled}")]
 internal sealed class TwitchStreamSettingsOffline : TwitchStreamSettingsBase, ITwitchStreamSettings
 {
     public TwitchStreamSettingsOffline(TwitchBotOptions options, in Streamer streamer)
