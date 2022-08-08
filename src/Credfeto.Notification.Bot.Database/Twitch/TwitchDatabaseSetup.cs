@@ -29,6 +29,7 @@ internal static class TwitchDatabaseSetup
     private static IServiceCollection AddDataManagers(this IServiceCollection services)
     {
         return services.AddSingleton<ITwitchStreamDataManager, TwitchStreamDataManager>()
+                       .AddSingleton<ITwitchViewerDataManager, TwitchViewerDataManager>()
                        .AddSingleton<ITwitchStreamerDataManager, TwitchStreamerDataManager>();
     }
 }

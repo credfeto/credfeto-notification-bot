@@ -16,11 +16,13 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 public sealed class UserInfoServiceTests : TestBase
 {
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
+    private readonly ITwitchViewerDataManager _twitchViewerDataManager;
     private readonly IUserInfoService _userInfoService;
 
     public UserInfoServiceTests()
     {
         this._twitchStreamerDataManager = GetSubstitute<ITwitchStreamerDataManager>();
+        this._twitchViewerDataManager = GetSubstitute<ITwitchViewerDataManager>();
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
@@ -30,7 +32,10 @@ public sealed class UserInfoServiceTests : TestBase
                                                    marbles: null,
                                                    channels: new()));
 
-        this._userInfoService = new UserInfoService(options: options, twitchStreamerDataManager: this._twitchStreamerDataManager, this.GetTypedLogger<UserInfoService>());
+        this._userInfoService = new UserInfoService(options: options,
+                                                    twitchStreamerDataManager: this._twitchStreamerDataManager,
+                                                    twitchViewerDataManager: this._twitchViewerDataManager,
+                                                    this.GetTypedLogger<UserInfoService>());
     }
 
     [Fact]

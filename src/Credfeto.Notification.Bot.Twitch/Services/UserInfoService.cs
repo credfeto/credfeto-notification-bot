@@ -20,10 +20,12 @@ public sealed class UserInfoService : IUserInfoService
     private readonly ConcurrentDictionary<Viewer, TwitchUser?> _cache;
     private readonly ILogger<UserInfoService> _logger;
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
+    private readonly ITwitchViewerDataManager _twitchViewerDataManager;
 
-    public UserInfoService(IOptions<TwitchBotOptions> options, ITwitchStreamerDataManager twitchStreamerDataManager, ILogger<UserInfoService> logger)
+    public UserInfoService(IOptions<TwitchBotOptions> options, ITwitchStreamerDataManager twitchStreamerDataManager, ITwitchViewerDataManager twitchViewerDataManager, ILogger<UserInfoService> logger)
     {
         this._twitchStreamerDataManager = twitchStreamerDataManager ?? throw new ArgumentNullException(nameof(twitchStreamerDataManager));
+        this._twitchViewerDataManager = twitchViewerDataManager ?? throw new ArgumentNullException(nameof(twitchViewerDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         TwitchBotOptions apiOptions = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -44,7 +46,7 @@ public sealed class UserInfoService : IUserInfoService
             return user;
         }
 
-        user = await this._twitchStreamerDataManager.GetByUserNameAsync(userName);
+        user = await this.GetUserFromDatabaseAsync(userName);
 
         if (user != null)
         {
@@ -72,6 +74,10 @@ public sealed class UserInfoService : IUserInfoService
             {
                 await this._twitchStreamerDataManager.AddStreamerAsync(user.UserName.ToStreamer(), streamerId: user.Id, startedStreaming: user.DateCreated);
             }
+            else
+            {
+                await this._twitchViewerDataManager.AddViewerAsync(viewerName: user.UserName, viewerId: user.Id, dateCreated: user.DateCreated);
+            }
 
             return user;
         }
@@ -81,6 +87,11 @@ public sealed class UserInfoService : IUserInfoService
 
             return null;
         }
+    }
+
+    private async Task<TwitchUser?> GetUserFromDatabaseAsync(Viewer userName)
+    {
+        return await this._twitchStreamerDataManager.GetByUserNameAsync(userName) ?? await this._twitchViewerDataManager.GetByUserNameAsync(userName);
     }
 
     private static TwitchUser Convert(User user)
