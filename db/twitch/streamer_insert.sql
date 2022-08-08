@@ -8,6 +8,19 @@ AS
 $$
 
 BEGIN
+    -- update followers with new username
+    update twitch.stream_follower
+    set follower = username_
+    where follower in (select username
+                       from twitch.streamer
+                       where username <> username_
+                         and id = id_
+                       union
+                       select username
+                       from twitch.viewer
+                       where username <> username_
+                         and id = id_);
+
     -- update chatters with new username
     update twitch.stream_chatter
     set chat_user = username_
