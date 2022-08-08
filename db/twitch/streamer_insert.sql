@@ -8,12 +8,28 @@ AS
 $$
 
 BEGIN
+    -- update chatters with new username
+    update twitch.stream_chatter
+    set chat_user = username_
+    where chat_user in (select username
+                        from twitch.streamer
+                        where username <> username_
+                          and id = id_
+                        union
+                        select username
+                        from twitch.viewer
+                        where username <> username_
+                          and id = id_);
+
+    -- update streamers with new username
     update twitch.streamer
     set username = username_
     where id = id_
       and username <> username_;
 
-    delete from twitch.viewer
+    -- remove any viewer
+    delete
+    from twitch.viewer
     where username = username_
        or id = id_;
 

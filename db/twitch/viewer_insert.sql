@@ -8,6 +8,15 @@ AS
 $$
 
 BEGIN
+    -- update chatters with new username
+    update twitch.stream_chatter
+    set chat_user = username_
+    where chat_user in (select username
+                        from twitch.viewer
+                        where username <> username_
+                          and id = id_);
+
+    -- update viewers with new username
     update twitch.viewer
     set username = username_
     where id = id_
@@ -15,8 +24,8 @@ BEGIN
 
 
     INSERT INTO twitch.viewer (username,
-                                 id,
-                                 date_created)
+                               id,
+                               date_created)
     VALUES (userName_,
             id_,
             date_created_)
