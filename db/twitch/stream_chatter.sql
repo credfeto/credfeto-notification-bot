@@ -2,6 +2,7 @@ CREATE TABLE twitch.stream_chatter (
     channel VARCHAR(100) NOT NULL,
     start_date TIMESTAMP NOT NULL,
     chat_user VARCHAR(100) NOT NULL,
+    chat_id VARCHAR(100) NULL,
     first_message_date TIMESTAMP NOT NULL,
     CONSTRAINT stream_chatter_pk PRIMARY KEY (
         channel,

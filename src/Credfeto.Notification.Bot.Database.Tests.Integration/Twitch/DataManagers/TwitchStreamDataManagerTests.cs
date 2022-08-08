@@ -34,12 +34,13 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     {
         Streamer streamerName = GenerateStreamerUsername();
         Viewer chatter = GenerateViewerUsername();
+        string chatterId = chatter.ToString();
         DateTime streamStart = this._currentTimeSource.UtcNow();
 
         bool isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter);
         Assert.True(condition: isFirstMessageInStream, userMessage: "Should be first message");
 
-        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter);
+        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter, viewerId: chatterId);
 
         isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter);
         Assert.False(condition: isFirstMessageInStream, userMessage: "Should not be first message");
