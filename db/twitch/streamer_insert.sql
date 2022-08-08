@@ -13,6 +13,9 @@ BEGIN
     where id = id_
       and username <> username_;
 
+    delete from twitch.viewer
+    where username = username_
+       or id = id_;
 
     INSERT INTO twitch.streamer (username,
                                  id,
