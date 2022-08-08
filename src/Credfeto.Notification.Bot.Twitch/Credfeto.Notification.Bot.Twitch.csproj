@@ -36,7 +36,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Models\Credfeto.Notification.Bot.Twitch.Models.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.1.0" />
+    <PackageReference Include="FluentValidation" Version="11.1.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="6.0.7" />
     <PackageReference Include="NonBlocking" Version="2.1.0" />
