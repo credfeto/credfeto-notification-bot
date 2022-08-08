@@ -5,9 +5,9 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders;
 
-public sealed class TwitchStreamerUserBuilder : IObjectBuilder<TwitchStreamerUserEntity, TwitchUser>
+public sealed class TwitchViewerUserBuilder : IObjectBuilder<TwitchViewerUserEntity, TwitchUser>
 {
-    public TwitchUser? Build(TwitchStreamerUserEntity? source)
+    public TwitchUser? Build(TwitchViewerUserEntity? source)
     {
         if (source == null)
         {
@@ -16,7 +16,7 @@ public sealed class TwitchStreamerUserBuilder : IObjectBuilder<TwitchStreamerUse
 
         return new(source.Id ?? throw new DataException("Missing Id"),
                    Viewer.FromString(source.UserName ?? throw new DataException("Missing Username")),
-                   isStreamer: true,
+                   isStreamer: false,
                    dateCreated: source.DateCreated);
     }
 }

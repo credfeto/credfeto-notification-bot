@@ -2,7 +2,7 @@ using System;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
 
-public sealed class TwitchStreamerUserEntity
+public sealed class TwitchViewerUserEntity
 {
     public string? Id { get; init; }
 

@@ -11,9 +11,9 @@ namespace Credfeto.Notification.Bot.Database.Twitch.DataManagers;
 public sealed class TwitchViewerDataManager : ITwitchViewerDataManager
 {
     private readonly IDatabase _database;
-    private readonly IObjectBuilder<TwitchUserEntity, TwitchUser> _twitchUserBuilder;
+    private readonly IObjectBuilder<TwitchViewerUserEntity, TwitchUser> _twitchUserBuilder;
 
-    public TwitchViewerDataManager(IDatabase database, IObjectBuilder<TwitchUserEntity, TwitchUser> twitchUserBuilder)
+    public TwitchViewerDataManager(IDatabase database, IObjectBuilder<TwitchViewerUserEntity, TwitchUser> twitchUserBuilder)
     {
         this._database = database ?? throw new ArgumentNullException(nameof(database));
         this._twitchUserBuilder = twitchUserBuilder ?? throw new ArgumentNullException(nameof(twitchUserBuilder));
