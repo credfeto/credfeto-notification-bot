@@ -8,19 +8,21 @@ AS
 $$
 
 BEGIN
-    INSERT INTO twitch.streamer (
-        username,
-        id,
-        date_created
-        )
-    VALUES (
-        userName_,
-        id_,
-        date_created_
-        )
-        ON conflict do nothing;
+    update twitch.streamer
+    set username = username_
+    where id = id_
+      and username <> username_;
 
-    RETURN FOUND;
+
+    INSERT INTO twitch.streamer (username,
+                                 id,
+                                 date_created)
+    VALUES (userName_,
+            id_,
+            date_created_)
+    ON conflict do nothing;
+
+    return FOUND;
 END $$;
 
 ALTER FUNCTION twitch.streamer_insert (
