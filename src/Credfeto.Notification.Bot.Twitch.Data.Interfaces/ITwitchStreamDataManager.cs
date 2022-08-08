@@ -8,7 +8,7 @@ public interface ITwitchStreamDataManager
 {
     Task RecordStreamStartAsync(Streamer streamer, DateTime streamStartDate);
 
-    Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username, string viewerId);
+    Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username);
 
     Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username);
 

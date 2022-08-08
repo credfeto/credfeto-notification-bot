@@ -132,7 +132,14 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         bool isRegular = await this.IsRegularChatterAsync(streamer: this.Streamer, username: user);
 
-        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user);
+
+        if (twitchUser != null)
+        {
+
+            await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user);
+        }
+
 
         // no point in welcoming ignored users
         await this._mediator.Publish(new TwitchStreamNewChatter(streamer: this.Streamer, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
