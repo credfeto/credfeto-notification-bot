@@ -38,6 +38,7 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
                                                                     })
                       .AddMockedService<IMediator>()
                       .AddMockedService<ITwitchStreamDataManager>()
+                      .AddMockedService<ITwitchViewerDataManager>()
                       .AddMockedService<ITwitchStreamerDataManager>()
 
                       // Items being tested
