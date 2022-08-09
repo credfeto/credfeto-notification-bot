@@ -22,7 +22,10 @@ public sealed class UserInfoService : IUserInfoService
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
     private readonly ITwitchViewerDataManager _twitchViewerDataManager;
 
-    public UserInfoService(IOptions<TwitchBotOptions> options, ITwitchStreamerDataManager twitchStreamerDataManager, ITwitchViewerDataManager twitchViewerDataManager, ILogger<UserInfoService> logger)
+    public UserInfoService(IOptions<TwitchBotOptions> options,
+                           ITwitchStreamerDataManager twitchStreamerDataManager,
+                           ITwitchViewerDataManager twitchViewerDataManager,
+                           ILogger<UserInfoService> logger)
     {
         this._twitchStreamerDataManager = twitchStreamerDataManager ?? throw new ArgumentNullException(nameof(twitchStreamerDataManager));
         this._twitchViewerDataManager = twitchViewerDataManager ?? throw new ArgumentNullException(nameof(twitchViewerDataManager));
