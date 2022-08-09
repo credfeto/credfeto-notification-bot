@@ -32,6 +32,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated TwitchLib to 3.6.1
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.3.44
 - FF-3881 - Updated DotNet SDK to 6.0.400
+- FF-1429 - Updated FunFair.CodeAnalysis to 5.8.5.1436
 ### Removed
 ### Deployment Changes
 
