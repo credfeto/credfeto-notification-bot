@@ -27,8 +27,8 @@ public sealed class TwitchBotOptionsValidator : AbstractValidator<TwitchBotOptio
             .NotNull()
             .SetValidator(new TwitchMilestonesValidator());
 
-        this.RuleFor(x => x.Marbles)
-            .NotNull();
+        // this.RuleFor(x => x.Marbles)
+        //     .NotNull();
 
         this.RuleForEach(x => x.Marbles)
             .NotNull()
