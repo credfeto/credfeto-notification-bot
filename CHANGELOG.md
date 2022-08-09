@@ -29,6 +29,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated TwitchLib to 3.2.6
 - FF-1429 - Updated FunFair.Test.Common to 6.0.4.1998
 - FF-1429 - Updated Microsoft.Extensions to 6.0.8
+- FF-1429 - Updated TwitchLib to 3.6.1
 ### Removed
 ### Deployment Changes
 
