@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using Credfeto.Extensions.Configuration.Typed.Json;
 using Credfeto.Notification.Bot.Database;
 using Credfeto.Notification.Bot.Database.Pgsql;
 using Credfeto.Notification.Bot.Database.Shared;
 using Credfeto.Notification.Bot.Discord;
 using Credfeto.Notification.Bot.Server.Helpers;
 using Credfeto.Notification.Bot.Shared;
-using Credfeto.Notification.Bot.Shared.Configuration;
 using Credfeto.Notification.Bot.Twitch;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Configuration.Validators;
@@ -52,12 +52,8 @@ internal static class Services
                            .WithConfiguration<PgsqlServerConfigurationValidator, PgsqlServerConfiguration>(configurationRoot: configurationRoot,
                                                                                                            key: "Database:Postgres",
                                                                                                            jsonSerializerContext: jsonSerializerContext)
-                           .WithConfiguration<DiscordBotOptionsValidator, DiscordBotOptions>(configurationRoot: configurationRoot,
-                                                                                             key: "Discord",
-                                                                                             jsonSerializerContext: jsonSerializerContext)
-                           .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot,
-                                                                                           key: "Twitch",
-                                                                                           jsonSerializerContext: jsonSerializerContext);
+                           .WithConfiguration<DiscordBotOptionsValidator, DiscordBotOptions>(configurationRoot: configurationRoot, key: "Discord", jsonSerializerContext: jsonSerializerContext)
+                           .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot, key: "Twitch", jsonSerializerContext: jsonSerializerContext);
         }
         catch (ConfigurationErrorsException exception)
         {

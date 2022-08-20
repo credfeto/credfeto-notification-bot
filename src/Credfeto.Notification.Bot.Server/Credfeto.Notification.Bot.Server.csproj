@@ -54,10 +54,10 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Shared\Credfeto.Notification.Bot.Database.Shared.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Discord\Credfeto.Notification.Bot.Discord.csproj" />
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared.Configuration\Credfeto.Notification.Bot.Shared.Configuration.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="0.0.1.6-main"/>
     <PackageReference Include="FluentValidation" Version="11.2.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0" />
