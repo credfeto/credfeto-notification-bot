@@ -62,8 +62,6 @@
  - any: [ 'src/Credfeto.Notification.Bot.Server/**/*' ]
 "Shared":
  - any: [ 'src/Credfeto.Notification.Bot.Shared/**/*' ]
-"Shared.Configuration":
- - any: [ 'src/Credfeto.Notification.Bot.Shared.Configuration/**/*' ]
 "Shared.Extensions":
  - any: [ 'src/Credfeto.Notification.Bot.Shared.Extensions/**/*' ]
 "Shared.Extensions.Tests":
