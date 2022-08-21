@@ -1,11 +1,11 @@
 CREATE FUNCTION twitch.stream_settings_set(
     channel_ VARCHAR,
     start_date_ TIMESTAMP WITH TIME zone,
-    thanks_ BIT,
-    announce_milestones_ BIT,
-    chat_welcomes_ BIT,
-    raid_welcomes_ BIT,
-    shout_outs_ BIT
+    thanks_ boolean,
+    announce_milestones_ boolean,
+    chat_welcomes_ boolean,
+    raid_welcomes_ boolean,
+    shout_outs_ boolean
 )
     RETURNS boolean
     LANGUAGE plpgsql
@@ -22,19 +22,17 @@ BEGIN
                                         shout_outs)
     VALUES (channel_,
             start_date_,
-            thanks,
-            announce_milestones,
-            chat_welcomes,
-            raid_welcomes,
-            shout_outs)
-    ON conflict do update
-        set thanks              = thanks_,
-            announce_milestones = announce_milestones_,
-            chat_welcomes       = chat_welcomes_,
-            raid_welcomes       = raid_welcomes_,
-            shout_outs          = shout_outs_
-    where channel = channel_
-      and start_date = start_date;
+            thanks_,
+            announce_milestones_,
+            chat_welcomes_,
+            raid_welcomes_,
+            shout_outs_)
+    ON conflict (channel, start_date) do update
+        set thanks              = excluded.thanks,
+            announce_milestones = excluded.announce_milestones,
+            chat_welcomes       = excluded.chat_welcomes,
+            raid_welcomes       = excluded.raid_welcomes,
+            shout_outs          = excluded.shout_outs;
 
     RETURN found;
 END;
@@ -43,18 +41,18 @@ $$;
 ALTER FUNCTION twitch.stream_settings_set (
     VARCHAR,
     TIMESTAMP WITH TIME zone,
-    BIT,
-    BIT,
-    BIT,
-    BIT,
-    BIT
+    boolean,
+    boolean,
+    boolean,
+    boolean,
+    boolean
     ) OWNER TO markr;
 
 GRANT EXECUTE
     ON FUNCTION twitch.stream_settings_set(VARCHAR, TIMESTAMP WITH TIME zone,
-    BIT,
-    BIT,
-    BIT,
-    BIT,
-    BIT)
+    boolean,
+    boolean,
+    boolean,
+    boolean,
+    boolean)
     TO notificationbot;

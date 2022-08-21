@@ -69,4 +69,25 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
         follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: streamerName, username: followerName);
         Assert.Equal(expected: 2, actual: follows);
     }
+
+    [Fact]
+    public async Task RecordStreamSettingsAsync()
+    {
+        Streamer streamerName = GenerateStreamerUsername();
+        DateTime streamStart = this._currentTimeSource.UtcNow();
+
+        StreamSettings? settings = await this._twitchStreamDataManager.GetSettingsAsync(streamer: streamerName, streamStartDate: streamStart);
+        Assert.Null(settings);
+
+        settings = new(chatWelcomesEnabled: false, raidWelcomesEnabled: true, thanksEnabled: false, announceMilestonesEnabled: false, shoutOutsEnabled: false);
+
+        await this._twitchStreamDataManager.UpdateSettingsAsync(streamer: streamerName, streamStartDate: streamStart, settings: settings);
+
+        StreamSettings firstSettings = AssertReallyNotNull(await this._twitchStreamDataManager.GetSettingsAsync(streamer: streamerName, streamStartDate: streamStart));
+        Assert.Equal(expected: settings.ThanksEnabled, actual: firstSettings.ThanksEnabled);
+        Assert.Equal(expected: settings.ChatWelcomesEnabled, actual: firstSettings.ChatWelcomesEnabled);
+        Assert.Equal(expected: settings.RaidWelcomesEnabled, actual: firstSettings.RaidWelcomesEnabled);
+        Assert.Equal(expected: settings.AnnounceMilestonesEnabled, actual: firstSettings.AnnounceMilestonesEnabled);
+        Assert.Equal(expected: settings.ShoutOutsEnabled, actual: firstSettings.ShoutOutsEnabled);
+    }
 }

@@ -93,11 +93,11 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
                                            {
                                                channel_ = streamer.ToString(),
                                                start_date_ = streamStartDate,
-                                               _thanks = settings.ThanksEnabled,
-                                               _announce_milestones = settings.AnnounceMilestonesEnabled,
-                                               _chat_welcomes = settings.ChatWelcomesEnabled,
-                                               _raid_welcomes = settings.RaidWelcomesEnabled,
-                                               _shout_outs = settings.ShoutOutsEnabled
+                                               thanks_ = settings.ThanksEnabled,
+                                               announce_milestones_ = settings.AnnounceMilestonesEnabled,
+                                               chat_welcomes_ = settings.ChatWelcomesEnabled,
+                                               raid_welcomes_ = settings.RaidWelcomesEnabled,
+                                               shout_outs_ = settings.ShoutOutsEnabled
                                            });
     }
 }

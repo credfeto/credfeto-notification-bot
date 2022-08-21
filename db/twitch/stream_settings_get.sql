@@ -6,11 +6,11 @@ CREATE FUNCTION twitch.stream_settings_get(
             (
                 channel             VARCHAR,
                 start_date          TIMESTAMP without TIME zone,
-                thanks              BIT,
-                announce_milestones BIT,
-                chat_welcomes       BIT,
-                raid_welcomes       BIT,
-                shout_outs          BIT
+                thanks              boolean,
+                announce_milestones boolean,
+                chat_welcomes       boolean,
+                raid_welcomes       boolean,
+                shout_outs          boolean
             )
     LANGUAGE plpgsql
 AS
