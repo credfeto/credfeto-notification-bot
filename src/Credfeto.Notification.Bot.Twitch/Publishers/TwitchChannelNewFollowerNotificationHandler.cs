@@ -26,12 +26,6 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
     {
         try
         {
-            if (notification.FollowCount > 1)
-            {
-                // If they've unfollowed and re-followed, then ignore them
-                return;
-            }
-
             await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken: cancellationToken);
 
             int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);
