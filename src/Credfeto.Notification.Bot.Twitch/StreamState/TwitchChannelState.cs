@@ -106,7 +106,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         }
     }
 
-    public async Task ChatMessageAsync(Viewer user, string message, int bits, CancellationToken cancellationToken)
+    public async Task ChatMessageAsync(Viewer user, string message, CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -132,14 +132,6 @@ public sealed class TwitchChannelState : ITwitchChannelState
             this._logger.LogDebug($"{this.Streamer}: Message from streamer themselves");
 
             return;
-        }
-
-        if (bits != 0)
-        {
-            this._logger.LogDebug($"{this.Streamer}: {user} Gave {bits}");
-            this._stream.AddBitGifter(user: user, bits: bits);
-
-            await this._mediator.Publish(new TwitchBitsGift(streamer: this.Streamer, user: user, bits: bits), cancellationToken: cancellationToken);
         }
 
         if (this._options.IsIgnoredUser(user))
@@ -171,6 +163,33 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         // no point in welcoming ignored users
         await this._mediator.Publish(new TwitchStreamNewChatter(streamer: this.Streamer, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
+    }
+
+    public async Task BitsGiftedAsync(Viewer user, int bits, CancellationToken cancellationToken)
+    {
+        if (this._stream == null)
+        {
+            this._logger.LogDebug($"{this.Streamer}: Message from {user} while stream offline");
+
+            return;
+        }
+
+        if (!this._options.IsModChannel(this.Streamer))
+        {
+            this._logger.LogDebug($"{this.Streamer}: Message from {user} that not modding for");
+
+            return;
+        }
+
+        if (this._options.IsSelf(user))
+        {
+            return;
+        }
+
+        this._logger.LogDebug($"{this.Streamer}: {user} Gave {bits}");
+        this._stream.AddBitGifter(user: user, bits: bits);
+
+        await this._mediator.Publish(new TwitchBitsGift(streamer: this.Streamer, user: user, bits: bits), cancellationToken: cancellationToken);
     }
 
     public Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken)
@@ -305,12 +324,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            model = new(streamer: this.Streamer,
-                        user: user,
-                        this._stream != null,
-                        isStreamer: twitchUser.IsStreamer,
-                        accountCreated: twitchUser.DateCreated,
-                        followCount: followCount);
+            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
         }
         else
         {

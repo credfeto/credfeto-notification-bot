@@ -568,9 +568,6 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
             return;
         }
 
-        // TODO: Consider using a mediator and just publishing a TwitchIncomingMessage and letting whatever is interested pick it up
-        // and handle it.
-
         // TODO: Move to the custom message handler and deprecate the heist specific code
         if (this._options.Heists.Contains(value: e.ChatMessage.Channel, comparer: StringComparer.OrdinalIgnoreCase))
         {
@@ -585,24 +582,14 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         Viewer viewer = Viewer.FromString(e.ChatMessage.Username);
 
         TwitchIncomingMessage incomingMessage = new(Streamer: streamer, Chatter: viewer, Message: e.ChatMessage.Message);
+        await this._mediator.Publish(notification: incomingMessage, cancellationToken: cancellationToken);
 
-        bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(message: incomingMessage, cancellationToken: cancellationToken);
-
-        if (handled)
+        if (e.ChatMessage.Bits > 0)
         {
-            return;
+            ITwitchChannelState channelState = this._twitchChannelManager.GetStreamer(streamer);
+
+            await channelState.BitsGiftedAsync(user: viewer, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
         }
-
-        if (!this._options.IsModChannel(streamer))
-        {
-            return;
-        }
-
-        this._logger.LogInformation($"{streamer}: @{e.ChatMessage.Username}: {e.ChatMessage.Message}");
-
-        ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
-
-        await state.ChatMessageAsync(Viewer.FromString(e.ChatMessage.Username), message: e.ChatMessage.Message, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
     }
 
     private async Task<bool> JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
