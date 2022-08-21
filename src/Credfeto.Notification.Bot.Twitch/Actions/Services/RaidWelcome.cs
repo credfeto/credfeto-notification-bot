@@ -26,10 +26,8 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
-        this._raidWelcome = @"
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
-GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫".Trim();
+        this._raidWelcome = @"♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫" + Environment.NewLine + @"GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit" + Environment.NewLine +
+                            @"♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
     }
 
     public async Task IssueRaidWelcomeAsync(Streamer streamer, Viewer raider, CancellationToken cancellationToken)
