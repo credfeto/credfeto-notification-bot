@@ -16,7 +16,7 @@ public abstract class DatabaseIntegrationTestBase : IntegrationTestBase
     {
         return new("@S" + Guid.NewGuid()
                               .ToString()
-                              .Replace(oldValue: "-", newValue: "")
+                              .Replace(oldValue: "-", newValue: "", comparisonType: StringComparison.Ordinal)
                               .ToLowerInvariant());
     }
 
@@ -24,7 +24,7 @@ public abstract class DatabaseIntegrationTestBase : IntegrationTestBase
     {
         return new("@V" + Guid.NewGuid()
                               .ToString()
-                              .Replace(oldValue: "-", newValue: "")
+                              .Replace(oldValue: "-", newValue: "", comparisonType: StringComparison.Ordinal)
                               .ToLowerInvariant());
     }
 }
