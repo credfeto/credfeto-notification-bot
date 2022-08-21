@@ -194,6 +194,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         return !this._options.IsSelf(Viewer.FromString(viewer)) && this._options.IsModChannel(Streamer.FromString(streamer));
     }
 
+    [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToPrimeToPaidSubConversions()
     {
         return Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h, removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
