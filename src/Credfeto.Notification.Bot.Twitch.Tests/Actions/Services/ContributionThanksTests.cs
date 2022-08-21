@@ -4,12 +4,10 @@ using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
-using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
-using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -30,86 +28,79 @@ public sealed class ContributionThanksTests : TestBase
     {
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
         this._currentTimeSource = GetSubstitute<ICurrentTimeSource>();
-        IOptions<TwitchBotOptions> options = Substitute.For<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions(
-                                  channels: new()
-                                            {
-                                                new(MockReferenceData.Streamer.ToString(),
-                                                    thanks: new(enabled: true),
-                                                    raids: new(enabled: false, immediate: null, calmDown: null),
-                                                    shoutOuts: new(enabled: false, friendChannels: null),
-                                                    mileStones: new(enabled: false),
-                                                    welcome: new(enabled: false))
-                                            },
-                                  heists: MockReferenceData.Heists,
-                                  marbles: null,
-                                  authentication: MockReferenceData.TwitchAuthentication,
-                                  ignoredUsers: MockReferenceData.IgnoredUsers,
-                                  milestones: MockReferenceData.TwitchMilestones));
 
         ITwitchChannelManager twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
         this._twitchChannelState = GetSubstitute<ITwitchChannelState>();
         twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
                             .Returns(this._twitchChannelState);
 
-        this._twitchChatMessageGenerator = GetSubstitute<ITwitchChatMessageGenerator>();
-        this._twitchChatMessageGenerator.ThanksForBits(Arg.Any<Viewer>(), Arg.Any<int>())
-            .Returns(x =>
-                     {
-                         Viewer user = x.Arg<Viewer>();
+        ITwitchChatMessageGenerator twitchChatMessageGenerator = BuildTwitchChatMessageGenerator();
 
-                         return $"Thanks @{user} for the bits";
-                     });
-
-        this._twitchChatMessageGenerator.ThanksForNewPaidSub(Arg.Any<Viewer>())
-            .Returns(x =>
-                     {
-                         Viewer user = x.Arg<Viewer>();
-
-                         return $"Thanks @{user} for subscribing";
-                     });
-        this._twitchChatMessageGenerator.ThanksForNewPrimeSub(Arg.Any<Viewer>())
-            .Returns(x =>
-                     {
-                         Viewer user = x.Arg<Viewer>();
-
-                         return $"Thanks @{user} for subscribing";
-                     });
-        this._twitchChatMessageGenerator.ThanksForPaidReSub(Arg.Any<Viewer>())
-            .Returns(x =>
-                     {
-                         Viewer user = x.Arg<Viewer>();
-
-                         return $"Thanks @{user} for resubscribing";
-                     });
-        this._twitchChatMessageGenerator.ThanksForPrimeReSub(Arg.Any<Viewer>())
-            .Returns(x =>
-                     {
-                         Viewer user = x.Arg<Viewer>();
-
-                         return $"Thanks @{user} for resubscribing";
-                     });
-        this._twitchChatMessageGenerator.ThanksForGiftingMultipleSubs(Arg.Any<Viewer>())
-            .Returns(x =>
-                     {
-                         Viewer giftedBy = x.Arg<Viewer>();
-
-                         return $"Thanks @{giftedBy} for gifting subs";
-                     });
-
-        this._twitchChatMessageGenerator.ThanksForGiftingOneSub(Arg.Any<Viewer>())
-            .Returns(x =>
-                     {
-                         Viewer giftedBy = x.Arg<Viewer>();
-
-                         return $"Thanks @{giftedBy} for gifting sub";
-                     });
+        this._twitchChatMessageGenerator = twitchChatMessageGenerator;
 
         this._contributionThanks = new ContributionThanks(twitchChannelManager: twitchChannelManager,
                                                           twitchChatMessageChannel: this._twitchChatMessageChannel,
                                                           currentTimeSource: this._currentTimeSource,
                                                           twitchChatMessageGenerator: this._twitchChatMessageGenerator,
                                                           logger: this.GetTypedLogger<ContributionThanks>());
+    }
+
+    private static ITwitchChatMessageGenerator BuildTwitchChatMessageGenerator()
+    {
+        ITwitchChatMessageGenerator twitchChatMessageGenerator = GetSubstitute<ITwitchChatMessageGenerator>();
+        twitchChatMessageGenerator.ThanksForBits(Arg.Any<Viewer>(), Arg.Any<int>())
+                                  .Returns(x =>
+                                           {
+                                               Viewer user = x.Arg<Viewer>();
+
+                                               return $"Thanks @{user} for the bits";
+                                           });
+
+        twitchChatMessageGenerator.ThanksForNewPaidSub(Arg.Any<Viewer>())
+                                  .Returns(x =>
+                                           {
+                                               Viewer user = x.Arg<Viewer>();
+
+                                               return $"Thanks @{user} for subscribing";
+                                           });
+        twitchChatMessageGenerator.ThanksForNewPrimeSub(Arg.Any<Viewer>())
+                                  .Returns(x =>
+                                           {
+                                               Viewer user = x.Arg<Viewer>();
+
+                                               return $"Thanks @{user} for subscribing";
+                                           });
+        twitchChatMessageGenerator.ThanksForPaidReSub(Arg.Any<Viewer>())
+                                  .Returns(x =>
+                                           {
+                                               Viewer user = x.Arg<Viewer>();
+
+                                               return $"Thanks @{user} for resubscribing";
+                                           });
+        twitchChatMessageGenerator.ThanksForPrimeReSub(Arg.Any<Viewer>())
+                                  .Returns(x =>
+                                           {
+                                               Viewer user = x.Arg<Viewer>();
+
+                                               return $"Thanks @{user} for resubscribing";
+                                           });
+        twitchChatMessageGenerator.ThanksForGiftingMultipleSubs(Arg.Any<Viewer>())
+                                  .Returns(x =>
+                                           {
+                                               Viewer giftedBy = x.Arg<Viewer>();
+
+                                               return $"Thanks @{giftedBy} for gifting subs";
+                                           });
+
+        twitchChatMessageGenerator.ThanksForGiftingOneSub(Arg.Any<Viewer>())
+                                  .Returns(x =>
+                                           {
+                                               Viewer giftedBy = x.Arg<Viewer>();
+
+                                               return $"Thanks @{giftedBy} for gifting sub";
+                                           });
+
+        return twitchChatMessageGenerator;
     }
 
     private void MockThanksEnabled(bool enabled)
@@ -283,10 +274,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer,
-                                                                     giftedBy: GiftingUser,
-                                                                     count: 27,
-                                                                     cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
 
         this.ReceivedThanksForGiftingMultipleSubs();
         await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for gifting subs");
@@ -299,10 +287,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer,
-                                                                     giftedBy: GiftingUser,
-                                                                     count: 27,
-                                                                     cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
 
         this.DidNotReceiveThanksForGiftingMultipleSubs();
         await this.DidNotReceivePublishMessageAsync();

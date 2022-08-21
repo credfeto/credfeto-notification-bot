@@ -47,11 +47,7 @@ public sealed class TwitchChannelManagerTests : TestBase
                                                                      mileStones: new(enabled: true),
                                                                      raids: new(enabled: true, immediate: null, calmDown: null),
                                                                      thanks: new(enabled: true),
-                                                                     shoutOuts: new(enabled: true,
-                                                                                    new()
-                                                                                    {
-                                                                                        new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null)
-                                                                                    }))
+                                                                     shoutOuts: new(enabled: true, new() { new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null) }))
                                                              }));
 
         this._twitchChannelManager = new TwitchChannelManager(options: options,
@@ -152,7 +148,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         this.MockIsRegularChatter(isRegular);
         this.MockIsFirstMessageInStream(false);
 
-        await twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", bits: 123, cancellationToken: CancellationToken.None);
+        await twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", cancellationToken: CancellationToken.None);
 
         await this.ReceivedBitGiftNotificationAsync(Guest1.ToViewer(), amount: 124);
         await this.DidNotReceiveCheckForIsRegularChatterAsync();
@@ -173,7 +169,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         this.MockIsRegularChatter(isRegular);
         this.MockIsFirstMessageInStream(true);
 
-        await twitchChannelState.ChatMessageAsync(user: MockReferenceData.Ignored, message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
+        await twitchChannelState.ChatMessageAsync(user: MockReferenceData.Ignored, message: "Hello world", cancellationToken: CancellationToken.None);
 
         await this.DidNotReceiveBitGiftNotificationAsync();
         await this.DidNotReceiveCheckForIsRegularChatterAsync();
@@ -194,7 +190,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         this.MockIsRegularChatter(isRegular);
         this.MockIsFirstMessageInStream(true);
 
-        await twitchChannelState.ChatMessageAsync(((Streamer)MockReferenceData.Streamer).ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
+        await twitchChannelState.ChatMessageAsync(((Streamer)MockReferenceData.Streamer).ToViewer(), message: "Hello world", cancellationToken: CancellationToken.None);
 
         await this.DidNotReceiveBitGiftNotificationAsync();
         await this.DidNotReceiveCheckForIsRegularChatterAsync();
@@ -214,8 +210,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     private Task ReceivedBitGiftNotificationAsync(Viewer viewer, int amount)
     {
         return this._mediator.DidNotReceive()
-                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount),
-                            cancellationToken: CancellationToken.None);
+                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount), cancellationToken: CancellationToken.None);
     }
 
     private Task ReceivedCheckForFirstMessageInStreamAsync()
@@ -244,7 +239,7 @@ public sealed class TwitchChannelManagerTests : TestBase
 
     private static Task SendChatMessageAsync(ITwitchChannelState twitchChannelState)
     {
-        return twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", bits: 0, cancellationToken: CancellationToken.None);
+        return twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", cancellationToken: CancellationToken.None);
     }
 
     private async Task<ITwitchChannelState> GetOnlineStreamAsync()

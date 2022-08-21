@@ -28,9 +28,9 @@ public static class MockReferenceData
                                                                    },
                                                                    new());
 
-    public static List<string> IgnoredUsers { get; } = new();
+    public static MockBase<List<string>> IgnoredUsers { get; } = new MockIgnoredUsers();
 
-    public static List<string> Heists { get; } = new();
+    public static MockBase<List<string>> Heists { get; } = new MockHeists();
 
     public static MockBase<TwitchChannelShoutout> TwitchChannelShoutout { get; } = new MockTwitchChannelShoutout();
 

@@ -36,7 +36,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     private readonly IDisposable _chatConnected;
     private readonly IDisposable _chatDisconnected;
     private readonly IDisposable? _chatLogMessage;
-    private readonly IDisposable _chatMessageRecieved;
+    private readonly IDisposable _chatMessageReceived;
     private readonly IDisposable _chatReconnected;
     private readonly TwitchClient _client;
     private readonly IDisposable _communityGiftSub;
@@ -59,8 +59,6 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     [SuppressMessage(category: "ReSharper", checkId: "PrivateFieldCanBeConvertedToLocalVariable", Justification = "TODO: Review")]
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
-    private readonly ITwitchCustomMessageHandler _twitchCustomMessageHandler;
-
     private bool _connected;
 
     public TwitchChat(IOptions<TwitchBotOptions> options,
@@ -68,13 +66,11 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
                       IMediator mediator,
                       ITwitchClient twitchClient,
-                      ITwitchCustomMessageHandler twitchCustomMessageHandler,
                       ILogger<TwitchChat> logger)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this._twitchCustomMessageHandler = twitchCustomMessageHandler ?? throw new ArgumentNullException(nameof(twitchCustomMessageHandler));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
@@ -104,7 +100,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
             : null;
 
         // CHAT
-        this._chatMessageRecieved = this.SubscribeToIncomingChatMessages();
+        this._chatMessageReceived = this.SubscribeToIncomingChatMessages();
         this._chatCleared = this.SubscribeToChatCleared();
 
         // RAIDS
@@ -136,7 +132,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         this._chatConnected.Dispose();
         this._chatDisconnected.Dispose();
         this._chatLogMessage?.Dispose();
-        this._chatMessageRecieved.Dispose();
+        this._chatMessageReceived.Dispose();
         this._chatReconnected.Dispose();
         this._communityGiftSub.Dispose();
         this._continuedGiftedSub.Dispose();
@@ -568,16 +564,6 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
             return;
         }
 
-        // TODO: Move to the custom message handler and deprecate the heist specific code
-        if (this._options.Heists.Contains(value: e.ChatMessage.Channel, comparer: StringComparer.OrdinalIgnoreCase))
-        {
-            if (await this.JoinHeistAsync(e: e, cancellationToken: cancellationToken))
-            {
-                // It was a heist message, no point in processing anything else.
-                return;
-            }
-        }
-
         Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
         Viewer viewer = Viewer.FromString(e.ChatMessage.Username);
 
@@ -590,24 +576,6 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
             await channelState.BitsGiftedAsync(user: viewer, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
         }
-    }
-
-    private async Task<bool> JoinHeistAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
-    {
-        if (IsHeistStartingMessage(e))
-        {
-            await this._mediator.Publish(new StreamLabsHeistStarting(new(e.ChatMessage.Channel)), cancellationToken: cancellationToken);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private static bool IsHeistStartingMessage(OnMessageReceivedArgs e)
-    {
-        return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
-               e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
     }
 
     private Task OnNewSubscriberAsync(OnNewSubscriberArgs e, in CancellationToken cancellationToken)
