@@ -14,5 +14,5 @@ public sealed class TwitchChannelShoutout
 
     public bool Enabled { get; }
 
-    public List<TwitchFriendChannel>? FriendChannels { get; }
+    public IReadOnlyList<TwitchFriendChannel>? FriendChannels { get; }
 }

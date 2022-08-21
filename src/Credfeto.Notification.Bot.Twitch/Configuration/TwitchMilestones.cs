@@ -12,7 +12,7 @@ public sealed class TwitchMilestones
         this.Subscribers = subscribers;
     }
 
-    public List<int> Followers { get; }
+    public IReadOnlyList<int> Followers { get; }
 
-    public List<int> Subscribers { get; }
+    public IReadOnlyList<int> Subscribers { get; }
 }
