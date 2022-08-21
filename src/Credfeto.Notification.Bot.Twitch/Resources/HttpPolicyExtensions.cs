@@ -11,19 +11,15 @@ public static class HttpPolicyExtensions
 {
     private static readonly Func<HttpResponseMessage, bool> TransientHttpStatusCodePredicate = response =>
                                                                                                {
-                                                                                                   switch (response.StatusCode)
+                                                                                                   return response.StatusCode switch
                                                                                                    {
-                                                                                                       case HttpStatusCode.TooManyRequests:
-                                                                                                       case HttpStatusCode.ServiceUnavailable:
-                                                                                                       case HttpStatusCode.BadGateway:
-                                                                                                       case HttpStatusCode.GatewayTimeout:
-                                                                                                       case HttpStatusCode.RequestTimeout:
-                                                                                                       {
-                                                                                                           return true;
-                                                                                                       }
-                                                                                                   }
-
-                                                                                                   return false;
+                                                                                                       HttpStatusCode.TooManyRequests => true,
+                                                                                                       HttpStatusCode.ServiceUnavailable => true,
+                                                                                                       HttpStatusCode.BadGateway => true,
+                                                                                                       HttpStatusCode.GatewayTimeout => true,
+                                                                                                       HttpStatusCode.RequestTimeout => true,
+                                                                                                       _ => false
+                                                                                                   };
                                                                                                };
 
     public static PolicyBuilder<HttpResponseMessage> SensiblyHandleTransientHttpError()
