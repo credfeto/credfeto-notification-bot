@@ -193,12 +193,16 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                    .Subscribe();
     }
 
+    private bool IsMessageForModChannel(string streamer, string viewer)
+    {
+        return !this._options.IsSelf(Viewer.FromString(viewer)) && this._options.IsModChannel(Streamer.FromString(streamer));
+    }
+
     private IDisposable SubscribeToPrimeToPaidSubConversions()
     {
         return Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h, removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
-                         .Where(e => !this._options.IsSelf(Viewer.FromString(e.PrimePaidSubscriber.DisplayName)))
-                         .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
+                         .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.PrimePaidSubscriber.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnPrimePaidSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                          .Concat()
                          .Subscribe();
@@ -209,8 +213,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         return Observable.FromEventPattern<OnContinuedGiftedSubscriptionArgs>(addHandler: h => this._client.OnContinuedGiftedSubscription += h,
                                                                               removeHandler: h => this._client.OnContinuedGiftedSubscription -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
-                         .Where(e => !this._options.IsSelf(Viewer.FromString(e.ContinuedGiftedSubscription.DisplayName)))
-                         .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
+                         .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.ContinuedGiftedSubscription.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnContinuedGiftedSubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                          .Concat()
                          .Subscribe();
@@ -220,8 +223,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     {
         return Observable.FromEventPattern<OnGiftedSubscriptionArgs>(addHandler: h => this._client.OnGiftedSubscription += h, removeHandler: h => this._client.OnGiftedSubscription -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
-                         .Where(e => !this._options.IsSelf(Viewer.FromString(e.GiftedSubscription.DisplayName)))
-                         .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
+                         .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.GiftedSubscription.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnGiftedSubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                          .Concat()
                          .Subscribe();
@@ -231,8 +233,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     {
         return Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h, removeHandler: h => this._client.OnCommunitySubscription -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
-                         .Where(e => !this._options.IsSelf(Viewer.FromString(e.GiftedSubscription.DisplayName)))
-                         .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
+                         .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.GiftedSubscription.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnCommunitySubscriptionAsync(e: e, cancellationToken: cancellationToken)))
                          .Concat()
                          .Subscribe();
@@ -242,8 +243,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     {
         return Observable.FromEventPattern<OnReSubscriberArgs>(addHandler: h => this._client.OnReSubscriber += h, removeHandler: h => this._client.OnReSubscriber -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
-                         .Where(e => !this._options.IsSelf(Viewer.FromString(e.ReSubscriber.DisplayName)))
-                         .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
+                         .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.ReSubscriber.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnReSubscribeAsync(e: e, cancellationToken: cancellationToken)))
                          .Concat()
                          .Subscribe();
@@ -253,8 +253,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     {
         return Observable.FromEventPattern<OnNewSubscriberArgs>(addHandler: h => this._client.OnNewSubscriber += h, removeHandler: h => this._client.OnNewSubscriber -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
-                         .Where(e => !this._options.IsSelf(Viewer.FromString(e.Subscriber.DisplayName)))
-                         .Where(e => this._options.IsModChannel(Streamer.FromString(e.Channel)))
+                         .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.Subscriber.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnNewSubscriberAsync(e: e, cancellationToken: cancellationToken)))
                          .Concat()
                          .Subscribe();
