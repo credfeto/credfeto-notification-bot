@@ -81,6 +81,15 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
 
         settings = new(chatWelcomesEnabled: false, raidWelcomesEnabled: true, thanksEnabled: false, announceMilestonesEnabled: false, shoutOutsEnabled: false);
 
+        await this.UpdateSettingsAsync(streamerName: streamerName, streamStart: streamStart, settings: settings);
+
+        settings = new(chatWelcomesEnabled: true, raidWelcomesEnabled: true, thanksEnabled: true, announceMilestonesEnabled: true, shoutOutsEnabled: true);
+
+        await this.UpdateSettingsAsync(streamerName: streamerName, streamStart: streamStart, settings: settings);
+    }
+
+    private async Task UpdateSettingsAsync(Streamer streamerName, DateTime streamStart, StreamSettings settings)
+    {
         await this._twitchStreamDataManager.UpdateSettingsAsync(streamer: streamerName, streamStartDate: streamStart, settings: settings);
 
         StreamSettings firstSettings = AssertReallyNotNull(await this._twitchStreamDataManager.GetSettingsAsync(streamer: streamerName, streamStartDate: streamStart));
