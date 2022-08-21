@@ -208,6 +208,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                          .Subscribe();
     }
 
+    [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToContinuedGiftedSub()
     {
         return Observable.FromEventPattern<OnContinuedGiftedSubscriptionArgs>(addHandler: h => this._client.OnContinuedGiftedSubscription += h,
@@ -219,6 +220,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                          .Subscribe();
     }
 
+    [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToGiftedSub()
     {
         return Observable.FromEventPattern<OnGiftedSubscriptionArgs>(addHandler: h => this._client.OnGiftedSubscription += h, removeHandler: h => this._client.OnGiftedSubscription -= h)
@@ -229,6 +231,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                          .Subscribe();
     }
 
+    [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToCommunityGiftSubs()
     {
         return Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h, removeHandler: h => this._client.OnCommunitySubscription -= h)
@@ -239,6 +242,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                          .Subscribe();
     }
 
+    [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToReSubscriptionMessages()
     {
         return Observable.FromEventPattern<OnReSubscriberArgs>(addHandler: h => this._client.OnReSubscriber += h, removeHandler: h => this._client.OnReSubscriber -= h)
@@ -249,6 +253,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                          .Subscribe();
     }
 
+    [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToNewSubscriberMessages()
     {
         return Observable.FromEventPattern<OnNewSubscriberArgs>(addHandler: h => this._client.OnNewSubscriber += h, removeHandler: h => this._client.OnNewSubscriber -= h)
