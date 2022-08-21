@@ -78,7 +78,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         {
             Trace.WriteLine($"Adding heist trigger: {streamer}");
 
-            //     // TODO: Add EndsWith support
+            //     //  Add EndsWith support
             //     // return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
             //     //        e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
             //
