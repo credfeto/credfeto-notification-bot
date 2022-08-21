@@ -14,6 +14,7 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
     private readonly IObjectBuilder<TwitchChatterEntity, TwitchChatter> _chatterBuilder;
     private readonly IDatabase _database;
     private readonly IObjectBuilder<TwitchFollowerEntity, TwitchFollower> _followerBuilder;
+    private readonly IObjectBuilder<StreamSettingsEntity, StreamSettings> _streamSettingsBuilder;
     private readonly IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> _followerMilestoneBuilder;
     private readonly IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> _regularChatterBuilder;
 
@@ -21,13 +22,15 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
                                    IObjectBuilder<TwitchChatterEntity, TwitchChatter> chatterBuilder,
                                    IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> regularChatterBuilder,
                                    IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> followerMilestoneBuilder,
-                                   IObjectBuilder<TwitchFollowerEntity, TwitchFollower> followerBuilder)
+                                   IObjectBuilder<TwitchFollowerEntity, TwitchFollower> followerBuilder,
+                                   IObjectBuilder<StreamSettingsEntity, StreamSettings> streamSettingsBuilder)
     {
         this._database = database ?? throw new ArgumentNullException(nameof(database));
         this._chatterBuilder = chatterBuilder ?? throw new ArgumentNullException(nameof(chatterBuilder));
         this._regularChatterBuilder = regularChatterBuilder ?? throw new ArgumentNullException(nameof(regularChatterBuilder));
         this._followerMilestoneBuilder = followerMilestoneBuilder ?? throw new ArgumentNullException(nameof(followerMilestoneBuilder));
         this._followerBuilder = followerBuilder ?? throw new ArgumentNullException(nameof(followerBuilder));
+        this._streamSettingsBuilder = streamSettingsBuilder ?? throw new ArgumentNullException(nameof(streamSettingsBuilder));
     }
 
     public Task RecordStreamStartAsync(Streamer streamer, DateTime streamStartDate)
@@ -37,18 +40,14 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
     public Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert",
-                                           new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
     }
 
     public async Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
     {
         TwitchChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
                                                                                 storedProcedure: "twitch.stream_chatter_get",
-                                                                                new
-                                                                                {
-                                                                                    channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString()
-                                                                                });
+                                                                                new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
 
         return chatted == null;
     }
@@ -82,13 +81,23 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
     public Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTime streamStartDate)
     {
-        // TODO: Implement
-        return Task.FromResult<StreamSettings?>(null);
+        return this._database.QuerySingleOrDefaultAsync(builder: this._streamSettingsBuilder,
+                                               storedProcedure: "twitch.stream_settings_get",
+                                               new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
     }
 
     public Task UpdateSettingsAsync(Streamer streamer, DateTime streamStartDate, StreamSettings settings)
     {
-        // TODO: Implement
-        return Task.CompletedTask;
+        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_settings_set",
+                                           new
+                                           {
+                                               channel_ = streamer.ToString(),
+                                               start_date_ = streamStartDate,
+                                               _thanks = settings.ThanksEnabled,
+                                               _announce_milestones = settings.AnnounceMilestonesEnabled,
+                                               _chat_welcomes = settings.ChatWelcomesEnabled,
+                                               _raid_welcomes = settings.RaidWelcomesEnabled,
+                                               _shout_outs = settings.ShoutOutsEnabled
+                                           });
     }
 }

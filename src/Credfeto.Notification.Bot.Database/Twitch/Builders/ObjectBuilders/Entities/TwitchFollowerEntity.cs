@@ -10,9 +10,9 @@ public sealed record TwitchFollowerEntity
 
     public string? Follower { get; init; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "InconsistentNaming", Justification = "TODO: Review")]
+    [SuppressMessage(category: "ReSharper", checkId: "InconsistentNaming", Justification = "Matches name in database")]
     public int Follow_Count { get; init; }
 
-    [SuppressMessage(category: "ReSharper", checkId: "InconsistentNaming", Justification = "TODO: Review")]
+    [SuppressMessage(category: "ReSharper", checkId: "InconsistentNaming", Justification = "Matches name in database")]
     public bool Freshly_Reached { get; init; }
 }
