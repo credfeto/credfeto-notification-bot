@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Discord;
 using Microsoft.Extensions.Logging;
@@ -29,6 +30,7 @@ public abstract class DiscordLoggingBase
         };
     }
 
+    [SuppressMessage(category: "codecracker.CSharp", checkId: "CC0091: Make method static", Justification = "Conditional code in debug builds")]
     private Task LogDebugAsync(LogMessage arg)
     {
         this.IssueDebugLog(arg);
@@ -49,6 +51,7 @@ public abstract class DiscordLoggingBase
         }
     }
 
+    [SuppressMessage(category: "codecracker.CSharp", checkId: "CC0091: Make method static", Justification = "Conditional code in debug builds")]
     private Task LogInformationAsync(LogMessage arg)
     {
         this.IssueInformationalLog(arg);
@@ -69,6 +72,7 @@ public abstract class DiscordLoggingBase
         }
     }
 
+    [SuppressMessage(category: "codecracker.CSharp", checkId: "CC0091: Make method static", Justification = "Conditional code in debug builds")]
     private Task LogWarningAsync(LogMessage arg)
     {
         this.IssueWarningLog(arg);
