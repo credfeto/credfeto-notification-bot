@@ -1,12 +1,10 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
 internal static class Jitter
 {
-    private static readonly Random RandomNumberGenerator = new();
-
     public static double WithJitter(double delaySeconds, int maxSeconds)
     {
         double minNonJitterPeriod = delaySeconds / 2.0d;
@@ -24,9 +22,20 @@ internal static class Jitter
         return nonJitterPeriod + jitter;
     }
 
-    [SuppressMessage(category: "Microsoft.Security", checkId: "CA5394:Do not use insecure randomness", Justification = "Just a re-try delay")]
     private static double CalculateJitterSeconds(double jitterRange)
     {
-        return jitterRange * RandomNumberGenerator.NextDouble();
+        return jitterRange * GetRandom();
+    }
+
+    private static double GetRandom()
+    {
+        using (RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create())
+        {
+            Span<byte> rnd = stackalloc byte[sizeof(uint)];
+            randomNumberGenerator.GetBytes(rnd);
+            uint random = BitConverter.ToUInt32(value: rnd);
+
+            return random / (double)uint.MaxValue;
+        }
     }
 }
