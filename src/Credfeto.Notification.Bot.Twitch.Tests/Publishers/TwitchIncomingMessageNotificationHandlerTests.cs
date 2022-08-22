@@ -18,11 +18,15 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
 {
     private readonly INotificationHandler<TwitchIncomingMessage> _notificationHandler;
     private readonly ITwitchChannelManager _twitchChannelManager;
+    private readonly ITwitchChannelState _twitchChannelState;
     private readonly ITwitchCustomMessageHandler _twitchCustomMessageHandler;
 
     public TwitchIncomingMessageNotificationHandlerTests()
     {
+        this._twitchChannelState = GetSubstitute<ITwitchChannelState>();
         this._twitchChannelManager = GetSubstitute<ITwitchChannelManager>();
+        this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer)
+            .Returns(this._twitchChannelState);
         this._twitchCustomMessageHandler = GetSubstitute<ITwitchCustomMessageHandler>();
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
@@ -47,12 +51,62 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     }
 
     [Fact]
-    public async Task JdfiAsync()
+    public async Task WhenHandledByCustomMessageHandlerDoesNothingElseAsync()
     {
-        // TODO: Implements some decent tests
+        this.MockCustomMessageHandler(true);
+
         await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
 
-        this._twitchChannelManager.DidNotReceive()
+        await this.ReceivedCustomMessageHandlerAsync();
+        this.DidNotReceiveGetStreamer();
+    }
+
+    [Fact]
+    public async Task WhenNotModChannelDoesNothingElseAsync()
+    {
+        this.MockCustomMessageHandler(false);
+
+        await this._notificationHandler.Handle(new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedCustomMessageHandlerAsync();
+        this.DidNotReceiveGetStreamer();
+    }
+
+    [Fact]
+    public async Task WhenModChannelForwardsChatMessageAsync()
+    {
+        this.MockCustomMessageHandler(false);
+
+        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
+
+        await this.ReceivedCustomMessageHandlerAsync();
+        this.ReceivedGetStreamer();
+
+        await this._twitchChannelState.Received(1)
+                  .ChatMessageAsync(user: MockReferenceData.Viewer, message: "Banana", Arg.Any<CancellationToken>());
+    }
+
+    private void ReceivedGetStreamer()
+    {
+        this._twitchChannelManager.Received(1)
             .GetStreamer(MockReferenceData.Streamer);
+    }
+
+    private void DidNotReceiveGetStreamer()
+    {
+        this._twitchChannelManager.DidNotReceive()
+            .GetStreamer(Arg.Any<Streamer>());
+    }
+
+    private Task<bool> ReceivedCustomMessageHandlerAsync()
+    {
+        return this._twitchCustomMessageHandler.Received(1)
+                   .HandleMessageAsync(Arg.Any<TwitchIncomingMessage>(), Arg.Any<CancellationToken>());
+    }
+
+    private void MockCustomMessageHandler(bool handled)
+    {
+        this._twitchCustomMessageHandler.HandleMessageAsync(Arg.Any<TwitchIncomingMessage>(), Arg.Any<CancellationToken>())
+            .Returns(handled);
     }
 }
