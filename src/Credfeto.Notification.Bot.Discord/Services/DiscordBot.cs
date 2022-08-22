@@ -11,11 +11,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Discord.Services;
 
-public sealed class DiscordBot : IDiscordBot
+public sealed class DiscordBot : IDiscordBot, IDisposable
 {
     private readonly DiscordSocketClient _client;
     private readonly ILogger<DiscordBot> _logger;
     private readonly IMessageChannel<DiscordMessage> _messageChannel;
+    private readonly IDisposable _messageSubscription;
 
     public DiscordBot(DiscordSocketClient discordSocketClient, IMessageChannel<DiscordMessage> messageChannel, ILogger<DiscordBot> logger)
     {
@@ -24,18 +25,23 @@ public sealed class DiscordBot : IDiscordBot
         this._client = discordSocketClient ?? throw new ArgumentNullException(nameof(discordSocketClient));
         this._messageChannel = messageChannel ?? throw new ArgumentNullException(nameof(messageChannel));
 
-        this._messageChannel.ReadAllAsync(CancellationToken.None)
-            .ToObservable()
-            .Delay(TimeSpan.FromSeconds(1))
-            .Select(message => Observable.FromAsync(() => this.PublishMessageAsync(message: message)))
-            .Concat()
-            .Subscribe();
+        this._messageSubscription = this._messageChannel.ReadAllAsync(CancellationToken.None)
+                                        .ToObservable()
+                                        .Delay(TimeSpan.FromSeconds(1))
+                                        .Select(message => Observable.FromAsync(() => this.PublishMessageAsync(message: message)))
+                                        .Concat()
+                                        .Subscribe();
     }
 
     public async Task PublishAsync(DiscordMessage message, CancellationToken cancellationToken)
     {
         await this._messageChannel.PublishAsync(message: message, cancellationToken: cancellationToken);
         this._logger.LogDebug($"{message.Channel}: Queuing message for Discord");
+    }
+
+    public void Dispose()
+    {
+        this._messageSubscription.Dispose();
     }
 
     private async Task PublishMessageAsync(DiscordMessage message)
