@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ public static class HttpClientBuilderExtensions
                                                                           if (response.Result != null)
                                                                           {
                                                                               if (response.Result.Headers.TryGetValues(name: "Retry-After", out IEnumerable<string>? result) &&
-                                                                                  int.TryParse(result.First(), out int seconds))
+                                                                                  int.TryParse(result.First(), style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int seconds))
                                                                               {
                                                                                   return TimeSpan.FromSeconds(seconds);
                                                                               }

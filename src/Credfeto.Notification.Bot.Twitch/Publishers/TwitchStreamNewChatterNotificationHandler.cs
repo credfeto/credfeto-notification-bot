@@ -32,7 +32,6 @@ public sealed class TwitchStreamNewChatterNotificationHandler : INotificationHan
     {
         try
         {
-            // TODO: Move the below into the handler.
             TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(notification.User);
 
             if (twitchUser == null)

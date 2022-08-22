@@ -13,7 +13,7 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
 {
     private static readonly DateTime Initial = new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc);
 
-    private static readonly TwitchMessageMatch MessageMatch = new(streamer: MockReferenceData.Streamer, chatter: MockReferenceData.Viewer, message: "message");
+    private static readonly TwitchMessageMatch MessageMatch = new(streamer: MockReferenceData.Streamer, chatter: MockReferenceData.Viewer, matchType: TwitchMessageMatchType.EXACT, message: "message");
 
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
@@ -21,8 +21,7 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
     public TwitchMessageTriggerDebounceFilterTests()
     {
         this._currentTimeSource = GetSubstitute<ICurrentTimeSource>();
-        this._twitchMessageTriggerDebounceFilter =
-            new TwitchMessageTriggerDebounceFilter(currentTimeSource: this._currentTimeSource, this.GetTypedLogger<TwitchMessageTriggerDebounceFilter>());
+        this._twitchMessageTriggerDebounceFilter = new TwitchMessageTriggerDebounceFilter(currentTimeSource: this._currentTimeSource, this.GetTypedLogger<TwitchMessageTriggerDebounceFilter>());
     }
 
     private void MockCurrentTime(bool shortBreak)

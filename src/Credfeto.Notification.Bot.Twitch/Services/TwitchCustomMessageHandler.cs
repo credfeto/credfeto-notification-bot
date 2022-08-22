@@ -66,25 +66,31 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
     private static bool IsMatch(TwitchIncomingMessage message, TwitchMessageMatch trigger)
     {
-        return trigger.Streamer == message.Streamer && trigger.Chatter == message.Chatter &&
-               StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Message, y: trigger.Message);
+        return trigger.Streamer == message.Streamer && trigger.Chatter == message.Chatter && trigger.MatchType switch
+        {
+            TwitchMessageMatchType.EXACT => StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Message, y: trigger.Message),
+            TwitchMessageMatchType.CONTAINS => message.Message.Contains(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
+            TwitchMessageMatchType.STARTS_WITH => message.Message.StartsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
+            TwitchMessageMatchType.ENDS_WITH => message.Message.EndsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
+            _ => false
+        };
     }
 
-    private static ConcurrentDictionary<TwitchMessageMatch, string> BuildMessageTriggers(List<string> heists, List<TwitchMarbles>? marbles)
+    private static ConcurrentDictionary<TwitchMessageMatch, string> BuildMessageTriggers(IReadOnlyList<string> heists, IReadOnlyList<TwitchMarbles>? marbles)
     {
         ConcurrentDictionary<TwitchMessageMatch, string> triggers = new();
 
-        // Viewer streamLabs = Viewer.FromString("streamlabs");
+        Viewer streamLabs = Viewer.FromString("streamlabs");
+
         foreach (string streamer in heists)
         {
             Trace.WriteLine($"Adding heist trigger: {streamer}");
 
-            //     // TODO: Add EndsWith support
-            //     // return StringComparer.InvariantCulture.Equals(x: e.ChatMessage.Username, y: "streamlabs") &&
-            //     //        e.ChatMessage.Message.EndsWith(value: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.", comparisonType: StringComparison.Ordinal);
-            //
-            //     TwitchMessageMatch trigger = new(Streamer.FromString(streamer), streamLabs, message: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.");
-            //     triggers.TryAdd(key: trigger, value: "!heist all");
+            TwitchMessageMatch trigger = new(Streamer.FromString(streamer),
+                                             chatter: streamLabs,
+                                             matchType: TwitchMessageMatchType.ENDS_WITH,
+                                             message: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.");
+            triggers.TryAdd(key: trigger, value: "!heist all");
         }
 
         if (marbles != null)
@@ -92,7 +98,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             foreach (TwitchMarbles marble in marbles)
             {
                 Trace.WriteLine($"Adding marbles trigger: {marble.Streamer}");
-                TwitchMessageMatch trigger = new(Streamer.FromString(marble.Streamer), Viewer.FromString(marble.Bot), message: marble.Match);
+                TwitchMessageMatch trigger = new(Streamer.FromString(marble.Streamer), Viewer.FromString(marble.Bot), matchType: TwitchMessageMatchType.EXACT, message: marble.Match);
                 triggers.TryAdd(key: trigger, value: "!play");
             }
         }

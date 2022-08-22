@@ -15,9 +15,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
     private readonly IFollowerMilestone _followerMilestone;
     private readonly ILogger<TwitchChannelNewFollowerNotificationHandler> _logger;
 
-    public TwitchChannelNewFollowerNotificationHandler(IChannelFollowCount channelFollowCount,
-                                                       IFollowerMilestone followerMilestone,
-                                                       ILogger<TwitchChannelNewFollowerNotificationHandler> logger)
+    public TwitchChannelNewFollowerNotificationHandler(IChannelFollowCount channelFollowCount, IFollowerMilestone followerMilestone, ILogger<TwitchChannelNewFollowerNotificationHandler> logger)
     {
         this._channelFollowCount = channelFollowCount;
         this._followerMilestone = followerMilestone;
@@ -28,7 +26,6 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
     {
         try
         {
-            // TODO: Check DB to see if user has ever followed
             await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken: cancellationToken);
 
             int followers = await this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: notification.Streamer, cancellationToken: cancellationToken);

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Discord.Models;
@@ -41,7 +42,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
                                                   notification.FollowCount == 1
                                                       ? "New Follower"
                                                       : $"Followed {notification.FollowCount} times")
-                                        .AddField(name: "Account Created", notification.AccountCreated.ToString("yyyy-MM-dd HH:mm:ss"))
+                                        .AddField(name: "Account Created", notification.AccountCreated.ToString(format: "yyyy-MM-dd HH:mm:ss", provider: CultureInfo.InvariantCulture))
                                         .Build();
         DiscordMessage discordMessage = new(notification.Streamer.ToString(), embed: embed, title: title, image: null);
 

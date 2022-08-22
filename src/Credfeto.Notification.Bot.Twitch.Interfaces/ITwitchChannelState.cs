@@ -23,7 +23,9 @@ public interface ITwitchChannelState
 
     Task RaidedAsync(Viewer raider, int viewerCount, CancellationToken cancellationToken);
 
-    Task ChatMessageAsync(Viewer user, string message, int bits, CancellationToken cancellationToken);
+    Task ChatMessageAsync(Viewer user, string message, CancellationToken cancellationToken);
+
+    Task BitsGiftedAsync(Viewer user, int bits, CancellationToken cancellationToken);
 
     Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken);
 

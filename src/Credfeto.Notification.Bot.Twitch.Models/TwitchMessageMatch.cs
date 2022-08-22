@@ -4,14 +4,16 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
-[DebuggerDisplay("{Streamer.Value}: {Chatter.Value} - {Message}")]
+[DebuggerDisplay("{Streamer.Value}: {Chatter.Value} -  {MatchType}: {Message}")]
 public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
 {
-    public TwitchMessageMatch(in Streamer streamer, in Viewer chatter, string message)
+    public TwitchMessageMatch(in Streamer streamer, in Viewer chatter, string message, TwitchMessageMatchType matchType)
+
     {
         this.Streamer = streamer;
         this.Chatter = chatter;
         this.Message = message;
+        this.MatchType = matchType;
     }
 
     public Streamer Streamer { get; }
@@ -19,6 +21,8 @@ public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
     public Viewer Chatter { get; }
 
     public string Message { get; }
+
+    public TwitchMessageMatchType MatchType { get; }
 
     public bool Equals(TwitchMessageMatch? other)
     {
@@ -32,7 +36,7 @@ public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
             return true;
         }
 
-        return this.Streamer.Equals(other.Streamer) && this.Chatter.Equals(other.Chatter) && this.Message == other.Message;
+        return this.Streamer.Equals(other.Streamer) && this.Chatter.Equals(other.Chatter) && this.Message == other.Message && this.MatchType == other.MatchType;
     }
 
     public override bool Equals(object? obj)
@@ -42,7 +46,7 @@ public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(value1: this.Streamer, value2: this.Chatter, value3: this.Message);
+        return HashCode.Combine(value1: this.Streamer, value2: this.Chatter, value3: this.Message, value4: this.MatchType);
     }
 
     public static bool operator ==(TwitchMessageMatch? left, TwitchMessageMatch? right)

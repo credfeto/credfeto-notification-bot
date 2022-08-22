@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
@@ -18,20 +19,15 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
     private readonly string _raidWelcome;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public RaidWelcome(IOptions<TwitchBotOptions> options,
-                       ITwitchChannelManager twitchChannelManager,
-                       IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
-                       ILogger<RaidWelcome> logger)
+    public RaidWelcome(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<RaidWelcome> logger)
         : base(twitchChatMessageChannel)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
-        this._raidWelcome = @"
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫
-GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
-♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫".Trim();
+        this._raidWelcome = @"♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫" + Environment.NewLine + @"GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit" + Environment.NewLine +
+                            @"♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
     }
 
     public async Task IssueRaidWelcomeAsync(Streamer streamer, Viewer raider, CancellationToken cancellationToken)
@@ -81,6 +77,6 @@ GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit
 
     private TwitchModChannel? GetStreamerSettings(Streamer streamer)
     {
-        return this._options.Channels.Find(c => Streamer.FromString(c.ChannelName) == streamer);
+        return this._options.Channels.FirstOrDefault(c => Streamer.FromString(c.ChannelName) == streamer);
     }
 }

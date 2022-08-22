@@ -23,13 +23,13 @@ public sealed class TwitchBotOptions
 
     public TwitchAuthentication Authentication { get; }
 
-    public List<TwitchModChannel> Channels { get; }
+    public IReadOnlyList<TwitchModChannel> Channels { get; }
 
-    public List<string> Heists { get; }
+    public IReadOnlyList<string> Heists { get; }
 
-    public List<TwitchMarbles>? Marbles { get; }
+    public IReadOnlyList<TwitchMarbles>? Marbles { get; }
 
-    public List<string> IgnoredUsers { get; }
+    public IReadOnlyList<string> IgnoredUsers { get; }
 
     public TwitchMilestones Milestones { get; }
 }

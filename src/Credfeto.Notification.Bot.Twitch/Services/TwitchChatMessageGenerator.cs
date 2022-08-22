@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
@@ -77,56 +78,56 @@ public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
     {
         string formatString = this.GetMessage(ThankBitsMessages);
 
-        return string.Format(format: formatString, arg0: giftedBy.Value, arg1: bitsGiven);
+        return string.Format(provider: CultureInfo.InvariantCulture, format: formatString, arg0: giftedBy.Value, arg1: bitsGiven);
     }
 
     public string ThanksForNewPrimeSub(in Viewer user)
     {
         string formatString = this.GetMessage(ThankNewPrimeSubMessages);
 
-        return string.Format(format: formatString, arg0: user.Value);
+        return string.Format(provider: CultureInfo.InvariantCulture, format: formatString, arg0: user.Value);
     }
 
     public string ThanksForPrimeReSub(in Viewer user)
     {
         string formatString = this.GetMessage(ThankPrimeReSubMessages);
 
-        return string.Format(format: formatString, arg0: user.Value);
+        return string.Format(provider: CultureInfo.InvariantCulture, format: formatString, arg0: user.Value);
     }
 
     public string ThanksForPaidReSub(in Viewer user)
     {
         string formatString = this.GetMessage(ThankPaidReSubMessages);
 
-        return string.Format(format: formatString, arg0: user.Value);
+        return string.Format(provider: CultureInfo.InvariantCulture, format: formatString, arg0: user.Value);
     }
 
     public string ThanksForNewPaidSub(in Viewer user)
     {
         string formatString = this.GetMessage(ThankNewPaidSubMessages);
 
-        return string.Format(format: formatString, arg0: user.Value);
+        return string.Format(provider: CultureInfo.InvariantCulture, format: formatString, arg0: user.Value);
     }
 
     public string ThanksForGiftingMultipleSubs(in Viewer giftedBy)
     {
         string formatString = this.GetMessage(ThankGiftMultipleSubsMessages);
 
-        return string.Format(format: formatString, arg0: giftedBy.Value);
+        return string.Format(provider: CultureInfo.InvariantCulture, format: formatString, arg0: giftedBy.Value);
     }
 
     public string ThanksForGiftingOneSub(in Viewer giftedBy)
     {
         string formatString = this.GetMessage(ThankGiftOneSubMessages);
 
-        return string.Format(format: formatString, arg0: giftedBy.Value);
+        return string.Format(provider: CultureInfo.InvariantCulture, format: formatString, arg0: giftedBy.Value);
     }
 
     public string WelcomeMessage(in Viewer user)
     {
         string formatString = this.GetMessage(WelcomeMessages);
 
-        return string.Format(format: formatString, arg0: user.Value);
+        return string.Format(provider: CultureInfo.InvariantCulture, format: formatString, arg0: user.Value);
     }
 
     private string GetMessage(IReadOnlyList<string> messages)
