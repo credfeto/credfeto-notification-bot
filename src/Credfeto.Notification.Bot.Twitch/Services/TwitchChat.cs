@@ -568,14 +568,41 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
         Viewer viewer = Viewer.FromString(e.ChatMessage.Username);
 
-        TwitchIncomingMessage incomingMessage = new(Streamer: streamer, Chatter: viewer, Message: e.ChatMessage.Message);
-        await this._mediator.Publish(notification: incomingMessage, cancellationToken: cancellationToken);
+        string message = e.ChatMessage.Message;
+        await this.HandleChatMessageAsync(streamer: streamer, viewer: viewer, message: message, cancellationToken: cancellationToken);
 
-        if (e.ChatMessage.Bits > 0)
+        int bits = e.ChatMessage.Bits;
+
+        if (bits > 0)
+        {
+            await this.HandleBitsGiftAsync(streamer: streamer, viewer: viewer, bits: bits, cancellationToken: cancellationToken);
+        }
+    }
+
+    private async Task HandleBitsGiftAsync(Streamer streamer, Viewer viewer, int bits, CancellationToken cancellationToken)
+    {
+        try
         {
             ITwitchChannelState channelState = this._twitchChannelManager.GetStreamer(streamer);
 
-            await channelState.BitsGiftedAsync(user: viewer, bits: e.ChatMessage.Bits, cancellationToken: cancellationToken);
+            await channelState.BitsGiftedAsync(user: viewer, bits: bits, cancellationToken: cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError($"{streamer}: Failed to handle bit gift: {exception.Message}");
+        }
+    }
+
+    private async Task HandleChatMessageAsync(Streamer streamer, Viewer viewer, string message, CancellationToken cancellationToken)
+    {
+        try
+        {
+            TwitchIncomingMessage incomingMessage = new(Streamer: streamer, Chatter: viewer, Message: message);
+            await this._mediator.Publish(notification: incomingMessage, cancellationToken: cancellationToken);
+        }
+        catch (Exception exception)
+        {
+            this._logger.LogError($"{streamer}: Failed to handle chat message: {exception.Message}");
         }
     }
 
