@@ -349,7 +349,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
         double delay = Jitter.WithJitter((int)priority, GetMaxSeconds(priority));
 
-        this._logger.LogDebug($"{twitchChatMessage.Streamer}: Delaying message for {delay} seconds for: {twitchChatMessage.Message}");
+        this._logger.LogInformation($"{twitchChatMessage.Streamer}: Delaying message for {delay} seconds for: {twitchChatMessage.Message}");
 
         return TimeSpan.FromSeconds(delay);
     }
