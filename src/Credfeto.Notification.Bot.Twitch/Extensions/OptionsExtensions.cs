@@ -10,7 +10,7 @@ internal static class OptionsExtensions
 {
     public static TwitchModChannel? GetModChannel(this TwitchBotOptions options, Streamer streamer)
     {
-        return options.Channels.FirstOrDefault(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: streamer.Value));
+        return Array.Find(array: options.Channels, match: c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: streamer.Value));
     }
 
     public static bool IsModChannel(this TwitchBotOptions options, in Streamer streamer)

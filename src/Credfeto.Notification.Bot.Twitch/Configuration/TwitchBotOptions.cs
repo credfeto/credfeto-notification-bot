@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
@@ -6,12 +5,7 @@ namespace Credfeto.Notification.Bot.Twitch.Configuration;
 public sealed class TwitchBotOptions
 {
     [JsonConstructor]
-    public TwitchBotOptions(TwitchAuthentication authentication,
-                            List<TwitchModChannel> channels,
-                            List<string> heists,
-                            List<string> ignoredUsers,
-                            TwitchMilestones milestones,
-                            List<TwitchMarbles>? marbles)
+    public TwitchBotOptions(TwitchAuthentication authentication, TwitchModChannel[] channels, string[] heists, string[] ignoredUsers, TwitchMilestones milestones, TwitchMarbles[] marbles)
     {
         this.Authentication = authentication;
         this.Channels = channels;
@@ -23,13 +17,13 @@ public sealed class TwitchBotOptions
 
     public TwitchAuthentication Authentication { get; }
 
-    public IReadOnlyList<TwitchModChannel> Channels { get; }
+    public TwitchModChannel[] Channels { get; }
 
-    public IReadOnlyList<string> Heists { get; }
+    public string[] Heists { get; }
 
-    public IReadOnlyList<TwitchMarbles>? Marbles { get; }
+    public TwitchMarbles[] Marbles { get; }
 
-    public IReadOnlyList<string> IgnoredUsers { get; }
+    public string[] IgnoredUsers { get; }
 
     public TwitchMilestones Milestones { get; }
 }

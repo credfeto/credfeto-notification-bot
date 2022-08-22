@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
@@ -77,6 +76,6 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
 
     private TwitchModChannel? GetStreamerSettings(Streamer streamer)
     {
-        return this._options.Channels.FirstOrDefault(c => Streamer.FromString(c.ChannelName) == streamer);
+        return Array.Find(array: this._options.Channels, match: c => Streamer.FromString(c.ChannelName) == streamer);
     }
 }

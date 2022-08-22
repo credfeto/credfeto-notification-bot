@@ -36,11 +36,25 @@ public sealed class TwitchChannelManagerTests : TestBase
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                   ignoredUsers: new() { MockReferenceData.Ignored.Value },
-                                                   milestones: new(new() { 10, 20, 30 }, new() { 10, 20, 30 }),
+                                                   ignoredUsers: new[]
+                                                                 {
+                                                                     MockReferenceData.Ignored.Value
+                                                                 },
+                                                   milestones: new(new[]
+                                                                   {
+                                                                       10,
+                                                                       20,
+                                                                       30
+                                                                   },
+                                                                   new[]
+                                                                   {
+                                                                       10,
+                                                                       20,
+                                                                       30
+                                                                   }),
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: null,
-                                                   channels: new()
+                                                   marbles: Array.Empty<TwitchMarbles>(),
+                                                   channels: new TwitchModChannel[]
                                                              {
                                                                  new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
                                                                      welcome: new(enabled: true),

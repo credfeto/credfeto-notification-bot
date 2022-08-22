@@ -1,3 +1,4 @@
+using System;
 using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -30,9 +31,9 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
                       .AddMockedService<IOptions<TwitchBotOptions>>(options =>
                                                                     {
                                                                         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                                                                                   new(),
+                                                                                                                   Array.Empty<TwitchModChannel>(),
                                                                                                                    heists: MockReferenceData.Heists,
-                                                                                                                   marbles: new(),
+                                                                                                                   marbles: Array.Empty<TwitchMarbles>(),
                                                                                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                                                                                    milestones: MockReferenceData.TwitchMilestones));
                                                                     })

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
@@ -30,7 +31,7 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
         this._twitchCustomMessageHandler = GetSubstitute<ITwitchCustomMessageHandler>();
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                   new()
+                                                   new TwitchModChannel[]
                                                    {
                                                        new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
                                                            raids: MockReferenceData.TwitchChannelRaids,
@@ -40,7 +41,7 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
                                                            welcome: MockReferenceData.TwitchChannelWelcome)
                                                    },
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: null,
+                                                   marbles: Array.Empty<TwitchMarbles>(),
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    milestones: MockReferenceData.TwitchMilestones));
 

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
@@ -29,8 +30,11 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: new() { new(streamer: streamer.Value, bot: viewer.Value, match: "!play") },
-                                                   channels: new()));
+                                                   marbles: new TwitchMarbles[]
+                                                            {
+                                                                new(streamer: streamer.Value, bot: viewer.Value, match: "!play")
+                                                            },
+                                                   channels: Array.Empty<TwitchModChannel>()));
 
         this._mediator = GetSubstitute<IMediator>();
         this._twitchMessageTriggerDebounceFilter = GetSubstitute<ITwitchMessageTriggerDebounceFilter>();

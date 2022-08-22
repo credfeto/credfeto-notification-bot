@@ -1,17 +1,17 @@
-using System.Collections.Generic;
+using System;
 using FunFair.Test.Common.Mocks;
 
 namespace Credfeto.Notification.Bot.Mocks.Objects;
 
-internal sealed class MockIgnoredUsers : MockBase<List<string>>
+internal sealed class MockIgnoredUsers : MockBase<string[]>
 {
     public MockIgnoredUsers()
-        : base(new())
+        : base(Array.Empty<string>())
     {
     }
 
-    public override List<string> Next()
+    public override string[] Next()
     {
-        return new();
+        return Array.Empty<string>();
     }
 }

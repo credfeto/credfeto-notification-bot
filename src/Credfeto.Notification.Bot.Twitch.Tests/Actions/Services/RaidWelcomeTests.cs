@@ -42,8 +42,8 @@ public sealed class RaidWelcomeTests : LoggingTestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: null,
-                                                   channels: new()
+                                                   marbles: Array.Empty<TwitchMarbles>(),
+                                                   channels: new TwitchModChannel[]
                                                              {
                                                                  new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
                                                                      raids: new(enabled: false,

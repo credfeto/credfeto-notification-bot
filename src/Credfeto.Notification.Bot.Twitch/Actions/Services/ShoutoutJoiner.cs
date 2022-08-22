@@ -74,7 +74,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
     private TwitchFriendChannel? FindTwitchFriendChannel(Streamer streamer, TwitchUser visitingStreamer)
     {
-        TwitchModChannel? channel = this._options.Channels.FirstOrDefault(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: streamer.Value));
+        TwitchModChannel? channel = Array.Find(array: this._options.Channels, match: c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.ChannelName, y: streamer.Value));
 
         return channel?.ShoutOuts.FriendChannels?.FirstOrDefault(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
     }

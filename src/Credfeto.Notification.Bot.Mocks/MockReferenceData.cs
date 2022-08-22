@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using Credfeto.Notification.Bot.Mocks.Objects;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
@@ -16,7 +16,7 @@ public static class MockReferenceData
 
     public static MockBase<TwitchAuthentication> TwitchAuthentication { get; } = new MockTwitchAuthentication();
 
-    public static TwitchMilestones TwitchMilestones { get; } = new(new()
+    public static TwitchMilestones TwitchMilestones { get; } = new(new[]
                                                                    {
                                                                        1,
                                                                        10,
@@ -26,11 +26,11 @@ public static class MockReferenceData
                                                                        3000,
                                                                        4000
                                                                    },
-                                                                   new());
+                                                                   Array.Empty<int>());
 
-    public static MockBase<List<string>> IgnoredUsers { get; } = new MockIgnoredUsers();
+    public static MockBase<string[]> IgnoredUsers { get; } = new MockIgnoredUsers();
 
-    public static MockBase<List<string>> Heists { get; } = new MockHeists();
+    public static MockBase<string[]> Heists { get; } = new MockHeists();
 
     public static MockBase<TwitchChannelShoutout> TwitchChannelShoutout { get; } = new MockTwitchChannelShoutout();
 

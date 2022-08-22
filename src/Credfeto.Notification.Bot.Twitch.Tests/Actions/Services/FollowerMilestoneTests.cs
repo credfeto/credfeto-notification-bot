@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
@@ -28,9 +29,9 @@ public sealed class FollowerMilestoneTests : TestBase
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                   new(),
+                                                   Array.Empty<TwitchModChannel>(),
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: null,
+                                                   marbles: Array.Empty<TwitchMarbles>(),
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    milestones: MockReferenceData.TwitchMilestones));
 

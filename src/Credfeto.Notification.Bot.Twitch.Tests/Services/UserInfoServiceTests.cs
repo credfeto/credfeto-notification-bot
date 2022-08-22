@@ -29,8 +29,8 @@ public sealed class UserInfoServiceTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: null,
-                                                   channels: new()));
+                                                   marbles: Array.Empty<TwitchMarbles>(),
+                                                   channels: Array.Empty<TwitchModChannel>()));
 
         this._userInfoService = new UserInfoService(options: options,
                                                     twitchStreamerDataManager: this._twitchStreamerDataManager,

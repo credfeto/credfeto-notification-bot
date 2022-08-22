@@ -35,8 +35,8 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: null,
-                                                   channels: new()
+                                                   marbles: Array.Empty<TwitchMarbles>(),
+                                                   channels: new TwitchModChannel[]
                                                              {
                                                                  new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
                                                                      thanks: MockReferenceData.TwitchChannelThanks,
