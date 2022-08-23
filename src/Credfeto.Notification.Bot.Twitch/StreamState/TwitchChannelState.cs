@@ -324,7 +324,12 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
+            model = new(streamer: this.Streamer,
+                        user: user,
+                        this._stream != null,
+                        isStreamer: twitchUser.IsStreamer,
+                        accountCreated: twitchUser.DateCreated,
+                        followCount: followCount);
         }
         else
         {

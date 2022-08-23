@@ -15,7 +15,9 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
     private readonly IFollowerMilestone _followerMilestone;
     private readonly ILogger<TwitchChannelNewFollowerNotificationHandler> _logger;
 
-    public TwitchChannelNewFollowerNotificationHandler(IChannelFollowCount channelFollowCount, IFollowerMilestone followerMilestone, ILogger<TwitchChannelNewFollowerNotificationHandler> logger)
+    public TwitchChannelNewFollowerNotificationHandler(IChannelFollowCount channelFollowCount,
+                                                       IFollowerMilestone followerMilestone,
+                                                       ILogger<TwitchChannelNewFollowerNotificationHandler> logger)
     {
         this._channelFollowCount = channelFollowCount;
         this._followerMilestone = followerMilestone;

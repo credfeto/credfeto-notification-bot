@@ -14,9 +14,9 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
     private readonly IObjectBuilder<TwitchChatterEntity, TwitchChatter> _chatterBuilder;
     private readonly IDatabase _database;
     private readonly IObjectBuilder<TwitchFollowerEntity, TwitchFollower> _followerBuilder;
-    private readonly IObjectBuilder<StreamSettingsEntity, StreamSettings> _streamSettingsBuilder;
     private readonly IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> _followerMilestoneBuilder;
     private readonly IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> _regularChatterBuilder;
+    private readonly IObjectBuilder<StreamSettingsEntity, StreamSettings> _streamSettingsBuilder;
 
     public TwitchStreamDataManager(IDatabase database,
                                    IObjectBuilder<TwitchChatterEntity, TwitchChatter> chatterBuilder,
@@ -40,14 +40,18 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
     public Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert",
+                                           new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
     }
 
     public async Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
     {
         TwitchChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
                                                                                 storedProcedure: "twitch.stream_chatter_get",
-                                                                                new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+                                                                                new
+                                                                                {
+                                                                                    channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString()
+                                                                                });
 
         return chatted == null;
     }
@@ -82,8 +86,8 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
     public Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTime streamStartDate)
     {
         return this._database.QuerySingleOrDefaultAsync(builder: this._streamSettingsBuilder,
-                                               storedProcedure: "twitch.stream_settings_get",
-                                               new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
+                                                        storedProcedure: "twitch.stream_settings_get",
+                                                        new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
     }
 
     public Task UpdateSettingsAsync(Streamer streamer, DateTime streamStartDate, StreamSettings settings)

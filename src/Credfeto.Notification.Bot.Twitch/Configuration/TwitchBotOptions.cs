@@ -5,7 +5,12 @@ namespace Credfeto.Notification.Bot.Twitch.Configuration;
 public sealed class TwitchBotOptions
 {
     [JsonConstructor]
-    public TwitchBotOptions(TwitchAuthentication authentication, TwitchModChannel[] channels, string[] heists, string[] ignoredUsers, TwitchMilestones milestones, TwitchMarbles[] marbles)
+    public TwitchBotOptions(TwitchAuthentication authentication,
+                            TwitchModChannel[] channels,
+                            string[] heists,
+                            string[] ignoredUsers,
+                            TwitchMilestones milestones,
+                            TwitchMarbles[] marbles)
     {
         this.Authentication = authentication;
         this.Channels = channels;
