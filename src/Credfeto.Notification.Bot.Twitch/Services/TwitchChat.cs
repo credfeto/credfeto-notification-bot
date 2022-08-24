@@ -197,8 +197,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToPrimeToPaidSubConversions()
     {
-        return Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h,
-                                                                      removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
+        return Observable.FromEventPattern<OnPrimePaidSubscriberArgs>(addHandler: h => this._client.OnPrimePaidSubscriber += h, removeHandler: h => this._client.OnPrimePaidSubscriber -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
                          .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.PrimePaidSubscriber.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnPrimePaidSubscriberAsync(e: e, cancellationToken: cancellationToken)))
@@ -221,8 +220,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToGiftedSub()
     {
-        return Observable.FromEventPattern<OnGiftedSubscriptionArgs>(addHandler: h => this._client.OnGiftedSubscription += h,
-                                                                     removeHandler: h => this._client.OnGiftedSubscription -= h)
+        return Observable.FromEventPattern<OnGiftedSubscriptionArgs>(addHandler: h => this._client.OnGiftedSubscription += h, removeHandler: h => this._client.OnGiftedSubscription -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
                          .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.GiftedSubscription.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnGiftedSubscriptionAsync(e: e, cancellationToken: cancellationToken)))
@@ -233,8 +231,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     [SuppressMessage(category: "Philips.CodeAnalysis.DuplicateCodeAnalyzer", checkId: "PH2071: Duplicate code segment", Justification = "TODO: Optimise")]
     private IDisposable SubscribeToCommunityGiftSubs()
     {
-        return Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h,
-                                                                        removeHandler: h => this._client.OnCommunitySubscription -= h)
+        return Observable.FromEventPattern<OnCommunitySubscriptionArgs>(addHandler: h => this._client.OnCommunitySubscription += h, removeHandler: h => this._client.OnCommunitySubscription -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
                          .Where(e => this.IsMessageForModChannel(streamer: e.Channel, viewer: e.GiftedSubscription.DisplayName))
                          .Select(e => Observable.FromAsync(cancellationToken => this.OnCommunitySubscriptionAsync(e: e, cancellationToken: cancellationToken)))
@@ -300,8 +297,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
     private IDisposable SubscribeToChannelStateChanged()
     {
-        return Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h,
-                                                                      removeHandler: h => this._client.OnChannelStateChanged -= h)
+        return Observable.FromEventPattern<OnChannelStateChangedArgs>(addHandler: h => this._client.OnChannelStateChanged += h, removeHandler: h => this._client.OnChannelStateChanged -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
                          .Subscribe(onNext: this.Client_OnChannelStateChanged);
     }
@@ -447,9 +443,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
-        return state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName),
-                                    months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration,
-                                    cancellationToken: cancellationToken);
+        return state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName), months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration, cancellationToken: cancellationToken);
     }
 
     private void Client_OnChannelStateChanged(OnChannelStateChangedArgs e)
@@ -587,6 +581,11 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
     private async Task HandleBitsGiftAsync(Streamer streamer, Viewer viewer, int bits, CancellationToken cancellationToken)
     {
+        if (!this._options.IsModChannel(streamer))
+        {
+            return;
+        }
+
         try
         {
             ITwitchChannelState channelState = this._twitchChannelManager.GetStreamer(streamer);
