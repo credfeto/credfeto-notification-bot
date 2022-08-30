@@ -34,7 +34,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Interfaces\Credfeto.Notification.Bot.Database.Interfaces.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.2.0" />
+    <PackageReference Include="FluentValidation" Version="11.2.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
