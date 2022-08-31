@@ -47,7 +47,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.0.1" />
+    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.1.2" />
     <PackageReference Include="FunFair.Test.Common" Version="6.0.4.1998" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="NSubstitute" Version="4.4.0" />
