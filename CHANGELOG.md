@@ -11,22 +11,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Fluent validation for json config
 ### Fixed
 ### Changed
-- FF-1429 - Updated Discord.Net to 3.7.2
-- FF-1429 - Updated Microsoft.Extensions to 6.0.7
 - FF-1429 - Updated NonBlocking to 2.1.0
 - FF-1429 - Updated NSubstitute to 4.4.0
-- FF-1429 - Updated FunFair.CodeAnalysis to 5.8.3.1353
 - FF-1429 - Updated Roslynator.Analyzers to 4.1.1
-- FF-1429 - Updated SonarAnalyzer.CSharp to 8.42.0.51121
-- FF-1429 - Updated FunFair.Test.Common to 6.0.1.1951
 - FF-1429 - Updated xunit.analyzers to 1.0.0
 - FF-1429 - Updated xunit to 2.4.2
-- FF-1429 - Updated FunFair.Test.Common to 6.0.2.1981
-- FF-1429 - Updated SonarAnalyzer.CSharp to 8.43.0.51858
 - FF-1429 - Updated Npgsql to 6.0.6
-- FF-1429 - Updated FunFair.Test.Common to 6.0.3.1991
-- FF-1429 - Updated TwitchLib to 3.6.0
-- FF-1429 - Updated TwitchLib to 3.2.6
 - FF-1429 - Updated FunFair.Test.Common to 6.0.4.1998
 - FF-1429 - Updated Microsoft.Extensions to 6.0.8
 - FF-1429 - Updated TwitchLib to 3.6.1
@@ -34,12 +24,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-3881 - Updated DotNet SDK to 6.0.400
 - FF-1429 - Updated FunFair.CodeAnalysis to 5.8.5.1436
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.44.0.52574
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.716
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.717
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.719
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.720
 - FF-1429 - Updated Discord.Net to 3.8.0
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.1
+- FF-1429 - Updated FluentValidation.AspNetCore to 11.2.1
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.2.3
 ### Removed
 ### Deployment Changes
