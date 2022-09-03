@@ -6,7 +6,7 @@ namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders;
 
 public sealed class TwitchStreamSettingsBuilder : IObjectBuilder<StreamSettingsEntity, StreamSettings>
 {
-    public StreamSettings? Build(StreamSettingsEntity source)
+    public StreamSettings Build(StreamSettingsEntity source)
     {
         return new(chatWelcomesEnabled: source.Chat_Welcomes,
                    raidWelcomesEnabled: source.Raid_Welcomes,

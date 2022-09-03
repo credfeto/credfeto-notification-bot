@@ -7,7 +7,7 @@ namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders;
 
 public sealed class TwitchFollowerBuilder : IObjectBuilder<TwitchFollowerEntity, TwitchFollower>
 {
-    public TwitchFollower? Build(TwitchFollowerEntity source)
+    public TwitchFollower Build(TwitchFollowerEntity source)
     {
         return new(source.Channel ?? throw new DataException("Unknown Channel"),
                    source.Follower ?? throw new DataException("Unknown Follower"),
