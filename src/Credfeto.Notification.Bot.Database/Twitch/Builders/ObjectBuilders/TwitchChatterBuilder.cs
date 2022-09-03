@@ -7,13 +7,8 @@ namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders;
 
 public sealed class TwitchChatterBuilder : IObjectBuilder<TwitchChatterEntity, TwitchChatter>
 {
-    public TwitchChatter? Build(TwitchChatterEntity? source)
+    public TwitchChatter? Build(TwitchChatterEntity source)
     {
-        if (source == null)
-        {
-            return null;
-        }
-
         return new(source.Channel ?? throw new DataException("Unknown Channel"),
                    streamStartDate: source.Start_Date,
                    source.Chat_User ?? throw new DataException("Unknown Chat_User"),

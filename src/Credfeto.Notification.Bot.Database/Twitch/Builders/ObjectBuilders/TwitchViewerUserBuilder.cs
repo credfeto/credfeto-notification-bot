@@ -7,13 +7,8 @@ namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders;
 
 public sealed class TwitchViewerUserBuilder : IObjectBuilder<TwitchViewerUserEntity, TwitchUser>
 {
-    public TwitchUser? Build(TwitchViewerUserEntity? source)
+    public TwitchUser? Build(TwitchViewerUserEntity source)
     {
-        if (source == null)
-        {
-            return null;
-        }
-
         return new(source.Id ?? throw new DataException("Missing Id"),
                    Viewer.FromString(source.UserName ?? throw new DataException("Missing Username")),
                    isStreamer: false,

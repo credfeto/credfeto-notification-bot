@@ -16,7 +16,7 @@ public abstract class ObjectBuilderTestsBase<TBuilder, TSourceObject, TDestinati
         this._builder = builder ?? throw new ArgumentNullException(nameof(builder));
     }
 
-    protected TDestinationObject? Build(TSourceObject? source)
+    protected TDestinationObject? Build(TSourceObject source)
     {
         return this._builder.Build(source);
     }
@@ -29,22 +29,16 @@ public abstract class ObjectBuilderTestsBase<TBuilder, TSourceObject, TDestinati
         Assert.Throws<TException>(() => this.Build(source));
     }
 
-    protected void ShouldBeNull(TSourceObject? source)
+    protected void ShouldBeNull(TSourceObject source)
     {
         TDestinationObject? result = this.Build(source);
         Assert.Null(result);
     }
 
-    protected void ShouldNotBeNull(TSourceObject? source)
+    protected void ShouldNotBeNull(TSourceObject source)
     {
         TDestinationObject? result = this.Build(source);
         Assert.NotNull(result);
-    }
-
-    [Fact]
-    public void BuildWithNullSourceGivesNullResponse()
-    {
-        this.ShouldBeNull(source: null);
     }
 
     [Fact]

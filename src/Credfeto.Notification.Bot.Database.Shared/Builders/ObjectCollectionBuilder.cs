@@ -16,12 +16,12 @@ public sealed class ObjectCollectionBuilder<TSourceObject, TDestinationObject> :
         this._entityBuilder = entityBuilder ?? throw new ArgumentNullException(nameof(entityBuilder));
     }
 
-    public TDestinationObject? Build(TSourceObject? source)
+    public TDestinationObject? Build(TSourceObject source)
     {
         return this._entityBuilder.Build(source);
     }
 
-    public IReadOnlyList<TDestinationObject> Build(IEnumerable<TSourceObject?> entities)
+    public IReadOnlyList<TDestinationObject> Build(IEnumerable<TSourceObject> entities)
     {
         return entities.Select(this.Build)
                        .RemoveNulls()
