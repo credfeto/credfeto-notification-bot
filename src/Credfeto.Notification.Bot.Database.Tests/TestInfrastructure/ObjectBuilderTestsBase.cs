@@ -1,5 +1,5 @@
 using System;
-using Credfeto.Notification.Bot.Database.Interfaces.Builders;
+using Credfeto.Database.Interfaces.Builders;
 using FunFair.Test.Common;
 using Xunit;
 

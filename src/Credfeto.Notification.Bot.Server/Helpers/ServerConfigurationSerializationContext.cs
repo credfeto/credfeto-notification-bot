@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using Credfeto.Notification.Bot.Database.Pgsql;
+using Credfeto.Database.Pgsql;
 using Credfeto.Notification.Bot.Discord;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 

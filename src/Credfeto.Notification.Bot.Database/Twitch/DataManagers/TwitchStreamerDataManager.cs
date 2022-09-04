@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Credfeto.Notification.Bot.Database.Interfaces;
-using Credfeto.Notification.Bot.Database.Interfaces.Builders;
+using Credfeto.Database.Interfaces;
+using Credfeto.Database.Interfaces.Builders;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
@@ -21,8 +21,7 @@ public sealed class TwitchStreamerDataManager : ITwitchStreamerDataManager
 
     public Task AddStreamerAsync(Streamer streamerName, string streamerId, DateTime startedStreaming)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.streamer_insert",
-                                           new { username_ = streamerName.ToString(), id_ = streamerId, date_created_ = startedStreaming });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.streamer_insert", new { username_ = streamerName.ToString(), id_ = streamerId, date_created_ = startedStreaming });
     }
 
     public Task<TwitchUser?> GetByUserNameAsync(Streamer userName)

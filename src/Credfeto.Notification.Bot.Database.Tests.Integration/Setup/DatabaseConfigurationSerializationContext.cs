@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
-using Credfeto.Notification.Bot.Database.Pgsql;
+using Credfeto.Database.Pgsql;
 
 namespace Credfeto.Notification.Bot.Database.Tests.Integration.Setup;
 

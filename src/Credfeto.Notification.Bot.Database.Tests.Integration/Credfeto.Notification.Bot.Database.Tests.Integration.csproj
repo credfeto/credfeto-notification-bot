@@ -42,7 +42,6 @@
     <Copy Condition="Exists('appsettings-local.json')" SourceFiles="appsettings-local.json" DestinationFiles="$(OutDir)\appsettings-local.json" />
   </Target>
   <ItemGroup>
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Database.Pgsql\Credfeto.Notification.Bot.Database.Pgsql.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
   </ItemGroup>

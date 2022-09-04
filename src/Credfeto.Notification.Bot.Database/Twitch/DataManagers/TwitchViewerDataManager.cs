@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Credfeto.Notification.Bot.Database.Interfaces;
-using Credfeto.Notification.Bot.Database.Interfaces.Builders;
+using Credfeto.Database.Interfaces;
+using Credfeto.Database.Interfaces.Builders;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;

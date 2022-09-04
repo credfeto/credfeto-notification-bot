@@ -1,6 +1,6 @@
 using System.IO;
+using Credfeto.Database.Pgsql;
 using Credfeto.Extensions.Configuration.Typed.Json;
-using Credfeto.Notification.Bot.Database.Pgsql;
 using Credfeto.Notification.Bot.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
