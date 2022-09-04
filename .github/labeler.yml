@@ -34,20 +34,6 @@
  - any: [ '.github/workflows/*.yml' ]
 "Database":
  - any: [ 'src/Credfeto.Notification.Bot.Database/**/*' ]
-"Database.Dapper":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Dapper/**/*' ]
-"Database.Dapper.Tests":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Dapper.Tests/**/*' ]
-"Database.Interfaces":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Interfaces/**/*' ]
-"Database.Pgsql":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Pgsql/**/*' ]
-"Database.Pgsql.Tests":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Pgsql.Tests/**/*' ]
-"Database.Shared":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Shared/**/*' ]
-"Database.Shared.Tests":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Shared.Tests/**/*' ]
 "Database.Tests":
  - any: [ 'src/Credfeto.Notification.Bot.Database.Tests/**/*' ]
 "Database.Tests.Integration":
