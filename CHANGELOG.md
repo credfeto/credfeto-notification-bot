@@ -29,6 +29,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FluentValidation.AspNetCore to 11.2.1
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.2.3
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.722
+- FF-1429 - Updated SecurityCodeScan.VS2019 to 5.6.7
 ### Removed
 ### Deployment Changes
 

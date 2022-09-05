@@ -55,7 +55,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Database.Shared" Version="0.0.1.4-main"/>
+    <PackageReference Include="Credfeto.Database.Shared" Version="0.0.1.4-main" />
     <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.2.3" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
@@ -75,10 +75,10 @@
     <PackageReference Include="Meziantou.Analyzer" Version="1.0.722" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.3.44" PrivateAssets="All" />
     <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.15" PrivateAssets="All" />
-    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.10.4539" PrivateAssets="All"/>
+    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.10.4539" PrivateAssets="All" />
     <PackageReference Include="Philips.CodeAnalysis.DuplicateCodeAnalyzer" Version="1.1.6" PrivateAssets="All" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.1.1" PrivateAssets="All" />
-    <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.6" PrivateAssets="All" />
+    <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7" PrivateAssets="All" />
     <PackageReference Include="SmartAnalyzers.CSharpExtensions.Annotations" Version="4.2.7" PrivateAssets="All" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="8.44.0.52574" PrivateAssets="All" />
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
