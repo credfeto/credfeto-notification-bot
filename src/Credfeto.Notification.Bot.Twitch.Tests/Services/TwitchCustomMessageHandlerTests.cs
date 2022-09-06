@@ -32,7 +32,7 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
                                                    heists: MockReferenceData.Heists,
                                                    marbles: new TwitchMarbles[]
                                                             {
-                                                                new(streamer: streamer.Value, bot: viewer.Value, match: "!play")
+                                                                new(streamer: streamer.Value, bot: viewer.Value, match: "!play", issue: "!play")
                                                             },
                                                    channels: Array.Empty<TwitchModChannel>()));
 

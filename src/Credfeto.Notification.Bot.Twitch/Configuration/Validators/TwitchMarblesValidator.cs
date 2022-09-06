@@ -17,5 +17,9 @@ public sealed class TwitchMarblesValidator : AbstractValidator<TwitchMarbles>
         this.RuleFor(x => x.Match)
             .NotNull()
             .NotEmpty();
+
+        this.RuleFor(x => x.Issue)
+            .NotNull()
+            .NotEmpty();
     }
 }
