@@ -19,7 +19,7 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 {
-    private static readonly Regex StreamerUnknown = new(pattern: "No\\schannel\\swith\\sthen\\same\"\\s(?<Streamer>[\\w\\d]+)\"\\scould\\sbef\\sound.",
+    private static readonly Regex StreamerUnknown = new(pattern: "^No\\schannel\\swith\\sthe\\sname\\s\"(?<streamer>[\\w\\d_]+)\"\\scould\\sbe\\sfound\\.$",
                                                         RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture,
                                                         TimeSpan.FromSeconds(1));
 
