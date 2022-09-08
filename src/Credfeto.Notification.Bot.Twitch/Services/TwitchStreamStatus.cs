@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -18,7 +19,13 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 {
+    private static readonly Regex StreamerUnknown = new(pattern: "No\\schannel\\swith\\sthen\\same\"\\s(?<Streamer>[\\w\\d]+)\"\\scould\\sbef\\sound.",
+                                                        RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture,
+                                                        TimeSpan.FromSeconds(1));
+
     private readonly ConcurrentDictionary<Streamer, bool> _channels;
+
+    private readonly SemaphoreSlim _lock;
     private readonly ILogger<TwitchStreamStatus> _logger;
     private readonly LiveStreamMonitorService _lsm;
     private readonly IMediator _mediator;
@@ -35,45 +42,70 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         this._version = 0;
         this._lastVersion = 0;
         this._channels = new();
+        this._lock = new(1);
 
         this._lsm = new(options.Value.ConfigureTwitchApi());
 
-        this._onlineSubscription = Observable
-                                   .FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
-                                   .Select(messageEvent => messageEvent.EventArgs)
-                                   .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
-                                   .Concat()
-                                   .Subscribe();
+        this._onlineSubscription = Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
+                                             .Select(messageEvent => messageEvent.EventArgs)
+                                             .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
+                                             .Concat()
+                                             .Subscribe();
 
-        this._offlineSubscription = Observable
-                                    .FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
-                                    .Select(messageEvent => messageEvent.EventArgs)
-                                    .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
-                                    .Concat()
-                                    .Subscribe();
+        this._offlineSubscription = Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
+                                              .Select(messageEvent => messageEvent.EventArgs)
+                                              .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
+                                              .Concat()
+                                              .Subscribe();
     }
 
     public void Dispose()
     {
         this._offlineSubscription.Dispose();
         this._onlineSubscription.Dispose();
+        this._lock.Dispose();
     }
 
-    public Task UpdateAsync()
+    public async Task UpdateAsync()
     {
         if (this._channels.IsEmpty)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        if (this._lastVersion != this._version)
+        await this._lock.WaitAsync();
+
+        try
         {
-            this._lsm.SetChannelsByName(this._channels.Keys.Select(c => c.Value)
-                                            .ToList());
-            this._lastVersion = this._version;
-        }
+            if (this._lastVersion != this._version)
+            {
+                this._lsm.SetChannelsByName(this._channels.Keys.Select(c => c.Value)
+                                                .ToList());
+                this._lastVersion = this._version;
+            }
 
-        return this._lsm.UpdateLiveStreamersAsync();
+            await this._lsm.UpdateLiveStreamersAsync();
+        }
+        catch (InvalidOperationException exception)
+        {
+            Match match = StreamerUnknown.Match(input: exception.Message);
+
+            if (!match.Success)
+            {
+                // Another error
+                throw;
+            }
+
+            Streamer streamer = Streamer.FromString(match.Groups["Streamer"]
+                                                         .Value);
+            this._logger.LogError(new(exception.HResult), exception: exception, $"Streamer {streamer.Value} not found");
+
+            this._channels.TryRemove(key: streamer, value: out _);
+        }
+        finally
+        {
+            this._lock.Release();
+        }
     }
 
     public async Task EnableAsync(Streamer streamer)
