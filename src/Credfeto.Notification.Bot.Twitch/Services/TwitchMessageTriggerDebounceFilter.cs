@@ -10,7 +10,7 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
 {
     private static readonly TimeSpan MinIntervalBetweenMatches = TimeSpan.FromMinutes(1);
     private readonly ICurrentTimeSource _currentTimeSource;
-    private readonly ConcurrentDictionary<TwitchMessageMatch, When> _debounce;
+    private readonly ConcurrentDictionary<TwitchOutputMessageMatch, When> _debounce;
     private readonly ILogger<TwitchMessageTriggerDebounceFilter> _logger;
 
     public TwitchMessageTriggerDebounceFilter(ICurrentTimeSource currentTimeSource, ILogger<TwitchMessageTriggerDebounceFilter> logger)
@@ -20,7 +20,7 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
         this._debounce = new();
     }
 
-    public bool CanSend(TwitchMessageMatch match)
+    public bool CanSend(TwitchOutputMessageMatch match)
     {
         When when = this.GetMatch(match);
 
@@ -28,12 +28,12 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
 
         bool canSend = when.CanSend(now: now, minIntervalBetweenMatches: MinIntervalBetweenMatches);
 
-        this._logger.LogDebug($"{match.Streamer}\\{match.Chatter}: {canSend}");
+        this._logger.LogDebug($"{match.Streamer}\\{match.Message}: {canSend}");
 
         return canSend;
     }
 
-    private When GetMatch(TwitchMessageMatch match)
+    private When GetMatch(TwitchOutputMessageMatch match)
     {
         if (this._debounce.TryGetValue(key: match, out When? when))
         {

@@ -18,7 +18,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     private readonly ILogger<TwitchCustomMessageHandler> _logger;
     private readonly IMediator _mediator;
     private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
-    private readonly ConcurrentDictionary<TwitchMessageMatch, string> _twitchMessageTriggers;
+    private readonly ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> _twitchMessageTriggers;
 
     public TwitchCustomMessageHandler(IOptions<TwitchBotOptions> options,
                                       IMediator mediator,
@@ -35,7 +35,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
     public async Task<bool> HandleMessageAsync(TwitchIncomingMessage message, CancellationToken cancellationToken)
     {
-        foreach ((TwitchMessageMatch trigger, string command) in this._twitchMessageTriggers)
+        foreach ((TwitchInputMessageMatch trigger, TwitchOutputMessageMatch command) in this._twitchMessageTriggers)
         {
             if (!IsMatch(message: message, trigger: trigger))
             {
@@ -48,9 +48,9 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         return false;
     }
 
-    private async Task<bool> SendMessageAsync(TwitchMessageMatch trigger, string command, CancellationToken cancellationToken)
+    private async Task<bool> SendMessageAsync(TwitchInputMessageMatch trigger, TwitchOutputMessageMatch command, CancellationToken cancellationToken)
     {
-        if (!this._twitchMessageTriggerDebounceFilter.CanSend(trigger))
+        if (!this._twitchMessageTriggerDebounceFilter.CanSend(command))
         {
             this._logger.LogInformation($"{trigger.Streamer}: Debouncing... {trigger.Chatter}: {trigger.Message}");
 
@@ -59,12 +59,12 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         }
 
         this._logger.LogInformation($"{trigger.Streamer}: Matched... {trigger.Chatter}: {trigger.Message}");
-        await this._mediator.Publish(new CustomTriggeredMessage(streamer: trigger.Streamer, message: command), cancellationToken: cancellationToken);
+        await this._mediator.Publish(new CustomTriggeredMessage(streamer: trigger.Streamer, message: command.Message), cancellationToken: cancellationToken);
 
         return true;
     }
 
-    private static bool IsMatch(TwitchIncomingMessage message, TwitchMessageMatch trigger)
+    private static bool IsMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
     {
         return trigger.Streamer == message.Streamer && trigger.Chatter == message.Chatter && trigger.MatchType switch
         {
@@ -76,9 +76,9 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         };
     }
 
-    private static ConcurrentDictionary<TwitchMessageMatch, string> BuildMessageTriggers(IReadOnlyList<string> heists, IReadOnlyList<TwitchMarbles>? marbles)
+    private static ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> BuildMessageTriggers(IReadOnlyList<string> heists, IReadOnlyList<TwitchMarbles>? marbles)
     {
-        ConcurrentDictionary<TwitchMessageMatch, string> triggers = new();
+        ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> triggers = new();
 
         Viewer streamLabs = Viewer.FromString("streamlabs");
 
@@ -86,11 +86,11 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         {
             Trace.WriteLine($"Adding heist trigger: {streamer}");
 
-            TwitchMessageMatch trigger = new(Streamer.FromString(streamer),
-                                             chatter: streamLabs,
-                                             matchType: TwitchMessageMatchType.ENDS_WITH,
-                                             message: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.");
-            triggers.TryAdd(key: trigger, value: "!heist all");
+            TwitchInputMessageMatch trigger = new(Streamer.FromString(streamer),
+                                                  chatter: streamLabs,
+                                                  matchType: TwitchMessageMatchType.ENDS_WITH,
+                                                  message: " is trying to get a crew together for a treasure hunt! Type !heist <amount> to join.");
+            triggers.TryAdd(key: trigger, new(Streamer.FromString(streamer), message: "!heist all"));
         }
 
         if (marbles != null)
@@ -98,8 +98,9 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             foreach (TwitchMarbles marble in marbles)
             {
                 Trace.WriteLine($"Adding marbles trigger: {marble.Streamer}");
-                TwitchMessageMatch trigger = new(Streamer.FromString(marble.Streamer), Viewer.FromString(marble.Bot), matchType: TwitchMessageMatchType.EXACT, message: marble.Match);
-                triggers.TryAdd(key: trigger, value: marble.Issue);
+                TwitchInputMessageMatch trigger = new(Streamer.FromString(marble.Streamer), Viewer.FromString(marble.Bot), matchType: TwitchMessageMatchType.EXACT, message: marble.Match);
+
+                triggers.TryAdd(key: trigger, new(Streamer.FromString(marble.Streamer), message: marble.Issue));
             }
         }
 

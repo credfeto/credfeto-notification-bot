@@ -13,10 +13,7 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
 {
     private static readonly DateTime Initial = new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc);
 
-    private static readonly TwitchMessageMatch MessageMatch = new(streamer: MockReferenceData.Streamer,
-                                                                  chatter: MockReferenceData.Viewer,
-                                                                  matchType: TwitchMessageMatchType.EXACT,
-                                                                  message: "message");
+    private static readonly TwitchOutputMessageMatch OutputMessageMatch = new(streamer: MockReferenceData.Streamer, message: "message");
 
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
@@ -24,8 +21,7 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
     public TwitchMessageTriggerDebounceFilterTests()
     {
         this._currentTimeSource = GetSubstitute<ICurrentTimeSource>();
-        this._twitchMessageTriggerDebounceFilter =
-            new TwitchMessageTriggerDebounceFilter(currentTimeSource: this._currentTimeSource, this.GetTypedLogger<TwitchMessageTriggerDebounceFilter>());
+        this._twitchMessageTriggerDebounceFilter = new TwitchMessageTriggerDebounceFilter(currentTimeSource: this._currentTimeSource, this.GetTypedLogger<TwitchMessageTriggerDebounceFilter>());
     }
 
     private void MockCurrentTime(bool shortBreak)
@@ -49,7 +45,7 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
     {
         this.MockCurrentTime(true);
 
-        bool shouldSend = this._twitchMessageTriggerDebounceFilter.CanSend(MessageMatch);
+        bool shouldSend = this._twitchMessageTriggerDebounceFilter.CanSend(OutputMessageMatch);
         Assert.True(condition: shouldSend, userMessage: "First message should always send");
 
         this.ReceivedUtcNow(1);
@@ -68,12 +64,12 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
 
         this.MockCurrentTime(true);
 
-        bool shouldSendFirst = this._twitchMessageTriggerDebounceFilter.CanSend(MessageMatch);
+        bool shouldSendFirst = this._twitchMessageTriggerDebounceFilter.CanSend(OutputMessageMatch);
         Assert.True(condition: shouldSendFirst, userMessage: "First message should always send");
 
         for (int attempt = 2; attempt <= attempts; attempt++)
         {
-            bool shouldSendSecond = this._twitchMessageTriggerDebounceFilter.CanSend(MessageMatch);
+            bool shouldSendSecond = this._twitchMessageTriggerDebounceFilter.CanSend(OutputMessageMatch);
             Assert.False(condition: shouldSendSecond, $"Message should not send after {attempt} short break attempts");
         }
 
@@ -87,12 +83,12 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
 
         this.MockCurrentTime(false);
 
-        bool shouldSendFirst = this._twitchMessageTriggerDebounceFilter.CanSend(MessageMatch);
+        bool shouldSendFirst = this._twitchMessageTriggerDebounceFilter.CanSend(OutputMessageMatch);
         Assert.True(condition: shouldSendFirst, userMessage: "First message should always send");
 
         for (int attempt = 2; attempt <= attempts; attempt++)
         {
-            bool shouldSendSecond = this._twitchMessageTriggerDebounceFilter.CanSend(MessageMatch);
+            bool shouldSendSecond = this._twitchMessageTriggerDebounceFilter.CanSend(OutputMessageMatch);
             Assert.True(condition: shouldSendSecond, userMessage: "Second message should send");
         }
 
@@ -105,13 +101,13 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
         this._currentTimeSource.UtcNow()
             .Returns(returnThis: Initial, Initial.AddSeconds(1), Initial.AddSeconds(91));
 
-        bool shouldSendFirst = this._twitchMessageTriggerDebounceFilter.CanSend(MessageMatch);
+        bool shouldSendFirst = this._twitchMessageTriggerDebounceFilter.CanSend(OutputMessageMatch);
         Assert.True(condition: shouldSendFirst, userMessage: "First message should always send");
 
-        bool shouldSendSecond = this._twitchMessageTriggerDebounceFilter.CanSend(MessageMatch);
+        bool shouldSendSecond = this._twitchMessageTriggerDebounceFilter.CanSend(OutputMessageMatch);
         Assert.False(condition: shouldSendSecond, userMessage: "Second message should not send");
 
-        bool shouldSendThird = this._twitchMessageTriggerDebounceFilter.CanSend(MessageMatch);
+        bool shouldSendThird = this._twitchMessageTriggerDebounceFilter.CanSend(OutputMessageMatch);
         Assert.True(condition: shouldSendThird, userMessage: "Third message should send");
     }
 }

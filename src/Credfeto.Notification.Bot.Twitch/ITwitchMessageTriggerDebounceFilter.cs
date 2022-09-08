@@ -4,5 +4,5 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface ITwitchMessageTriggerDebounceFilter
 {
-    bool CanSend(TwitchMessageMatch match);
+    bool CanSend(TwitchOutputMessageMatch match);
 }

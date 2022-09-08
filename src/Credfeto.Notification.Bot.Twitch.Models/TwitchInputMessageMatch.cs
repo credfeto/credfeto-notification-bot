@@ -5,9 +5,9 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
 [DebuggerDisplay("{Streamer.Value}: {Chatter.Value} -  {MatchType}: {Message}")]
-public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
+public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch>
 {
-    public TwitchMessageMatch(in Streamer streamer, in Viewer chatter, string message, TwitchMessageMatchType matchType)
+    public TwitchInputMessageMatch(in Streamer streamer, in Viewer chatter, string message, TwitchMessageMatchType matchType)
 
     {
         this.Streamer = streamer;
@@ -24,7 +24,7 @@ public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
 
     public TwitchMessageMatchType MatchType { get; }
 
-    public bool Equals(TwitchMessageMatch? other)
+    public bool Equals(TwitchInputMessageMatch? other)
     {
         if (ReferenceEquals(objA: null, objB: other))
         {
@@ -41,7 +41,7 @@ public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
 
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, objB: obj) || obj is TwitchMessageMatch other && this.Equals(other);
+        return ReferenceEquals(this, objB: obj) || obj is TwitchInputMessageMatch other && this.Equals(other);
     }
 
     public override int GetHashCode()
@@ -49,12 +49,12 @@ public sealed class TwitchMessageMatch : IEquatable<TwitchMessageMatch>
         return HashCode.Combine(value1: this.Streamer, value2: this.Chatter, value3: this.Message, value4: this.MatchType);
     }
 
-    public static bool operator ==(TwitchMessageMatch? left, TwitchMessageMatch? right)
+    public static bool operator ==(TwitchInputMessageMatch? left, TwitchInputMessageMatch? right)
     {
         return Equals(objA: left, objB: right);
     }
 
-    public static bool operator !=(TwitchMessageMatch? left, TwitchMessageMatch? right)
+    public static bool operator !=(TwitchInputMessageMatch? left, TwitchInputMessageMatch? right)
     {
         return !Equals(objA: left, objB: right);
     }

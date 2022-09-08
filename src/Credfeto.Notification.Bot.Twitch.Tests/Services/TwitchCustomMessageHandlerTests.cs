@@ -85,13 +85,13 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
     private void ReceivedCanSend()
     {
         this._twitchMessageTriggerDebounceFilter.Received(1)
-            .CanSend(Arg.Any<TwitchMessageMatch>());
+            .CanSend(Arg.Any<TwitchOutputMessageMatch>());
     }
 
     private void DidNotReceiveCanSend()
     {
         this._twitchMessageTriggerDebounceFilter.DidNotReceive()
-            .CanSend(Arg.Any<TwitchMessageMatch>());
+            .CanSend(Arg.Any<TwitchOutputMessageMatch>());
     }
 
     private Task ReceivedSendCustomMessageAsync()
@@ -106,9 +106,9 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
                    .Publish(Arg.Any<CustomTriggeredMessage>(), Arg.Any<CancellationToken>());
     }
 
-    private void MockCanSend(bool x)
+    private void MockCanSend(bool canSend)
     {
-        this._twitchMessageTriggerDebounceFilter.CanSend(Arg.Any<TwitchMessageMatch>())
-            .Returns(x);
+        this._twitchMessageTriggerDebounceFilter.CanSend(Arg.Any<TwitchOutputMessageMatch>())
+            .Returns(canSend);
     }
 }
