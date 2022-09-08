@@ -96,7 +96,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
                 throw;
             }
 
-            Streamer streamer = Streamer.FromString(match.Groups["Streamer"]
+            Streamer streamer = Streamer.FromString(match.Groups["streamer"]
                                                          .Value);
             this._logger.LogError(new(exception.HResult), exception: exception, $"Streamer {streamer.Value} not found");
 
