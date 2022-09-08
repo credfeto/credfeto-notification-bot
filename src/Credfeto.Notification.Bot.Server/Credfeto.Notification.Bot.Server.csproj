@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Database.Shared" Version="0.0.1.4-main" />
-    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.2.3" />
+    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.3.4" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0" />
