@@ -21,7 +21,8 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
     public TwitchMessageTriggerDebounceFilterTests()
     {
         this._currentTimeSource = GetSubstitute<ICurrentTimeSource>();
-        this._twitchMessageTriggerDebounceFilter = new TwitchMessageTriggerDebounceFilter(currentTimeSource: this._currentTimeSource, this.GetTypedLogger<TwitchMessageTriggerDebounceFilter>());
+        this._twitchMessageTriggerDebounceFilter =
+            new TwitchMessageTriggerDebounceFilter(currentTimeSource: this._currentTimeSource, this.GetTypedLogger<TwitchMessageTriggerDebounceFilter>());
     }
 
     private void MockCurrentTime(bool shortBreak)

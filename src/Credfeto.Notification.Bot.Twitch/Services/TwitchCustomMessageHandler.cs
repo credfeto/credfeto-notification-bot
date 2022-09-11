@@ -98,7 +98,10 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             foreach (TwitchMarbles marble in marbles)
             {
                 Trace.WriteLine($"Adding marbles trigger: {marble.Streamer}");
-                TwitchInputMessageMatch trigger = new(Streamer.FromString(marble.Streamer), Viewer.FromString(marble.Bot), matchType: TwitchMessageMatchType.EXACT, message: marble.Match);
+                TwitchInputMessageMatch trigger = new(Streamer.FromString(marble.Streamer),
+                                                      Viewer.FromString(marble.Bot),
+                                                      matchType: TwitchMessageMatchType.EXACT,
+                                                      message: marble.Match);
 
                 triggers.TryAdd(key: trigger, new(Streamer.FromString(marble.Streamer), message: marble.Issue));
             }

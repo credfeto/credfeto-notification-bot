@@ -46,17 +46,19 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 
         this._lsm = new(options.Value.ConfigureTwitchApi());
 
-        this._onlineSubscription = Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
-                                             .Select(messageEvent => messageEvent.EventArgs)
-                                             .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
-                                             .Concat()
-                                             .Subscribe();
+        this._onlineSubscription = Observable
+                                   .FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
+                                   .Select(messageEvent => messageEvent.EventArgs)
+                                   .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
+                                   .Concat()
+                                   .Subscribe();
 
-        this._offlineSubscription = Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
-                                              .Select(messageEvent => messageEvent.EventArgs)
-                                              .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
-                                              .Concat()
-                                              .Subscribe();
+        this._offlineSubscription = Observable
+                                    .FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
+                                    .Select(messageEvent => messageEvent.EventArgs)
+                                    .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
+                                    .Concat()
+                                    .Subscribe();
     }
 
     public void Dispose()
