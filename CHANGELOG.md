@@ -20,7 +20,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FunFair.Test.Common to 6.0.4.1998
 - FF-1429 - Updated TwitchLib to 3.6.1
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.3.44
-- FF-3881 - Updated DotNet SDK to 6.0.400
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.44.0.52574
 - FF-1429 - Updated Discord.Net to 3.8.0
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.1
@@ -31,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.3.4
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.725
 - FF-1429 - Updated Microsoft.Extensions to 6.0.9
+- FF-3881 - Updated DotNet SDK to 6.0.401
 ### Removed
 ### Deployment Changes
 
