@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated xunit to 2.4.2
 - FF-1429 - Updated Npgsql to 6.0.6
 - FF-1429 - Updated FunFair.Test.Common to 6.0.4.1998
-- FF-1429 - Updated Microsoft.Extensions to 6.0.8
 - FF-1429 - Updated TwitchLib to 3.6.1
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.3.44
 - FF-3881 - Updated DotNet SDK to 6.0.400
@@ -31,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FluentValidation.AspNetCore to 11.2.2
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.3.4
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.725
+- FF-1429 - Updated Microsoft.Extensions to 6.0.9
 ### Removed
 ### Deployment Changes
 
