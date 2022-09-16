@@ -19,7 +19,7 @@
     <OutputType>Exe</OutputType>
     <RunAOTCompilation>false</RunAOTCompilation>
     <RuntimeIdentifiers>win-x64;win10-x64;linux-x64;linux-arm64</RuntimeIdentifiers>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
     <TreatSpecificWarningsAsErrors />
