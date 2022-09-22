@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated xunit to 2.4.2
 - FF-1429 - Updated Npgsql to 6.0.6
 - FF-1429 - Updated FunFair.Test.Common to 6.0.4.1998
-- FF-1429 - Updated TwitchLib to 3.6.1
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.3.44
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.1
 - FF-1429 - Updated SecurityCodeScan.VS2019 to 5.6.7
@@ -31,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Discord.Net to 3.8.1
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.45.0.54064
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.732
+- FF-1429 - Updated TwitchLib to 3.7.0
 ### Removed
 ### Deployment Changes
 
