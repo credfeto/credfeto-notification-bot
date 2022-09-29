@@ -32,6 +32,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated TwitchLib to 3.7.0
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.2
 - FF-1429 - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 1.1.7
+- Changed to use built in shoutout
 ### Removed
 ### Deployment Changes
 
