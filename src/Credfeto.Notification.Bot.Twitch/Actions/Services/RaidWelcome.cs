@@ -54,7 +54,7 @@ public sealed class RaidWelcome : MessageSenderBase, IRaidWelcome
 
         await this.SendImmediateMessageAsync(streamer: streamer, message: this._raidWelcome, cancellationToken: cancellationToken);
         await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, $"Thanks @{raider} for the raid", cancellationToken: cancellationToken);
-        await this.SendSlowMessageAsync(streamer: streamer, $"/shoutout @{raider}", cancellationToken: cancellationToken);
+        await this.SendSlowMessageAsync(streamer: streamer, $"/shoutout {raider}", cancellationToken: cancellationToken);
 
         if (raidSettings?.CalmDown != null)
         {

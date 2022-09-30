@@ -121,7 +121,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                                       isRegular: true,
                                                       cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"/shoutout @{VisitingChannel}");
+        await this.ReceivedPublishMessageAsync($"/shoutout {VisitingChannel}");
     }
 
     [Fact]
@@ -147,7 +147,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                                       isRegular: true,
                                                       cancellationToken: CancellationToken.None);
 
-        await this.ReceivedPublishMessageAsync($"/shoutout @{VisitingChannelFriendWithNoMessage}");
+        await this.ReceivedPublishMessageAsync($"/shoutout {VisitingChannelFriendWithNoMessage}");
     }
 
     [Fact]

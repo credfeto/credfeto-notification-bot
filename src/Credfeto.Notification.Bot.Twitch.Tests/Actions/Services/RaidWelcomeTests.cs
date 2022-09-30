@@ -80,7 +80,7 @@ public sealed class RaidWelcomeTests : LoggingTestBase
         await this.ReceivedPublishMessageAsync(IMMEDIATE_MSG);
         await this.ReceivedPublishMessageAsync(raidWelcome);
         await this.ReceivedPublishMessageAsync($"Thanks @{Raider} for the raid");
-        await this.ReceivedPublishMessageAsync($"/shoutout @{Raider}");
+        await this.ReceivedPublishMessageAsync($"/shoutout {Raider}");
         await this.ReceivedPublishMessageAsync(CALM_DOWN_MSG);
     }
 

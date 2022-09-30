@@ -102,7 +102,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
 
     private async Task SendStandardShoutoutAsync(Streamer streamer, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
     {
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, $"/shoutout @{visitingStreamer.UserName}", cancellationToken: cancellationToken);
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, $"/shoutout {visitingStreamer.UserName}", cancellationToken: cancellationToken);
         this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: code);
     }
 
