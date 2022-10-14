@@ -31,9 +31,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 1.1.7
 - Changed to use built in shoutout
 - FF-1429 - Updated MediatR to 11.0.0
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.733
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.46.0.54807
 - FF-1429 - Updated Microsoft.Extensions to 6.0.10
+- FF-1429 - Updated Meziantou.Analyzer to 1.0.734
 ### Removed
 ### Deployment Changes
 
