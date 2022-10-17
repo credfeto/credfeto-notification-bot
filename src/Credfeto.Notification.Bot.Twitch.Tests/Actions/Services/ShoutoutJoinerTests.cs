@@ -132,6 +132,7 @@ public sealed class ShoutoutJoinerTests : TestBase
         await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"!so @{VisitingChannelFriendWithNoMessage}");
+        await this.ReceivedPublishMessageAsync($"/shoutout @{VisitingChannelFriendWithNoMessage}");
     }
 
     [Fact]
@@ -142,5 +143,6 @@ public sealed class ShoutoutJoinerTests : TestBase
         await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync("Check out this weird and wonderful streamer!");
+        await this.ReceivedPublishMessageAsync($"/shoutout @{VisitingChannelFriendWithMessage}");
     }
 }

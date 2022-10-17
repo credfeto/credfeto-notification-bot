@@ -90,7 +90,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         else
         {
             await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
-            await this.SendBuiltInShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
+            await this.SendBuiltInShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG", cancellationToken: cancellationToken);
             this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
         }
 
