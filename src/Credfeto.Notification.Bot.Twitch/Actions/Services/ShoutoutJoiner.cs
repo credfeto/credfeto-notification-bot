@@ -51,6 +51,7 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
             if (isRegular)
             {
                 await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
+                await this.SendBuiltInShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "REGULAR", cancellationToken: cancellationToken);
 
                 return true;
             }
@@ -84,10 +85,12 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
         {
             await this.SendStandardShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
+            await this.SendBuiltInShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
         }
         else
         {
             await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, message: twitchFriendChannel.Message, cancellationToken: cancellationToken);
+            await this.SendBuiltInShoutoutAsync(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND", cancellationToken: cancellationToken);
             this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: "FRIEND_MSG");
         }
 
@@ -97,6 +100,12 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
     private async Task SendStandardShoutoutAsync(Streamer streamer, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
     {
         await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, $"!so @{visitingStreamer.UserName}", cancellationToken: cancellationToken);
+        this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: code);
+    }
+
+    private async Task SendBuiltInShoutoutAsync(Streamer streamer, TwitchUser visitingStreamer, string code, CancellationToken cancellationToken)
+    {
+        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.SLOW, $"/shoutout @{visitingStreamer.UserName}", cancellationToken: cancellationToken);
         this.LogShoutout(streamer: streamer, visitingStreamer: visitingStreamer, code: code);
     }
 
