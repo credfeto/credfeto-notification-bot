@@ -32,8 +32,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Changed to use built in shoutout
 - FF-1429 - Updated MediatR to 11.0.0
 - FF-1429 - Updated Microsoft.Extensions to 6.0.10
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.734
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.47.0.55603
+- FF-1429 - Updated Meziantou.Analyzer to 1.0.736
 ### Removed
 ### Deployment Changes
 
