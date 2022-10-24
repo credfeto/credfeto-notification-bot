@@ -75,7 +75,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             TwitchMessageMatchType.ENDS_WITH => message.Message.EndsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
             TwitchMessageMatchType.REGEX => Regex.IsMatch(input: message.Message,
                                                           pattern: trigger.Message,
-                                                          RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant,
+                                                          RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant | RegexOptions.Singleline,
                                                           TimeSpan.FromSeconds(1)),
             _ => false
         };
