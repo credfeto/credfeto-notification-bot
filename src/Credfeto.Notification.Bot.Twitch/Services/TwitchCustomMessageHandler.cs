@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -72,6 +73,10 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             TwitchMessageMatchType.CONTAINS => message.Message.Contains(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
             TwitchMessageMatchType.STARTS_WITH => message.Message.StartsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
             TwitchMessageMatchType.ENDS_WITH => message.Message.EndsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
+            TwitchMessageMatchType.REGEX => Regex.IsMatch(input: message.Message,
+                                                          pattern: trigger.Message,
+                                                          RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant,
+                                                          TimeSpan.FromSeconds(1)),
             _ => false
         };
     }
@@ -100,7 +105,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
                 Trace.WriteLine($"Adding marbles trigger: {marble.Streamer}");
                 TwitchInputMessageMatch trigger = new(Streamer.FromString(marble.Streamer),
                                                       Viewer.FromString(marble.Bot),
-                                                      matchType: TwitchMessageMatchType.EXACT,
+                                                      matchType: ConvertMatchType(marble.MatchType.ToUpperInvariant()),
                                                       message: marble.Match);
 
                 triggers.TryAdd(key: trigger, new(Streamer.FromString(marble.Streamer), message: marble.Issue));
@@ -108,5 +113,18 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         }
 
         return triggers;
+    }
+
+    private static TwitchMessageMatchType ConvertMatchType(string marbleMatchType)
+    {
+        return marbleMatchType switch
+        {
+            "EXACT" => TwitchMessageMatchType.EXACT,
+            "CONTAINS" => TwitchMessageMatchType.CONTAINS,
+            "STARTS_WITH" => TwitchMessageMatchType.STARTS_WITH,
+            "ENDS_WITH" => TwitchMessageMatchType.ENDS_WITH,
+            "REGEX" => TwitchMessageMatchType.REGEX,
+            _ => throw new ArgumentOutOfRangeException(nameof(marbleMatchType), actualValue: marbleMatchType, message: null)
+        };
     }
 }

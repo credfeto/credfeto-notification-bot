@@ -8,5 +8,7 @@ public enum TwitchMessageMatchType
 
     ENDS_WITH = 2,
 
-    CONTAINS = 3
+    CONTAINS = 3,
+
+    REGEX = 4
 }

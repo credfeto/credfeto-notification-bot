@@ -5,12 +5,13 @@ namespace Credfeto.Notification.Bot.Twitch.Configuration;
 public sealed class TwitchMarbles
 {
     [JsonConstructor]
-    public TwitchMarbles(string streamer, string bot, string match, string issue)
+    public TwitchMarbles(string streamer, string bot, string match, string issue, string matchType)
     {
         this.Streamer = streamer;
         this.Bot = bot;
         this.Match = match;
         this.Issue = issue;
+        this.MatchType = matchType;
     }
 
     public string Streamer { get; }
@@ -20,4 +21,6 @@ public sealed class TwitchMarbles
     public string Match { get; }
 
     public string Issue { get; }
+
+    public string MatchType { get; }
 }
