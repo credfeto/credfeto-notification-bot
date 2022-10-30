@@ -69,16 +69,41 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         return trigger.Streamer == message.Streamer && trigger.Chatter == message.Chatter && trigger.MatchType switch
         {
-            TwitchMessageMatchType.EXACT => StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Message, y: trigger.Message),
-            TwitchMessageMatchType.CONTAINS => message.Message.Contains(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
-            TwitchMessageMatchType.STARTS_WITH => message.Message.StartsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
-            TwitchMessageMatchType.ENDS_WITH => message.Message.EndsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase),
-            TwitchMessageMatchType.REGEX => Regex.IsMatch(input: message.Message,
-                                                          pattern: trigger.Message,
-                                                          RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant | RegexOptions.Singleline,
-                                                          TimeSpan.FromSeconds(1)),
+            TwitchMessageMatchType.EXACT => IsExactMatch(message: message, trigger: trigger),
+            TwitchMessageMatchType.CONTAINS => IsContainsMatch(message: message, trigger: trigger),
+            TwitchMessageMatchType.STARTS_WITH => IsStartsWithMatch(message: message, trigger: trigger),
+            TwitchMessageMatchType.ENDS_WITH => IsEndsWithMatch(message: message, trigger: trigger),
+            TwitchMessageMatchType.REGEX => IsRegexMatch(message: message, trigger: trigger),
             _ => false
         };
+    }
+
+    private static bool IsContainsMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    {
+        return message.Message.Contains(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase);
+    }
+
+    private static bool IsExactMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    {
+        return StringComparer.InvariantCultureIgnoreCase.Equals(x: message.Message, y: trigger.Message);
+    }
+
+    private static bool IsStartsWithMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    {
+        return message.Message.StartsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase);
+    }
+
+    private static bool IsEndsWithMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    {
+        return message.Message.EndsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase);
+    }
+
+    private static bool IsRegexMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    {
+        return Regex.IsMatch(input: message.Message,
+                             pattern: trigger.Message,
+                             RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant | RegexOptions.Singleline,
+                             TimeSpan.FromSeconds(1));
     }
 
     private static ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> BuildMessageTriggers(IReadOnlyList<string> heists, IReadOnlyList<TwitchMarbles>? marbles)
