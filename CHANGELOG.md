@@ -13,7 +13,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - FF-1429 - Updated NonBlocking to 2.1.0
 - FF-1429 - Updated NSubstitute to 4.4.0
-- FF-1429 - Updated Roslynator.Analyzers to 4.1.1
 - FF-1429 - Updated xunit.analyzers to 1.0.0
 - FF-1429 - Updated xunit to 2.4.2
 - FF-1429 - Updated Npgsql to 6.0.6
@@ -35,6 +34,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FunFair.Test.Common to 6.0.5.2217
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.744
 - FF-1429 - Updated coverlet to 3.2.0
+- FF-1429 - Updated Roslynator.Analyzers to 4.1.2
 ### Removed
 ### Deployment Changes
 
