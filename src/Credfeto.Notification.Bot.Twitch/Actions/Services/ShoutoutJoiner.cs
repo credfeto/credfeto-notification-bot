@@ -18,7 +18,10 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
     private readonly TwitchBotOptions _options;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public ShoutoutJoiner(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<ShoutoutJoiner> logger)
+    public ShoutoutJoiner(IOptions<TwitchBotOptions> options,
+                          ITwitchChannelManager twitchChannelManager,
+                          IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                          ILogger<ShoutoutJoiner> logger)
         : base(twitchChatMessageChannel)
     {
         this._twitchChannelManager = twitchChannelManager ?? throw new ArgumentNullException(nameof(twitchChannelManager));
@@ -80,7 +83,10 @@ public sealed class ShoutoutJoiner : MessageSenderBase, IShoutoutJoiner
         return channel?.ShoutOuts.FriendChannels?.FirstOrDefault(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c.Channel, y: visitingStreamer.UserName.Value));
     }
 
-    private async Task<bool> IssueFriendChannelShoutoutAsync(Streamer streamer, TwitchUser visitingStreamer, TwitchFriendChannel twitchFriendChannel, CancellationToken cancellationToken)
+    private async Task<bool> IssueFriendChannelShoutoutAsync(Streamer streamer,
+                                                             TwitchUser visitingStreamer,
+                                                             TwitchFriendChannel twitchFriendChannel,
+                                                             CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(twitchFriendChannel.Message))
         {
