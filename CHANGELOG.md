@@ -23,7 +23,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-3881 - Updated DotNet SDK to 6.0.401
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.4.5
 - FF-1429 - Updated Discord.Net to 3.8.1
-- FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.3.2
 - FF-1429 - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 1.1.7
 - Changed to use built in shoutout
 - FF-1429 - Updated MediatR to 11.0.0
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.745
 - FF-1429 - Updated Credfeto.Enumeration.Source.Generation to 0.0.2.3
 - FF-1429 - Updated FunFair.Test.Common to 6.0.6.2271
+- FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.4.0
 ### Removed
 ### Deployment Changes
 
