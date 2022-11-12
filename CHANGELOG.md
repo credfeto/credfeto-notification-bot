@@ -7,9 +7,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 
 ## [Unreleased]
 ### Added
+### Fixed
+### Changed
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.7] - 2022-11-12
+### Added
 - Ability to generate different messages rather than a single message for each type
 - Fluent validation for json config
-### Fixed
 ### Changed
 - FF-1429 - Updated NonBlocking to 2.1.0
 - FF-1429 - Updated NSubstitute to 4.4.0
@@ -37,12 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.4.27
 - FF-1429 - Updated FunFair.Test.Common to 6.0.8.2334
 - FF-1429 - Updated Credfeto.Enumeration.Source.Generation to 0.0.8.10
-### Removed
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [0.0.6] - 2022-07-15
 ### Added
 - More generic trigger support
