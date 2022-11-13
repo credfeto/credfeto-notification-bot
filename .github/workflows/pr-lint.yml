@@ -54,11 +54,7 @@ jobs:
         with:
           fetch-depth: 0
       - if: ${{ github.actor != 'dependabot[bot]' || endsWith(github.repository , '-template') }}
-        run: >
-          { \
-            CHANGE_TEXT=$(git diff --exit-code --no-patch --merge-base origin/main CHANGELOG.md) ; \
-            echo "CHANGES=$?" ; \
-          } >> "$GITHUB_ENV"
+        run: echo $(git diff --exit-code --no-patch --merge-base origin/main CHANGELOG.md 2> /dev/null && echo 0 || echo $?) >> "$GITHUB_ENV"
       - if: ${{ (github.actor != 'dependabot[bot]' || endsWith(github.repository , '-template')) && env.CHANGES == '0' }}
         uses: actions/github-script@v6.3.3
         with:
