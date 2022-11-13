@@ -9,7 +9,7 @@ using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using FunFair.Test.Common;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
@@ -89,7 +89,7 @@ public sealed class FollowerMilestoneTests : TestBase
                    .UpdateFollowerMilestoneAsync(Arg.Any<Streamer>(), Arg.Any<int>());
     }
 
-    private Task ReceivedPublishMessageAsync(int milestone, int nextMilestone)
+    private ValueTask ReceivedPublishMessageAsync(int milestone, int nextMilestone)
     {
         return this._mediator.Received(1)
                    .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == MockReferenceData.Streamer && t.MilestoneReached == milestone &&
@@ -97,7 +97,7 @@ public sealed class FollowerMilestoneTests : TestBase
                             Arg.Any<CancellationToken>());
     }
 
-    private Task DidNotReceivePublishMessageAsync()
+    private ValueTask DidNotReceivePublishMessageAsync()
     {
         return this._mediator.DidNotReceive()
                    .Publish(Arg.Any<TwitchFollowerMilestoneReached>(), Arg.Any<CancellationToken>());

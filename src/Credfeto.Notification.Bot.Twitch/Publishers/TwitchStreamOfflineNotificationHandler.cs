@@ -5,7 +5,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -27,7 +27,7 @@ public sealed class TwitchStreamOfflineNotificationHandler : INotificationHandle
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public Task Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
+    public ValueTask Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
     {
         this._logger.LogWarning($"{notification.Streamer}: Stopped streaming \"{notification.Title}\" ({notification.GameName}) at {notification.StartedAt}");
 
@@ -35,7 +35,7 @@ public sealed class TwitchStreamOfflineNotificationHandler : INotificationHandle
         {
             this._logger.LogDebug($"{notification.Streamer}: Ignoring non-mod channel");
 
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(notification.Streamer);
@@ -49,6 +49,6 @@ public sealed class TwitchStreamOfflineNotificationHandler : INotificationHandle
             this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to notify Started streaming");
         }
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 }

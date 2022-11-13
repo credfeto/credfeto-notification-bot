@@ -9,7 +9,7 @@ using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
@@ -240,13 +240,13 @@ public sealed class TwitchChannelManagerTests : TestBase
                            cancellationToken: CancellationToken.None);
     }
 
-    private Task DidNotReceiveBitGiftNotificationAsync()
+    private ValueTask DidNotReceiveBitGiftNotificationAsync()
     {
         return this._mediator.DidNotReceive()
                    .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == Guest1.ToViewer()), cancellationToken: CancellationToken.None);
     }
 
-    private Task ReceivedBitGiftNotificationAsync(Viewer viewer, int amount)
+    private ValueTask ReceivedBitGiftNotificationAsync(Viewer viewer, int amount)
     {
         return this._mediator.Received(1)
                    .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount),
@@ -277,7 +277,7 @@ public sealed class TwitchChannelManagerTests : TestBase
                    .IsRegularChatterAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>());
     }
 
-    private static Task SendChatMessageAsync(ITwitchChannelState twitchChannelState)
+    private static ValueTask SendChatMessageAsync(ITwitchChannelState twitchChannelState)
     {
         return twitchChannelState.ChatMessageAsync(Guest1.ToViewer(), message: "Hello world", cancellationToken: CancellationToken.None);
     }

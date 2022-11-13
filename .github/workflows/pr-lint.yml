@@ -54,12 +54,12 @@ jobs:
         with:
           fetch-depth: 0
       - if: ${{ github.actor != 'dependabot[bot]' || endsWith(github.repository , '-template') }}
-        run: echo "CHANGES=$(git diff --exit-code origin/main CHANGELOG.md)" >> "$GITHUB_ENV"
-      - if: ${{ env.CHANGES == '0' }}
+        run: echo "CHANGES=$(git diff --exit-code --no-patch --merge-base origin/main CHANGELOG.md 2> /dev/null && echo 0 || echo $?)" >> "$GITHUB_ENV"
+      - if: ${{ (github.actor != 'dependabot[bot]' || endsWith(github.repository , '-template')) && env.CHANGES == '0' }}
         uses: actions/github-script@v6.3.3
         with:
           script: |
-            core.setFailed('Changelog has not changed')
+            core.setFailed('Changelog has not changed')        uses: actions/github-script@v6.3.3
 
   change-log-entry-is-in-unreleased:
     if: github.event.pull_request.draft == false

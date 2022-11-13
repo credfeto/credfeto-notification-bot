@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
@@ -19,7 +19,7 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandler : INotificat
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public Task Handle(TwitchWatchChannel notification, CancellationToken cancellationToken)
+    public ValueTask Handle(TwitchWatchChannel notification, CancellationToken cancellationToken)
     {
         Streamer streamer = notification.Info.UserName.ToStreamer();
         this._logger.LogInformation($"{streamer}: Enabling for live status checks");

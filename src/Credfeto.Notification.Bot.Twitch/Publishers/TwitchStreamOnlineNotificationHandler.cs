@@ -5,7 +5,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -27,7 +27,7 @@ public sealed class TwitchStreamOnlineNotificationHandler : INotificationHandler
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public async Task Handle(TwitchStreamOnline notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(TwitchStreamOnline notification, CancellationToken cancellationToken)
     {
         this._logger.LogWarning($"{notification.Streamer}: Started streaming \"{notification.Title}\" ({notification.GameName}) at {notification.StartedAt}");
 

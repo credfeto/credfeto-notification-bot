@@ -80,7 +80,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         this._semaphoreSlim.Dispose();
     }
 
-    public async Task EnableAsync(TwitchUser streamer)
+    public async ValueTask EnableAsync(TwitchUser streamer)
     {
         if (this._userMappings.TryAdd(key: streamer.Id, streamer.UserName.ToStreamer()))
         {
@@ -165,11 +165,11 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         this._connected = false;
     }
 
-    private Task OnFollowedAsync(OnFollowArgs e, in CancellationToken cancellationToken)
+    private async Task OnFollowedAsync(OnFollowArgs e, CancellationToken cancellationToken)
     {
         if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out Streamer channelName))
         {
-            return Task.CompletedTask;
+            return ;
         }
 
         Viewer user = Viewer.FromString(e.Username);
@@ -178,11 +178,11 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
         if (!this._options.IsModChannel(channelName))
         {
-            return Task.CompletedTask;
+            return;
         }
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(channelName);
 
-        return state.NewFollowerAsync(user: user, cancellationToken: cancellationToken);
+        await state.NewFollowerAsync(user: user, cancellationToken: cancellationToken);
     }
 }

@@ -5,7 +5,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -30,7 +30,7 @@ public sealed class TwitchIncomingMessageNotificationHandler : INotificationHand
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
     }
 
-    public async Task Handle(TwitchIncomingMessage notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(TwitchIncomingMessage notification, CancellationToken cancellationToken)
     {
         bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(message: notification, cancellationToken: cancellationToken);
 

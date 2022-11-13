@@ -7,7 +7,7 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
@@ -35,7 +35,7 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
                                                                 new(streamer: streamer.Value,
                                                                     bot: viewer.Value,
                                                                     match: "!play",
-                                                                    matchType: TwitchMessageMatchType.EXACT.ToString(),
+                                                                    matchType: TwitchMessageMatchType.EXACT.GetName(),
                                                                     issue: "!play")
                                                             },
                                                    channels: Array.Empty<TwitchModChannel>()));
@@ -98,13 +98,13 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
             .CanSend(Arg.Any<TwitchOutputMessageMatch>());
     }
 
-    private Task ReceivedSendCustomMessageAsync()
+    private ValueTask ReceivedSendCustomMessageAsync()
     {
         return this._mediator.Received(1)
                    .Publish(Arg.Is<CustomTriggeredMessage>(x => x.Streamer == IncomingMessage.Streamer), Arg.Any<CancellationToken>());
     }
 
-    private Task DidNotReceiveSendCustomMessageAsync()
+    private ValueTask DidNotReceiveSendCustomMessageAsync()
     {
         return this._mediator.DidNotReceive()
                    .Publish(Arg.Any<CustomTriggeredMessage>(), Arg.Any<CancellationToken>());

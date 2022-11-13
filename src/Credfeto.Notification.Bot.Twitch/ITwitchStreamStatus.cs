@@ -5,7 +5,7 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface ITwitchStreamStatus
 {
-    Task EnableAsync(Streamer streamer);
+    ValueTask EnableAsync(Streamer streamer);
 
     Task UpdateAsync();
 }

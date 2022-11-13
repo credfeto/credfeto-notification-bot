@@ -5,7 +5,7 @@ using Credfeto.Notification.Bot.Discord.Models;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Discord;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Discord.Publishers;
@@ -21,7 +21,7 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : INotific
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Handle(TwitchFollowerMilestoneReached notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(TwitchFollowerMilestoneReached notification, CancellationToken cancellationToken)
     {
         string title = $"Woo! New follower milestone reached {notification.MilestoneReached}";
 

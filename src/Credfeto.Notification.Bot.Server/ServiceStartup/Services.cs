@@ -11,7 +11,7 @@ using Credfeto.Notification.Bot.Twitch;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Configuration.Validators;
 using FluentValidation.Results;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -30,7 +30,8 @@ internal static class Services
         Log.Logger = CreateLogger();
 
         services.AddConfiguration()
-                .AddMediatR(typeof(Program), typeof(DiscordSetup), typeof(TwitchSetup))
+                .AddMediator()
+                //.AddMediatR(typeof(Program), typeof(DiscordSetup), typeof(TwitchSetup))
                 .AddAppLogging()
                 .AddResources()
                 .AddPostgresql()
