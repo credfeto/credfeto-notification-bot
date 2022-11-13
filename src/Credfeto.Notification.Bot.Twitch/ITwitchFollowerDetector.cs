@@ -5,7 +5,7 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface ITwitchFollowerDetector
 {
-    Task EnableAsync(TwitchUser streamer);
+    ValueTask EnableAsync(TwitchUser streamer);
 
     Task UpdateAsync();
 }

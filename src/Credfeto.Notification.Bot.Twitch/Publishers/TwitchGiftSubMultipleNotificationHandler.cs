@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
@@ -19,7 +19,7 @@ public sealed class TwitchGiftSubMultipleNotificationHandler : INotificationHand
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Handle(TwitchGiftSubMultiple notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(TwitchGiftSubMultiple notification, CancellationToken cancellationToken)
     {
         try
         {

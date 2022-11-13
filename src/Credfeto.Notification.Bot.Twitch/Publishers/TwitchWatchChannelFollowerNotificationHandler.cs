@@ -5,7 +5,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -26,14 +26,14 @@ public sealed class TwitchWatchChannelFollowerNotificationHandler : INotificatio
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public Task Handle(TwitchWatchChannel notification, CancellationToken cancellationToken)
+    public ValueTask Handle(TwitchWatchChannel notification, CancellationToken cancellationToken)
     {
         Streamer streamer = notification.Info.UserName.ToStreamer();
 
         if (!this._options.IsModChannel(streamer))
         {
             // don't watch for followers for channels we're not a mod for
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         this._logger.LogInformation($"{streamer}: Enabling for follower tracking");

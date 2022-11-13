@@ -6,7 +6,7 @@ using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.StreamState;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
@@ -25,7 +25,7 @@ public sealed class TwitchFollowerMilestoneReachedNotificationHandler : MessageS
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Handle(TwitchFollowerMilestoneReached notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(TwitchFollowerMilestoneReached notification, CancellationToken cancellationToken)
     {
         ITwitchChannelState channelState = this._twitchChannelManager.GetStreamer(notification.Streamer);
 

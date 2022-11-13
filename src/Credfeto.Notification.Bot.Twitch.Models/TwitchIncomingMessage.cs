@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
-using MediatR;
+using Mediator;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 

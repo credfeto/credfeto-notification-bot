@@ -62,7 +62,6 @@
     <PackageReference Include="Credfeto.Database.Shared" Version="0.0.1.4-main" />
     <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.4.5" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.0" />
     <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2" />
@@ -78,6 +77,7 @@
     <PackageReference Include="Credfeto.Enumeration.Source.Generation" Version="0.0.8.10" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="FunFair.CodeAnalysis" Version="5.9.0.1493" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Meziantou.Analyzer" Version="1.0.746" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="Mediator.SourceGenerator" Version="2.0.27-rc" PrivateAssets="All" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.4.27" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.15" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.10.4539" PrivateAssets="All" ExcludeAssets="runtime" />

@@ -8,7 +8,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NonBlocking;
@@ -110,7 +110,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
     }
 
-    public async Task EnableAsync(Streamer streamer)
+    public async ValueTask EnableAsync(Streamer streamer)
     {
         if (this._channels.TryAdd(key: streamer, value: true))
         {

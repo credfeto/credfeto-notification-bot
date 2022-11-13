@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
@@ -15,10 +15,10 @@ public sealed class TwitchStreamOfflineLeaveChatNotificationHandler : INotificat
         this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
     }
 
-    public Task Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
+    public ValueTask Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
     {
         this._twitchChat.LeaveChat(notification.Streamer);
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 }

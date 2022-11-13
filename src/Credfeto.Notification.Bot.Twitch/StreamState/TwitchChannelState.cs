@@ -10,7 +10,7 @@ using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Services;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
@@ -98,7 +98,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         this._stream?.AddIncident();
     }
 
-    public async Task RaidedAsync(Viewer raider, int viewerCount, CancellationToken cancellationToken)
+    public async ValueTask RaidedAsync(Viewer raider, int viewerCount, CancellationToken cancellationToken)
     {
         if (this._stream?.AddRaider(raider: raider, viewerCount: viewerCount) == true)
         {
@@ -106,7 +106,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         }
     }
 
-    public async Task ChatMessageAsync(Viewer user, string message, CancellationToken cancellationToken)
+    public async ValueTask ChatMessageAsync(Viewer user, string message, CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -165,7 +165,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         await this._mediator.Publish(new TwitchStreamNewChatter(streamer: this.Streamer, user: user, isRegular: isRegular), cancellationToken: cancellationToken);
     }
 
-    public async Task BitsGiftedAsync(Viewer user, int bits, CancellationToken cancellationToken)
+    public async ValueTask BitsGiftedAsync(Viewer user, int bits, CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
@@ -192,11 +192,11 @@ public sealed class TwitchChannelState : ITwitchChannelState
         await this._mediator.Publish(new TwitchBitsGift(streamer: this.Streamer, user: user, bits: bits), cancellationToken: cancellationToken);
     }
 
-    public Task GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken)
+    public ValueTask GiftedMultipleAsync(Viewer giftedBy, int count, string months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         this._stream.GiftedSub(giftedBy: giftedBy, count: count);
@@ -204,116 +204,116 @@ public sealed class TwitchChannelState : ITwitchChannelState
         return this._mediator.Publish(new TwitchGiftSubMultiple(streamer: this.Streamer, user: giftedBy, count: count), cancellationToken: cancellationToken);
     }
 
-    public Task GiftedSubAsync(Viewer giftedBy, string months, in CancellationToken cancellationToken)
+    public ValueTask GiftedSubAsync(Viewer giftedBy, string months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         this._stream.GiftedSub(giftedBy: giftedBy, count: 1);
 
         if (this._options.IsSelf(giftedBy))
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         return this._mediator.Publish(new TwitchGiftSubSingle(streamer: this.Streamer, user: giftedBy), cancellationToken: cancellationToken);
     }
 
-    public Task ContinuedSubAsync(Viewer user, in CancellationToken cancellationToken)
+    public ValueTask ContinuedSubAsync(Viewer user, in CancellationToken cancellationToken)
     {
         this._stream?.ContinuedSub(user);
 
         if (this._options.IsSelf(user))
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    public Task PrimeToPaidAsync(Viewer user, in CancellationToken cancellationToken)
+    public ValueTask PrimeToPaidAsync(Viewer user, in CancellationToken cancellationToken)
     {
         this._stream?.PrimeToPaid(user);
 
         if (this._options.IsSelf(user))
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    public Task NewSubscriberPaidAsync(Viewer user, in CancellationToken cancellationToken)
+    public ValueTask NewSubscriberPaidAsync(Viewer user, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         this._stream.NewSubscriberPaid(user);
 
         if (this._options.IsSelf(user))
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         return this._mediator.Publish(new TwitchNewPaidSub(streamer: this.Streamer, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task NewSubscriberPrimeAsync(Viewer user, in CancellationToken cancellationToken)
+    public ValueTask NewSubscriberPrimeAsync(Viewer user, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         this._stream.NewSubscriberPrime(user);
 
         if (this._options.IsSelf(user))
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         return this._mediator.Publish(new TwitchNewPrimeSub(streamer: this.Streamer, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task ResubscribePaidAsync(Viewer user, int months, in CancellationToken cancellationToken)
+    public ValueTask ResubscribePaidAsync(Viewer user, int months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         this._stream.ResubscribePaid(user);
 
         if (this._options.IsSelf(user))
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         return this._mediator.Publish(new TwitchPaidReSub(streamer: this.Streamer, user: user), cancellationToken: cancellationToken);
     }
 
-    public Task ResubscribePrimeAsync(Viewer user, int months, in CancellationToken cancellationToken)
+    public ValueTask ResubscribePrimeAsync(Viewer user, int months, in CancellationToken cancellationToken)
     {
         if (this._stream == null)
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         this._stream.ResubscribePrime(user);
 
         if (this._options.IsSelf(user))
         {
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
 
         return this._mediator.Publish(new TwitchPrimeReSub(streamer: this.Streamer, user: user), cancellationToken: cancellationToken);
     }
 
-    public async Task NewFollowerAsync(Viewer user, CancellationToken cancellationToken)
+    public async ValueTask NewFollowerAsync(Viewer user, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{this.Streamer}: Followed by {user}");
         int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: this.Streamer, username: user);

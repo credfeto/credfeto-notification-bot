@@ -7,7 +7,7 @@ using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;
-using MediatR;
+using Mediator;
 using NSubstitute;
 using Xunit;
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
@@ -24,7 +24,7 @@ public sealed class TwitchChannelChatConnectedNotificationHandler : INotificatio
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Handle(TwitchChannelChatConnected notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(TwitchChannelChatConnected notification, CancellationToken cancellationToken)
     {
         try
         {

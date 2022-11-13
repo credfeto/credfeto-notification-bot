@@ -7,7 +7,7 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;

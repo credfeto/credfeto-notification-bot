@@ -13,7 +13,7 @@ using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.StreamState;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NonBlocking;
@@ -419,37 +419,37 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         state.ClearChat();
     }
 
-    private Task OnCommunitySubscriptionAsync(OnCommunitySubscriptionArgs e, in CancellationToken cancellationToken)
+    private async Task OnCommunitySubscriptionAsync(OnCommunitySubscriptionArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.LogInformation($"{streamer}: Community Sub: {e.GiftedSubscription.DisplayName}");
 
         if (e.GiftedSubscription.IsAnonymous)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
-        return state.GiftedMultipleAsync(Viewer.FromString(e.GiftedSubscription.DisplayName),
+        await state.GiftedMultipleAsync(Viewer.FromString(e.GiftedSubscription.DisplayName),
                                          count: e.GiftedSubscription.MsgParamMassGiftCount,
                                          months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration,
                                          cancellationToken: cancellationToken);
     }
 
-    private Task OnGiftedSubscriptionAsync(OnGiftedSubscriptionArgs e, in CancellationToken cancellationToken)
+    private async Task OnGiftedSubscriptionAsync(OnGiftedSubscriptionArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.LogInformation($"{streamer}: Community Sub: {e.GiftedSubscription.DisplayName}");
 
         if (e.GiftedSubscription.IsAnonymous)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
-        return state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName),
+        await state.GiftedSubAsync(Viewer.FromString(e.GiftedSubscription.DisplayName),
                                     months: e.GiftedSubscription.MsgParamMultiMonthGiftDuration,
                                     cancellationToken: cancellationToken);
     }
@@ -466,24 +466,24 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         this._logger.LogInformation($"{streamer}: Emote Only: {e.ChannelState.EmoteOnly} Follower Only: {e.ChannelState.FollowersOnly} Sub Only: {e.ChannelState.SubOnly}");
     }
 
-    private Task OnContinuedGiftedSubscriptionAsync(OnContinuedGiftedSubscriptionArgs e, in CancellationToken cancellationToken)
+    private async Task OnContinuedGiftedSubscriptionAsync(OnContinuedGiftedSubscriptionArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.LogInformation($"{e.Channel}: {e.ContinuedGiftedSubscription.DisplayName} continued sub gifted by {e.ContinuedGiftedSubscription.MsgParamSenderLogin}");
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
-        return state.ContinuedSubAsync(Viewer.FromString(e.ContinuedGiftedSubscription.DisplayName), cancellationToken: cancellationToken);
+        await state.ContinuedSubAsync(Viewer.FromString(e.ContinuedGiftedSubscription.DisplayName), cancellationToken: cancellationToken);
     }
 
-    private Task OnPrimePaidSubscriberAsync(OnPrimePaidSubscriberArgs e, in CancellationToken cancellationToken)
+    private async Task OnPrimePaidSubscriberAsync(OnPrimePaidSubscriberArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.LogInformation($"{streamer}: {e.PrimePaidSubscriber.DisplayName} converted prime sub to paid");
 
         ITwitchChannelState state = this._twitchChannelManager.GetStreamer(streamer);
 
-        return state.PrimeToPaidAsync(Viewer.FromString(e.PrimePaidSubscriber.DisplayName), cancellationToken: cancellationToken);
+        await state.PrimeToPaidAsync(Viewer.FromString(e.PrimePaidSubscriber.DisplayName), cancellationToken: cancellationToken);
     }
 
     private void OnLog(OnLogArgs e)
@@ -524,7 +524,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         }
     }
 
-    private Task OnRaidAsync(OnRaidNotificationArgs e, in CancellationToken cancellationToken)
+    private async Task OnRaidAsync(OnRaidNotificationArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.LogInformation($"{streamer}: Raided by {e.RaidNotification.DisplayName}");
@@ -536,7 +536,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
             viewerCount = 1;
         }
 
-        return state.RaidedAsync(Viewer.FromString(e.RaidNotification.DisplayName), viewerCount: viewerCount, cancellationToken: cancellationToken);
+        await state.RaidedAsync(Viewer.FromString(e.RaidNotification.DisplayName), viewerCount: viewerCount, cancellationToken: cancellationToken);
     }
 
     private async Task OnJoinedChannelAsync(OnJoinedChannelArgs e, CancellationToken cancellationToken)
@@ -619,7 +619,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         }
     }
 
-    private Task OnNewSubscriberAsync(OnNewSubscriberArgs e, in CancellationToken cancellationToken)
+    private async Task OnNewSubscriberAsync(OnNewSubscriberArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
 
@@ -629,13 +629,14 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
         if (e.Subscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {
-            return state.NewSubscriberPaidAsync(Viewer.FromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
+            await state.NewSubscriberPaidAsync(Viewer.FromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
+            return;
         }
 
-        return state.NewSubscriberPrimeAsync(Viewer.FromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
+        await state.NewSubscriberPrimeAsync(Viewer.FromString(e.Subscriber.DisplayName), cancellationToken: cancellationToken);
     }
 
-    private Task OnReSubscribeAsync(OnReSubscriberArgs e, in CancellationToken cancellationToken)
+    private async Task OnReSubscribeAsync(OnReSubscriberArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.LogInformation($"{streamer}: Resub {e.ReSubscriber.DisplayName} for {e.ReSubscriber.Months}");
@@ -644,9 +645,11 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
         if (e.ReSubscriber.SubscriptionPlan == SubscriptionPlan.Prime)
         {
-            return state.ResubscribePaidAsync(Viewer.FromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
+            await state.ResubscribePaidAsync(Viewer.FromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
+
+            return;
         }
 
-        return state.ResubscribePrimeAsync(Viewer.FromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
+        await state.ResubscribePrimeAsync(Viewer.FromString(e.ReSubscriber.DisplayName), months: e.ReSubscriber.Months, cancellationToken: cancellationToken);
     }
 }

@@ -6,7 +6,7 @@ using Credfeto.Notification.Bot.Discord.Models;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Discord;
-using MediatR;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Discord.Publishers;
@@ -22,7 +22,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Handle(TwitchChannelNewFollower notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(TwitchChannelNewFollower notification, CancellationToken cancellationToken)
     {
         string title = $"{notification.Streamer} was followed by {notification.User}";
 
