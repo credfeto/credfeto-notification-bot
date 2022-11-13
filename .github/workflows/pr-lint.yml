@@ -56,7 +56,7 @@ jobs:
       - if: ${{ github.actor != 'dependabot[bot]' || endsWith(github.repository , '-template') }}
         run: >
           { \
-            git diff --exit-code --no-patch --merge-base origin/main CHANGELOG.md ; \
+            CHANGE_TEXT=$(git diff --exit-code --no-patch --merge-base origin/main CHANGELOG.md) ; \
             echo "CHANGES=$?" ; \
           } >> "$GITHUB_ENV"
       - if: ${{ (github.actor != 'dependabot[bot]' || endsWith(github.repository , '-template')) && env.CHANGES == '0' }}
