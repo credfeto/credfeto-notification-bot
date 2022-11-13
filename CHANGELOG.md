@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-1429 - Updated Meziantou.Analyzer to 1.0.747
+- FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.5.6
 ### Removed
 ### Deployment Changes
 
