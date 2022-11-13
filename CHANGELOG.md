@@ -9,13 +9,16 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Changing to Source generated mediators
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.8] - 2022-11-13
+### Changed
+- Changing to Source generated mediators
+
 ## [0.0.7] - 2022-11-12
 ### Added
 - Ability to generate different messages rather than a single message for each type
