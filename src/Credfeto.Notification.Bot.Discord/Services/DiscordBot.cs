@@ -59,7 +59,6 @@ public sealed class DiscordBot : IDiscordBot, IDisposable
             using (socketTextChannel.EnterTypingState())
             {
                 if (message.Image != null)
-
                 {
                     await using (MemoryStream imageStream = new(buffer: message.Image, writable: false))
                     {
@@ -74,7 +73,7 @@ public sealed class DiscordBot : IDiscordBot, IDisposable
         }
         catch (Exception exception)
         {
-            this._logger.LogCritical(new(exception.HResult), exception: exception, message: exception.Message);
+            this._logger.LogQueueMessageError(streamer: message.Channel, message: exception.Message, exception: exception);
         }
     }
 
