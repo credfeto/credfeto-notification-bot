@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Discord.Models;
+using Credfeto.Notification.Bot.Discord.Publishers.Logging;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Discord;
@@ -42,13 +43,12 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
                                                   notification.FollowCount == 1
                                                       ? "New Follower"
                                                       : $"Followed {notification.FollowCount} times")
-                                        .AddField(name: "Account Created",
-                                                  notification.AccountCreated.ToString(format: "yyyy-MM-dd HH:mm:ss", provider: CultureInfo.InvariantCulture))
+                                        .AddField(name: "Account Created", notification.AccountCreated.ToString(format: "yyyy-MM-dd HH:mm:ss", provider: CultureInfo.InvariantCulture))
                                         .Build();
         DiscordMessage discordMessage = new(notification.Streamer.ToString(), embed: embed, title: title, image: null);
 
         await this._messageChannel.PublishAsync(message: discordMessage, cancellationToken: cancellationToken);
 
-        this._logger.LogDebug($"{notification.Streamer} Queue new follower message to Discord");
+        this._logger.LogQueueNewFollower(notification.Streamer);
     }
 }
