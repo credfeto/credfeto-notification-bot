@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Discord.Models;
+using Credfeto.Notification.Bot.Discord.Services.Logging;
 using Credfeto.Notification.Bot.Shared;
 using Discord.WebSocket;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,7 @@ public sealed class DiscordBot : IDiscordBot, IDisposable
     public async Task PublishAsync(DiscordMessage message, CancellationToken cancellationToken)
     {
         await this._messageChannel.PublishAsync(message: message, cancellationToken: cancellationToken);
-        this._logger.LogDebug($"{message.Channel}: Queuing message for Discord");
+        this._logger.LogQueueMessage(message.Channel);
     }
 
     public void Dispose()
