@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Shared.Services.Logging;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Shared.Services;
@@ -16,7 +17,7 @@ public sealed class ProcessStartup : IRunOnStartup
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        this._logger.LogInformation("Starting...");
+        this._logger.LogStarting();
 
         return Task.CompletedTask;
     }

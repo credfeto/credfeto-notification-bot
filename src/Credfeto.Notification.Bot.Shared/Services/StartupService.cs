@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Shared.Services.Logging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -26,7 +27,8 @@ public sealed class StartupService : BackgroundService
 
     private Task StartServiceAsync(IRunOnStartup service, in CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"Starting {service.GetType().Name} service...");
+        this._logger.LogStarting(service.GetType()
+                                        .Name);
 
         return service.StartAsync(cancellationToken);
     }
