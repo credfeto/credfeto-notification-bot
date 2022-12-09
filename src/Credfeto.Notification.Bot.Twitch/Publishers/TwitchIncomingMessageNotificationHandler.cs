@@ -39,6 +39,11 @@ public sealed class TwitchIncomingMessageNotificationHandler : INotificationHand
             return;
         }
 
+        if (this._options.IsSelf(notification.Chatter))
+        {
+            return;
+        }
+
         if (!this._options.IsModChannel(notification.Streamer))
         {
             return;
