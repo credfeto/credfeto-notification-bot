@@ -35,7 +35,6 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj"/>
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.DataTypes\Credfeto.Notification.Bot.Twitch.DataTypes.csproj"/>
   </ItemGroup>
   <ItemGroup>
