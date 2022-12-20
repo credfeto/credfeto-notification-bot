@@ -18,6 +18,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.Extensions to 7.0.1
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.4.1
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.51.0.59060
+- FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.11.12
 ### Removed
 ### Deployment Changes
 
