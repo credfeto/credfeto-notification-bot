@@ -31,10 +31,17 @@ internal static class Program
     private static IHostBuilder CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
+                   .UseDefaultServiceProvider(InitialiseServiceProvider)
                    .ConfigureServices(Services.Configure)
                    .ConfigureLogging(InitialiseProviders)
                    .UseWindowsService()
                    .UseSystemd();
+    }
+
+    private static void InitialiseServiceProvider(ServiceProviderOptions options)
+    {
+        options.ValidateScopes = true;
+        options.ValidateOnBuild = true;
     }
 
     private static void InitialiseProviders(HostBuilderContext hostBuilderContext, ILoggingBuilder logger)
