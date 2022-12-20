@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Credfeto.Database.Pgsql;
 using Credfeto.Database.Shared;
 using Credfeto.Extensions.Configuration.Typed.Json;
+using Credfeto.Extensions.Configuration.Typed.Json.Exceptions;
 using Credfeto.Notification.Bot.Database;
 using Credfeto.Notification.Bot.Discord;
 using Credfeto.Notification.Bot.Server.Helpers;
