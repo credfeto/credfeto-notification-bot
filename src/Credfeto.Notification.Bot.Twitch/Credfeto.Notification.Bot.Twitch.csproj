@@ -38,7 +38,6 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Data.Interfaces\Credfeto.Notification.Bot.Twitch.Data.Interfaces.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Interfaces\Credfeto.Notification.Bot.Twitch.Interfaces.csproj" />
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Models\Credfeto.Notification.Bot.Twitch.Models.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
