@@ -17,6 +17,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated xunit.analyzers to 1.1.0
 - FF-1429 - Updated FunFair.Test.Common to 6.0.12.2443
 - FF-1429 - Updated Microsoft.Extensions to 7.0.1
+- FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.4.1
 ### Removed
 ### Deployment Changes
 
