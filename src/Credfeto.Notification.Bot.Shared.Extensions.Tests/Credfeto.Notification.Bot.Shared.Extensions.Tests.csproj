@@ -36,7 +36,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Shared.Extensions\Credfeto.Notification.Bot.Shared.Extensions.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FunFair.Test.Common" Version="6.0.8.2334" />
+    <PackageReference Include="FunFair.Test.Common" Version="6.0.12.2443" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
     <PackageReference Include="NSubstitute" Version="4.4.0" />
     <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.36" />
