@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Random.Interfaces;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 

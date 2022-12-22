@@ -1,6 +1,6 @@
-using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Services;
+using Credfeto.Random.Interfaces;
 using FunFair.Test.Common;
 using NSubstitute;
 using Xunit;

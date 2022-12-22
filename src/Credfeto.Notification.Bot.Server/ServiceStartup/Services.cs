@@ -12,6 +12,7 @@ using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Configuration.Validators;
+using Credfeto.Random;
 using FluentValidation.Results;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,7 @@ internal static class Services
                 .AddMediator()
                 .AddAppLogging()
                 .AddDate()
+                .AddRandomNumbers()
                 .AddResources()
                 .AddPostgresql()
                 .AddDatabaseShared()

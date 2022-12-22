@@ -7,6 +7,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.StreamState;
+using Credfeto.Random.Interfaces;
 using FunFair.Test.Common;
 using Mediator;
 using Microsoft.Extensions.DependencyInjection;

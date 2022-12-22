@@ -9,7 +9,6 @@ public static class ResourceSetup
     {
         return services.AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>))
                        .AddSingleton<IRunOnStartup, ProcessStartup>()
-                       .AddSingleton<IRandomNumberGenerator, DefaultRandomNumberGenerator>()
                        .AddHostedService<StartupService>();
     }
 }
