@@ -146,14 +146,6 @@
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Shared project"
 
- - name: "Shared.Extensions"
-   color: "96f7d2"
-   description: "Changes in Credfeto.Notification.Bot.Shared.Extensions project"
-
- - name: "Shared.Extensions.Tests"
-   color: "0e8a16"
-   description: "Changes in Credfeto.Notification.Bot.Shared.Extensions.Tests project"
-
  - name: "Shared.Tests"
    color: "0e8a16"
    description: "Changes in Credfeto.Notification.Bot.Shared.Tests project"
