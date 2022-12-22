@@ -6,7 +6,7 @@ namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 public interface ITwitchViewerDataManager
 {
-    Task AddViewerAsync(Viewer viewerName, string viewerId, DateTime dateCreated);
+    Task AddViewerAsync(Viewer viewerName, string viewerId, DateTimeOffset dateCreated);
 
     Task<TwitchUser?> GetByUserNameAsync(Viewer userName);
 }

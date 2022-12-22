@@ -1,7 +1,7 @@
 using System.IO;
 using Credfeto.Database.Pgsql;
+using Credfeto.Date;
 using Credfeto.Extensions.Configuration.Typed.Json;
-using Credfeto.Notification.Bot.Shared;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,7 +25,7 @@ internal static class IntegrationTestStartup
                                               jsonSerializerContext: DatabaseConfigurationSerializationContext.Default)
                            .AddPostgresql()
                            .AddApplicationDatabase()
-                           .AddResources();
+                           .AddDate();
         }
     }
 

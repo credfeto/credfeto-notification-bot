@@ -49,6 +49,6 @@ public sealed class UserInfoServiceTests : TestBase
                   .GetByUserNameAsync(MockReferenceData.Viewer);
 
         await this._twitchStreamerDataManager.DidNotReceive()
-                  .AddStreamerAsync(Arg.Any<Streamer>(), Arg.Any<string>(), Arg.Any<DateTime>());
+                  .AddStreamerAsync(Arg.Any<Streamer>(), Arg.Any<string>(), Arg.Any<DateTimeOffset>());
     }
 }

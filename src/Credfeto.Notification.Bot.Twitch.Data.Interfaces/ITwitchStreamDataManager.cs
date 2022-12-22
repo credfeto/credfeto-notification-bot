@@ -6,11 +6,11 @@ namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 public interface ITwitchStreamDataManager
 {
-    Task RecordStreamStartAsync(Streamer streamer, DateTime streamStartDate);
+    Task RecordStreamStartAsync(Streamer streamer, DateTimeOffset streamStartDate);
 
-    Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username);
+    Task AddChatterToStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username);
 
-    Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username);
+    Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username);
 
     Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username);
 
@@ -18,7 +18,7 @@ public interface ITwitchStreamDataManager
 
     Task<int> RecordNewFollowerAsync(Streamer streamer, Viewer username);
 
-    Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTime streamStartDate);
+    Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate);
 
-    Task UpdateSettingsAsync(Streamer streamer, DateTime streamStartDate, StreamSettings settings);
+    Task UpdateSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, StreamSettings settings);
 }

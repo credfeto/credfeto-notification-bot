@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Credfeto.Notification.Bot.Shared;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +12,7 @@ public sealed class SubDonorTracker
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ILogger _logger;
     private Viewer? _giftedBy;
-    private DateTime _whenGifted;
+    private DateTimeOffset _whenGifted;
 
     public SubDonorTracker(ICurrentTimeSource currentTimeSource,
                            [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
@@ -21,12 +21,12 @@ public sealed class SubDonorTracker
 
         this._currentTimeSource = currentTimeSource;
         this._logger = logger;
-        this._whenGifted = DateTime.MinValue;
+        this._whenGifted = DateTimeOffset.MinValue;
     }
 
     public bool Update(in Viewer giftedBy)
     {
-        DateTime now = this._currentTimeSource.UtcNow();
+        DateTimeOffset now = this._currentTimeSource.UtcNow();
 
         if (this._giftedBy != null)
         {

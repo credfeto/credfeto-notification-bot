@@ -1,6 +1,6 @@
 using System;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Mocks;
-using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Services;
 using FunFair.Test.Common;
@@ -11,7 +11,7 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
 public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
 {
-    private static readonly DateTime Initial = new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc);
+    private static readonly DateTimeOffset Initial = new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, offset: TimeSpan.Zero);
 
     private static readonly TwitchOutputMessageMatch OutputMessageMatch = new(streamer: MockReferenceData.Streamer, message: "message");
 
@@ -21,18 +21,17 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
     public TwitchMessageTriggerDebounceFilterTests()
     {
         this._currentTimeSource = GetSubstitute<ICurrentTimeSource>();
-        this._twitchMessageTriggerDebounceFilter =
-            new TwitchMessageTriggerDebounceFilter(currentTimeSource: this._currentTimeSource, this.GetTypedLogger<TwitchMessageTriggerDebounceFilter>());
+        this._twitchMessageTriggerDebounceFilter = new TwitchMessageTriggerDebounceFilter(currentTimeSource: this._currentTimeSource, this.GetTypedLogger<TwitchMessageTriggerDebounceFilter>());
     }
 
     private void MockCurrentTime(bool shortBreak)
     {
-        DateTime currentTime = Initial;
+        DateTimeOffset currentTime = Initial;
 
         this._currentTimeSource.UtcNow()
             .Returns(_ =>
                      {
-                         DateTime now = currentTime;
+                         DateTimeOffset now = currentTime;
                          currentTime = currentTime.AddSeconds(shortBreak
                                                                   ? 1
                                                                   : 90);

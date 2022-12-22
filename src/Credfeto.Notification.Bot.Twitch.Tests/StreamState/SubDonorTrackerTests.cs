@@ -1,5 +1,5 @@
 ﻿using System;
-using Credfeto.Notification.Bot.Shared;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using FunFair.Test.Common;

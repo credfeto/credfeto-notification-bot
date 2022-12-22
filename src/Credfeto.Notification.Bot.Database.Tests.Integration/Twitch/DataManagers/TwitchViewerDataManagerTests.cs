@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Database.Tests.Integration.Setup;
-using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Xunit;

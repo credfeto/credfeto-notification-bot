@@ -7,8 +7,7 @@ public static class ResourceSetup
 {
     public static IServiceCollection AddResources(this IServiceCollection services)
     {
-        return services.AddSingleton<ICurrentTimeSource, CurrentTimeSource>()
-                       .AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>))
+        return services.AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>))
                        .AddSingleton<IRunOnStartup, ProcessStartup>()
                        .AddSingleton<IRandomNumberGenerator, DefaultRandomNumberGenerator>()
                        .AddHostedService<StartupService>();

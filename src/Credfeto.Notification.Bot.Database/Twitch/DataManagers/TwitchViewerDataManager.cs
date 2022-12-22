@@ -19,7 +19,7 @@ public sealed class TwitchViewerDataManager : ITwitchViewerDataManager
         this._twitchUserBuilder = twitchUserBuilder ?? throw new ArgumentNullException(nameof(twitchUserBuilder));
     }
 
-    public Task AddViewerAsync(Viewer viewerName, string viewerId, DateTime dateCreated)
+    public Task AddViewerAsync(Viewer viewerName, string viewerId, DateTimeOffset dateCreated)
     {
         return this._database.ExecuteAsync(storedProcedure: "twitch.viewer_insert", new { username_ = viewerName.ToString(), id_ = viewerId, date_created_ = dateCreated });
     }

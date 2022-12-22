@@ -61,11 +61,7 @@ public sealed class TwitchChannelManagerTests : TestBase
                                                                      mileStones: new(enabled: true),
                                                                      raids: new(enabled: true, immediate: null, calmDown: null),
                                                                      thanks: new(enabled: true),
-                                                                     shoutOuts: new(enabled: true,
-                                                                                    new()
-                                                                                    {
-                                                                                        new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null)
-                                                                                    }))
+                                                                     shoutOuts: new(enabled: true, new() { new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null) }))
                                                              }));
 
         this._twitchChannelManager = new TwitchChannelManager(options: options,
@@ -249,8 +245,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     private ValueTask ReceivedBitGiftNotificationAsync(Viewer viewer, int amount)
     {
         return this._mediator.Received(1)
-                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount),
-                            cancellationToken: CancellationToken.None);
+                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount), cancellationToken: CancellationToken.None);
     }
 
     private Task ReceivedCheckForFirstMessageInStreamAsync()
@@ -262,7 +257,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     private Task DidNotReceiveCheckForFirstMessageInStreamAsync()
     {
         return this._twitchStreamerDataManager.DidNotReceive()
-                   .IsFirstMessageInStreamAsync(Arg.Any<Streamer>(), Arg.Any<DateTime>(), Arg.Any<Viewer>());
+                   .IsFirstMessageInStreamAsync(Arg.Any<Streamer>(), Arg.Any<DateTimeOffset>(), Arg.Any<Viewer>());
     }
 
     private Task ReceivedCheckForIsRegularChatterAsync()

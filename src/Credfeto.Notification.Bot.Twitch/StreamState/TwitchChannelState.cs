@@ -48,7 +48,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public bool IsOnline => this._stream != null;
 
-    public async Task OnlineAsync(string gameName, DateTime startDate)
+    public async Task OnlineAsync(string gameName, DateTimeOffset startDate)
     {
         this._logger.LogInformation($"{this.Streamer}: Going Online...");
         ActiveStream stream = new(gameName: gameName, startedAt: startDate, new TwitchStreamSettingsOnline(options: this._options, streamer: this.Streamer, logger: this._logger));
@@ -324,12 +324,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            model = new(streamer: this.Streamer,
-                        user: user,
-                        this._stream != null,
-                        isStreamer: twitchUser.IsStreamer,
-                        accountCreated: twitchUser.DateCreated,
-                        followCount: followCount);
+            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
         }
         else
         {

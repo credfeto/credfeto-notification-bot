@@ -33,25 +33,21 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         this._streamSettingsBuilder = streamSettingsBuilder ?? throw new ArgumentNullException(nameof(streamSettingsBuilder));
     }
 
-    public Task RecordStreamStartAsync(Streamer streamer, DateTime streamStartDate)
+    public Task RecordStreamStartAsync(Streamer streamer, DateTimeOffset streamStartDate)
     {
         return this._database.ExecuteAsync(storedProcedure: "twitch.stream_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
     }
 
-    public Task AddChatterToStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
+    public Task AddChatterToStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert",
-                                           new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
     }
 
-    public async Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTime streamStartDate, Viewer username)
+    public async Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username)
     {
         TwitchChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
                                                                                 storedProcedure: "twitch.stream_chatter_get",
-                                                                                new
-                                                                                {
-                                                                                    channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString()
-                                                                                });
+                                                                                new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
 
         return chatted == null;
     }
@@ -83,14 +79,14 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         return follower.FollowCount;
     }
 
-    public Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTime streamStartDate)
+    public Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate)
     {
         return this._database.QuerySingleOrDefaultAsync(builder: this._streamSettingsBuilder,
                                                         storedProcedure: "twitch.stream_settings_get",
                                                         new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
     }
 
-    public Task UpdateSettingsAsync(Streamer streamer, DateTime streamStartDate, StreamSettings settings)
+    public Task UpdateSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, StreamSettings settings)
     {
         return this._database.ExecuteAsync(storedProcedure: "twitch.stream_settings_set",
                                            new

@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
@@ -274,10 +275,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer,
-                                                                     giftedBy: GiftingUser,
-                                                                     count: 27,
-                                                                     cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
 
         this.ReceivedThanksForGiftingMultipleSubs();
         await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for gifting subs");
@@ -290,10 +288,7 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer,
-                                                                     giftedBy: GiftingUser,
-                                                                     count: 27,
-                                                                     cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
 
         this.DidNotReceiveThanksForGiftingMultipleSubs();
         await this.DidNotReceivePublishMessageAsync();

@@ -57,14 +57,15 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
         this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer)
             .Returns(this._twitchChannelState);
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(
+            new(streamer: MockReferenceData.Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, millisecond: 0)),
+            cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.Received(1)
             .GetStreamer(MockReferenceData.Streamer);
 
         await this._twitchChannelState.Received(1)
-                  .OnlineAsync(gameName: "IRL", new(year: 2020, month: 1, day: 1));
+                  .OnlineAsync(gameName: "IRL", new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, millisecond: 0, offset: TimeSpan.Zero));
     }
 
     [Fact]
@@ -73,7 +74,7 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
         this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer)
             .Returns(this._twitchChannelState);
 
-        this._twitchChannelState.OnlineAsync(Arg.Any<string>(), Arg.Any<DateTime>())
+        this._twitchChannelState.OnlineAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset>())
             .Throws<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
@@ -83,7 +84,7 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
             .GetStreamer(MockReferenceData.Streamer);
 
         await this._twitchChannelState.Received(1)
-                  .OnlineAsync(gameName: "IRL", new(year: 2020, month: 1, day: 1));
+                  .OnlineAsync(gameName: "IRL", new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, offset: TimeSpan.Zero));
     }
 
     [Fact]
@@ -92,13 +93,12 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
         this._twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
             .Returns(this._twitchChannelState);
 
-        await this._notificationHandler.Handle(new(streamer: NonStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: NonStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.DidNotReceive()
             .GetStreamer(Arg.Any<Streamer>());
 
         await this._twitchChannelState.DidNotReceive()
-                  .OnlineAsync(Arg.Any<string>(), Arg.Any<DateTime>());
+                  .OnlineAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset>());
     }
 }

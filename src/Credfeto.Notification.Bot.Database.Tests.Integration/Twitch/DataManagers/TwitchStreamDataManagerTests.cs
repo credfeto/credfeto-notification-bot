@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Database.Tests.Integration.Setup;
-using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Xunit;
@@ -34,7 +34,7 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     {
         Streamer streamerName = GenerateStreamerUsername();
         Viewer chatter = GenerateViewerUsername();
-        DateTime streamStart = this._currentTimeSource.UtcNow();
+        DateTimeOffset streamStart = this._currentTimeSource.UtcNow();
 
         bool isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter);
         Assert.True(condition: isFirstMessageInStream, userMessage: "Should be first message");
@@ -74,7 +74,7 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     public async Task RecordStreamSettingsAsync()
     {
         Streamer streamerName = GenerateStreamerUsername();
-        DateTime streamStart = this._currentTimeSource.UtcNow();
+        DateTimeOffset streamStart = this._currentTimeSource.UtcNow();
 
         StreamSettings? settings = await this._twitchStreamDataManager.GetSettingsAsync(streamer: streamerName, streamStartDate: streamStart);
         Assert.Null(settings);
@@ -88,7 +88,7 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
         await this.UpdateSettingsAsync(streamerName: streamerName, streamStart: streamStart, settings: settings);
     }
 
-    private async Task UpdateSettingsAsync(Streamer streamerName, DateTime streamStart, StreamSettings settings)
+    private async Task UpdateSettingsAsync(Streamer streamerName, DateTimeOffset streamStart, StreamSettings settings)
     {
         await this._twitchStreamDataManager.UpdateSettingsAsync(streamer: streamerName, streamStartDate: streamStart, settings: settings);
 

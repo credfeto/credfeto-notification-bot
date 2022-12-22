@@ -1,5 +1,5 @@
 using System;
-using Credfeto.Notification.Bot.Shared;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Microsoft.Extensions.Logging;
 using NonBlocking;
@@ -24,7 +24,7 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
     {
         When when = this.GetMatch(match);
 
-        DateTime now = this._currentTimeSource.UtcNow();
+        DateTimeOffset now = this._currentTimeSource.UtcNow();
 
         bool canSend = when.CanSend(now: now, minIntervalBetweenMatches: MinIntervalBetweenMatches);
 
@@ -40,19 +40,19 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
             return when;
         }
 
-        return this._debounce.GetOrAdd(key: match, new When(lastMatch: DateTime.MinValue));
+        return this._debounce.GetOrAdd(key: match, new When(lastMatch: DateTimeOffset.MinValue));
     }
 
     private sealed class When
     {
-        private DateTime _lastMatch;
+        private DateTimeOffset _lastMatch;
 
-        public When(in DateTime lastMatch)
+        public When(in DateTimeOffset lastMatch)
         {
             this._lastMatch = lastMatch;
         }
 
-        public bool CanSend(in DateTime now, in TimeSpan minIntervalBetweenMatches)
+        public bool CanSend(in DateTimeOffset now, in TimeSpan minIntervalBetweenMatches)
         {
             TimeSpan timeSinceLastMatch = now - this._lastMatch;
 

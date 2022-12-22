@@ -19,7 +19,7 @@ internal sealed class ActiveStream
 
     private int _incidents;
 
-    public ActiveStream(string gameName, in DateTime startedAt, ITwitchStreamSettings settings)
+    public ActiveStream(string gameName, in DateTimeOffset startedAt, ITwitchStreamSettings settings)
     {
         this.GameName = gameName;
         this.StartedAt = startedAt;
@@ -36,7 +36,7 @@ internal sealed class ActiveStream
 
     public string GameName { get; }
 
-    public DateTime StartedAt { get; }
+    public DateTimeOffset StartedAt { get; }
 
     public ITwitchStreamSettings Settings { get; }
 
