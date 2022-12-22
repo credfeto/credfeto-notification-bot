@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using Credfeto.Database.Pgsql;
 using Credfeto.Database.Shared;
+using Credfeto.Date;
 using Credfeto.Extensions.Configuration.Typed.Json;
 using Credfeto.Extensions.Configuration.Typed.Json.Exceptions;
 using Credfeto.Notification.Bot.Database;
@@ -32,6 +33,7 @@ internal static class Services
         services.AddConfiguration()
                 .AddMediator()
                 .AddAppLogging()
+                .AddDate()
                 .AddResources()
                 .AddPostgresql()
                 .AddDatabaseShared()

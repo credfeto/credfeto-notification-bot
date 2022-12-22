@@ -48,7 +48,6 @@
   </Target>
   <ItemGroup>
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Date" Version="0.0.1.3"/>
