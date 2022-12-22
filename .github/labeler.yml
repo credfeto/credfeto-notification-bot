@@ -48,10 +48,6 @@
  - any: [ 'src/Credfeto.Notification.Bot.Server/**/*' ]
 "Shared":
  - any: [ 'src/Credfeto.Notification.Bot.Shared/**/*' ]
-"Shared.Extensions":
- - any: [ 'src/Credfeto.Notification.Bot.Shared.Extensions/**/*' ]
-"Shared.Extensions.Tests":
- - any: [ 'src/Credfeto.Notification.Bot.Shared.Extensions.Tests/**/*' ]
 "Shared.Tests":
  - any: [ 'src/Credfeto.Notification.Bot.Shared.Tests/**/*' ]
 "Twitch":
