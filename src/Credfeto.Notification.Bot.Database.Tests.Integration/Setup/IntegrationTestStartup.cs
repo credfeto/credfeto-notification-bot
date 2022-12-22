@@ -33,11 +33,10 @@ internal static class IntegrationTestStartup
     {
         string settingsPath = Directory.GetCurrentDirectory();
 
-        IConfigurationBuilder integrationConfigurationBuilder = new ConfigurationBuilder().SetBasePath(settingsPath)
-                                                                                          .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
-                                                                                          .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
-                                                                                          .AddEnvironmentVariables();
-
-        return integrationConfigurationBuilder.Build();
+        return new ConfigurationBuilder().SetBasePath(settingsPath)
+                                         .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
+                                         .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
+                                         .AddEnvironmentVariables()
+                                         .Build();
     }
 }
