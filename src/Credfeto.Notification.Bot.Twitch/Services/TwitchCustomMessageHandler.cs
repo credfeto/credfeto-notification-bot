@@ -19,6 +19,8 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     private const RegexOptions REGEX_OPTIONS = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant |
                                                RegexOptions.Singleline;
 
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(5);
+
     private readonly ILogger<TwitchCustomMessageHandler> _logger;
     private readonly IMediator _mediator;
     private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
@@ -41,7 +43,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         foreach ((TwitchInputMessageMatch trigger, TwitchOutputMessageMatch command) in this._twitchMessageTriggers)
         {
-            if (!IsMatch(message: message, trigger: trigger))
+            if (!this.IsMatch(message: message, trigger: trigger))
             {
                 continue;
             }
@@ -68,7 +70,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         return true;
     }
 
-    private static bool IsMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    private bool IsMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
     {
         return trigger.Streamer == message.Streamer && trigger.Chatter == message.Chatter && trigger.MatchType switch
         {
@@ -76,7 +78,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             TwitchMessageMatchType.CONTAINS => IsContainsMatch(message: message, trigger: trigger),
             TwitchMessageMatchType.STARTS_WITH => IsStartsWithMatch(message: message, trigger: trigger),
             TwitchMessageMatchType.ENDS_WITH => IsEndsWithMatch(message: message, trigger: trigger),
-            TwitchMessageMatchType.REGEX => IsRegexMatch(message: message, trigger: trigger),
+            TwitchMessageMatchType.REGEX => this.IsRegexMatch(message: message, trigger: trigger),
             _ => false
         };
     }
@@ -101,9 +103,22 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         return message.Message.EndsWith(value: trigger.Message, comparisonType: StringComparison.InvariantCultureIgnoreCase);
     }
 
-    private static bool IsRegexMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    private bool IsRegexMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
     {
-        return Regex.IsMatch(input: message.Message, pattern: trigger.Message, options: REGEX_OPTIONS, TimeSpan.FromSeconds(1));
+        if (message.Message.StartsWith(value: "@credfeto", comparisonType: StringComparison.InvariantCultureIgnoreCase))
+        {
+            bool isMatch = IsRegexMatch(message: message.Message, pattern: trigger.Message);
+            this._logger.LogInformation($"{trigger.Streamer}: Checking match \"{trigger.Message}\" : Pattern: \"{trigger.Message}\" : Message: \"{message.Message}\" : Match: {isMatch}");
+
+            return isMatch;
+        }
+
+        return IsRegexMatch(message: message.Message, pattern: trigger.Message);
+    }
+
+    private static bool IsRegexMatch(string message, string pattern)
+    {
+        return Regex.IsMatch(input: message, pattern: pattern, options: REGEX_OPTIONS, matchTimeout: RegexTimeout);
     }
 
     private static ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> BuildMessageTriggers(IReadOnlyList<string> heists, IReadOnlyList<TwitchMarbles>? marbles)
