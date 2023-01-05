@@ -16,6 +16,9 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 {
+    private const RegexOptions REGEX_OPTIONS = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant |
+                                               RegexOptions.Singleline;
+
     private readonly ILogger<TwitchCustomMessageHandler> _logger;
     private readonly IMediator _mediator;
     private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
@@ -100,10 +103,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
     private static bool IsRegexMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
     {
-        return Regex.IsMatch(input: message.Message,
-                             pattern: trigger.Message,
-                             RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant | RegexOptions.Singleline,
-                             TimeSpan.FromSeconds(1));
+        return Regex.IsMatch(input: message.Message, pattern: trigger.Message, options: REGEX_OPTIONS, TimeSpan.FromSeconds(1));
     }
 
     private static ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> BuildMessageTriggers(IReadOnlyList<string> heists, IReadOnlyList<TwitchMarbles>? marbles)
