@@ -21,6 +21,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Enumeration.Source.Generation to 1.0.4.16
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.4
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.4.33
+- FF-1429 - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.2.32
 ### Removed
 ### Deployment Changes
 
