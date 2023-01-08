@@ -23,6 +23,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.13.14
 - FF-1429 - Updated Discord.Net to 3.9.0
 - FF-1429 - Updated FunFair.Test.Common to 6.0.14.2474
+- FF-1429 - Updated NonBlocking to 2.1.1
 ### Removed
 ### Deployment Changes
 
