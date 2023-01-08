@@ -10,7 +10,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - FF-3881 - Updated DotNet SDK to 7.0.101
-- FF-1429 - Updated Meziantou.Analyzer to 1.0.757
 - FF-1429 - Updated Roslynator.Analyzers to 4.2.0
 - FF-1429 - Updated xunit.analyzers to 1.1.0
 - FF-1429 - Updated FunFair.Test.Common to 6.0.12.2443
@@ -20,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.11.12
 - Switch to use Credfeto.Date
 - FF-1429 - Updated Credfeto.Enumeration.Source.Generation to 1.0.4.16
+- FF-1429 - Updated Meziantou.Analyzer to 2.0.4
 ### Removed
 ### Deployment Changes
 
