@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Date" Version="0.0.1.3" />
-    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.11.12" />
+    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.13.14" />
     <PackageReference Include="FunFair.Test.Common" Version="6.0.12.2443" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
     <PackageReference Include="NSubstitute" Version="4.4.0" />
