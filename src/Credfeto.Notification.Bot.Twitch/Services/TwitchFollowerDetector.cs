@@ -30,10 +30,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
     private bool _connected;
 
-    public TwitchFollowerDetector(IOptions<TwitchBotOptions> options,
-                                  ITwitchPubSub twitchPubSub,
-                                  ITwitchChannelManager twitchChannelManager,
-                                  ILogger<TwitchFollowerDetector> logger)
+    public TwitchFollowerDetector(IOptions<TwitchBotOptions> options, ITwitchPubSub twitchPubSub, ITwitchChannelManager twitchChannelManager, ILogger<TwitchFollowerDetector> logger)
     {
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._twitchPubSub = twitchPubSub ?? throw new ArgumentNullException(nameof(twitchPubSub));
@@ -44,31 +41,12 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         this._userMappings = new(StringComparer.InvariantCultureIgnoreCase);
         this._connected = false;
 
+        this._serviceErrorSubscription = this.SubscribeErrors();
+        this._connectedSubscription = this.SubscribeConnected();
+        this._disconnectedSubscription = this.SubscribeDisconnected();
+
         // FOLLOWS
-
-        this._serviceErrorSubscription = Observable
-                                         .FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._twitchPubSub.OnPubSubServiceError += h,
-                                                                                     removeHandler: h => this._twitchPubSub.OnPubSubServiceError -= h)
-                                         .Select(messageEvent => messageEvent.EventArgs)
-                                         .Subscribe(this.OnPubSubServiceError);
-
-        this._connectedSubscription = Observable.FromEventPattern(addHandler: h => this._twitchPubSub.OnPubSubServiceConnected += h,
-                                                                  removeHandler: h => this._twitchPubSub.OnPubSubServiceConnected -= h)
-                                                .Select(messageEvent => messageEvent.EventArgs)
-                                                .Select(_ => Observable.FromAsync(this.OnConnectedAsync))
-                                                .Concat()
-                                                .Subscribe();
-
-        this._disconnectedSubscription = Observable.FromEventPattern(addHandler: h => this._twitchPubSub.OnPubSubServiceClosed += h,
-                                                                     removeHandler: h => this._twitchPubSub.OnPubSubServiceClosed -= h)
-                                                   .Subscribe(this.OnDisconnected);
-
-        this._followedSubscription = Observable
-                                     .FromEventPattern<OnFollowArgs>(addHandler: h => this._twitchPubSub.OnFollow += h, removeHandler: h => this._twitchPubSub.OnFollow -= h)
-                                     .Select(messageEvent => messageEvent.EventArgs)
-                                     .Select(e => Observable.FromAsync(cancellationToken => this.OnFollowedAsync(e: e, cancellationToken: cancellationToken)))
-                                     .Concat()
-                                     .Subscribe();
+        this._followedSubscription = this.SubscribeFollowed();
     }
 
     public void Dispose()
@@ -100,6 +78,37 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         }
 
         return this.EnsureConnectedAsync();
+    }
+
+    private IDisposable SubscribeErrors()
+    {
+        return Observable.FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._twitchPubSub.OnPubSubServiceError += h, removeHandler: h => this._twitchPubSub.OnPubSubServiceError -= h)
+                         .Select(messageEvent => messageEvent.EventArgs)
+                         .Subscribe(this.OnPubSubServiceError);
+    }
+
+    private IDisposable SubscribeConnected()
+    {
+        return Observable.FromEventPattern(addHandler: h => this._twitchPubSub.OnPubSubServiceConnected += h, removeHandler: h => this._twitchPubSub.OnPubSubServiceConnected -= h)
+                         .Select(messageEvent => messageEvent.EventArgs)
+                         .Select(_ => Observable.FromAsync(this.OnConnectedAsync))
+                         .Concat()
+                         .Subscribe();
+    }
+
+    private IDisposable SubscribeDisconnected()
+    {
+        return Observable.FromEventPattern(addHandler: h => this._twitchPubSub.OnPubSubServiceClosed += h, removeHandler: h => this._twitchPubSub.OnPubSubServiceClosed -= h)
+                         .Subscribe(this.OnDisconnected);
+    }
+
+    private IDisposable SubscribeFollowed()
+    {
+        return Observable.FromEventPattern<OnFollowArgs>(addHandler: h => this._twitchPubSub.OnFollow += h, removeHandler: h => this._twitchPubSub.OnFollow -= h)
+                         .Select(messageEvent => messageEvent.EventArgs)
+                         .Select(e => Observable.FromAsync(cancellationToken => this.OnFollowedAsync(e: e, cancellationToken: cancellationToken)))
+                         .Concat()
+                         .Subscribe();
     }
 
     private async Task<bool> EnsureConnectedAsync()
