@@ -24,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated NonBlocking to 2.1.1
 - FF-1429 - Updated Microsoft.Extensions to 7.0.2
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.5
+- FF-1429 - Updated Mediator to 2.0.30
 ### Removed
 ### Deployment Changes
 
