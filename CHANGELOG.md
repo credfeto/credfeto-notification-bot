@@ -16,7 +16,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.51.0.59060
 - Switch to use Credfeto.Date
 - FF-1429 - Updated Credfeto.Enumeration.Source.Generation to 1.0.4.16
-- FF-1429 - Updated Meziantou.Analyzer to 2.0.4
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.4.33
 - FF-1429 - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.2.32
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.13.14
@@ -24,6 +23,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated FunFair.Test.Common to 6.0.14.2474
 - FF-1429 - Updated NonBlocking to 2.1.1
 - FF-1429 - Updated Microsoft.Extensions to 7.0.2
+- FF-1429 - Updated Meziantou.Analyzer to 2.0.5
 ### Removed
 ### Deployment Changes
 
