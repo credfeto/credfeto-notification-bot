@@ -12,7 +12,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-3881 - Updated DotNet SDK to 7.0.101
 - FF-1429 - Updated Roslynator.Analyzers to 4.2.0
 - FF-1429 - Updated xunit.analyzers to 1.1.0
-- FF-1429 - Updated Microsoft.Extensions to 7.0.1
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.4.1
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.51.0.59060
 - Switch to use Credfeto.Date
@@ -24,6 +23,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Discord.Net to 3.9.0
 - FF-1429 - Updated FunFair.Test.Common to 6.0.14.2474
 - FF-1429 - Updated NonBlocking to 2.1.1
+- FF-1429 - Updated Microsoft.Extensions to 7.0.2
 ### Removed
 ### Deployment Changes
 
