@@ -9,7 +9,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- FF-3881 - Updated DotNet SDK to 7.0.101
 - FF-1429 - Updated Roslynator.Analyzers to 4.2.0
 - FF-1429 - Updated xunit.analyzers to 1.1.0
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.4.1
@@ -25,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.Extensions to 7.0.2
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.5
 - FF-1429 - Updated Mediator to 2.0.30
+- FF-3881 - Updated DotNet SDK to 7.0.102
 ### Removed
 ### Deployment Changes
 
