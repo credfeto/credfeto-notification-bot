@@ -275,7 +275,10 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(true);
 
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer,
+                                                                     giftedBy: GiftingUser,
+                                                                     count: 27,
+                                                                     cancellationToken: CancellationToken.None);
 
         this.ReceivedThanksForGiftingMultipleSubs();
         await this.ReceivedPublishMessageAsync($"Thanks @{GiftingUser} for gifting subs");
@@ -288,7 +291,10 @@ public sealed class ContributionThanksTests : TestBase
     {
         this.MockThanksEnabled(false);
 
-        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer, giftedBy: GiftingUser, count: 27, cancellationToken: CancellationToken.None);
+        await this._contributionThanks.ThankForMultipleGiftSubsAsync(streamer: MockReferenceData.Streamer,
+                                                                     giftedBy: GiftingUser,
+                                                                     count: 27,
+                                                                     cancellationToken: CancellationToken.None);
 
         this.DidNotReceiveThanksForGiftingMultipleSubs();
         await this.DidNotReceivePublishMessageAsync();

@@ -169,7 +169,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
     {
         if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out Streamer channelName))
         {
-            return ;
+            return;
         }
 
         Viewer user = Viewer.FromString(e.Username);
