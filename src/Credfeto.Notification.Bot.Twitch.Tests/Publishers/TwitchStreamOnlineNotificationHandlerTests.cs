@@ -35,7 +35,7 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: Array.Empty<TwitchMarbles>(),
+                                                   marbles: Array.Empty<TwitchChatTriggeredMessage>(),
                                                    channels: new TwitchModChannel[]
                                                              {
                                                                  new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
@@ -95,8 +95,7 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
         this._twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
             .Returns(this._twitchChannelState);
 
-        await this._notificationHandler.Handle(new(streamer: NonStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: NonStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.DidNotReceive()
             .GetStreamer(Arg.Any<Streamer>());

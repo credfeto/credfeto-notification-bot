@@ -31,7 +31,7 @@ public sealed class TwitchWatchChannelFollowerNotificationHandlerTests : TestBas
                                                          milestones: MockReferenceData.TwitchMilestones,
                                                          ignoredUsers: MockReferenceData.IgnoredUsers,
                                                          heists: MockReferenceData.Heists,
-                                                         marbles: Array.Empty<TwitchMarbles>(),
+                                                         marbles: Array.Empty<TwitchChatTriggeredMessage>(),
                                                          channels: new TwitchModChannel[]
                                                                    {
                                                                        new(channelName: ModdingForStreamer.Value,

@@ -35,7 +35,7 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
                                                                         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
                                                                                                                    Array.Empty<TwitchModChannel>(),
                                                                                                                    heists: MockReferenceData.Heists,
-                                                                                                                   marbles: Array.Empty<TwitchMarbles>(),
+                                                                                                                   marbles: Array.Empty<TwitchChatTriggeredMessage>(),
                                                                                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                                                                                    milestones: MockReferenceData.TwitchMilestones));
                                                                     })

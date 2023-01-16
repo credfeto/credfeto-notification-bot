@@ -16,8 +16,8 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 {
-    private const RegexOptions REGEX_OPTIONS = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.NonBacktracking |
-                                               RegexOptions.CultureInvariant | RegexOptions.Singleline;
+    private const RegexOptions REGEX_OPTIONS = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant |
+                                               RegexOptions.Singleline;
 
     private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(5);
 
@@ -108,8 +108,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         if (message.Message.StartsWith(value: "@credfeto", comparisonType: StringComparison.InvariantCultureIgnoreCase))
         {
             bool isMatch = IsRegexMatch(message: message.Message, pattern: trigger.Message);
-            this._logger.LogInformation(
-                $"{trigger.Streamer}: Checking match \"{trigger.Message}\" : Pattern: \"{trigger.Message}\" : Message: \"{message.Message}\" : Match: {isMatch}");
+            this._logger.LogInformation($"{trigger.Streamer}: Checking match \"{trigger.Message}\" : Pattern: \"{trigger.Message}\" : Message: \"{message.Message}\" : Match: {isMatch}");
 
             return isMatch;
         }
@@ -122,7 +121,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         return Regex.IsMatch(input: message, pattern: pattern, options: REGEX_OPTIONS, matchTimeout: RegexTimeout);
     }
 
-    private static ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> BuildMessageTriggers(IReadOnlyList<string> heists, IReadOnlyList<TwitchMarbles>? marbles)
+    private static ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> BuildMessageTriggers(IReadOnlyList<string> heists, IReadOnlyList<TwitchChatTriggeredMessage>? marbles)
     {
         ConcurrentDictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch> triggers = new();
 
@@ -141,7 +140,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
         if (marbles != null)
         {
-            foreach (TwitchMarbles marble in marbles)
+            foreach (TwitchChatTriggeredMessage marble in marbles)
             {
                 Trace.WriteLine($"Adding marbles trigger: {marble.Streamer}");
                 TwitchInputMessageMatch trigger = new(Streamer.FromString(marble.Streamer),
