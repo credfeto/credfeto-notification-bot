@@ -45,16 +45,13 @@ public static class TwitchSetup
     {
         return new WebSocketClient(new ClientOptions
                                    {
-                                       MessagesAllowedInPeriod = 750,
-                                       ThrottlingPeriod = TimeSpan.FromSeconds(30),
-                                       ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
+                                       MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30), ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
                                    });
     }
 
     private static IServiceCollection AddActions(this IServiceCollection services)
     {
         return services.AddSingleton<IRaidWelcome, RaidWelcome>()
-                       .AddSingleton<IHeistJoiner, HeistJoiner>()
                        .AddSingleton<ICustomTriggeredMessageSender, CustomTriggeredMessageSender>()
                        .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
                        .AddSingleton<IContributionThanks, ContributionThanks>()

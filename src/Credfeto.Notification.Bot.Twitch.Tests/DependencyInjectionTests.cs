@@ -60,12 +60,6 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     }
 
     [Fact]
-    public void HeistJoinerMustBeRegistered()
-    {
-        this.RequireService<IHeistJoiner>();
-    }
-
-    [Fact]
     public void ShoutoutJoinerMustBeRegistered()
     {
         this.RequireService<IShoutoutJoiner>();
