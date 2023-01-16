@@ -27,7 +27,8 @@ See [CHANGELOG](CHANGELOG.md) for history
 * Create a twitch App here: https://dev.twitch.tv/console
 * Authorise the twitch app https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=\[Twitch API Client Id
   goes here\]&redirect_uri=http://localhost]
-
+*
+e.g: https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=clientId&redirect_uri=http://localhost&scope=chat%3Aread+chat%3Aedit+channel:moderate
 5.
 
 6. Choose how you want to configure the application:
