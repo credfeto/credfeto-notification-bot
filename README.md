@@ -24,7 +24,7 @@ See [CHANGELOG](CHANGELOG.md) for history
 
 4. Create a Twitch Application and authorise it:
 
-* Create a twitch App here:
+* Create a twitch App here: https://dev.twitch.tv/console
 * Authorise the twitch app https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=\[Twitch API Client Id
   goes here\]&redirect_uri=http://localhost]
 
