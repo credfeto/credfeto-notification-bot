@@ -29,7 +29,6 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
-                                                   heists: MockReferenceData.Heists,
                                                    chatCommands: new TwitchChatCommand[]
                                                                  {
                                                                      new(streamer: streamer.Value, bot: viewer.Value, match: "!play", matchType: TwitchMessageMatchType.EXACT.GetName(), issue: "!play")

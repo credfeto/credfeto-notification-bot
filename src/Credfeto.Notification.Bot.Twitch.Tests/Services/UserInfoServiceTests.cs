@@ -28,7 +28,6 @@ public sealed class UserInfoServiceTests : TestBase
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
-                                                   heists: MockReferenceData.Heists,
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
                                                    channels: Array.Empty<TwitchModChannel>()));
 

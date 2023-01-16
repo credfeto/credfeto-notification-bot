@@ -17,9 +17,6 @@ public sealed class TwitchBotOptionsValidator : AbstractValidator<TwitchBotOptio
             .NotNull()
             .SetValidator(new TwitchModChannelValidator());
 
-        this.RuleFor(x => x.Heists)
-            .NotNull();
-
         this.RuleFor(x => x.IgnoredUsers)
             .NotNull();
 
@@ -27,8 +24,8 @@ public sealed class TwitchBotOptionsValidator : AbstractValidator<TwitchBotOptio
             .NotNull()
             .SetValidator(new TwitchMilestonesValidator());
 
-        // this.RuleFor(x => x.ChatCommands)
-        //     .NotNull();
+        this.RuleFor(x => x.ChatCommands)
+            .NotNull();
 
         this.RuleForEach(x => x.ChatCommands)
             .NotNull()

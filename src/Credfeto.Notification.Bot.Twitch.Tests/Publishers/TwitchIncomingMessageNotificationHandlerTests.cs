@@ -40,7 +40,6 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
                                                            mileStones: MockReferenceData.TwitchChanelMileStone,
                                                            welcome: MockReferenceData.TwitchChannelWelcome)
                                                    },
-                                                   heists: MockReferenceData.Heists,
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    milestones: MockReferenceData.TwitchMilestones));

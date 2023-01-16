@@ -41,7 +41,6 @@ public sealed class RaidWelcomeTests : LoggingTestBase
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
-                                                   heists: MockReferenceData.Heists,
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
                                                    channels: new TwitchModChannel[]
                                                              {

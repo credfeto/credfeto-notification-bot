@@ -52,7 +52,6 @@ public sealed class TwitchChannelManagerTests : TestBase
                                                                        20,
                                                                        30
                                                                    }),
-                                                   heists: MockReferenceData.Heists,
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
                                                    channels: new TwitchModChannel[]
                                                              {

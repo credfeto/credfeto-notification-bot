@@ -30,8 +30,6 @@ public static class MockReferenceData
 
     public static MockBase<string[]> IgnoredUsers { get; } = new MockIgnoredUsers();
 
-    public static MockBase<string[]> Heists { get; } = new MockHeists();
-
     public static MockBase<TwitchChannelShoutout> TwitchChannelShoutout { get; } = new MockTwitchChannelShoutout();
 
     public static MockBase<TwitchChannelRaids> TwitchChannelRaids { get; } = new MockTwitchChannelRaids();

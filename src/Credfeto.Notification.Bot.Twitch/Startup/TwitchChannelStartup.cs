@@ -42,8 +42,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
                          {
                              this._options.Authentication.UserName
                          }.Concat(this._options.Channels.Select(channel => channel.ChannelName))
-                          .Concat(this._options.Heists)
-                          .Concat(this._options.ChatCommands?.Select(channel => channel.Streamer) ?? Array.Empty<string>())
+                          .Concat(this._options.ChatCommands.Select(channel => channel.Streamer) ?? Array.Empty<string>())
                           .Select(Streamer.FromString)
                           .Distinct()
                           .ToList();
