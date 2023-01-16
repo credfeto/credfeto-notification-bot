@@ -2,10 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
-public sealed class TwitchChatTriggeredMessage
+public sealed class TwitchChatCommand
 {
     [JsonConstructor]
-    public TwitchChatTriggeredMessage(string streamer, string bot, string match, string issue, string matchType)
+    public TwitchChatCommand(string streamer, string bot, string match, string issue, string matchType)
     {
         this.Streamer = streamer;
         this.Bot = bot;

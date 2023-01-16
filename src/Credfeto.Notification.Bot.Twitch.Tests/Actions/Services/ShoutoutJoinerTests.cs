@@ -35,7 +35,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: Array.Empty<TwitchChatTriggeredMessage>(),
+                                                   chatCommands: Array.Empty<TwitchChatCommand>(),
                                                    channels: new TwitchModChannel[]
                                                              {
                                                                  new(StreamerShoutOutsEnabled.ToString(),

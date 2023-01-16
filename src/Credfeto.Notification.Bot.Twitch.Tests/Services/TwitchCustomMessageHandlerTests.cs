@@ -30,10 +30,10 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: new TwitchChatTriggeredMessage[]
-                                                            {
-                                                                new(streamer: streamer.Value, bot: viewer.Value, match: "!play", matchType: TwitchMessageMatchType.EXACT.GetName(), issue: "!play")
-                                                            },
+                                                   chatCommands: new TwitchChatCommand[]
+                                                                 {
+                                                                     new(streamer: streamer.Value, bot: viewer.Value, match: "!play", matchType: TwitchMessageMatchType.EXACT.GetName(), issue: "!play")
+                                                                 },
                                                    channels: Array.Empty<TwitchModChannel>()));
 
         this._mediator = GetSubstitute<IMediator>();

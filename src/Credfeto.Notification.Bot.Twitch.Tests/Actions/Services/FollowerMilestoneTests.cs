@@ -31,7 +31,7 @@ public sealed class FollowerMilestoneTests : TestBase
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
                                                    Array.Empty<TwitchModChannel>(),
                                                    heists: MockReferenceData.Heists,
-                                                   marbles: Array.Empty<TwitchChatTriggeredMessage>(),
+                                                   chatCommands: Array.Empty<TwitchChatCommand>(),
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    milestones: MockReferenceData.TwitchMilestones));
 
