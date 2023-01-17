@@ -22,9 +22,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Mediator to 2.0.30
 - FF-3881 - Updated DotNet SDK to 7.0.102
 - FF-1429 - Updated FunFair.Test.Common to 6.0.15.2520
-- FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.14.15
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.8
 - FF-1429 - Updated Credfeto.Enumeration.Source.Generation to 1.0.5.17
+- FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.15.16
 ### Removed
 ### Deployment Changes
 
