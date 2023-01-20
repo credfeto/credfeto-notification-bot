@@ -40,7 +40,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Interfaces\Credfeto.Notification.Bot.Twitch.Interfaces.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="0.0.1.1"/>
+    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="0.0.1.2" />
     <PackageReference Include="Discord.Net" Version="3.9.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
   </ItemGroup>
