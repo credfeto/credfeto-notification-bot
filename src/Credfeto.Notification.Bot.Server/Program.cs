@@ -32,7 +32,7 @@ internal static class Program
     {
         return Host.CreateDefaultBuilder(args)
                    .UseDefaultServiceProvider(InitialiseServiceProvider)
-                   .ConfigureServices(Services.Configure)
+                   .ConfigureServices(Service.Configure)
                    .ConfigureLogging(InitialiseProviders)
                    .UseWindowsService()
                    .UseSystemd();

@@ -1,6 +1,6 @@
 using Credfeto.Notification.Bot.Discord.BackgroundServices;
 using Credfeto.Notification.Bot.Discord.Services;
-using Credfeto.Notification.Bot.Shared;
+using Credfeto.Services.Startup.Interfaces;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -15,7 +15,7 @@ public static class DiscordSetup
         return services.AddSingleton(_ => new DiscordSocketClient(new() { GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent }))
                        .AddSingleton<CommandService>()
                        .AddSingleton<IDiscordBot, DiscordBot>()
-                       .AddSingleton<IRunOnStartup, DiscordCommandService>()
+                       .AddRunOnStartupTask<DiscordCommandService>()
                        .AddSingleton<IDiscordConnectionService, DiscordConnectionService>()
                        .AddHostedService(x => x.GetRequiredService<IDiscordConnectionService>())
                        .AddHostedService<DiscordTestServices>();

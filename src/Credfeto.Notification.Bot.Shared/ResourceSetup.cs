@@ -7,8 +7,6 @@ public static class ResourceSetup
 {
     public static IServiceCollection AddResources(this IServiceCollection services)
     {
-        return services.AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>))
-                       .AddSingleton<IRunOnStartup, ProcessStartup>()
-                       .AddHostedService<StartupService>();
+        return services.AddSingleton(typeof(IMessageChannel<>), typeof(MessageChannel<>));
     }
 }

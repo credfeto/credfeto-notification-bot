@@ -1,11 +1,11 @@
 using System;
-using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.BackgroundServices;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Services;
 using Credfeto.Notification.Bot.Twitch.Startup;
+using Credfeto.Services.Startup.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using TwitchLib.Client;
 using TwitchLib.Client.Interfaces;
@@ -81,6 +81,6 @@ public static class TwitchSetup
 
     private static IServiceCollection AddStartupServices(this IServiceCollection services)
     {
-        return services.AddSingleton<IRunOnStartup, TwitchChannelStartup>();
+        return services.AddRunOnStartupTask<TwitchChannelStartup>();
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Discord.Commands;
-using Credfeto.Notification.Bot.Shared;
+using Credfeto.Services.Startup.Interfaces;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
