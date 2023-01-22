@@ -23,8 +23,7 @@ public sealed class TwitchNewPaidSubNotificationHandlerTests : TestBase
     {
         this._contributionThanks = GetSubstitute<IContributionThanks>();
 
-        this._notificationHandler =
-            new TwitchNewPaidSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchNewPaidSubNotificationHandler>());
+        this._notificationHandler = new TwitchNewPaidSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchNewPaidSubNotificationHandler>());
     }
 
     [Fact]
@@ -39,7 +38,7 @@ public sealed class TwitchNewPaidSubNotificationHandlerTests : TestBase
     public async Task HandleExceptionAsync()
     {
         this._contributionThanks.ThankForNewPaidSubAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
-            .Throws<TimeoutException>();
+            .ThrowsAsync<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer), cancellationToken: CancellationToken.None);
 

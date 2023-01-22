@@ -40,7 +40,7 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     public async Task HandleExceptionAsync()
     {
         this._customTriggeredMessageSender.SendAsync(Arg.Any<Streamer>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Throws<TimeoutException>();
+            .ThrowsAsync<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, message: MESSAGE), cancellationToken: CancellationToken.None);
 

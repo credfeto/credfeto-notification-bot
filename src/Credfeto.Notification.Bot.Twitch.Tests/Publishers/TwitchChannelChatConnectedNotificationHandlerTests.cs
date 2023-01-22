@@ -51,7 +51,7 @@ public sealed class TwitchChannelChatConnectedNotificationHandlerTests : TestBas
     public async Task HandleExceptionAsync()
     {
         this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>())
-            .Throws<TimeoutException>();
+            .ThrowsAsync<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer), cancellationToken: CancellationToken.None);
 

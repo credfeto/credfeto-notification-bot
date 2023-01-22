@@ -76,7 +76,7 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
             .Returns(this._twitchChannelState);
 
         this._twitchChannelState.OnlineAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset>())
-            .Throws<TimeoutException>();
+            .ThrowsAsync<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
                                                cancellationToken: CancellationToken.None);
