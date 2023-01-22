@@ -23,8 +23,7 @@ public sealed class TwitchNewPrimeSubNotificationHandlerTests : TestBase
     {
         this._contributionThanks = GetSubstitute<IContributionThanks>();
 
-        this._notificationHandler =
-            new TwitchNewPrimeSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchNewPrimeSubNotificationHandler>());
+        this._notificationHandler = new TwitchNewPrimeSubNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchNewPrimeSubNotificationHandler>());
     }
 
     [Fact]
@@ -39,7 +38,7 @@ public sealed class TwitchNewPrimeSubNotificationHandlerTests : TestBase
     public async Task HandleExceptionAsync()
     {
         this._contributionThanks.ThankForNewPrimeSubAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>())
-            .Throws<TimeoutException>();
+            .ThrowsAsync<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer), cancellationToken: CancellationToken.None);
 

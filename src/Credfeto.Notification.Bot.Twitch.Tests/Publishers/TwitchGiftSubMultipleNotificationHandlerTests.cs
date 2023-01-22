@@ -23,8 +23,7 @@ public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
     {
         this._contributionThanks = GetSubstitute<IContributionThanks>();
 
-        this._notificationHandler =
-            new TwitchGiftSubMultipleNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchGiftSubMultipleNotificationHandler>());
+        this._notificationHandler = new TwitchGiftSubMultipleNotificationHandler(contributionThanks: this._contributionThanks, this.GetTypedLogger<TwitchGiftSubMultipleNotificationHandler>());
     }
 
     [Fact]
@@ -39,7 +38,7 @@ public sealed class TwitchGiftSubMultipleNotificationHandlerTests : TestBase
     public async Task HandleExceptionAsync()
     {
         this._contributionThanks.ThankForMultipleGiftSubsAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
-            .Throws<TimeoutException>();
+            .ThrowsAsync<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, count: 42), cancellationToken: CancellationToken.None);
 

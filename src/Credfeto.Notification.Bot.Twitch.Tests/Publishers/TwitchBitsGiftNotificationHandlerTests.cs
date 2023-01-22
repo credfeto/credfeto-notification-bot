@@ -31,8 +31,7 @@ public sealed class TwitchBitsGiftNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, bits: BITS_GIVEN),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, bits: BITS_GIVEN), cancellationToken: CancellationToken.None);
 
         await this.ReceivedThankForBitsAsync();
     }
@@ -41,7 +40,7 @@ public sealed class TwitchBitsGiftNotificationHandlerTests : TestBase
     public async Task HandleExceptionAsync()
     {
         this._contributionThanks.ThankForBitsAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<int>(), Arg.Any<CancellationToken>())
-            .Throws<TimeoutException>();
+            .ThrowsAsync<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, bits: 404), cancellationToken: CancellationToken.None);
 

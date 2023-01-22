@@ -61,7 +61,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
     {
         const bool streamOnline = false;
         this._channelFollowCount.GetCurrentFollowerCountAsync(streamer: MockReferenceData.Streamer, Arg.Any<CancellationToken>())
-            .Throws<TimeoutException>();
+            .ThrowsAsync<TimeoutException>();
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer,
                                                    user: MockReferenceData.Viewer,
