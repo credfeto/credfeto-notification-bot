@@ -25,8 +25,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.15.16
 - FF-1429 - Updated FunFair.Test.Common to 6.0.17.2561
 - FF-1429 - Updated Credfeto.Services.Startup to 0.0.1.2
-- FF-1429 - Updated Meziantou.Analyzer to 2.0.10
 - FF-1429 - Updated NSubstitute.Analyzers.CSharp to 1.0.16
+- FF-1429 - Updated Meziantou.Analyzer to 2.0.11
 ### Removed
 ### Deployment Changes
 
