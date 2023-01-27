@@ -1,0 +1,117 @@
+step "manual-intervention-required" {
+    name = "Manual Intervention Required"
+
+    action {
+        action_type = "Octopus.Manual"
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Decide if its worth deploying ys"
+            Octopus.Action.Manual.ResponsibleTeamIds = "global/everyone"
+        }
+        worker_pool_variable = ""
+    }
+}
+
+step "deploy-server-package-x64" {
+    name = "Deploy Server Package X64"
+    properties = {
+        Octopus.Action.TargetRoles = "Linux"
+    }
+
+    action {
+        action_type = "Octopus.TentaclePackage"
+        environments = ["home-development"]
+        is_required = true
+        properties = {
+            Octopus.Action.EnabledFeatures = "Octopus.Features.JsonConfigurationVariables"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "octopus-server-built-in"
+            Octopus.Action.Package.JsonConfigurationVariablesTargets = "appsettings.json"
+            Octopus.Action.Package.PackageId = "Credfeto-Notification-Bot-Server-x64"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "Credfeto-Notification-Bot-Server-x64"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "deploy-server-package-arm64" {
+    name = "Deploy Server Package ARM64"
+    properties = {
+        Octopus.Action.TargetRoles = "Linux"
+    }
+
+    action {
+        action_type = "Octopus.TentaclePackage"
+        environments = ["home-live"]
+        is_required = true
+        properties = {
+            Octopus.Action.EnabledFeatures = "Octopus.Features.JsonConfigurationVariables"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "octopus-server-built-in"
+            Octopus.Action.Package.JsonConfigurationVariablesTargets = "appsettings.json"
+            Octopus.Action.Package.PackageId = "Credfeto-Notification-Bot-Server-arm64"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "Credfeto-Notification-Bot-Server-arm64"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "configure-systemd-x64" {
+    name = "Configure Systemd X64"
+    properties = {
+        Octopus.Action.TargetRoles = "Linux"
+    }
+
+    action {
+        environments = ["home-development"]
+        is_required = true
+        notes = ""
+        properties = {
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "0"
+            PackageStep = "Deploy Server Package X64"
+            ServiceName = "Credfeto.Notification.Bot.Server"
+            User = "notificationbot"
+        }
+        worker_pool_variable = ""
+    }
+}
+
+step "configure-systemd-arm64" {
+    name = "Configure Systemd ARM64"
+    properties = {
+        Octopus.Action.TargetRoles = "Linux"
+    }
+
+    action {
+        environments = ["home-live"]
+        is_required = true
+        notes = ""
+        properties = {
+            Octopus.Action.RunOnServer = "false"
+            Octopus.Action.Template.Id = "ActionTemplates-21"
+            Octopus.Action.Template.Version = "0"
+            PackageStep = "Deploy Server Package ARM64"
+            ServiceName = "Credfeto.Notification.Bot.Server"
+            User = "notificationbot"
+        }
+        worker_pool_variable = ""
+    }
+}
