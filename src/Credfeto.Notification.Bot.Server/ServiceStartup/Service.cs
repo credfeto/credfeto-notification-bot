@@ -58,8 +58,12 @@ internal static class Service
                            .WithConfiguration<PgsqlServerConfigurationValidator, PgsqlServerConfiguration>(configurationRoot: configurationRoot,
                                                                                                            key: "Database:Postgres",
                                                                                                            jsonSerializerContext: jsonSerializerContext)
-                           .WithConfiguration<DiscordBotOptionsValidator, DiscordBotOptions>(configurationRoot: configurationRoot, key: "Discord", jsonSerializerContext: jsonSerializerContext)
-                           .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot, key: "Twitch", jsonSerializerContext: jsonSerializerContext);
+                           .WithConfiguration<DiscordBotOptionsValidator, DiscordBotOptions>(configurationRoot: configurationRoot,
+                                                                                             key: "Discord",
+                                                                                             jsonSerializerContext: jsonSerializerContext)
+                           .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot,
+                                                                                           key: "Twitch",
+                                                                                           jsonSerializerContext: jsonSerializerContext);
         }
         catch (ConfigurationErrorsException exception)
         {

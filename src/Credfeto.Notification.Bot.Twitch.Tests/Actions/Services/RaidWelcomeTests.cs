@@ -60,7 +60,10 @@ public sealed class RaidWelcomeTests : LoggingTestBase
                                                                      welcome: MockReferenceData.TwitchChannelWelcome)
                                                              }));
 
-        this._raidWelcome = new RaidWelcome(options: options, twitchChannelManager: twitchChannelManager, twitchChatMessageChannel: this._twitchChatMessageChannel, this.GetTypedLogger<RaidWelcome>());
+        this._raidWelcome = new RaidWelcome(options: options,
+                                            twitchChannelManager: twitchChannelManager,
+                                            twitchChatMessageChannel: this._twitchChatMessageChannel,
+                                            this.GetTypedLogger<RaidWelcome>());
     }
 
     [Fact]
@@ -70,8 +73,8 @@ public sealed class RaidWelcomeTests : LoggingTestBase
 
         await this._raidWelcome.IssueRaidWelcomeAsync(streamer: MockReferenceData.Streamer, raider: Raider, cancellationToken: CancellationToken.None);
 
-        string raidWelcome = @"♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫" + Environment.NewLine + @"GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit" + Environment.NewLine +
-                             @"♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
+        string raidWelcome = @"♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫" + Environment.NewLine + @"GlitchLit  GlitchLit  GlitchLit Welcome raiders! GlitchLit GlitchLit GlitchLit" +
+                             Environment.NewLine + @"♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫♫";
 
         await this.ReceivedPublishMessageAsync(IMMEDIATE_MSG);
         await this.ReceivedPublishMessageAsync(raidWelcome);
@@ -95,7 +98,8 @@ public sealed class RaidWelcomeTests : LoggingTestBase
     private ValueTask ReceivedPublishMessageAsync(string expectedMessage)
     {
         return this._twitchChatMessageChannel.Received(1)
-                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == MockReferenceData.Streamer && StringComparer.InvariantCultureIgnoreCase.Equals(t.Message.Trim(), expectedMessage)),
+                   .PublishAsync(Arg.Is<TwitchChatMessage>(t => t.Streamer == MockReferenceData.Streamer &&
+                                                                StringComparer.InvariantCultureIgnoreCase.Equals(t.Message.Trim(), expectedMessage)),
                                  Arg.Any<CancellationToken>());
     }
 }
