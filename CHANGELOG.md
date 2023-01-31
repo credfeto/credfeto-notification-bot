@@ -29,6 +29,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.14
 - FF-1429 - Updated Credfeto.Date to 1.0.0.4
+- FF-1429 - Updated Credfeto.Random to 1.0.0.2
 ### Removed
 ### Deployment Changes
 
