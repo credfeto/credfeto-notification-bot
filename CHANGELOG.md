@@ -30,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Date to 1.0.0.4
 - FF-1429 - Updated Credfeto.Random to 1.0.0.2
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.52.0.60960
+- FF-1429 - Updated Credfeto.Database to 1.0.1.3
 ### Removed
 ### Deployment Changes
 
