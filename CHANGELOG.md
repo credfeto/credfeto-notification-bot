@@ -13,7 +13,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated xunit.analyzers to 1.1.0
 - FF-1429 - Updated Microsoft.NET.Test.Sdk to 17.4.1
 - Switch to use Credfeto.Date
-- FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.4.33
 - FF-1429 - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.2.32
 - FF-1429 - Updated Discord.Net to 3.9.0
 - FF-1429 - Updated NonBlocking to 2.1.1
@@ -31,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Random to 1.0.0.2
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.52.0.60960
 - FF-1429 - Updated Credfeto.Database to 1.0.1.3
+- FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.5.22
 ### Removed
 ### Deployment Changes
 
