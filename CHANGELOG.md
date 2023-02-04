@@ -21,7 +21,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-3881 - Updated DotNet SDK to 7.0.102
 - FF-1429 - Updated Credfeto.Enumeration.Source.Generation to 1.0.5.17
 - FF-1429 - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.15.16
-- FF-1429 - Updated Credfeto.Services.Startup to 0.0.1.2
 - FF-1429 - Updated NSubstitute.Analyzers.CSharp to 1.0.16
 - FF-1429 - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 - FF-1429 - Updated Meziantou.Analyzer to 2.0.14
@@ -31,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Database to 1.0.1.3
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.5.22
 - FF-1429 - Updated FunFair.Test.Common to 6.0.19.2617
+- FF-1429 - Updated Credfeto.Services.Startup to 1.0.0.3
 ### Removed
 ### Deployment Changes
 
