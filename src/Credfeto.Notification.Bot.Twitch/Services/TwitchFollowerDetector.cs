@@ -30,10 +30,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
     private bool _connected;
 
-    public TwitchFollowerDetector(IOptions<TwitchBotOptions> options,
-                                  ITwitchPubSub twitchPubSub,
-                                  ITwitchChannelManager twitchChannelManager,
-                                  ILogger<TwitchFollowerDetector> logger)
+    public TwitchFollowerDetector(IOptions<TwitchBotOptions> options, ITwitchPubSub twitchPubSub, ITwitchChannelManager twitchChannelManager, ILogger<TwitchFollowerDetector> logger)
     {
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._twitchPubSub = twitchPubSub ?? throw new ArgumentNullException(nameof(twitchPubSub));
@@ -61,11 +58,11 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         this._semaphoreSlim.Dispose();
     }
 
-    public async ValueTask EnableAsync(TwitchUser streamer)
+    public async ValueTask EnableAsync(TwitchUser streamer, CancellationToken cancellationToken)
     {
         if (this._userMappings.TryAdd(key: streamer.Id, streamer.UserName.ToStreamer()))
         {
-            if (!await this.EnsureConnectedAsync())
+            if (!await this.EnsureConnectedAsync(cancellationToken))
             {
                 this._logger.LogInformation($"{streamer.UserName}: Tracking follower notifications as twitch user id {streamer.Id}.");
                 this._twitchPubSub.ListenToFollows(streamer.Id);
@@ -73,20 +70,19 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         }
     }
 
-    public Task UpdateAsync()
+    public Task UpdateAsync(CancellationToken cancellationToken)
     {
         if (this._userMappings.IsEmpty)
         {
             return Task.CompletedTask;
         }
 
-        return this.EnsureConnectedAsync();
+        return this.EnsureConnectedAsync(cancellationToken);
     }
 
     private IDisposable SubscribeErrors()
     {
-        return Observable.FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._twitchPubSub.OnPubSubServiceError += h,
-                                                                     removeHandler: h => this._twitchPubSub.OnPubSubServiceError -= h)
+        return Observable.FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._twitchPubSub.OnPubSubServiceError += h, removeHandler: h => this._twitchPubSub.OnPubSubServiceError -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
                          .Subscribe(this.OnPubSubServiceError);
     }
@@ -115,14 +111,14 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
                          .Subscribe();
     }
 
-    private async Task<bool> EnsureConnectedAsync()
+    private async Task<bool> EnsureConnectedAsync(CancellationToken cancellationToken)
     {
         if (this._connected)
         {
             return false;
         }
 
-        await this._semaphoreSlim.WaitAsync();
+        await this._semaphoreSlim.WaitAsync(cancellationToken);
 
         try
         {
@@ -132,7 +128,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
             }
 
             this._twitchPubSub.Connect();
-            await Task.Delay(TimeSpan.FromMilliseconds(value: 500));
+            await Task.Delay(TimeSpan.FromMilliseconds(value: 500), cancellationToken);
 
             return true;
         }

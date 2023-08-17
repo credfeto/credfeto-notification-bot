@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Server.Helpers;
 using Credfeto.Notification.Bot.Server.ServiceStartup;
@@ -16,7 +17,7 @@ internal static class Program
         return CreateHostBuilder(args)
                .Build()
                .InitializeLogging()
-               .RunAsync();
+               .RunAsync(CancellationToken.None);
     }
 
     private static IHost InitializeLogging(this IHost host)

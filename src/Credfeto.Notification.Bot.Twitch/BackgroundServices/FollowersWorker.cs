@@ -23,16 +23,16 @@ public sealed class FollowersWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            await this.UpdateFollowersAsync();
+            await this.UpdateFollowersAsync(stoppingToken);
             await Task.Delay(delay: Interval, cancellationToken: stoppingToken);
         }
     }
 
-    private async Task UpdateFollowersAsync()
+    private async Task UpdateFollowersAsync(CancellationToken cancellationToken)
     {
         try
         {
-            await this._twitchFollowerDetector.UpdateAsync();
+            await this._twitchFollowerDetector.UpdateAsync(cancellationToken);
         }
         catch (Exception e)
         {

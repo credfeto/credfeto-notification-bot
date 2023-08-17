@@ -23,10 +23,7 @@ public static class HttpClientBuilderExtensions
                                                                           if (response.Result != null)
                                                                           {
                                                                               if (response.Result.Headers.TryGetValues(name: "Retry-After", out IEnumerable<string>? result) &&
-                                                                                  int.TryParse(result.First(),
-                                                                                               style: NumberStyles.Integer,
-                                                                                               provider: CultureInfo.InvariantCulture,
-                                                                                               out int seconds))
+                                                                                  int.TryParse(result.First(), style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int seconds))
                                                                               {
                                                                                   return TimeSpan.FromSeconds(seconds);
                                                                               }
@@ -48,11 +45,6 @@ public static class HttpClientBuilderExtensions
     [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "TODO: Review")]
     public static IHttpClientBuilder AddSensibleTransientHttpErrorPolicy(this IHttpClientBuilder builder, int maxRetries = 3)
     {
-        if (builder == null)
-        {
-            throw new ArgumentNullException(nameof(builder));
-        }
-
         PolicyBuilder<HttpResponseMessage> policyBuilder = HttpPolicyExtensions.SensiblyHandleTransientHttpError();
 
         // Important - cache policy instances so that they are singletons per handler.

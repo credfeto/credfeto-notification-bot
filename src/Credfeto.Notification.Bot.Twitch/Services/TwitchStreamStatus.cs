@@ -17,11 +17,9 @@ using TwitchLib.Api.Services.Events.LiveStreamMonitor;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
-public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
+public sealed partial class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 {
-    private static readonly Regex StreamerUnknown = new(pattern: "^No\\schannel\\swith\\sthe\\sname\\s\"(?<streamer>[\\w\\d_]+)\"\\scould\\sbe\\sfound\\.$",
-                                                        RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.ExplicitCapture,
-                                                        TimeSpan.FromSeconds(1));
+    private static readonly Regex StreamerUnknown = TwitchStreamStatusRegex.NoChannelWithName();
 
     private readonly ConcurrentDictionary<Streamer, bool> _channels;
 
@@ -46,19 +44,17 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 
         this._lsm = new(options.Value.ConfigureTwitchApi());
 
-        this._onlineSubscription = Observable
-                                   .FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
-                                   .Select(messageEvent => messageEvent.EventArgs)
-                                   .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
-                                   .Concat()
-                                   .Subscribe();
+        this._onlineSubscription = Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
+                                             .Select(messageEvent => messageEvent.EventArgs)
+                                             .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
+                                             .Concat()
+                                             .Subscribe();
 
-        this._offlineSubscription = Observable
-                                    .FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
-                                    .Select(messageEvent => messageEvent.EventArgs)
-                                    .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
-                                    .Concat()
-                                    .Subscribe();
+        this._offlineSubscription = Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
+                                              .Select(messageEvent => messageEvent.EventArgs)
+                                              .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
+                                              .Concat()
+                                              .Subscribe();
     }
 
     public void Dispose()
@@ -98,8 +94,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
                 throw;
             }
 
-            Streamer streamer = Streamer.FromString(match.Groups["streamer"]
-                                                         .Value);
+            Streamer streamer = Streamer.FromString(match.Groups["streamer"].Value);
             this._logger.LogError(new(exception.HResult), exception: exception, $"Streamer {streamer.Value} not found");
 
             this._channels.TryRemove(key: streamer, value: out _);

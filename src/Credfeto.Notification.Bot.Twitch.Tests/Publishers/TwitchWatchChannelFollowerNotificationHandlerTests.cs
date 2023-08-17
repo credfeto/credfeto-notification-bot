@@ -53,7 +53,7 @@ public sealed class TwitchWatchChannelFollowerNotificationHandlerTests : TestBas
         await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
 
         await this._followerDetector.Received(1)
-                  .EnableAsync(Arg.Any<TwitchUser>());
+                  .EnableAsync(Arg.Any<TwitchUser>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -63,6 +63,6 @@ public sealed class TwitchWatchChannelFollowerNotificationHandlerTests : TestBas
         await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
 
         await this._followerDetector.DidNotReceive()
-                  .EnableAsync(Arg.Any<TwitchUser>());
+                  .EnableAsync(Arg.Any<TwitchUser>(), Arg.Any<CancellationToken>());
     }
 }

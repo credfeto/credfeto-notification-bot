@@ -34,11 +34,6 @@ public static class HttpPolicyExtensions
 
     private static PolicyBuilder<HttpResponseMessage> OrTransientHttpStatusCode(this PolicyBuilder<HttpResponseMessage> policyBuilder)
     {
-        if (policyBuilder == null)
-        {
-            throw new ArgumentNullException(nameof(policyBuilder));
-        }
-
         return policyBuilder.OrResult(TransientHttpStatusCodePredicate);
     }
 }
