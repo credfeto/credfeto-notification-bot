@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="generate-watched-accounts.sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+    <script-file value="$PROJECT_DIR$/db/twitch/generate-watched-accounts.sql" />
+    <script-mode>FILE</script-mode>
+    <data-source id="f62244cb-e79d-4c43-9a4a-8ceef892b4a1" />
+    <method v="2" />
+  </configuration>
+</component>
