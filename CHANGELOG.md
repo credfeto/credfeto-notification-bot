@@ -27,7 +27,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Credfeto.Date to 1.0.0.4
 - FF-1429 - Updated Credfeto.Random to 1.0.0.2
 - FF-1429 - Updated SonarAnalyzer.CSharp to 8.52.0.60960
-- FF-1429 - Updated Credfeto.Database to 1.0.1.3
+- FF-1429 - Updated Credfeto.Database to 1.2.0.3
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.5.22
 - FF-1429 - Updated FunFair.Test.Common to 6.0.19.2617
 - FF-1429 - Updated Credfeto.Services.Startup to 1.0.0.3
