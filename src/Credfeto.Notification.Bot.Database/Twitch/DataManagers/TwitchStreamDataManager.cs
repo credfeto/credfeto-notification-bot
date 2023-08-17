@@ -1,9 +1,12 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Database;
 using Credfeto.Database.Interfaces;
 using Credfeto.Database.Interfaces.Builders;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
+using Credfeto.Notification.Bot.Database.Twitch.ObjectMappers;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
@@ -11,47 +14,28 @@ namespace Credfeto.Notification.Bot.Database.Twitch.DataManagers;
 
 public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 {
-    private readonly IObjectBuilder<TwitchChatterEntity, TwitchChatter> _chatterBuilder;
     private readonly IDatabase _database;
-    private readonly IObjectBuilder<TwitchFollowerEntity, TwitchFollower> _followerBuilder;
-    private readonly IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> _followerMilestoneBuilder;
-    private readonly IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> _regularChatterBuilder;
-    private readonly IObjectBuilder<StreamSettingsEntity, StreamSettings> _streamSettingsBuilder;
 
-    public TwitchStreamDataManager(IDatabase database,
-                                   IObjectBuilder<TwitchChatterEntity, TwitchChatter> chatterBuilder,
-                                   IObjectBuilder<TwitchRegularChatterEntity, TwitchRegularChatter> regularChatterBuilder,
-                                   IObjectBuilder<TwitchFollowerMilestoneEntity, TwitchFollowerMilestone> followerMilestoneBuilder,
-                                   IObjectBuilder<TwitchFollowerEntity, TwitchFollower> followerBuilder,
-                                   IObjectBuilder<StreamSettingsEntity, StreamSettings> streamSettingsBuilder)
+    public TwitchStreamDataManager(IDatabase database)
     {
         this._database = database ?? throw new ArgumentNullException(nameof(database));
-        this._chatterBuilder = chatterBuilder ?? throw new ArgumentNullException(nameof(chatterBuilder));
-        this._regularChatterBuilder = regularChatterBuilder ?? throw new ArgumentNullException(nameof(regularChatterBuilder));
-        this._followerMilestoneBuilder = followerMilestoneBuilder ?? throw new ArgumentNullException(nameof(followerMilestoneBuilder));
-        this._followerBuilder = followerBuilder ?? throw new ArgumentNullException(nameof(followerBuilder));
-        this._streamSettingsBuilder = streamSettingsBuilder ?? throw new ArgumentNullException(nameof(streamSettingsBuilder));
     }
 
-    public Task RecordStreamStartAsync(Streamer streamer, DateTimeOffset streamStartDate)
+    public ValueTask RecordStreamStartAsync(Streamer streamer, DateTimeOffset streamStartDate, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
+        return this._database.ExecuteAsync(action: (c, ct) => TwitchStreamObjectMapper.StreamInsertAsync(c, channel: streamer, start_date: streamStartDate, ct), cancellationToken);
     }
 
     public Task AddChatterToStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert",
-                                           new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
     }
 
     public async Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username)
     {
         TwitchChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
                                                                                 storedProcedure: "twitch.stream_chatter_get",
-                                                                                new
-                                                                                {
-                                                                                    channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString()
-                                                                                });
+                                                                                new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
 
         return chatted == null;
     }
