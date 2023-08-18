@@ -1,8 +1,7 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Credfeto.Database.Interfaces;
-using Credfeto.Database.Interfaces.Builders;
-using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
+using Credfeto.Database;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
@@ -11,20 +10,18 @@ namespace Credfeto.Notification.Bot.Database.Twitch.DataManagers;
 public sealed class TwitchViewerDataManager : ITwitchViewerDataManager
 {
     private readonly IDatabase _database;
-    private readonly IObjectBuilder<TwitchViewerUserEntity, TwitchUser> _twitchUserBuilder;
 
-    public TwitchViewerDataManager(IDatabase database, IObjectBuilder<TwitchViewerUserEntity, TwitchUser> twitchUserBuilder)
+    public TwitchViewerDataManager(IDatabase database)
     {
         this._database = database ?? throw new ArgumentNullException(nameof(database));
-        this._twitchUserBuilder = twitchUserBuilder ?? throw new ArgumentNullException(nameof(twitchUserBuilder));
     }
 
-    public Task AddViewerAsync(Viewer viewerName, string viewerId, DateTimeOffset dateCreated)
+    public ValueTask AddViewerAsync(Viewer viewerName, string viewerId, DateTimeOffset dateCreated, CancellationToken cancellationToken)
     {
         return this._database.ExecuteAsync(storedProcedure: "twitch.viewer_insert", new { username_ = viewerName.ToString(), id_ = viewerId, date_created_ = dateCreated });
     }
 
-    public Task<TwitchUser?> GetByUserNameAsync(Viewer userName)
+    public ValueTask<TwitchUser?> GetByUserNameAsync(Viewer userName, CancellationToken cancellationToken)
     {
         return this._database.QuerySingleOrDefaultAsync(builder: this._twitchUserBuilder, storedProcedure: "twitch.viewer_get", new { username_ = userName.ToString() });
     }
