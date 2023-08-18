@@ -26,7 +26,7 @@ internal static partial class TwitchStreamObjectMapper
                                                              CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.stream_settings_set", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
-    public static partial ValueTask StreamSettingsSetAsync(DbConnection dbConnection,
+    public static partial ValueTask StreamSettingsSetAsync(DbConnection connection,
                                                            [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
                                                            [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
                                                            bool announce_milestones,
@@ -48,7 +48,6 @@ internal static partial class TwitchStreamObjectMapper
                                                                                        [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
                                                                                        CancellationToken cancellationToken);
 
-    // "twitch.stream_milestone_insert"
     [SqlObjectMap(name: "twitch.stream_milestone_insert", sqlObjectType: SqlObjectType.TABLE_FUNCTION)]
     public static partial ValueTask<IReadOnlyList<TwitchFollowerMilestone>> StreamFollowerMilestoneInsertAsync(DbConnection connection,
                                                                                                                [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
