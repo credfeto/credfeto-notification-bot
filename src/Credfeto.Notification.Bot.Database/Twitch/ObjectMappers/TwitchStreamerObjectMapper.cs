@@ -19,7 +19,4 @@ internal static partial class TwitchStreamerObjectMapper
 
     [SqlObjectMap(name: "twitch.streamer_get", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
     public static partial ValueTask<TwitchUser?> StreamerGetAsync(DbConnection connection, [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel, CancellationToken cancellationToken);
-
-    [SqlObjectMap(name: "twitch.streamer_get", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
-    public static partial ValueTask<TwitchUser?> StreamerGetAsync(DbConnection connection, [SqlFieldMap<ViewerMapper, Viewer>] Viewer channel, CancellationToken cancellationToken);
 }
