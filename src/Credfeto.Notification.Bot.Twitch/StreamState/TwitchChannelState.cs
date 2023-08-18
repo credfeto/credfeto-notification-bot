@@ -53,9 +53,9 @@ public sealed class TwitchChannelState : ITwitchChannelState
         this._logger.LogInformation($"{this.Streamer}: Going Online...");
         ActiveStream stream = new(gameName: gameName, startedAt: startDate, new TwitchStreamSettingsOnline(options: this._options, streamer: this.Streamer, logger: this._logger));
         this._stream = stream;
-        await this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this.Streamer, streamStartDate: startDate, cancellationToken);
+        await this._twitchStreamDataManager.RecordStreamStartAsync(streamer: this.Streamer, streamStartDate: startDate, cancellationToken: cancellationToken);
 
-        StreamSettings? settings = await this._twitchStreamDataManager.GetSettingsAsync(streamer: this.Streamer, streamStartDate: startDate, cancellationToken);
+        StreamSettings? settings = await this._twitchStreamDataManager.GetSettingsAsync(streamer: this.Streamer, streamStartDate: startDate, cancellationToken: cancellationToken);
 
         if (settings != null)
         {
@@ -69,7 +69,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
                 settings.AnnounceMilestonesEnabled != stream.Settings.AnnounceMilestonesEnabled || settings.ShoutOutsEnabled != stream.Settings.ShoutOutsEnabled ||
                 settings.ThanksEnabled != stream.Settings.ThanksEnabled)
             {
-                await this.SaveStreamSettingsInternalAsync(stream, cancellationToken);
+                await this.SaveStreamSettingsInternalAsync(stream: stream, cancellationToken: cancellationToken);
             }
         }
     }
@@ -80,7 +80,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         return stream == null
             ? ValueTask.CompletedTask
-            : this.SaveStreamSettingsInternalAsync(stream, cancellationToken);
+            : this.SaveStreamSettingsInternalAsync(stream: stream, cancellationToken: cancellationToken);
     }
 
     public void Offline()
@@ -142,20 +142,21 @@ public sealed class TwitchChannelState : ITwitchChannelState
         }
 
         // note that this covers disconnections of the bot
-        bool firstTimeInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user, cancellationToken);
+        bool firstTimeInStream =
+            await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user, cancellationToken: cancellationToken);
 
         if (!firstTimeInStream)
         {
             return;
         }
 
-        bool isRegular = await this.IsRegularChatterAsync(streamer: this.Streamer, username: user, cancellationToken);
+        bool isRegular = await this.IsRegularChatterAsync(streamer: this.Streamer, username: user, cancellationToken: cancellationToken);
 
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user, cancellationToken);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(userName: user, cancellationToken: cancellationToken);
 
         if (twitchUser != null)
         {
-            await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user, cancellationToken);
+            await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user, cancellationToken: cancellationToken);
         }
 
         // no point in welcoming ignored users
@@ -313,19 +314,19 @@ public sealed class TwitchChannelState : ITwitchChannelState
     public async ValueTask NewFollowerAsync(Viewer user, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{this.Streamer}: Followed by {user}");
-        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: this.Streamer, username: user, cancellationToken);
+        int followCount = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: this.Streamer, username: user, cancellationToken: cancellationToken);
 
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(user, cancellationToken);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(userName: user, cancellationToken: cancellationToken);
 
         TwitchChannelNewFollower model;
 
         if (twitchUser != null)
         {
-            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: twitchUser.IsStreamer, accountCreated: twitchUser.DateCreated, followCount: followCount);
+            model = new(Streamer: this.Streamer, Viewer: user, this._stream != null, IsStreamer: twitchUser.IsStreamer, AccountCreated: twitchUser.DateCreated, FollowCount: followCount);
         }
         else
         {
-            model = new(streamer: this.Streamer, user: user, this._stream != null, isStreamer: false, accountCreated: DateTime.MinValue, followCount: followCount);
+            model = new(Streamer: this.Streamer, Viewer: user, this._stream != null, IsStreamer: false, AccountCreated: DateTimeOffset.MinValue, FollowCount: followCount);
         }
 
         await this._mediator.Publish(notification: model, cancellationToken: cancellationToken);
@@ -343,14 +344,14 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         this._logger.LogInformation($"{this.Streamer}: Settings changed, updating...");
 
-        return this._twitchStreamDataManager.UpdateSettingsAsync(streamer: this.Streamer, streamStartDate: stream.StartedAt, settings: newSettings, cancellationToken);
+        return this._twitchStreamDataManager.UpdateSettingsAsync(streamer: this.Streamer, streamStartDate: stream.StartedAt, settings: newSettings, cancellationToken: cancellationToken);
     }
 
     private async Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken)
     {
         try
         {
-            return await this._twitchStreamDataManager.IsRegularChatterAsync(streamer: streamer, username: username, cancellationToken);
+            return await this._twitchStreamDataManager.IsRegularChatterAsync(streamer: streamer, username: username, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {

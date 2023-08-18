@@ -70,7 +70,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideWelcomes(enabled))
         {
-            await channel.SaveStreamSettingsAsync();
+            await channel.SaveStreamSettingsAsync(CancellationToken.None);
             await this.ReplyAsync($"Welcomes for regular {streamer} chatters are now {enabled.AsEnabledDisabled()}");
         }
         else
@@ -89,7 +89,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideRaidWelcomes(enabled))
         {
-            await channel.SaveStreamSettingsAsync();
+            await channel.SaveStreamSettingsAsync(CancellationToken.None);
             await this.ReplyAsync($"Raid Welcomes for regular {streamer} chatters are now {enabled.AsEnabledDisabled()}");
         }
         else
@@ -108,7 +108,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideThanks(enabled))
         {
-            await channel.SaveStreamSettingsAsync();
+            await channel.SaveStreamSettingsAsync(CancellationToken.None);
             await this.ReplyAsync($"Thanks for {streamer} gifts  are now {enabled.AsEnabledDisabled()}");
         }
         else
@@ -127,7 +127,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideMilestonesEnabled(enabled))
         {
-            await channel.SaveStreamSettingsAsync();
+            await channel.SaveStreamSettingsAsync(CancellationToken.None);
             await this.ReplyAsync($"Milestone announcements for {streamer} gifts  are now {enabled.AsEnabledDisabled()}");
         }
         else
@@ -146,7 +146,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         if (channel.Settings.OverrideShoutOuts(enabled))
         {
-            await channel.SaveStreamSettingsAsync();
+            await channel.SaveStreamSettingsAsync(CancellationToken.None);
             await this.ReplyAsync($"Auto-Shoutouts for {streamer} gifts  are now {enabled.AsEnabledDisabled()}");
         }
         else

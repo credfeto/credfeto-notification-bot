@@ -7,7 +7,7 @@ namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 public interface ITwitchViewerDataManager
 {
-    ValueTask AddViewerAsync(Viewer viewerName, string viewerId, DateTimeOffset dateCreated, CancellationToken cancellationToken);
+    ValueTask AddViewerAsync(Viewer viewerName, int viewerId, DateTimeOffset dateCreated, CancellationToken cancellationToken);
 
     ValueTask<TwitchUser?> GetByUserNameAsync(Viewer userName, CancellationToken cancellationToken);
 }

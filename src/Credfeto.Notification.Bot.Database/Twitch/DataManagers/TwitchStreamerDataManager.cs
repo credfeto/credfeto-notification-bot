@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Database;
@@ -18,11 +17,11 @@ public sealed class TwitchStreamerDataManager : ITwitchStreamerDataManager
         this._database = database ?? throw new ArgumentNullException(nameof(database));
     }
 
-    public ValueTask AddStreamerAsync(Streamer streamerName, string streamerId, DateTimeOffset startedStreaming, CancellationToken cancellationToken)
+    public ValueTask AddStreamerAsync(Streamer streamerName, int streamerId, DateTimeOffset startedStreaming, CancellationToken cancellationToken)
     {
         return this._database.ExecuteAsync(action: (c, ct) => TwitchStreamerObjectMapper.StreamerInsertAsync(connection: c,
                                                                                                              streamer: streamerName,
-                                                                                                             Convert.ToInt32(value: streamerId, provider: CultureInfo.InvariantCulture),
+                                                                                                             id: streamerId,
                                                                                                              start_date: startedStreaming,
                                                                                                              cancellationToken: ct),
                                            cancellationToken: cancellationToken);

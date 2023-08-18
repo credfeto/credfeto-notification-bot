@@ -25,10 +25,10 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
 
     public async ValueTask Handle(TwitchChannelNewFollower notification, CancellationToken cancellationToken)
     {
-        string title = $"{notification.Streamer} was followed by {notification.User}";
+        string title = $"{notification.Streamer} was followed by {notification.Viewer}";
 
         Embed embed = BuildEmbed(notification: notification, title: title);
-        DiscordMessage discordMessage = new(notification.Streamer.ToString(), embed: embed, title: title, image: null);
+        DiscordMessage discordMessage = new(channel: notification.Streamer.Value, embed: embed, title: title, image: null);
 
         await this._messageChannel.PublishAsync(message: discordMessage, cancellationToken: cancellationToken);
 
@@ -40,7 +40,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
         return new EmbedBuilder().WithColor(Color.Blue)
                                  .WithCurrentTimestamp()
                                  .WithTitle(title)
-                                 .WithUrl($"https://twitch.tv/{notification.User}")
+                                 .WithUrl($"https://twitch.tv/{notification.Viewer.Value}")
                                  .AddField(name: "Streamer",
                                            notification.IsStreamer
                                                ? "Yes"
@@ -53,7 +53,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
                                            notification.FollowCount == 1
                                                ? "New Follower"
                                                : $"Followed {notification.FollowCount} times")
-                                 .AddField(name: "Account Created", notification.AccountCreated.ToString(format: "yyyy-MM-dd HH:mm:ss", provider: CultureInfo.InvariantCulture))
+                                 .AddField(name: "Account Created", notification.AccountCreated.ToString(format: "yyyy-MM-dd HH:mm:ss", formatProvider: CultureInfo.InvariantCulture))
                                  .Build();
     }
 }

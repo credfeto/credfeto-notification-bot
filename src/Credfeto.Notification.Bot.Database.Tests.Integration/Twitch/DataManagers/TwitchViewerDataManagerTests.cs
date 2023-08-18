@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Database.Tests.Integration.Setup;
@@ -25,12 +27,12 @@ public sealed class TwitchViewerDataManagerTests : DatabaseIntegrationTestBase
     {
         Viewer viewerName = GenerateViewerUsername();
 
-        TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(viewerName);
+        TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(viewerName, CancellationToken.None);
         Assert.Null(user);
 
-        await this._twitchStreamerDataManager.AddViewerAsync(viewerName: viewerName, viewerName.ToString(), this._currentTimeSource.UtcNow());
+        await this._twitchStreamerDataManager.AddViewerAsync(viewerName: viewerName, Math.Abs(viewerName.GetHashCode()), this._currentTimeSource.UtcNow(), CancellationToken.None);
 
-        user = await this._twitchStreamerDataManager.GetByUserNameAsync(viewerName);
+        user = await this._twitchStreamerDataManager.GetByUserNameAsync(viewerName, CancellationToken.None);
         Assert.NotNull(user);
     }
 }

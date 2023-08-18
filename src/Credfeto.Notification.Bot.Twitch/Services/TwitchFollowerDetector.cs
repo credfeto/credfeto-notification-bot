@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
@@ -26,7 +27,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
     private readonly IDisposable _serviceErrorSubscription;
     private readonly ITwitchChannelManager _twitchChannelManager;
     private readonly ITwitchPubSub _twitchPubSub;
-    private readonly ConcurrentDictionary<string, Streamer> _userMappings;
+    private readonly ConcurrentDictionary<int, Streamer> _userMappings;
 
     private bool _connected;
 
@@ -38,7 +39,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         this._semaphoreSlim = new(1);
-        this._userMappings = new(StringComparer.InvariantCultureIgnoreCase);
+        this._userMappings = new();
         this._connected = false;
 
         this._serviceErrorSubscription = this.SubscribeErrors();
@@ -65,7 +66,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
             if (!await this.EnsureConnectedAsync(cancellationToken))
             {
                 this._logger.LogInformation($"{streamer.UserName}: Tracking follower notifications as twitch user id {streamer.Id}.");
-                this._twitchPubSub.ListenToFollows(streamer.Id);
+                this._twitchPubSub.ListenToFollows(streamer.Id.ToString(CultureInfo.InvariantCulture));
             }
         }
     }
@@ -154,12 +155,12 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
             this._twitchPubSub.SendTopics();
 
-            foreach ((string streamerId, Streamer streamer) in this._userMappings)
+            foreach ((int streamerId, Streamer streamer) in this._userMappings)
             {
                 await Task.Delay(TimeSpan.FromMilliseconds(500), cancellationToken: cancellationToken);
 
                 this._logger.LogInformation($"{streamer}: Tracking follower notifications as twitch user id {streamerId}.");
-                this._twitchPubSub.ListenToFollows(streamerId);
+                this._twitchPubSub.ListenToFollows(streamerId.ToString(CultureInfo.InvariantCulture));
             }
         }
         catch (Exception exception)
@@ -176,7 +177,12 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
     private async Task OnFollowedAsync(OnFollowArgs e, CancellationToken cancellationToken)
     {
-        if (!this._userMappings.TryGetValue(key: e.FollowedChannelId, out Streamer channelName))
+        if (!int.TryParse(e.FollowedChannelId, NumberStyles.Integer, CultureInfo.InvariantCulture, out int followedChannelId))
+        {
+            return;
+        }
+
+        if (!this._userMappings.TryGetValue(key: followedChannelId, out Streamer channelName))
         {
             return;
         }

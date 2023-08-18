@@ -18,13 +18,9 @@ public sealed class TwitchViewerDataManager : ITwitchViewerDataManager
         this._database = database ?? throw new ArgumentNullException(nameof(database));
     }
 
-    public ValueTask AddViewerAsync(Viewer viewerName, string viewerId, DateTimeOffset dateCreated, CancellationToken cancellationToken)
+    public ValueTask AddViewerAsync(Viewer viewerName, int viewerId, DateTimeOffset dateCreated, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(action: (c, ct) => TwitchViewerObjectMapper.ViewerInsertAsync(connection: c,
-                                                                                                         viewer: viewerName,
-                                                                                                         Convert.ToInt32(value: viewerId, provider: CultureInfo.InvariantCulture),
-                                                                                                         dateCreated: dateCreated,
-                                                                                                         cancellationToken: ct),
+        return this._database.ExecuteAsync(action: (c, ct) => TwitchViewerObjectMapper.ViewerInsertAsync(connection: c, viewer: viewerName, viewerId, dateCreated: dateCreated, cancellationToken: ct),
                                            cancellationToken: cancellationToken);
     }
 
