@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Database.Interfaces;
+using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
 using Credfeto.Notification.Bot.Database.Twitch.Mappers;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
@@ -24,12 +25,15 @@ internal static partial class TwitchStreamObjectMapper
                                                              CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.stream_settings_set", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
-    public static ValueTask StreamSettingsSetAsync(DbConnection dbConnection,
-                                                   [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
-                                                   [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
-                                                   bool announce_milestones,
-                                                   bool chat_welcomes,
-                                                   bool raid_welcomes,
-                                                   bool shout_outs,
-                                                   CancellationToken cancellationToken);
+    public static partial ValueTask StreamSettingsSetAsync(DbConnection dbConnection,
+                                                           [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                           [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                           bool announce_milestones,
+                                                           bool chat_welcomes,
+                                                           bool raid_welcomes,
+                                                           bool shout_outs,
+                                                           CancellationToken cancellationToken);
+
+    [SqlObjectMap(name: "twitch.stream_chatter_get", sqlObjectType: SqlObjectType.TABLE_FUNCTION)]
+    public static partial ValueTask<TwitchChatter> StreamChatterGetAsync(DbConnection connection, Streamer channel, DateTimeOffset start_date, Viewer viewer, CancellationToken cancellationToken);
 }
