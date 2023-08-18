@@ -1,24 +1,16 @@
 using System;
 using System.Diagnostics;
+using Credfeto.Database.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.DataTypes.Mappers;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
 
-[DebuggerDisplay("{Channel}: {ChatUser} {FirstMessage} Stream Started: {StreamStartDate}")]
-public sealed class TwitchChatter
-{
-    public TwitchChatter(string channel, in DateTime streamStartDate, string chatUser, in DateTime firstMessage)
-    {
-        this.Channel = channel;
-        this.StreamStartDate = streamStartDate;
-        this.ChatUser = chatUser;
-        this.FirstMessage = firstMessage;
-    }
-
-    public string Channel { get; }
-
-    public DateTime StreamStartDate { get; }
-
-    public string ChatUser { get; }
-
-    public DateTime FirstMessage { get; }
-}
+[DebuggerDisplay("{Streamer}: {Viewer} {FirstMessage} Stream Started: {StreamStartDate}")]
+public sealed record TwitchChatter([SqlFieldMap<StreamerMapper, Streamer>]
+                                   Streamer Streamer,
+                                   [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
+                                   DateTimeOffset StreamStartDate,
+                                   [SqlFieldMap<ViewerMapper, Viewer>] Viewer Viewer,
+                                   [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
+                                   DateTimeOffset FirstMessage);
