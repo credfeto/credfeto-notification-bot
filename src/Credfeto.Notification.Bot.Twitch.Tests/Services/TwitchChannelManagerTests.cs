@@ -250,28 +250,28 @@ public sealed class TwitchChannelManagerTests : TestBase
                    .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount), cancellationToken: CancellationToken.None);
     }
 
-    private Task ReceivedCheckForFirstMessageInStreamAsync()
+    private ValueTask<bool> ReceivedCheckForFirstMessageInStreamAsync()
     {
         return this._twitchStreamerDataManager.Received(1)
-                   .IsFirstMessageInStreamAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer());
+                   .IsFirstMessageInStreamAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer(), Arg.Any<CancellationToken>());
     }
 
-    private Task DidNotReceiveCheckForFirstMessageInStreamAsync()
+    private ValueTask<bool> DidNotReceiveCheckForFirstMessageInStreamAsync()
     {
         return this._twitchStreamerDataManager.DidNotReceive()
-                   .IsFirstMessageInStreamAsync(Arg.Any<Streamer>(), Arg.Any<DateTimeOffset>(), Arg.Any<Viewer>());
+                   .IsFirstMessageInStreamAsync(Arg.Any<Streamer>(), Arg.Any<DateTimeOffset>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>());
     }
 
-    private Task ReceivedCheckForIsRegularChatterAsync()
+    private ValueTask<bool> ReceivedCheckForIsRegularChatterAsync()
     {
         return this._twitchStreamerDataManager.Received(1)
-                   .IsRegularChatterAsync(streamer: MockReferenceData.Streamer, Guest1.ToViewer());
+                   .IsRegularChatterAsync(streamer: MockReferenceData.Streamer, Guest1.ToViewer(), Arg.Any<CancellationToken>());
     }
 
-    private Task DidNotReceiveCheckForIsRegularChatterAsync()
+    private ValueTask<bool> DidNotReceiveCheckForIsRegularChatterAsync()
     {
         return this._twitchStreamerDataManager.DidNotReceive()
-                   .IsRegularChatterAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>());
+                   .IsRegularChatterAsync(Arg.Any<Streamer>(), Arg.Any<Viewer>(), Arg.Any<CancellationToken>());
     }
 
     private static ValueTask SendChatMessageAsync(ITwitchChannelState twitchChannelState)
@@ -283,7 +283,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     {
         ITwitchChannelState twitchChannelState = this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer);
 
-        await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate);
+        await twitchChannelState.OnlineAsync(gameName: "FunGame", startDate: StreamStartDate, CancellationToken.None);
 
         Assert.True(condition: twitchChannelState.IsOnline, userMessage: "Should be online");
 
@@ -292,13 +292,13 @@ public sealed class TwitchChannelManagerTests : TestBase
 
     private void MockIsFirstMessageInStream(bool isFirstMessage)
     {
-        this._twitchStreamerDataManager.IsFirstMessageInStreamAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer())
+        this._twitchStreamerDataManager.IsFirstMessageInStreamAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate, Guest1.ToViewer(), Arg.Any<CancellationToken>())
             .Returns(isFirstMessage);
     }
 
     private void MockIsRegularChatter(bool isRegularChatter)
     {
-        this._twitchStreamerDataManager.IsRegularChatterAsync(streamer: MockReferenceData.Streamer, Guest1.ToViewer())
+        this._twitchStreamerDataManager.IsRegularChatterAsync(streamer: MockReferenceData.Streamer, Guest1.ToViewer(), Arg.Any<CancellationToken>())
             .Returns(isRegularChatter);
     }
 }
