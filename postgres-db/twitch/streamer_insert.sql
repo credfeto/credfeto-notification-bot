@@ -63,3 +63,9 @@ ALTER FUNCTION twitch.streamer_insert (
     TEXT,
     TIMESTAMP WITH TIME zone
     ) OWNER TO markr;
+
+GRANT EXECUTE ON FUNCTION twitch.streamer_insert (
+    TEXT,
+    TEXT,
+    TIMESTAMP WITH TIME zone
+    ) TO notificationbot;
