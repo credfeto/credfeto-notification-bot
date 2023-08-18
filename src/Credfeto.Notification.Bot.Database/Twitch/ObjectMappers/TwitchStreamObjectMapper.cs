@@ -43,10 +43,10 @@ internal static partial class TwitchStreamObjectMapper
                                                                                         CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.stream_chatter_is_regular", sqlObjectType: SqlObjectType.TABLE_FUNCTION)]
-    public static partial ValueTask<IReadOnlyList<TwitchRegularChatter>> StreamChatterIsRegularAsync(DbConnection connection,
-                                                                                                     [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
-                                                                                                     [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
-                                                                                                     CancellationToken cancellationToken);
+    public static partial ValueTask<TwitchRegularChatter?> StreamChatterIsRegularAsync(DbConnection connection,
+                                                                                       [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                                                       [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
+                                                                                       CancellationToken cancellationToken);
 
     // "twitch.stream_milestone_insert"
     [SqlObjectMap(name: "twitch.stream_milestone_insert", sqlObjectType: SqlObjectType.TABLE_FUNCTION)]

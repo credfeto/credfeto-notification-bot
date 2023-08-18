@@ -1,23 +1,13 @@
 using System.Diagnostics;
+using Credfeto.Database.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.DataTypes.Mappers;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
 
-[DebuggerDisplay("{Channel}:{Follower} Followed {FollowCount} times Fresh: {FreshlyReached")]
-public sealed class TwitchFollower
-{
-    public TwitchFollower(string channel, string follower, int followCount, bool freshlyReached)
-    {
-        this.Channel = channel;
-        this.Follower = follower;
-        this.FollowCount = followCount;
-        this.FreshlyReached = freshlyReached;
-    }
-
-    public string Channel { get; }
-
-    public string Follower { get; }
-
-    public int FollowCount { get; }
-
-    public bool FreshlyReached { get; }
-}
+[DebuggerDisplay("{Streamer}:{Viewer} Followed {FollowCount} times Fresh: {FreshlyReached")]
+public sealed record TwitchFollower([SqlFieldMap<StreamerMapper, Streamer>]
+                                    Streamer Streamer,
+                                    [SqlFieldMap<ViewerMapper, Viewer>] Viewer Viewer,
+                                    int FollowCount,
+                                    bool FreshlyReached);

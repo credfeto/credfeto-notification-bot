@@ -1,17 +1,9 @@
 using System.Diagnostics;
+using Credfeto.Database.Interfaces;
+using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.DataTypes.Mappers;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
 
-[DebuggerDisplay("{ChatUser}: {Regular}")]
-public sealed class TwitchRegularChatter
-{
-    public TwitchRegularChatter(string chatUser, bool regular)
-    {
-        this.ChatUser = chatUser;
-        this.Regular = regular;
-    }
-
-    public string ChatUser { get; }
-
-    public bool Regular { get; }
-}
+[DebuggerDisplay("{Viewer}: {IsRegular}")]
+public sealed record TwitchRegularChatter([SqlFieldMap<ViewerMapper, Viewer>] Viewer Viewer, bool IsRegular);

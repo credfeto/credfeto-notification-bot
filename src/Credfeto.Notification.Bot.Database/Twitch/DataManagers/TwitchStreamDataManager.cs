@@ -49,11 +49,11 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
     public async ValueTask<bool> IsRegularChatterAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken)
     {
-        TwitchRegularChatter? chatted = (await this._database.ExecuteAsync(
+        TwitchRegularChatter? chatted = await this._database.ExecuteAsync(
             action: (c, ct) => TwitchStreamObjectMapper.StreamChatterIsRegularAsync(connection: c, channel: streamer, viewer: username, cancellationToken: ct),
-            cancellationToken: cancellationToken)).FirstOrDefault();
+            cancellationToken: cancellationToken);
 
-        return chatted?.Regular == true;
+        return chatted?.IsRegular == true;
     }
 
     public async ValueTask<bool> UpdateFollowerMilestoneAsync(Streamer streamer, int followerCount, CancellationToken cancellationToken)
