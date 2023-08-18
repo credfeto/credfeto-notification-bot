@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Database;
@@ -37,13 +38,19 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
     public async ValueTask<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(
-            action: (c, ct) => TwitchStreamObjectMapper.StreamChatterGetAsync(connection: c, channel: streamer, start_date: streamStartDate, viewer: username, cancellationToken: ct), TwitchChatter
-                ? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
-                                                                           storedProcedure: "twitch.stream_chatter_get",
-                                                                           new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        return (await this._database.ExecuteAsync(action: (c, ct) =>
+                                                              TwitchStreamObjectMapper.StreamChatterGetAsync(connection: c,
+                                                                                                             channel: streamer,
+                                                                                                             start_date: streamStartDate,
+                                                                                                             viewer: username,
+                                                                                                             cancellationToken: ct),
+                                                  cancellationToken: cancellationToken)).Count != 0;
 
-        return chatted == null;
+        //                                    TwitchChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
+        //                                                                                                            storedProcedure: "twitch.stream_chatter_get",
+        //                                                                                                            new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        //
+        // return chatted == null;
     }
 
     public async ValueTask<bool> IsRegularChatterAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken)

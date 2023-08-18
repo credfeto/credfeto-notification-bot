@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,5 +36,9 @@ internal static partial class TwitchStreamObjectMapper
                                                            CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.stream_chatter_get", sqlObjectType: SqlObjectType.TABLE_FUNCTION)]
-    public static partial ValueTask<TwitchChatter> StreamChatterGetAsync(DbConnection connection, Streamer channel, DateTimeOffset start_date, Viewer viewer, CancellationToken cancellationToken);
+    public static partial ValueTask<IReadOnlyList<TwitchChatter>> StreamChatterGetAsync(DbConnection connection,
+                                                                                        [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                                                        [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                                                        [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
+                                                                                        CancellationToken cancellationToken);
 }
