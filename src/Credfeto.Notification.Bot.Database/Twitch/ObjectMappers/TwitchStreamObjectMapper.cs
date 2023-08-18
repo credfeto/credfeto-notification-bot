@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Database.Interfaces;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
-using Credfeto.Notification.Bot.Database.Twitch.Mappers;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.DataTypes.Mappers;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.ObjectMappers;
 

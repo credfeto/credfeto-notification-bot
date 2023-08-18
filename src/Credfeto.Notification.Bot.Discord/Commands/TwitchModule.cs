@@ -28,7 +28,7 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
     public async Task StatusAsync(string streamer)
     {
         Streamer s = Streamer.FromString(streamer);
-        TwitchUser? user = await this._userInfoService.GetUserAsync(s);
+        TwitchUser? user = await this._userInfoService.GetUserAsync(userName: s, cancellationToken: CancellationToken.None);
 
         if (user == null)
         {

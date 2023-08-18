@@ -4,9 +4,9 @@ using System.Data.Common;
 using System.Globalization;
 using Credfeto.Database.Interfaces;
 
-namespace Credfeto.Notification.Bot.Database.Twitch.Mappers;
+namespace Credfeto.Notification.Bot.Twitch.DataTypes.Mappers;
 
-internal sealed class DateTimeOffsetMapper : IMapper<DateTimeOffset>
+public sealed class DateTimeOffsetMapper : IMapper<DateTimeOffset>
 {
     public static DateTimeOffset MapFromDb(object value)
     {

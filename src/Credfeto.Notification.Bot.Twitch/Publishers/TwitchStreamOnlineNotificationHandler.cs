@@ -17,9 +17,7 @@ public sealed class TwitchStreamOnlineNotificationHandler : INotificationHandler
     private readonly TwitchBotOptions _options;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public TwitchStreamOnlineNotificationHandler(IOptions<TwitchBotOptions> options,
-                                                 ITwitchChannelManager twitchChannelManager,
-                                                 ILogger<TwitchStreamOnlineNotificationHandler> logger)
+    public TwitchStreamOnlineNotificationHandler(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, ILogger<TwitchStreamOnlineNotificationHandler> logger)
     {
         this._twitchChannelManager = twitchChannelManager;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -42,7 +40,7 @@ public sealed class TwitchStreamOnlineNotificationHandler : INotificationHandler
 
         try
         {
-            await state.OnlineAsync(gameName: notification.GameName, startDate: notification.StartedAt);
+            await state.OnlineAsync(gameName: notification.GameName, startDate: notification.StartedAt, cancellationToken);
         }
         catch (Exception exception)
         {

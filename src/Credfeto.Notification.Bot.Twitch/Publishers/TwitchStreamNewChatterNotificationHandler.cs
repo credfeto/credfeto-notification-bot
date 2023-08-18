@@ -32,7 +32,7 @@ public sealed class TwitchStreamNewChatterNotificationHandler : INotificationHan
     {
         try
         {
-            TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(notification.User);
+            TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(notification.User, cancellationToken);
 
             if (twitchUser == null)
             {

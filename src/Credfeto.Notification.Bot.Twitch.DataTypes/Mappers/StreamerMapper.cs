@@ -1,11 +1,10 @@
 using System.Data;
 using System.Data.Common;
 using Credfeto.Database.Interfaces;
-using Credfeto.Notification.Bot.Twitch.DataTypes;
 
-namespace Credfeto.Notification.Bot.Database.Twitch.Mappers;
+namespace Credfeto.Notification.Bot.Twitch.DataTypes.Mappers;
 
-internal sealed class StreamerMapper : IMapper<Streamer>
+public sealed class StreamerMapper : IMapper<Streamer>
 {
     public static Streamer MapFromDb(object value)
     {

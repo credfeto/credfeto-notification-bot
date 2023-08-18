@@ -1,7 +1,9 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Database;
+using Credfeto.Notification.Bot.Database.Twitch.ObjectMappers;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
@@ -18,11 +20,16 @@ public sealed class TwitchViewerDataManager : ITwitchViewerDataManager
 
     public ValueTask AddViewerAsync(Viewer viewerName, string viewerId, DateTimeOffset dateCreated, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.viewer_insert", new { username_ = viewerName.ToString(), id_ = viewerId, date_created_ = dateCreated });
+        return this._database.ExecuteAsync(action: (c, ct) => TwitchViewerObjectMapper.ViewerInsertAsync(connection: c,
+                                                                                                         viewer: viewerName,
+                                                                                                         Convert.ToInt32(value: viewerId, provider: CultureInfo.InvariantCulture),
+                                                                                                         dateCreated: dateCreated,
+                                                                                                         cancellationToken: ct),
+                                           cancellationToken: cancellationToken);
     }
 
     public ValueTask<TwitchUser?> GetByUserNameAsync(Viewer userName, CancellationToken cancellationToken)
     {
-        return this._database.QuerySingleOrDefaultAsync(builder: this._twitchUserBuilder, storedProcedure: "twitch.viewer_get", new { username_ = userName.ToString() });
+        return this._database.ExecuteAsync(action: (c, ct) => TwitchViewerObjectMapper.ViewerGetAsync(connection: c, viewer: userName, cancellationToken: ct), cancellationToken: cancellationToken);
     }
 }
