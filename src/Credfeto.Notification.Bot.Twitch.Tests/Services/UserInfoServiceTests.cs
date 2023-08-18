@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -40,14 +41,14 @@ public sealed class UserInfoServiceTests : TestBase
     [Fact]
     public async Task GetUserReturnsNullIfNotFoundAsync()
     {
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(MockReferenceData.Viewer);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(MockReferenceData.Viewer, CancellationToken.None);
 
         Assert.Null(twitchUser);
 
         await this._twitchStreamerDataManager.Received(1)
-                  .GetByUserNameAsync(MockReferenceData.Viewer);
+                  .GetByUserNameAsync(MockReferenceData.Viewer, Arg.Any<CancellationToken>());
 
         await this._twitchStreamerDataManager.DidNotReceive()
-                  .AddStreamerAsync(Arg.Any<Streamer>(), Arg.Any<string>(), Arg.Any<DateTimeOffset>());
+                  .AddStreamerAsync(Arg.Any<Streamer>(), Arg.Any<int>(), Arg.Any<DateTimeOffset>(), Arg.Any<CancellationToken>());
     }
 }

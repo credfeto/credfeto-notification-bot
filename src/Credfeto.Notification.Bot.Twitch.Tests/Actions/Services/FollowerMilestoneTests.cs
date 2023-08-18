@@ -34,16 +34,13 @@ public sealed class FollowerMilestoneTests : TestBase
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    milestones: MockReferenceData.TwitchMilestones));
 
-        this._followerMileStone = new FollowerMilestone(options: options,
-                                                        mediator: this._mediator,
-                                                        twitchStreamDataManager: this._twitchStreamDataManager,
-                                                        this.GetTypedLogger<FollowerMilestone>());
+        this._followerMileStone = new FollowerMilestone(options: options, mediator: this._mediator, twitchStreamDataManager: this._twitchStreamDataManager, this.GetTypedLogger<FollowerMilestone>());
     }
 
     [Fact]
     public async Task FollowerMileStoneReachedNewStreamerZeroAsync()
     {
-        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 1)
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 1, CancellationToken.None)
             .Returns(true);
 
         await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: MockReferenceData.Streamer, followers: 1, cancellationToken: CancellationToken.None);
@@ -55,7 +52,7 @@ public sealed class FollowerMilestoneTests : TestBase
     [Fact]
     public async Task FollowerMileStoneReachedForTheFirstTimeAsync()
     {
-        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 100)
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 100, CancellationToken.None)
             .Returns(true);
 
         await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: MockReferenceData.Streamer, followers: 101, cancellationToken: CancellationToken.None);
@@ -67,7 +64,7 @@ public sealed class FollowerMilestoneTests : TestBase
     [Fact]
     public async Task FollowerMileStoneReachedButAlreadyMetTimeAsync()
     {
-        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 100)
+        this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: 100, CancellationToken.None)
             .Returns(false);
 
         await this._followerMileStone.IssueMilestoneUpdateAsync(streamer: MockReferenceData.Streamer, followers: 101, cancellationToken: CancellationToken.None);
@@ -76,23 +73,22 @@ public sealed class FollowerMilestoneTests : TestBase
         await this.ReceivedUpdateMilestoneAsync(100);
     }
 
-    private Task ReceivedUpdateMilestoneAsync(int followerCount)
+    private ValueTask<bool> ReceivedUpdateMilestoneAsync(int followerCount)
     {
         return this._twitchStreamDataManager.Received(1)
-                   .UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: followerCount);
+                   .UpdateFollowerMilestoneAsync(streamer: MockReferenceData.Streamer, followerCount: followerCount, Arg.Any<CancellationToken>());
     }
 
-    private Task DidNotReceiveUpdateMilestoneAsync()
+    private ValueTask<bool> DidNotReceiveUpdateMilestoneAsync()
     {
         return this._twitchStreamDataManager.DidNotReceive()
-                   .UpdateFollowerMilestoneAsync(Arg.Any<Streamer>(), Arg.Any<int>());
+                   .UpdateFollowerMilestoneAsync(Arg.Any<Streamer>(), Arg.Any<int>(), Arg.Any<CancellationToken>());
     }
 
     private ValueTask ReceivedPublishMessageAsync(int milestone, int nextMilestone)
     {
         return this._mediator.Received(1)
-                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == MockReferenceData.Streamer && t.MilestoneReached == milestone &&
-                                                                        t.NextMilestone == nextMilestone),
+                   .Publish(Arg.Is<TwitchFollowerMilestoneReached>(t => t.Streamer == MockReferenceData.Streamer && t.MilestoneReached == milestone && t.NextMilestone == nextMilestone),
                             Arg.Any<CancellationToken>());
     }
 

@@ -8,11 +8,11 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/notification-bot</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="notification-bot@debian-i7" uuid="54dbe880-c49d-44bf-a680-092242d45a1d">
+    <data-source source="LOCAL" name="notification-bot@arch-i7" uuid="54dbe880-c49d-44bf-a680-092242d45a1d">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://debian-i7:5432/notification-bot</jdbc-url>
+      <jdbc-url>jdbc:postgresql://arch-i7:5432/notification-bot</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

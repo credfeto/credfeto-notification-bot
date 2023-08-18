@@ -79,7 +79,7 @@ public sealed class TwitchChannelManagerTests : TestBase
         ITwitchChannelState twitchChannelState = await this.GetOnlineStreamAsync();
 
         await this._twitchStreamerDataManager.Received(1)
-                  .RecordStreamStartAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate);
+                  .RecordStreamStartAsync(streamer: MockReferenceData.Streamer, streamStartDate: StreamStartDate, CancellationToken.None);
 
         twitchChannelState.Offline();
 
