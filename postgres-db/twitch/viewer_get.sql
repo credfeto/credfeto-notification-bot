@@ -12,3 +12,5 @@ BEGIN
 END;$$;
 
 ALTER FUNCTION twitch.viewer_get (VARCHAR) OWNER TO markr;
+
+GRANT EXECUTE ON FUNCTION twitch.viewer_get (VARCHAR) TO notificationbot;
