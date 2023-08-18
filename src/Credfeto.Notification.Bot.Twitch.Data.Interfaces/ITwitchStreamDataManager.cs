@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
@@ -6,19 +7,19 @@ namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 public interface ITwitchStreamDataManager
 {
-    Task RecordStreamStartAsync(Streamer streamer, DateTimeOffset streamStartDate);
+    ValueTask RecordStreamStartAsync(Streamer streamer, DateTimeOffset streamStartDate, CancellationToken cancellationToken);
 
-    Task AddChatterToStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username);
+    ValueTask AddChatterToStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username, CancellationToken cancellationToken);
 
-    Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username);
+    ValueTask<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username, CancellationToken cancellationToken);
 
-    Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username);
+    ValueTask<bool> IsRegularChatterAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken);
 
-    Task<bool> UpdateFollowerMilestoneAsync(Streamer streamer, int followerCount);
+    ValueTask<bool> UpdateFollowerMilestoneAsync(Streamer streamer, int followerCount, CancellationToken cancellationToken);
 
-    Task<int> RecordNewFollowerAsync(Streamer streamer, Viewer username);
+    ValueTask<int> RecordNewFollowerAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken);
 
-    Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate);
+    ValueTask<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, CancellationToken cancellationToken);
 
-    Task UpdateSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, StreamSettings settings);
+    ValueTask UpdateSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, StreamSettings settings, CancellationToken cancellationToken);
 }

@@ -8,11 +8,28 @@ using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Database.Twitch.ObjectMappers;
 
-public static partial class TwitchStreamObjectMapper
+internal static partial class TwitchStreamObjectMapper
 {
     [SqlObjectMap(name: "twitch.stream_insert", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
     public static partial ValueTask StreamInsertAsync(DbConnection connection,
                                                       [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
                                                       [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
                                                       CancellationToken cancellationToken);
+
+    [SqlObjectMap(name: "twitch.stream_chatter_insert", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
+    public static partial ValueTask StreamChatterInsertAsync(DbConnection connection,
+                                                             [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                             [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                             [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
+                                                             CancellationToken cancellationToken);
+
+    [SqlObjectMap(name: "twitch.stream_settings_set", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
+    public static ValueTask StreamSettingsSetAsync(DbConnection dbConnection,
+                                                   [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                   [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                   bool announce_milestones,
+                                                   bool chat_welcomes,
+                                                   bool raid_welcomes,
+                                                   bool shout_outs,
+                                                   CancellationToken cancellationToken);
 }

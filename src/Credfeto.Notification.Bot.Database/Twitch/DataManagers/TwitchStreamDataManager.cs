@@ -2,9 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Database;
-using Credfeto.Database.Interfaces;
-using Credfeto.Database.Interfaces.Builders;
-using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Entities;
 using Credfeto.Notification.Bot.Database.Twitch.Builders.ObjectBuilders.Models;
 using Credfeto.Notification.Bot.Database.Twitch.ObjectMappers;
 using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
@@ -23,15 +20,22 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
     public ValueTask RecordStreamStartAsync(Streamer streamer, DateTimeOffset streamStartDate, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(action: (c, ct) => TwitchStreamObjectMapper.StreamInsertAsync(c, channel: streamer, start_date: streamStartDate, ct), cancellationToken);
+        return this._database.ExecuteAsync(action: (c, ct) => TwitchStreamObjectMapper.StreamInsertAsync(connection: c, channel: streamer, start_date: streamStartDate, cancellationToken: ct),
+                                           cancellationToken: cancellationToken);
     }
 
-    public Task AddChatterToStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username)
+    public ValueTask AddChatterToStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_chatter_insert", new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
+        return this._database.ExecuteAsync(action: (c, ct) =>
+                                                       TwitchStreamObjectMapper.StreamChatterInsertAsync(connection: c,
+                                                                                                         channel: streamer,
+                                                                                                         start_date: streamStartDate,
+                                                                                                         viewer: username,
+                                                                                                         cancellationToken: ct),
+                                           cancellationToken: cancellationToken);
     }
 
-    public async Task<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username)
+    public async ValueTask<bool> IsFirstMessageInStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username, CancellationToken cancellationToken)
     {
         TwitchChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
                                                                                 storedProcedure: "twitch.stream_chatter_get",
@@ -40,7 +44,7 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         return chatted == null;
     }
 
-    public async Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username)
+    public async ValueTask<bool> IsRegularChatterAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken)
     {
         TwitchRegularChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._regularChatterBuilder,
                                                                                        storedProcedure: "twitch.stream_chatter_is_regular",
@@ -49,7 +53,7 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         return chatted?.Regular == true;
     }
 
-    public async Task<bool> UpdateFollowerMilestoneAsync(Streamer streamer, int followerCount)
+    public async ValueTask<bool> UpdateFollowerMilestoneAsync(Streamer streamer, int followerCount, CancellationToken cancellationToken)
     {
         TwitchFollowerMilestone? milestone = await this._database.QuerySingleOrDefaultAsync(builder: this._followerMilestoneBuilder,
                                                                                             storedProcedure: "twitch.stream_milestone_insert",
@@ -58,7 +62,7 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         return milestone?.FreshlyReached == true;
     }
 
-    public async Task<int> RecordNewFollowerAsync(Streamer streamer, Viewer username)
+    public async ValueTask<int> RecordNewFollowerAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken)
     {
         TwitchFollower follower = await this._database.QuerySingleAsync(builder: this._followerBuilder,
                                                                         storedProcedure: "twitch.stream_follower_insert",
@@ -67,25 +71,23 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
         return follower.FollowCount;
     }
 
-    public Task<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate)
+    public ValueTask<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, CancellationToken cancellationToken)
     {
         return this._database.QuerySingleOrDefaultAsync(builder: this._streamSettingsBuilder,
                                                         storedProcedure: "twitch.stream_settings_get",
                                                         new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
     }
 
-    public Task UpdateSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, StreamSettings settings)
+    public ValueTask UpdateSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, StreamSettings settings, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(storedProcedure: "twitch.stream_settings_set",
-                                           new
-                                           {
-                                               channel_ = streamer.ToString(),
-                                               start_date_ = streamStartDate,
-                                               thanks_ = settings.ThanksEnabled,
-                                               announce_milestones_ = settings.AnnounceMilestonesEnabled,
-                                               chat_welcomes_ = settings.ChatWelcomesEnabled,
-                                               raid_welcomes_ = settings.RaidWelcomesEnabled,
-                                               shout_outs_ = settings.ShoutOutsEnabled
-                                           });
+        return this._database.ExecuteAsync(action: (c, ct) => TwitchStreamObjectMapper.StreamSettingsSetAsync(dbConnection: c,
+                                                                                                              channel: streamer,
+                                                                                                              start_date: streamStartDate,
+                                                                                                              announce_milestones: settings.AnnounceMilestonesEnabled,
+                                                                                                              chat_welcomes: settings.ChatWelcomesEnabled,
+                                                                                                              raid_welcomes: settings.RaidWelcomesEnabled,
+                                                                                                              shout_outs: settings.ShoutOutsEnabled,
+                                                                                                              cancellationToken: ct),
+                                           cancellationToken: cancellationToken);
     }
 }
