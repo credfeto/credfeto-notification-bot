@@ -13,6 +13,6 @@ public static partial class TwitchStreamObjectMapper
     [SqlObjectMap(name: "twitch.stream_insert", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
     public static partial ValueTask StreamInsertAsync(DbConnection connection,
                                                       [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
-                                                      DateTimeOffset start_date,
+                                                      [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
                                                       CancellationToken cancellationToken);
 }
