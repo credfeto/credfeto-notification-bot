@@ -41,4 +41,29 @@ internal static partial class TwitchStreamObjectMapper
                                                                                         [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
                                                                                         [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
                                                                                         CancellationToken cancellationToken);
+
+    [SqlObjectMap(name: "twitch.stream_chatter_is_regular", sqlObjectType: SqlObjectType.TABLE_FUNCTION)]
+    public static partial ValueTask<IReadOnlyList<TwitchRegularChatter>> StreamChatterIsRegularAsync(DbConnection connection,
+                                                                                                     [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                                                                     [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
+                                                                                                     CancellationToken cancellationToken);
+
+    // "twitch.stream_milestone_insert"
+    [SqlObjectMap(name: "twitch.stream_milestone_insert", sqlObjectType: SqlObjectType.TABLE_FUNCTION)]
+    public static partial ValueTask<IReadOnlyList<TwitchFollowerMilestone>> StreamFollowerMilestoneInsertAsync(DbConnection connection,
+                                                                                                               [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                                                                               int followers,
+                                                                                                               CancellationToken cancellationToken);
+
+    [SqlObjectMap(name: "twitch.stream_follower_insert", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
+    public static partial ValueTask<IReadOnlyList<TwitchFollower>> StreamFollowerInsertAsync(DbConnection connection,
+                                                                                             [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                                                             [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
+                                                                                             CancellationToken cancellationToken);
+
+    [SqlObjectMap(name: "twitch.stream_settings_get", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
+    public static partial ValueTask<IReadOnlyList<StreamSettings>> StreamSettingsGetAsync(DbConnection connection,
+                                                                                          [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                                                          [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                                                          CancellationToken cancellationToken);
 }

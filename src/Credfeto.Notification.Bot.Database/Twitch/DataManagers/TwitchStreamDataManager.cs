@@ -45,46 +45,40 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
                                                                                                              viewer: username,
                                                                                                              cancellationToken: ct),
                                                   cancellationToken: cancellationToken)).Count != 0;
-
-        //                                    TwitchChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._chatterBuilder,
-        //                                                                                                            storedProcedure: "twitch.stream_chatter_get",
-        //                                                                                                            new { channel_ = streamer.ToString(), start_date_ = streamStartDate, chat_user_ = username.ToString() });
-        //
-        // return chatted == null;
     }
 
     public async ValueTask<bool> IsRegularChatterAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken)
     {
-        TwitchRegularChatter? chatted = await this._database.QuerySingleOrDefaultAsync(builder: this._regularChatterBuilder,
-                                                                                       storedProcedure: "twitch.stream_chatter_is_regular",
-                                                                                       new { channel_ = streamer.ToString(), username_ = username.ToString() });
+        TwitchRegularChatter? chatted = (await this._database.ExecuteAsync(
+            action: (c, ct) => TwitchStreamObjectMapper.StreamChatterIsRegularAsync(connection: c, channel: streamer, viewer: username, cancellationToken: ct),
+            cancellationToken: cancellationToken)).FirstOrDefault();
 
         return chatted?.Regular == true;
     }
 
     public async ValueTask<bool> UpdateFollowerMilestoneAsync(Streamer streamer, int followerCount, CancellationToken cancellationToken)
     {
-        TwitchFollowerMilestone? milestone = await this._database.QuerySingleOrDefaultAsync(builder: this._followerMilestoneBuilder,
-                                                                                            storedProcedure: "twitch.stream_milestone_insert",
-                                                                                            new { channel_ = streamer.ToString(), followers_ = followerCount });
+        TwitchFollowerMilestone? milestone = (await this._database.ExecuteAsync(
+            action: (c, ct) => TwitchStreamObjectMapper.StreamFollowerMilestoneInsertAsync(connection: c, channel: streamer, followers: followerCount, cancellationToken: ct),
+            cancellationToken: cancellationToken)).FirstOrDefault();
 
         return milestone?.FreshlyReached == true;
     }
 
     public async ValueTask<int> RecordNewFollowerAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken)
     {
-        TwitchFollower follower = await this._database.QuerySingleAsync(builder: this._followerBuilder,
-                                                                        storedProcedure: "twitch.stream_follower_insert",
-                                                                        new { channel_ = streamer.ToString(), follower_ = username.ToString() });
+        TwitchFollower? follower = (await this._database.ExecuteAsync(
+            action: (c, ct) => TwitchStreamObjectMapper.StreamFollowerInsertAsync(connection: c, channel: streamer, viewer: username, cancellationToken: ct),
+            cancellationToken: cancellationToken)).FirstOrDefault();
 
-        return follower.FollowCount;
+        return follower?.FollowCount ?? 0;
     }
 
-    public ValueTask<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, CancellationToken cancellationToken)
+    public async ValueTask<StreamSettings?> GetSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, CancellationToken cancellationToken)
     {
-        return this._database.QuerySingleOrDefaultAsync(builder: this._streamSettingsBuilder,
-                                                        storedProcedure: "twitch.stream_settings_get",
-                                                        new { channel_ = streamer.ToString(), start_date_ = streamStartDate });
+        return (await this._database.ExecuteAsync(
+            action: (c, ct) => TwitchStreamObjectMapper.StreamSettingsGetAsync(connection: c, channel: streamer, start_date: streamStartDate, cancellationToken: ct),
+            cancellationToken: cancellationToken)).FirstOrDefault();
     }
 
     public ValueTask UpdateSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, StreamSettings settings, CancellationToken cancellationToken)
