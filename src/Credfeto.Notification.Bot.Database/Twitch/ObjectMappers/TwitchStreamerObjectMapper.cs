@@ -12,11 +12,11 @@ internal static partial class TwitchStreamerObjectMapper
 {
     [SqlObjectMap(name: "twitch.streamer_insert", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
     public static partial ValueTask StreamerInsertAsync(DbConnection connection,
-                                                        [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
+                                                        [SqlFieldMap<StreamerMapper, Streamer>] Streamer streamer,
                                                         int id,
                                                         [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
                                                         CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.streamer_get", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
-    public static partial ValueTask<TwitchUser?> StreamerGetAsync(DbConnection connection, [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel, CancellationToken cancellationToken);
+    public static partial ValueTask<TwitchUser?> StreamerGetAsync(DbConnection connection, [SqlFieldMap<StreamerMapper, Streamer>] Streamer streamer, CancellationToken cancellationToken);
 }

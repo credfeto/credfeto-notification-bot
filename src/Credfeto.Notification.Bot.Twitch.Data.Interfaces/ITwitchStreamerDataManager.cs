@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
@@ -6,9 +7,9 @@ namespace Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 
 public interface ITwitchStreamerDataManager
 {
-    Task AddStreamerAsync(Streamer streamerName, string streamerId, DateTimeOffset startedStreaming);
+    ValueTask AddStreamerAsync(Streamer streamerName, string streamerId, DateTimeOffset startedStreaming, CancellationToken cancellationToken);
 
-    Task<TwitchUser?> GetByUserNameAsync(Streamer userName);
+    ValueTask<TwitchUser?> GetByUserNameAsync(Streamer userName, CancellationToken cancellationToken);
 
-    Task<TwitchUser?> GetByUserNameAsync(Viewer userName);
+    ValueTask<TwitchUser?> GetByUserNameAsync(in Viewer userName, in CancellationToken cancellationToken);
 }
