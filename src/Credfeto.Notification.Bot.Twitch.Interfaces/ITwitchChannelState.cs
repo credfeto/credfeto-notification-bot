@@ -13,9 +13,9 @@ public interface ITwitchChannelState
 
     ITwitchStreamSettings Settings { get; }
 
-    Task SaveStreamSettingsAsync(in CancellationToken cancellationToken);
+    ValueTask SaveStreamSettingsAsync(in CancellationToken cancellationToken);
 
-    Task OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken);
+    ValueTask OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken);
 
     void Offline();
 

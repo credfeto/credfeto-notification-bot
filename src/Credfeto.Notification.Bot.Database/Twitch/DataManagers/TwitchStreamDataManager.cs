@@ -83,7 +83,7 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
     public ValueTask UpdateSettingsAsync(Streamer streamer, DateTimeOffset streamStartDate, StreamSettings settings, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(action: (c, ct) => TwitchStreamObjectMapper.StreamSettingsSetAsync(dbConnection: c,
+        return this._database.ExecuteAsync(action: (c, ct) => TwitchStreamObjectMapper.StreamSettingsSetAsync(connection: c,
                                                                                                               channel: streamer,
                                                                                                               start_date: streamStartDate,
                                                                                                               announce_milestones: settings.AnnounceMilestonesEnabled,

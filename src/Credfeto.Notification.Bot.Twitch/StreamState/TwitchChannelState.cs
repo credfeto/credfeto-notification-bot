@@ -48,7 +48,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public bool IsOnline => this._stream != null;
 
-    public async Task OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken)
+    public async ValueTask OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken)
     {
         this._logger.LogInformation($"{this.Streamer}: Going Online...");
         ActiveStream stream = new(gameName: gameName, startedAt: startDate, new TwitchStreamSettingsOnline(options: this._options, streamer: this.Streamer, logger: this._logger));
@@ -335,11 +335,11 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     private ValueTask SaveStreamSettingsInternalAsync(ActiveStream stream, in CancellationToken cancellationToken)
     {
-        StreamSettings newSettings = new(chatWelcomesEnabled: stream.Settings.ChatWelcomesEnabled,
-                                         raidWelcomesEnabled: stream.Settings.RaidWelcomesEnabled,
-                                         thanksEnabled: stream.Settings.ThanksEnabled,
-                                         announceMilestonesEnabled: stream.Settings.AnnounceMilestonesEnabled,
-                                         shoutOutsEnabled: stream.Settings.ShoutOutsEnabled);
+        StreamSettings newSettings = new(ChatWelcomesEnabled: stream.Settings.ChatWelcomesEnabled,
+                                         RaidWelcomesEnabled: stream.Settings.RaidWelcomesEnabled,
+                                         ThanksEnabled: stream.Settings.ThanksEnabled,
+                                         AnnounceMilestonesEnabled: stream.Settings.AnnounceMilestonesEnabled,
+                                         ShoutOutsEnabled: stream.Settings.ShoutOutsEnabled);
 
         this._logger.LogInformation($"{this.Streamer}: Settings changed, updating...");
 
