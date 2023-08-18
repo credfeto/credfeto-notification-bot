@@ -75,8 +75,8 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
         this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer)
             .Returns(this._twitchChannelState);
 
-        this._twitchChannelState.OnlineAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset>(), Arg.Any<CancellationToken>())
-            .ThrowsAsync<TimeoutException>();
+        this._twitchChannelState.When(async x => await x.OnlineAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset>(), Arg.Any<CancellationToken>()))
+            .Do(_ => throw new TimeoutException());
 
         await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
                                                cancellationToken: CancellationToken.None);
