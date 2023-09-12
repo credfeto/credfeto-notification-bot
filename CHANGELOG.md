@@ -31,7 +31,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - FF-1429 - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.5.22
 - FF-1429 - Updated FunFair.Test.Common to 6.0.19.2617
 - FF-1429 - Updated Credfeto.Services.Startup to 1.0.0.3
-- SDK - Updated DotNet SDK to 8.0.100-preview.7.23376.3
+- SDK - Updated DotNet SDK to 8.0.100-rc.1.23455.8
 ### Removed
 ### Deployment Changes
 
