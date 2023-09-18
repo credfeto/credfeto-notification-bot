@@ -13,6 +13,7 @@
     <IsPublishable>false</IsPublishable>
     <LangVersion>latest</LangVersion>
     <NoWarn />
+    <NuGetAudit>true</NuGetAudit>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <RunAOTCompilation>false</RunAOTCompilation>
