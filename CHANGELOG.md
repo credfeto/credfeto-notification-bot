@@ -20,7 +20,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 7.0.2
 - Dependencies - Updated Mediator to 2.0.30
 - FF-3881 - Updated DotNet SDK to 7.0.102
-- Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.0.5.17
+- Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.0.138
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.15.16
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.16
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
