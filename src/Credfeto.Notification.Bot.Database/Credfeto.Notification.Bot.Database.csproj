@@ -39,13 +39,13 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Data.Interfaces\Credfeto.Notification.Bot.Twitch.Data.Interfaces.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Database.Interfaces" Version="1.2.0.3"/>
-    <PackageReference Include="Credfeto.Database.Pgsql" Version="1.2.0.3"/>
+    <PackageReference Include="Credfeto.Database.Interfaces" Version="1.2.1.103"/>
+    <PackageReference Include="Credfeto.Database.Pgsql" Version="1.2.1.103"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="codecracker.CSharp" Version="1.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="Credfeto.Database.Source.Generation" Version="1.2.0.3" PrivateAssets="all" ExcludeAssets="runtime"/>
+    <PackageReference Include="Credfeto.Database.Source.Generation" Version="1.2.1.103" PrivateAssets="all" ExcludeAssets="runtime"/>
     <PackageReference Include="Credfeto.Enumeration.Source.Generation" Version="1.0.5.17" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="FunFair.CodeAnalysis" Version="5.9.0.1493" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Meziantou.Analyzer" Version="2.0.14" PrivateAssets="All" ExcludeAssets="runtime" />
