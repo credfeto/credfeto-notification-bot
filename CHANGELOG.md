@@ -21,7 +21,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.14
 - Dependencies - Updated Credfeto.Date to 1.0.0.4
 - Dependencies - Updated Credfeto.Random to 1.0.0.2
-- Dependencies - Updated SonarAnalyzer.CSharp to 8.52.0.60960
 - Dependencies - Updated Credfeto.Database to 1.2.1.103
 - Dependencies - Updated FunFair.Test.Common to 6.0.19.2617
 - Dependencies - Updated Credfeto.Services.Startup to 1.0.0.3
@@ -45,6 +44,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
 - Dependencies - Updated Roslynator.Analyzers to 4.6.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.93
+- Dependencies - Updated Roslynator.Analyzers to 4.5.0
+- Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
 ### Removed
 ### Deployment Changes
 
