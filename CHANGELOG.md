@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.14
 - Dependencies - Updated SonarAnalyzer.CSharp to 8.52.0.60960
 - Dependencies - Updated Credfeto.Database to 1.2.1.103
-- Dependencies - Updated FunFair.Test.Common to 6.0.19.2617
 - Dependencies - Updated Credfeto.Services.Startup to 1.0.0.3
 - SDK - Updated DotNet SDK to 8.0.100-rc.2.23502.2
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.3.138
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.13.97
 - Dependencies - Updated Discord.Net to 3.12.0
 - Dependencies - Updated FluentValidation to 11.3.0
+- Dependencies - Updated FunFair.Test.Common to 6.1.12.182
 ### Removed
 ### Deployment Changes
 
