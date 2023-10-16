@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.16
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 - Dependencies - Updated Meziantou.Analyzer to 2.0.14
-- Dependencies - Updated Credfeto.Date to 1.0.0.4
 - Dependencies - Updated Credfeto.Random to 1.0.0.2
 - Dependencies - Updated SonarAnalyzer.CSharp to 8.52.0.60960
 - Dependencies - Updated Credfeto.Database to 1.2.1.103
@@ -35,6 +34,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.7.30
 - Dependencies - Updated Roslynator.Analyzers to 4.5.0
 - Dependencies - Updated coverlet to 6.0.0
+- Dependencies - Updated Credfeto.Date to 1.1.6.108
 ### Removed
 ### Deployment Changes
 
