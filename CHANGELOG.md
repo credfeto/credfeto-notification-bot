@@ -14,7 +14,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.4.1
 - Switch to use Credfeto.Date
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.2.32
-- Dependencies - Updated Discord.Net to 3.9.0
 - Dependencies - Updated NonBlocking to 2.1.1
 - Dependencies - Updated Microsoft.Extensions to 7.0.2
 - Dependencies - Updated Mediator to 2.1.7
@@ -35,6 +34,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.6.108
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.26.100
 - Dependencies - Updated Credfeto.Random to 1.0.13.97
+- Dependencies - Updated Discord.Net to 3.12.0
 ### Removed
 ### Deployment Changes
 
