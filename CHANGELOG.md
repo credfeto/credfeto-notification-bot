@@ -20,7 +20,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 2.1.7
 - FF-3881 - Updated DotNet SDK to 7.0.102
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.0.138
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.15.16
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.16
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 - Dependencies - Updated Meziantou.Analyzer to 2.0.14
@@ -35,6 +34,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.5.0
 - Dependencies - Updated coverlet to 6.0.0
 - Dependencies - Updated Credfeto.Date to 1.1.6.108
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.26.100
 ### Removed
 ### Deployment Changes
 
