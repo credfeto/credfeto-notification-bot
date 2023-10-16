@@ -18,7 +18,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.9.0
 - Dependencies - Updated NonBlocking to 2.1.1
 - Dependencies - Updated Microsoft.Extensions to 7.0.2
-- Dependencies - Updated Mediator to 2.0.30
+- Dependencies - Updated Mediator to 2.1.7
 - FF-3881 - Updated DotNet SDK to 7.0.102
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.0.138
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.15.16
