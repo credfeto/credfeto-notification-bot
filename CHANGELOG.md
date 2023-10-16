@@ -37,6 +37,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.7.2
 - Dependencies - Updated NonBlocking to 2.1.2
 - Dependencies - Updated NSubstitute to 5.1.0
+- Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
 ### Removed
 ### Deployment Changes
 
