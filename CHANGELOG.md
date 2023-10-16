@@ -11,7 +11,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 
 - Dependencies - Updated xunit.analyzers to 1.1.0
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.4.1
 - Switch to use Credfeto.Date
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.2.32
 - Dependencies - Updated NonBlocking to 2.1.1
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.12.0
 - Dependencies - Updated FluentValidation to 11.3.0
 - Dependencies - Updated Microsoft.Extensions to 7.0.1
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.7.2
 ### Removed
 ### Deployment Changes
 
