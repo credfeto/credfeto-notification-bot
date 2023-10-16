@@ -13,7 +13,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.1.0
 - Switch to use Credfeto.Date
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.2.32
-- Dependencies - Updated NonBlocking to 2.1.1
 - Dependencies - Updated Mediator to 2.1.7
 - FF-3881 - Updated DotNet SDK to 7.0.102
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.0.138
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FluentValidation to 11.3.0
 - Dependencies - Updated Microsoft.Extensions to 7.0.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.7.2
+- Dependencies - Updated NonBlocking to 2.1.2
 ### Removed
 ### Deployment Changes
 
