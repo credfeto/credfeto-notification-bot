@@ -39,9 +39,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.1.0
 - Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
 - Dependencies - Updated Serilog.Extensions.Logging to 7.0.0
-- Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.37
 - Dependencies - Updated TwitchLib to 3.9.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.3
+- Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
 ### Removed
 ### Deployment Changes
 
