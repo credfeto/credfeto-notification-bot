@@ -26,7 +26,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 8.0.100-rc.2.23502.2
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.3.138
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.7.30
-- Dependencies - Updated Roslynator.Analyzers to 4.5.0
 - Dependencies - Updated coverlet to 6.0.0
 - Dependencies - Updated Credfeto.Date to 1.1.6.108
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.26.100
@@ -42,6 +41,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated TwitchLib to 3.9.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.3
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
+- Dependencies - Updated Roslynator.Analyzers to 4.6.0
 ### Removed
 ### Deployment Changes
 
