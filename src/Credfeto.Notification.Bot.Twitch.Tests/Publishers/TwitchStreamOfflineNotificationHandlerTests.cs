@@ -54,7 +54,10 @@ public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
         this._twitchChannelManager.GetStreamer(MockReferenceData.Streamer)
             .Returns(this._twitchChannelState);
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer,
+                                                   title: "Skydiving",
+                                                   gameName: "IRL",
+                                                   new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc)),
                                                cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.Received(1)
@@ -73,7 +76,10 @@ public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
         this._twitchChannelState.When(x => x.Offline())
             .Do(_ => throw new ArithmeticException());
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer,
+                                                   title: "Skydiving",
+                                                   gameName: "IRL",
+                                                   new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc)),
                                                cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.Received(1)
@@ -86,8 +92,9 @@ public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleOtherChannelAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: OtherStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(
+            new(streamer: OtherStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc)),
+            cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.DidNotReceive()
             .GetStreamer(Arg.Any<Streamer>());

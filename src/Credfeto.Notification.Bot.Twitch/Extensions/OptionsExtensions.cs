@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using TwitchLib.Api;
@@ -33,7 +32,7 @@ internal static class OptionsExtensions
 
     public static bool IsIgnoredUser(this TwitchBotOptions options, Viewer username)
     {
-        return options.IgnoredUsers.Any(c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: username.Value));
+        return Array.Exists(array: options.IgnoredUsers, match: c => StringComparer.InvariantCultureIgnoreCase.Equals(x: c, y: username.Value));
     }
 
     public static bool IsSelf(this TwitchBotOptions options, in Viewer username)
