@@ -48,7 +48,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
                           .ToList();
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public async ValueTask StartAsync(CancellationToken cancellationToken)
     {
         // Explicitly give some time for things to initialize
         await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken: cancellationToken);
