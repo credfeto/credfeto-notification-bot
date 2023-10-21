@@ -67,7 +67,7 @@ public sealed class TwitchChannelNewFollowerNotificationHandlerTests : TestBase
                                                    Viewer: MockReferenceData.Viewer,
                                                    StreamOnline: streamOnline,
                                                    IsStreamer: false,
-                                                   AccountCreated: DateTime.MinValue,
+                                                   AccountCreated: DateTimeOffset.MinValue,
                                                    FollowCount: 42),
                                                cancellationToken: CancellationToken.None);
 

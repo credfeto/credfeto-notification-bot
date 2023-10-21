@@ -29,7 +29,7 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandlerTests : TestB
     public async Task ShouldEnableStreamStatusAsync()
     {
         Viewer viewer = MockReferenceData.Viewer;
-        TwitchWatchChannel notification = new(new(Id: 42, UserName: viewer, IsStreamer: false, DateCreated: DateTime.MinValue));
+        TwitchWatchChannel notification = new(new(Id: 42, UserName: viewer, IsStreamer: false, DateCreated: DateTimeOffset.MinValue));
         await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
 
         await this._twitchStreamStatus.Received(1)

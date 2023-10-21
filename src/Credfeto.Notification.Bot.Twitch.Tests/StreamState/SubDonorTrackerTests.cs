@@ -60,12 +60,12 @@ public sealed class SubDonorTrackerTests : TestBase
             this._advanced = true;
         }
 
-        public DateTime Now()
+        public DateTimeOffset Now()
         {
             Assert.True(condition: this._advanced, userMessage: "Time Should have advanced");
             this._advanced = false;
 
-            return this._when;
+            return this._when.AsDateTimeOffset();
         }
 
         public void Advance(in TimeSpan amount)
