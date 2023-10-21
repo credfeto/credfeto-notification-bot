@@ -48,12 +48,14 @@ public sealed class FollowerMilestone : IFollowerMilestone
             return;
         }
 
-        bool milestoneFreshlyReached = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamer, followerCount: lastMileStoneReached, cancellationToken);
+        bool milestoneFreshlyReached =
+            await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamer, followerCount: lastMileStoneReached, cancellationToken: cancellationToken);
 
         if (milestoneFreshlyReached)
         {
-            await this._mediator.Publish(new TwitchFollowerMilestoneReached(streamer: streamer, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
-                                         cancellationToken: cancellationToken);
+            await this._mediator.Publish(
+                new TwitchFollowerMilestoneReached(streamer: streamer, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
+                cancellationToken: cancellationToken);
             this._logger.LogWarning($"{streamer}: Woo!! New follower milestone reached {lastMileStoneReached}");
         }
     }

@@ -27,12 +27,15 @@ public sealed class TwitchViewerDataManagerTests : DatabaseIntegrationTestBase
     {
         Viewer viewerName = GenerateViewerUsername();
 
-        TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(viewerName, CancellationToken.None);
+        TwitchUser? user = await this._twitchStreamerDataManager.GetByUserNameAsync(userName: viewerName, cancellationToken: CancellationToken.None);
         Assert.Null(user);
 
-        await this._twitchStreamerDataManager.AddViewerAsync(viewerName: viewerName, Math.Abs(viewerName.GetHashCode()), this._currentTimeSource.UtcNow(), CancellationToken.None);
+        await this._twitchStreamerDataManager.AddViewerAsync(viewerName: viewerName,
+                                                             Math.Abs(viewerName.GetHashCode()),
+                                                             this._currentTimeSource.UtcNow(),
+                                                             cancellationToken: CancellationToken.None);
 
-        user = await this._twitchStreamerDataManager.GetByUserNameAsync(viewerName, CancellationToken.None);
+        user = await this._twitchStreamerDataManager.GetByUserNameAsync(userName: viewerName, cancellationToken: CancellationToken.None);
         Assert.NotNull(user);
     }
 }

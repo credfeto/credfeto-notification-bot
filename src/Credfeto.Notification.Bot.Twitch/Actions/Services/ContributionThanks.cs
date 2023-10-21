@@ -109,7 +109,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
             return;
         }
 
-        if (await this.WasLastSubDonorAsync(streamer: streamer, giftedBy: giftedBy, cancellationToken))
+        if (await this.WasLastSubDonorAsync(streamer: streamer, giftedBy: giftedBy, cancellationToken: cancellationToken))
         {
             this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting sub (Same as last donor).");
 
@@ -131,7 +131,7 @@ public sealed class ContributionThanks : MessageSenderBase, IContributionThanks
 
         this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting sub");
 
-        if (await this.WasLastSubDonorAsync(streamer: streamer, giftedBy: giftedBy, cancellationToken))
+        if (await this.WasLastSubDonorAsync(streamer: streamer, giftedBy: giftedBy, cancellationToken: cancellationToken))
         {
             this._logger.LogInformation($"{streamer}: Thanks @{giftedBy} for gifting sub (Same as last donor)");
 

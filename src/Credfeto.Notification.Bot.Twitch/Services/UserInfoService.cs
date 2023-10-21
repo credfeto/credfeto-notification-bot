@@ -24,7 +24,10 @@ public sealed class UserInfoService : IUserInfoService
     private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
     private readonly ITwitchViewerDataManager _twitchViewerDataManager;
 
-    public UserInfoService(IOptions<TwitchBotOptions> options, ITwitchStreamerDataManager twitchStreamerDataManager, ITwitchViewerDataManager twitchViewerDataManager, ILogger<UserInfoService> logger)
+    public UserInfoService(IOptions<TwitchBotOptions> options,
+                           ITwitchStreamerDataManager twitchStreamerDataManager,
+                           ITwitchViewerDataManager twitchViewerDataManager,
+                           ILogger<UserInfoService> logger)
     {
         this._twitchStreamerDataManager = twitchStreamerDataManager ?? throw new ArgumentNullException(nameof(twitchStreamerDataManager));
         this._twitchViewerDataManager = twitchViewerDataManager ?? throw new ArgumentNullException(nameof(twitchViewerDataManager));
@@ -74,11 +77,17 @@ public sealed class UserInfoService : IUserInfoService
 
             if (user.IsStreamer)
             {
-                await this._twitchStreamerDataManager.AddStreamerAsync(user.UserName.ToStreamer(), streamerId: user.Id, startedStreaming: user.DateCreated, cancellationToken: cancellationToken);
+                await this._twitchStreamerDataManager.AddStreamerAsync(user.UserName.ToStreamer(),
+                                                                       streamerId: user.Id,
+                                                                       startedStreaming: user.DateCreated,
+                                                                       cancellationToken: cancellationToken);
             }
             else
             {
-                await this._twitchViewerDataManager.AddViewerAsync(viewerName: user.UserName, viewerId: user.Id, dateCreated: user.DateCreated, cancellationToken: cancellationToken);
+                await this._twitchViewerDataManager.AddViewerAsync(viewerName: user.UserName,
+                                                                   viewerId: user.Id,
+                                                                   dateCreated: user.DateCreated,
+                                                                   cancellationToken: cancellationToken);
             }
 
             return user;

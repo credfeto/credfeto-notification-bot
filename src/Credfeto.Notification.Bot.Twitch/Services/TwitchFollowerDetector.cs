@@ -31,7 +31,10 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
     private bool _connected;
 
-    public TwitchFollowerDetector(IOptions<TwitchBotOptions> options, ITwitchPubSub twitchPubSub, ITwitchChannelManager twitchChannelManager, ILogger<TwitchFollowerDetector> logger)
+    public TwitchFollowerDetector(IOptions<TwitchBotOptions> options,
+                                  ITwitchPubSub twitchPubSub,
+                                  ITwitchChannelManager twitchChannelManager,
+                                  ILogger<TwitchFollowerDetector> logger)
     {
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._twitchPubSub = twitchPubSub ?? throw new ArgumentNullException(nameof(twitchPubSub));
@@ -83,7 +86,8 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
     private IDisposable SubscribeErrors()
     {
-        return Observable.FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._twitchPubSub.OnPubSubServiceError += h, removeHandler: h => this._twitchPubSub.OnPubSubServiceError -= h)
+        return Observable.FromEventPattern<OnPubSubServiceErrorArgs>(addHandler: h => this._twitchPubSub.OnPubSubServiceError += h,
+                                                                     removeHandler: h => this._twitchPubSub.OnPubSubServiceError -= h)
                          .Select(messageEvent => messageEvent.EventArgs)
                          .Subscribe(this.OnPubSubServiceError);
     }
@@ -129,7 +133,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
             }
 
             this._twitchPubSub.Connect();
-            await Task.Delay(TimeSpan.FromMilliseconds(value: 500), cancellationToken);
+            await Task.Delay(TimeSpan.FromMilliseconds(value: 500), cancellationToken: cancellationToken);
 
             return true;
         }
@@ -177,7 +181,7 @@ public sealed class TwitchFollowerDetector : ITwitchFollowerDetector, IDisposabl
 
     private async Task OnFollowedAsync(OnFollowArgs e, CancellationToken cancellationToken)
     {
-        if (!int.TryParse(e.FollowedChannelId, NumberStyles.Integer, CultureInfo.InvariantCulture, out int followedChannelId))
+        if (!int.TryParse(s: e.FollowedChannelId, style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int followedChannelId))
         {
             return;
         }

@@ -11,7 +11,6 @@ using FunFair.Test.Common;
 using Mediator;
 using Microsoft.Extensions.Options;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
@@ -66,7 +65,9 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
             .GetStreamer(MockReferenceData.Streamer);
 
         await this._twitchChannelState.Received(1)
-                  .OnlineAsync(gameName: "IRL", new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, millisecond: 0, offset: TimeSpan.Zero), Arg.Any<CancellationToken>());
+                  .OnlineAsync(gameName: "IRL",
+                               new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, millisecond: 0, offset: TimeSpan.Zero),
+                               Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -94,7 +95,8 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
         this._twitchChannelManager.GetStreamer(Arg.Any<Streamer>())
             .Returns(this._twitchChannelState);
 
-        await this._notificationHandler.Handle(new(streamer: NonStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: NonStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1)),
+                                               cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.DidNotReceive()
             .GetStreamer(Arg.Any<Streamer>());

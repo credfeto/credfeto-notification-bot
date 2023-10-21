@@ -10,7 +10,7 @@ public sealed class DateTimeOffsetMapper : IMapper<DateTimeOffset>
 {
     public static DateTimeOffset MapFromDb(object value)
     {
-        return new(Convert.ToDateTime(value, CultureInfo.InvariantCulture));
+        return new(Convert.ToDateTime(value: value, provider: CultureInfo.InvariantCulture));
     }
 
     public static void MapToDb(DateTimeOffset value, DbParameter parameter)

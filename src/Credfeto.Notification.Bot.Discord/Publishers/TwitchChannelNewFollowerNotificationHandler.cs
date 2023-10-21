@@ -53,7 +53,8 @@ public sealed class TwitchChannelNewFollowerNotificationHandler : INotificationH
                                            notification.FollowCount == 1
                                                ? "New Follower"
                                                : $"Followed {notification.FollowCount} times")
-                                 .AddField(name: "Account Created", notification.AccountCreated.ToString(format: "yyyy-MM-dd HH:mm:ss", formatProvider: CultureInfo.InvariantCulture))
+                                 .AddField(name: "Account Created",
+                                           notification.AccountCreated.ToString(format: "yyyy-MM-dd HH:mm:ss", formatProvider: CultureInfo.InvariantCulture))
                                  .Build();
     }
 }

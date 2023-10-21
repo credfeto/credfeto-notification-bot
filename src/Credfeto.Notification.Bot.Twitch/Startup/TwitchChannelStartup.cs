@@ -61,7 +61,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         foreach (Streamer streamer in this._channels)
         {
             this._logger.LogInformation($"Looking for channel {streamer}");
-            TwitchUser? info = await this._userInfoService.GetUserAsync(streamer, cancellationToken);
+            TwitchUser? info = await this._userInfoService.GetUserAsync(userName: streamer, cancellationToken: cancellationToken);
 
             if (info != null)
             {

@@ -41,12 +41,12 @@ public sealed class UserInfoServiceTests : TestBase
     [Fact]
     public async Task GetUserReturnsNullIfNotFoundAsync()
     {
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(MockReferenceData.Viewer, CancellationToken.None);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
 
         Assert.Null(twitchUser);
 
         await this._twitchStreamerDataManager.Received(1)
-                  .GetByUserNameAsync(MockReferenceData.Viewer, Arg.Any<CancellationToken>());
+                  .GetByUserNameAsync(userName: MockReferenceData.Viewer, Arg.Any<CancellationToken>());
 
         await this._twitchStreamerDataManager.DidNotReceive()
                   .AddStreamerAsync(Arg.Any<Streamer>(), Arg.Any<int>(), Arg.Any<DateTimeOffset>(), Arg.Any<CancellationToken>());

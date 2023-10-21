@@ -27,7 +27,7 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     {
         Streamer streamerName = GenerateStreamerUsername();
 
-        return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: streamerName, this._currentTimeSource.UtcNow(), CancellationToken.None);
+        return this._twitchStreamDataManager.RecordStreamStartAsync(streamer: streamerName, this._currentTimeSource.UtcNow(), cancellationToken: CancellationToken.None);
     }
 
     [Fact]
@@ -37,12 +37,23 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
         Viewer chatter = GenerateViewerUsername();
         DateTimeOffset streamStart = this._currentTimeSource.UtcNow();
 
-        bool isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter, CancellationToken.None);
+        bool isFirstMessageInStream =
+            await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName,
+                                                                            streamStartDate: streamStart,
+                                                                            username: chatter,
+                                                                            cancellationToken: CancellationToken.None);
         Assert.True(condition: isFirstMessageInStream, userMessage: "Should be first message");
 
-        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter, CancellationToken.None);
+        await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: streamerName,
+                                                                    streamStartDate: streamStart,
+                                                                    username: chatter,
+                                                                    cancellationToken: CancellationToken.None);
 
-        isFirstMessageInStream = await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName, streamStartDate: streamStart, username: chatter, CancellationToken.None);
+        isFirstMessageInStream =
+            await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: streamerName,
+                                                                            streamStartDate: streamStart,
+                                                                            username: chatter,
+                                                                            cancellationToken: CancellationToken.None);
         Assert.False(condition: isFirstMessageInStream, userMessage: "Should not be first message");
     }
 
@@ -51,10 +62,10 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
     {
         Streamer streamerName = GenerateStreamerUsername();
 
-        bool isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamerName, followerCount: 10, CancellationToken.None);
+        bool isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamerName, followerCount: 10, cancellationToken: CancellationToken.None);
         Assert.True(condition: isFirstHit, userMessage: "Should be first hit");
 
-        isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamerName, followerCount: 10, CancellationToken.None);
+        isFirstHit = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamerName, followerCount: 10, cancellationToken: CancellationToken.None);
         Assert.False(condition: isFirstHit, userMessage: "Should not be first hit");
     }
 
@@ -64,10 +75,10 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
         Streamer streamerName = GenerateStreamerUsername();
         Viewer followerName = GenerateViewerUsername();
 
-        int follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: streamerName, username: followerName, CancellationToken.None);
+        int follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: streamerName, username: followerName, cancellationToken: CancellationToken.None);
         Assert.Equal(expected: 1, actual: follows);
 
-        follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: streamerName, username: followerName, CancellationToken.None);
+        follows = await this._twitchStreamDataManager.RecordNewFollowerAsync(streamer: streamerName, username: followerName, cancellationToken: CancellationToken.None);
         Assert.Equal(expected: 2, actual: follows);
     }
 
@@ -77,7 +88,8 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
         Streamer streamerName = GenerateStreamerUsername();
         DateTimeOffset streamStart = this._currentTimeSource.UtcNow();
 
-        StreamSettings? settings = await this._twitchStreamDataManager.GetSettingsAsync(streamer: streamerName, streamStartDate: streamStart, CancellationToken.None);
+        StreamSettings? settings =
+            await this._twitchStreamDataManager.GetSettingsAsync(streamer: streamerName, streamStartDate: streamStart, cancellationToken: CancellationToken.None);
         Assert.Null(settings);
 
         settings = new(ChatWelcomesEnabled: false, RaidWelcomesEnabled: true, ThanksEnabled: false, AnnounceMilestonesEnabled: false, ShoutOutsEnabled: false);
@@ -91,9 +103,14 @@ public sealed class TwitchStreamDataManagerTests : DatabaseIntegrationTestBase
 
     private async Task UpdateSettingsAsync(Streamer streamerName, DateTimeOffset streamStart, StreamSettings settings)
     {
-        await this._twitchStreamDataManager.UpdateSettingsAsync(streamer: streamerName, streamStartDate: streamStart, settings: settings, CancellationToken.None);
+        await this._twitchStreamDataManager.UpdateSettingsAsync(streamer: streamerName,
+                                                                streamStartDate: streamStart,
+                                                                settings: settings,
+                                                                cancellationToken: CancellationToken.None);
 
-        StreamSettings firstSettings = AssertReallyNotNull(await this._twitchStreamDataManager.GetSettingsAsync(streamer: streamerName, streamStartDate: streamStart, CancellationToken.None));
+        StreamSettings firstSettings =
+            AssertReallyNotNull(
+                await this._twitchStreamDataManager.GetSettingsAsync(streamer: streamerName, streamStartDate: streamStart, cancellationToken: CancellationToken.None));
         Assert.Equal(expected: settings.ThanksEnabled, actual: firstSettings.ThanksEnabled);
         Assert.Equal(expected: settings.ChatWelcomesEnabled, actual: firstSettings.ChatWelcomesEnabled);
         Assert.Equal(expected: settings.RaidWelcomesEnabled, actual: firstSettings.RaidWelcomesEnabled);

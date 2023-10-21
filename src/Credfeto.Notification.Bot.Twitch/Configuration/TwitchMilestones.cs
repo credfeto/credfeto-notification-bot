@@ -6,7 +6,7 @@ namespace Credfeto.Notification.Bot.Twitch.Configuration;
 public sealed class TwitchMilestones
 {
     [JsonConstructor]
-    [SuppressMessage("Meziantou.Analyzer", "MA0109: Use a span", Justification = "Not in this case")]
+    [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0109: Use a span", Justification = "Not in this case")]
     public TwitchMilestones(int[] followers, int[] subscribers)
     {
         this.Followers = followers;

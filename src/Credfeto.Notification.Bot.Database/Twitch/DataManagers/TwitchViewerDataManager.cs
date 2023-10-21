@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Database;
@@ -20,12 +19,14 @@ public sealed class TwitchViewerDataManager : ITwitchViewerDataManager
 
     public ValueTask AddViewerAsync(Viewer viewerName, int viewerId, DateTimeOffset dateCreated, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(action: (c, ct) => TwitchViewerObjectMapper.ViewerInsertAsync(connection: c, viewer: viewerName, viewerId, dateCreated: dateCreated, cancellationToken: ct),
-                                           cancellationToken: cancellationToken);
+        return this._database.ExecuteAsync(
+            action: (c, ct) => TwitchViewerObjectMapper.ViewerInsertAsync(connection: c, viewer: viewerName, id: viewerId, dateCreated: dateCreated, cancellationToken: ct),
+            cancellationToken: cancellationToken);
     }
 
     public ValueTask<TwitchUser?> GetByUserNameAsync(Viewer userName, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(action: (c, ct) => TwitchViewerObjectMapper.ViewerGetAsync(connection: c, viewer: userName, cancellationToken: ct), cancellationToken: cancellationToken);
+        return this._database.ExecuteAsync(action: (c, ct) => TwitchViewerObjectMapper.ViewerGetAsync(connection: c, viewer: userName, cancellationToken: ct),
+                                           cancellationToken: cancellationToken);
     }
 }

@@ -21,8 +21,9 @@ public sealed class TwitchStreamDataManager : ITwitchStreamDataManager
 
     public ValueTask RecordStreamStartAsync(Streamer streamer, DateTimeOffset streamStartDate, CancellationToken cancellationToken)
     {
-        return this._database.ExecuteAsync(action: (c, ct) => TwitchStreamObjectMapper.StreamInsertAsync(connection: c, channel: streamer, start_date: streamStartDate, cancellationToken: ct),
-                                           cancellationToken: cancellationToken);
+        return this._database.ExecuteAsync(
+            action: (c, ct) => TwitchStreamObjectMapper.StreamInsertAsync(connection: c, channel: streamer, start_date: streamStartDate, cancellationToken: ct),
+            cancellationToken: cancellationToken);
     }
 
     public ValueTask AddChatterToStreamAsync(Streamer streamer, DateTimeOffset streamStartDate, Viewer username, CancellationToken cancellationToken)

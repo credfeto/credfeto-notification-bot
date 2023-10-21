@@ -6,7 +6,7 @@ namespace Credfeto.Notification.Bot.Discord.Models;
 
 public sealed class DiscordMessage
 {
-    [SuppressMessage("Meziantou.Analyzer", "MA0109: Use a span", Justification = "Not in this case")]
+    [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0109: Use a span", Justification = "Not in this case")]
     public DiscordMessage(string channel, Embed embed, string title, byte[]? image)
     {
         this.Channel = channel;
