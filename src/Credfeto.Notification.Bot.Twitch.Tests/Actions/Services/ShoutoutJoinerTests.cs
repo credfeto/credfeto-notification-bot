@@ -87,7 +87,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     [Fact]
     public async Task IssueShoutoutUnknownStreamerAsync()
     {
-        TwitchUser visitingStreamer = new(Id: 123456, UserName: VisitingChannel, IsStreamer: true, new DateTime(year: 2020, month: 1, day: 1).AsDateTimeOffset());
+        TwitchUser visitingStreamer = new(Id: 123456,
+                                          UserName: VisitingChannel,
+                                          IsStreamer: true,
+                                          new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
         await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: false, cancellationToken: CancellationToken.None);
 
@@ -97,7 +100,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     [Fact]
     public async Task IssueShoutoutDisabledAsync()
     {
-        TwitchUser visitingStreamer = new(Id: 123456, UserName: VisitingChannel, IsStreamer: true, new DateTime(year: 2020, month: 1, day: 1).AsDateTimeOffset());
+        TwitchUser visitingStreamer = new(Id: 123456,
+                                          UserName: VisitingChannel,
+                                          IsStreamer: true,
+                                          new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
         await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsDisabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
@@ -107,7 +113,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     [Fact]
     public async Task IssueShoutoutRegularStreamerVisitorAsync()
     {
-        TwitchUser visitingStreamer = new(Id: 123456, UserName: VisitingChannel, IsStreamer: true, new DateTime(year: 2020, month: 1, day: 1).AsDateTimeOffset());
+        TwitchUser visitingStreamer = new(Id: 123456,
+                                          UserName: VisitingChannel,
+                                          IsStreamer: true,
+                                          new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
         await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
@@ -117,7 +126,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     [Fact]
     public async Task IssueShoutoutExceptionAsync()
     {
-        TwitchUser visitingStreamer = new(Id: 123456, UserName: VisitingChannel, IsStreamer: true, new DateTime(year: 2020, month: 1, day: 1).AsDateTimeOffset());
+        TwitchUser visitingStreamer = new(Id: 123456,
+                                          UserName: VisitingChannel,
+                                          IsStreamer: true,
+                                          new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
         await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsException, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
@@ -127,7 +139,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     [Fact]
     public async Task IssueShoutoutFriendStreamerVisitorWithNoCustomMessageAsync()
     {
-        TwitchUser visitingStreamer = new(Id: 123456, UserName: VisitingChannelFriendWithNoMessage, IsStreamer: true, new DateTime(year: 2020, month: 1, day: 1).AsDateTimeOffset());
+        TwitchUser visitingStreamer = new(Id: 123456,
+                                          UserName: VisitingChannelFriendWithNoMessage,
+                                          IsStreamer: true,
+                                          new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
         await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
@@ -138,7 +153,10 @@ public sealed class ShoutoutJoinerTests : TestBase
     [Fact]
     public async Task IssueShoutoutFriendStreamerVisitorWithCustomMessageAsync()
     {
-        TwitchUser visitingStreamer = new(Id: 123456, UserName: VisitingChannelFriendWithMessage, IsStreamer: true, new DateTime(year: 2020, month: 1, day: 1).AsDateTimeOffset());
+        TwitchUser visitingStreamer = new(Id: 123456,
+                                          UserName: VisitingChannelFriendWithMessage,
+                                          IsStreamer: true,
+                                          new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
         await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 

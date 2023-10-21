@@ -56,7 +56,7 @@ public sealed class SubDonorTrackerTests : TestBase
 
         public Context()
         {
-            this._when = new(year: 2022, month: 1, day: 1, hour: 11, minute: 21, second: 1, millisecond: 15);
+            this._when = new(year: 2022, month: 1, day: 1, hour: 11, minute: 21, second: 1, millisecond: 15, kind: DateTimeKind.Utc);
             this._advanced = true;
         }
 

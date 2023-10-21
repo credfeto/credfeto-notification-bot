@@ -22,7 +22,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     private static readonly Streamer Guest1 = MockReferenceData.Streamer.Next();
     private static readonly Streamer Guest2 = MockReferenceData.Streamer.Next();
 
-    private static readonly DateTime StreamStartDate = new(year: 2020, month: 1, day: 1);
+    private static readonly DateTime StreamStartDate = new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc);
 
     private readonly IMediator _mediator;
     private readonly ITwitchChannelManager _twitchChannelManager;
