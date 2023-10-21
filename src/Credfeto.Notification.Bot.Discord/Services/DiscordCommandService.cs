@@ -33,7 +33,7 @@ public sealed class DiscordCommandService : DiscordLoggingBase, IRunOnStartup
         this._discordSocketClient.MessageReceived += this.MessageReceivedAsync;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public async ValueTask StartAsync(CancellationToken cancellationToken)
     {
         await this._commandService.AddModuleAsync(typeof(PingModule), services: this._serviceProvider);
         await this._commandService.AddModuleAsync(typeof(TwitchModule), services: this._serviceProvider);
