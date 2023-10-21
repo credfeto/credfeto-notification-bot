@@ -59,7 +59,7 @@ public sealed class TwitchWatchChannelFollowerNotificationHandlerTests : TestBas
     [Fact]
     public async Task ShouldNotEnableWatchingChannelAsync()
     {
-        TwitchWatchChannel notification = new(new(Id: 42, RandomStreamer.ToViewer(), IsStreamer: false, DateCreated: DateTime.MinValue));
+        TwitchWatchChannel notification = new(new(Id: 42, RandomStreamer.ToViewer(), IsStreamer: false, DateCreated: DateTimeOffset.MinValue));
         await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
 
         await this._followerDetector.DidNotReceive()

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
@@ -17,9 +18,7 @@ public sealed class TwitchStreamOnlineNotificationHandler : INotificationHandler
     private readonly TwitchBotOptions _options;
     private readonly ITwitchChannelManager _twitchChannelManager;
 
-    public TwitchStreamOnlineNotificationHandler(IOptions<TwitchBotOptions> options,
-                                                 ITwitchChannelManager twitchChannelManager,
-                                                 ILogger<TwitchStreamOnlineNotificationHandler> logger)
+    public TwitchStreamOnlineNotificationHandler(IOptions<TwitchBotOptions> options, ITwitchChannelManager twitchChannelManager, ILogger<TwitchStreamOnlineNotificationHandler> logger)
     {
         this._twitchChannelManager = twitchChannelManager;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -42,7 +41,7 @@ public sealed class TwitchStreamOnlineNotificationHandler : INotificationHandler
 
         try
         {
-            await state.OnlineAsync(gameName: notification.GameName, startDate: notification.StartedAt, cancellationToken: cancellationToken);
+            await state.OnlineAsync(gameName: notification.GameName, notification.StartedAt.AsDateTimeOffset(), cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {

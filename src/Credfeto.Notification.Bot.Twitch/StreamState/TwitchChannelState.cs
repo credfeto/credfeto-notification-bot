@@ -103,6 +103,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
         }
     }
 
+    [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0051:Method is too long", Justification = "Mainly logging")]
     public async ValueTask ChatMessageAsync(Viewer user, string message, CancellationToken cancellationToken)
     {
         if (this._stream == null)
@@ -143,10 +144,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         // note that this covers disconnections of the bot
         bool firstTimeInStream =
-            await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: this.Streamer,
-                                                                            streamStartDate: this._stream.StartedAt,
-                                                                            username: user,
-                                                                            cancellationToken: cancellationToken);
+            await this._twitchStreamDataManager.IsFirstMessageInStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user, cancellationToken: cancellationToken);
 
         if (!firstTimeInStream)
         {
@@ -159,10 +157,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this.Streamer,
-                                                                        streamStartDate: this._stream.StartedAt,
-                                                                        username: user,
-                                                                        cancellationToken: cancellationToken);
+            await this._twitchStreamDataManager.AddChatterToStreamAsync(streamer: this.Streamer, streamStartDate: this._stream.StartedAt, username: user, cancellationToken: cancellationToken);
         }
 
         // no point in welcoming ignored users
@@ -328,12 +323,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         if (twitchUser != null)
         {
-            model = new(Streamer: this.Streamer,
-                        Viewer: user,
-                        this._stream != null,
-                        IsStreamer: twitchUser.IsStreamer,
-                        AccountCreated: twitchUser.DateCreated,
-                        FollowCount: followCount);
+            model = new(Streamer: this.Streamer, Viewer: user, this._stream != null, IsStreamer: twitchUser.IsStreamer, AccountCreated: twitchUser.DateCreated, FollowCount: followCount);
         }
         else
         {
@@ -355,10 +345,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
         this._logger.LogInformation($"{this.Streamer}: Settings changed, updating...");
 
-        return this._twitchStreamDataManager.UpdateSettingsAsync(streamer: this.Streamer,
-                                                                 streamStartDate: stream.StartedAt,
-                                                                 settings: newSettings,
-                                                                 cancellationToken: cancellationToken);
+        return this._twitchStreamDataManager.UpdateSettingsAsync(streamer: this.Streamer, streamStartDate: stream.StartedAt, settings: newSettings, cancellationToken: cancellationToken);
     }
 
     private async Task<bool> IsRegularChatterAsync(Streamer streamer, Viewer username, CancellationToken cancellationToken)
