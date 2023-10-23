@@ -74,7 +74,8 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, Arg.Any<CancellationToken>())
             .ReturnsNull();
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: false), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: false),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
         await this.DidNotReceiveWelcomeAsync();
@@ -87,7 +88,8 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, Arg.Any<CancellationToken>())
             .Returns(new TwitchUser(Id: 123456, UserName: MockReferenceData.Viewer, IsStreamer: false, DateCreated: DateTimeOffset.MinValue));
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: false), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: false),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
         await this.DidNotReceiveWelcomeAsync();
@@ -100,7 +102,8 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, Arg.Any<CancellationToken>())
             .Returns(new TwitchUser(Id: 123456, UserName: MockReferenceData.Viewer, IsStreamer: true, DateCreated: DateTimeOffset.MinValue));
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: false), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: false),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
         await this.DidNotReceiveWelcomeAsync();
@@ -113,7 +116,8 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, Arg.Any<CancellationToken>())
             .Returns(new TwitchUser(Id: 123456, UserName: MockReferenceData.Viewer, IsStreamer: false, DateCreated: DateTimeOffset.MinValue));
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: true), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: true),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
         await this.ReceivedWelcomeAsync();
@@ -126,7 +130,8 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, Arg.Any<CancellationToken>())
             .Returns(new TwitchUser(Id: 123456, UserName: MockReferenceData.Viewer, IsStreamer: true, DateCreated: DateTimeOffset.MinValue));
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: true), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: true),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
         await this.ReceivedWelcomeAsync();
@@ -139,7 +144,8 @@ public sealed class TwitchStreamNewChatterNotificationHandlerTests : TestBase
         this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, Arg.Any<CancellationToken>())
             .ThrowsAsync<ArgumentOutOfRangeException>();
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: true), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, user: MockReferenceData.Viewer, isRegular: true),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedGetUserAsync();
         await this.DidNotReceiveWelcomeAsync();

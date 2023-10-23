@@ -92,9 +92,11 @@ public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleOtherChannelAsync()
     {
-        await this._notificationHandler.Handle(
-            new(streamer: OtherStreamer, title: "Skydiving", gameName: "IRL", new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc)),
-            cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(streamer: OtherStreamer,
+                                                   title: "Skydiving",
+                                                   gameName: "IRL",
+                                                   new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc)),
+                                               cancellationToken: CancellationToken.None);
 
         this._twitchChannelManager.DidNotReceive()
             .GetStreamer(Arg.Any<Streamer>());
