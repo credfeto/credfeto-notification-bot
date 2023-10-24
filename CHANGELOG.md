@@ -30,7 +30,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.13.97
 - Dependencies - Updated Discord.Net to 3.12.0
 - Dependencies - Updated FluentValidation to 11.3.0
-- Dependencies - Updated Microsoft.Extensions to 7.0.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.7.2
 - Dependencies - Updated NonBlocking to 2.1.2
 - Dependencies - Updated NSubstitute to 5.1.0
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.3.0
 - Dependencies - Updated Meziantou.Analyzer to 2.0.96
 - Dependencies - Updated Roslynator.Analyzers to 4.6.1
+- Dependencies - Updated Microsoft.Extensions to 7.0.13
 ### Removed
 ### Deployment Changes
 
