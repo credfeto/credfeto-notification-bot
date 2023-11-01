@@ -41,12 +41,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
 - Dependencies - Updated xunit.analyzers to 1.4.0
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.11.121
-- Dependencies - Updated xunit to 2.5.3
 - Dependencies - Updated FunFair.Test.Common to 6.1.14.194
 - Dependencies - Updated Roslynator.Analyzers to 4.6.1
 - Dependencies - Updated Microsoft.Extensions to 7.0.13
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.3.1
 - Dependencies - Updated Meziantou.Analyzer to 2.0.103
+- Dependencies - Updated xunit to 2.6.0
 ### Removed
 ### Deployment Changes
 
