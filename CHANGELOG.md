@@ -10,7 +10,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.4.1
 - Switch to use Credfeto.Date
 - Dependencies - Updated Mediator to 2.1.7
 - FF-3881 - Updated DotNet SDK to 7.0.102
@@ -30,7 +29,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.13.97
 - Dependencies - Updated Discord.Net to 3.12.0
 - Dependencies - Updated FluentValidation to 11.3.0
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.7.2
 - Dependencies - Updated NonBlocking to 2.1.2
 - Dependencies - Updated NSubstitute to 5.1.0
 - Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
@@ -47,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.3.1
 - Dependencies - Updated xunit to 2.6.1
 - Dependencies - Updated Meziantou.Analyzer to 2.0.105
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.8.0
 ### Removed
 ### Deployment Changes
 
