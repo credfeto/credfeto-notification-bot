@@ -25,7 +25,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.7.30
 - Dependencies - Updated coverlet to 6.0.0
 - Dependencies - Updated Credfeto.Date to 1.1.6.108
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.26.100
 - Dependencies - Updated Credfeto.Random to 1.0.13.97
 - Dependencies - Updated Discord.Net to 3.12.0
 - Dependencies - Updated FluentValidation to 11.3.0
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.106
 - Dependencies - Updated FunFair.Test.Common to 6.1.15.215
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.0
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.27.126
 ### Removed
 ### Deployment Changes
 
