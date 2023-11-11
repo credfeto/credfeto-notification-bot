@@ -36,7 +36,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.3
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
-- Dependencies - Updated xunit.analyzers to 1.4.0
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.11.121
 - Dependencies - Updated Microsoft.Extensions to 7.0.13
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.3.1
@@ -47,6 +46,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.27.126
 - Dependencies - Updated FunFair.Test.Common to 6.1.16.218
 - Dependencies - Updated Roslynator.Analyzers to 4.6.2
+- Dependencies - Updated xunit.analyzers to 1.5.0
 ### Removed
 ### Deployment Changes
 
