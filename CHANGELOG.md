@@ -16,14 +16,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.0.138
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.16
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
-- Dependencies - Updated Credfeto.Random to 1.0.0.2
 - Dependencies - Updated Credfeto.Database to 1.2.1.103
 - Dependencies - Updated Credfeto.Services.Startup to 1.0.0.3
 - SDK - Updated DotNet SDK to 8.0.100-rc.2.23502.2
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.3.138
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.7.30
 - Dependencies - Updated coverlet to 6.0.0
-- Dependencies - Updated Credfeto.Random to 1.0.13.97
 - Dependencies - Updated Discord.Net to 3.12.0
 - Dependencies - Updated FluentValidation to 11.3.0
 - Dependencies - Updated NonBlocking to 2.1.2
@@ -46,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.6.2
 - Dependencies - Updated xunit.analyzers to 1.5.0
 - Dependencies - Updated Credfeto.Date to 1.1.7.133
+- Dependencies - Updated Credfeto.Random to 1.0.14.124
 ### Removed
 ### Deployment Changes
 
