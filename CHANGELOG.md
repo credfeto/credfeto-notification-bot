@@ -37,7 +37,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.3.1
 - Dependencies - Updated xunit to 2.6.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.8.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.106
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.0
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.27.126
 - Dependencies - Updated Roslynator.Analyzers to 4.6.2
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.7.133
 - Dependencies - Updated Credfeto.Random to 1.0.14.124
 - Dependencies - Updated FunFair.Test.Common to 6.1.17.224
+- Dependencies - Updated Meziantou.Analyzer to 2.0.109
 ### Removed
 ### Deployment Changes
 
