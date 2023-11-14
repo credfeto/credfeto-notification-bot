@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.11.121
-- Dependencies - Updated Microsoft.Extensions to 7.0.13
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.3.1
 - Dependencies - Updated xunit to 2.6.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.8.0
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.14.124
 - Dependencies - Updated FunFair.Test.Common to 6.1.17.224
 - Dependencies - Updated Meziantou.Analyzer to 2.0.109
+- Dependencies - Updated Microsoft.Extensions to 8.0.0
 ### Removed
 ### Deployment Changes
 
