@@ -24,7 +24,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NonBlocking to 2.1.2
 - Dependencies - Updated NSubstitute to 5.1.0
 - Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
-- Dependencies - Updated Serilog.Extensions.Logging to 7.0.0
 - Dependencies - Updated TwitchLib to 3.9.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.3
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.110
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.8.14
 - Dependencies - Updated FunFair.Test.Common to 6.1.18.233
+- Dependencies - Updated Serilog.Extensions.Logging to 8.0.0
 ### Removed
 ### Deployment Changes
 
