@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 - Dependencies - Updated Credfeto.Database to 1.2.1.103
 - Dependencies - Updated Credfeto.Services.Startup to 1.0.0.3
-- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.7.30
 - Dependencies - Updated coverlet to 6.0.0
 - Dependencies - Updated Discord.Net to 3.12.0
 - Dependencies - Updated FluentValidation to 11.3.0
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 8.0.100
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.4.198
 - Dependencies - Updated Meziantou.Analyzer to 2.0.110
+- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.8.14
 ### Removed
 ### Deployment Changes
 
