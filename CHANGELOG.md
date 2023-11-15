@@ -12,7 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 
 - Switch to use Credfeto.Date
 - Dependencies - Updated Mediator to 2.1.7
-- FF-3881 - Updated DotNet SDK to 7.0.102
+- Dependencies - Updated DotNet SDK to 7.0.102
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.16
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 - Dependencies - Updated Credfeto.Database to 1.2.1.103
@@ -28,7 +28,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.11.121
-- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.3.1
 - Dependencies - Updated xunit to 2.6.1
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.8.0
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.0
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.18.233
 - Dependencies - Updated Serilog.Extensions.Logging to 8.0.0
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
+- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.4.0
 ### Removed
 ### Deployment Changes
 
