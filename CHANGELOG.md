@@ -13,7 +13,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Switch to use Credfeto.Date
 - Dependencies - Updated Mediator to 2.1.7
 - FF-3881 - Updated DotNet SDK to 7.0.102
-- Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.0.138
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.16
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 - Dependencies - Updated Credfeto.Database to 1.2.1.103
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.8.14
 - Dependencies - Updated FunFair.Test.Common to 6.1.18.233
 - Dependencies - Updated Serilog.Extensions.Logging to 8.0.0
+- Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
 ### Removed
 ### Deployment Changes
 
