@@ -41,10 +41,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.7.133
 - Dependencies - Updated Credfeto.Random to 1.0.14.124
 - Dependencies - Updated FunFair.Test.Common to 6.1.17.224
-- Dependencies - Updated Meziantou.Analyzer to 2.0.109
 - Dependencies - Updated Microsoft.Extensions to 8.0.0
 - SDK - Updated DotNet SDK to 8.0.100
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.4.198
+- Dependencies - Updated Meziantou.Analyzer to 2.0.110
 ### Removed
 ### Deployment Changes
 
