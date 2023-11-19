@@ -23,7 +23,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.1.0
 - Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
 - Dependencies - Updated TwitchLib to 3.9.0
-- Dependencies - Updated xunit.runner.visualstudio to 2.5.3
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.11.121
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.6.0
 - Dependencies - Updated Discord.Net to 3.13.0
 - Dependencies - Updated xunit to 2.6.2
+- Dependencies - Updated xunit.runner.visualstudio to 2.5.4
 ### Removed
 ### Deployment Changes
 
