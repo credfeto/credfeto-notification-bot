@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.1.103
 - Dependencies - Updated Credfeto.Services.Startup to 1.0.0.3
 - Dependencies - Updated coverlet to 6.0.0
-- Dependencies - Updated Discord.Net to 3.12.0
 - Dependencies - Updated FluentValidation to 11.3.0
 - Dependencies - Updated NonBlocking to 2.1.2
 - Dependencies - Updated NSubstitute to 5.1.0
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.8.149
 - Dependencies - Updated Credfeto.Random to 1.0.15.136
 - Dependencies - Updated xunit.analyzers to 1.6.0
+- Dependencies - Updated Discord.Net to 3.13.0
 ### Removed
 ### Deployment Changes
 
