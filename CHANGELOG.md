@@ -32,7 +32,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.8.0
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.0
 - Dependencies - Updated Roslynator.Analyzers to 4.6.2
-- Dependencies - Updated xunit.analyzers to 1.5.0
 - Dependencies - Updated Microsoft.Extensions to 8.0.0
 - SDK - Updated DotNet SDK to 8.0.100
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.4.198
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.28.143
 - Dependencies - Updated Credfeto.Date to 1.1.8.149
 - Dependencies - Updated Credfeto.Random to 1.0.15.136
+- Dependencies - Updated xunit.analyzers to 1.6.0
 ### Removed
 ### Deployment Changes
 
