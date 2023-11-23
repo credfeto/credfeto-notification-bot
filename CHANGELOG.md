@@ -37,7 +37,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 8.0.0
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.4.0
-- Dependencies - Updated FunFair.Test.Common to 6.1.19.238
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.28.143
 - Dependencies - Updated Credfeto.Date to 1.1.8.149
 - Dependencies - Updated Credfeto.Random to 1.0.15.136
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.13.0
 - Dependencies - Updated xunit to 2.6.2
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.4
+- Dependencies - Updated FunFair.Test.Common to 6.1.20.244
 ### Removed
 ### Deployment Changes
 
