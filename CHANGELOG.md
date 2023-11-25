@@ -31,7 +31,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 8.0.0
 - SDK - Updated DotNet SDK to 8.0.100
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.4.198
-- Dependencies - Updated Meziantou.Analyzer to 2.0.110
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.8.14
 - Dependencies - Updated Serilog.Extensions.Logging to 8.0.0
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.4
 - Dependencies - Updated Roslynator.Analyzers to 4.6.4
 - Dependencies - Updated FunFair.Test.Common to 6.1.21.247
+- Dependencies - Updated Meziantou.Analyzer to 2.0.112
 ### Removed
 ### Deployment Changes
 
