@@ -23,7 +23,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
 - Dependencies - Updated TwitchLib to 3.9.0
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
-- Dependencies - Updated SonarAnalyzer.CSharp to 9.12.0.78982
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.11.121
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.8.0
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.0
@@ -45,6 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.21.247
 - Dependencies - Updated Meziantou.Analyzer to 2.0.112
 - Dependencies - Updated Credfeto.Database to 1.2.2.183
+- Dependencies - Updated SonarAnalyzer.CSharp to 9.14.0.81108
 ### Removed
 ### Deployment Changes
 
