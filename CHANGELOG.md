@@ -44,7 +44,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.2.183
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.14.0.81108
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.1
-- Dependencies - Updated Meziantou.Analyzer to 2.0.116
+- Dependencies - Updated Meziantou.Analyzer to 2.0.118
 ### Removed
 ### Deployment Changes
 
