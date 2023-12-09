@@ -20,7 +20,7 @@ public sealed class DiscordTestServices : BackgroundService
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         this._logger.LogStarting(this._discordBot.GetType()
-                                     .FullName!);
+                                     .FullName ?? nameof(IDiscordBot));
 
         return Task.CompletedTask;
     }

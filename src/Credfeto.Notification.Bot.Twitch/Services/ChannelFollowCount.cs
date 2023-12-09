@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
@@ -58,16 +57,17 @@ public sealed class ChannelFollowCount : IChannelFollowCount
 
     private static string DetermineUserAgentProduct()
     {
-        AssemblyName an = typeof(ChannelFollowCount).Assembly.GetName();
-
-        return an.Name!;
+        return ThisAssembly.Info.Product;
     }
 
     private static string DetermineUserAgentVersion()
     {
-        AssemblyName an = typeof(ChannelFollowCount).Assembly.GetName();
+        const string fileVersion = ThisAssembly.Info.FileVersion;
+        int plusIndex = fileVersion.IndexOf(value: '+', comparisonType: StringComparison.Ordinal);
 
-        return an.Version!.ToString();
+        return plusIndex >= 0
+            ? fileVersion.Substring(startIndex: 0, length: plusIndex)
+            : fileVersion;
     }
 
     private static void InitialiseClientCommon(HttpClient httpClient)
