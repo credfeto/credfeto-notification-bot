@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Database.Interfaces;
@@ -15,30 +16,35 @@ internal static partial class TwitchStreamObjectMapper
     [SqlObjectMap(name: "twitch.stream_insert", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
     public static partial ValueTask StreamInsertAsync(DbConnection connection,
                                                       [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
-                                                      [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                      [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")] [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
+                                                      DateTimeOffset start_date,
                                                       CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.stream_chatter_insert", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
     public static partial ValueTask StreamChatterInsertAsync(DbConnection connection,
                                                              [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
-                                                             [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                             [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")] [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
+                                                             DateTimeOffset start_date,
                                                              [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
                                                              CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.stream_settings_set", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
     public static partial ValueTask StreamSettingsSetAsync(DbConnection connection,
                                                            [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
-                                                           [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
-                                                           bool announce_milestones,
-                                                           bool chat_welcomes,
-                                                           bool raid_welcomes,
-                                                           bool shout_outs,
+                                                           [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")] [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
+                                                           DateTimeOffset start_date,
+                                                           [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")] bool announce_milestones,
+                                                           [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")] bool chat_welcomes,
+                                                           [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")] bool raid_welcomes,
+                                                           [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")] bool shout_outs,
                                                            CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.stream_chatter_get", sqlObjectType: SqlObjectType.TABLE_FUNCTION)]
     public static partial ValueTask<IReadOnlyList<TwitchChatter>> StreamChatterGetAsync(DbConnection connection,
                                                                                         [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
-                                                                                        [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                                                        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")]
+                                                                                        [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
+                                                                                        DateTimeOffset start_date,
                                                                                         [SqlFieldMap<ViewerMapper, Viewer>] Viewer viewer,
                                                                                         CancellationToken cancellationToken);
 
@@ -63,6 +69,8 @@ internal static partial class TwitchStreamObjectMapper
     [SqlObjectMap(name: "twitch.stream_settings_get", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
     public static partial ValueTask<IReadOnlyList<StreamSettings>> StreamSettingsGetAsync(DbConnection connection,
                                                                                           [SqlFieldMap<StreamerMapper, Streamer>] Streamer channel,
-                                                                                          [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] DateTimeOffset start_date,
+                                                                                          [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")]
+                                                                                          [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
+                                                                                          DateTimeOffset start_date,
                                                                                           CancellationToken cancellationToken);
 }
