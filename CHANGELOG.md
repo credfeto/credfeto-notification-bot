@@ -35,7 +35,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.28.143
 - Dependencies - Updated Credfeto.Date to 1.1.8.149
 - Dependencies - Updated Credfeto.Random to 1.0.15.136
-- Dependencies - Updated xunit.analyzers to 1.6.0
 - Dependencies - Updated Discord.Net to 3.13.0
 - Dependencies - Updated xunit to 2.6.2
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.4
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.3.195
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.14.6129
 - Dependencies - Updated Meziantou.Analyzer to 2.0.120
+- Dependencies - Updated xunit.analyzers to 1.7.0
 ### Removed
 ### Deployment Changes
 
