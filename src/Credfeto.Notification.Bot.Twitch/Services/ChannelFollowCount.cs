@@ -76,7 +76,7 @@ public sealed class ChannelFollowCount : IChannelFollowCount
         httpClient.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher;
         httpClient.Timeout = ClientTimeout;
         httpClient.DefaultRequestVersion = new(major: 1, minor: 1);
-        httpClient.DefaultRequestHeaders.Accept.Add(new(mediaType: @"application/json"));
+        httpClient.DefaultRequestHeaders.Accept.Add(new(mediaType: "application/json"));
         httpClient.DefaultRequestHeaders.UserAgent.Add(new(new ProductHeaderValue(name: UserAgentProduct, version: UserAgentVersion)));
     }
 

@@ -28,7 +28,7 @@ public sealed class DiscordConnectionService : DiscordLoggingBase, IDiscordConne
 
         await this._discordSocketClient.StartAsync();
 
-        await this._discordSocketClient.SetGameAsync(name: @"Twitch", streamUrl: null, type: ActivityType.Watching);
+        await this._discordSocketClient.SetGameAsync(name: "Twitch", streamUrl: null, type: ActivityType.Watching);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

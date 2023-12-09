@@ -28,24 +28,24 @@ internal static class Logging
 
     private static Logger CreateLogger()
     {
-        string processName = typeof(Program).Namespace ?? @"Credfeto.Notification.Bot.Server";
+        string processName = typeof(Program).Namespace ?? "Credfeto.Notification.Bot.Server";
 
         return new LoggerConfiguration().Enrich.FromLogContext()
                                         .Enrich.WithDemystifiedStackTraces()
                                         .Enrich.WithMachineName()
                                         .Enrich.WithProcessId()
                                         .Enrich.WithThreadId()
-                                        .Enrich.WithProperty(name: @"ProcessName", value: processName)
+                                        .Enrich.WithProperty(name: "ProcessName", value: processName)
                                         .WriteTo.Console()
                                         .CreateLogger();
     }
 
     private static void AddFilters(ILoggingBuilder builder)
     {
-        builder.AddFilter(category: @"Discord", level: LogLevel.Warning)
-               .AddFilter(category: @"Microsoft", level: LogLevel.Warning)
-               .AddFilter(category: @"System.Net.Http.HttpClient", level: LogLevel.Warning)
-               .AddFilter(category: @"Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware", level: LogLevel.Error)
-               .AddFilter(category: @"TwitchLib", level: LogLevel.Warning);
+        builder.AddFilter(category: "Discord", level: LogLevel.Warning)
+               .AddFilter(category: "Microsoft", level: LogLevel.Warning)
+               .AddFilter(category: "System.Net.Http.HttpClient", level: LogLevel.Warning)
+               .AddFilter(category: "Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware", level: LogLevel.Error)
+               .AddFilter(category: "TwitchLib", level: LogLevel.Warning);
     }
 }

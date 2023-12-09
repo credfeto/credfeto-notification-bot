@@ -34,7 +34,7 @@ public static class ApplicationConfig
             return null;
         }
 
-        if (!File.Exists(Path.Combine(path1: path, path2: @"appsettings.json")))
+        if (!File.Exists(Path.Combine(path1: path, path2: "appsettings.json")))
         {
             return null;
         }
