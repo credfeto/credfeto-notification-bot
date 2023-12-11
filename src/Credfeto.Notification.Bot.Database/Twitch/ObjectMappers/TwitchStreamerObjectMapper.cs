@@ -15,10 +15,13 @@ internal static partial class TwitchStreamerObjectMapper
     public static partial ValueTask StreamerInsertAsync(DbConnection connection,
                                                         [SqlFieldMap<StreamerMapper, Streamer>] Streamer streamer,
                                                         int id,
-                                                        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Matches DB")] [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
+                                                        [SuppressMessage(category: "ReSharper", checkId: "InconsistentNaming", Justification = "Matches DB")]
+                                                        [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
                                                         DateTimeOffset start_date,
                                                         CancellationToken cancellationToken);
 
     [SqlObjectMap(name: "twitch.streamer_get", sqlObjectType: SqlObjectType.STORED_PROCEDURE)]
-    public static partial ValueTask<TwitchUser?> StreamerGetAsync(DbConnection connection, [SqlFieldMap<StreamerMapper, Streamer>] Streamer streamer, CancellationToken cancellationToken);
+    public static partial ValueTask<TwitchUser?> StreamerGetAsync(DbConnection connection,
+                                                                  [SqlFieldMap<StreamerMapper, Streamer>] Streamer streamer,
+                                                                  CancellationToken cancellationToken);
 }
