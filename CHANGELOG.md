@@ -36,7 +36,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.8.149
 - Dependencies - Updated Credfeto.Random to 1.0.15.136
 - Dependencies - Updated Discord.Net to 3.13.0
-- Dependencies - Updated FunFair.Test.Common to 6.1.21.247
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.1
 - Dependencies - Updated Roslynator.Analyzers to 4.7.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.15.0.81779
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.7.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.5
 - Dependencies - Updated xunit to 2.6.3
+- Dependencies - Updated FunFair.Test.Common to 6.1.22.273
 ### Removed
 ### Deployment Changes
 
