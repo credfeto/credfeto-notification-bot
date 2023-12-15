@@ -53,7 +53,7 @@
     <PackageReference Include="SmartAnalyzers.CSharpExtensions.Annotations" Version="4.2.8" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="9.15.0.81779" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="StronglyTypedId" Version="1.0.0-beta06" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="StronglyTypedId" Version="1.0.0-beta07" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
   </ItemGroup>
 </Project>
