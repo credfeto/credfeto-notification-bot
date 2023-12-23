@@ -36,7 +36,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.13.0
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.1
 - Dependencies - Updated Roslynator.Analyzers to 4.7.0
-- Dependencies - Updated SonarAnalyzer.CSharp to 9.15.0.81779
 - Dependencies - Updated Credfeto.Database to 1.2.3.195
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.14.6129
 - Dependencies - Updated xunit.analyzers to 1.7.0
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.127
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.5.0
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9
+- Dependencies - Updated SonarAnalyzer.CSharp to 9.16.0.82469
 ### Removed
 ### Deployment Changes
 
