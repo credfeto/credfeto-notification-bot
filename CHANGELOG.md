@@ -37,7 +37,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.3.195
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.14.6129
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.5
-- Dependencies - Updated xunit to 2.6.3
 - Dependencies - Updated Meziantou.Analyzer to 2.0.127
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.5.0
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.9.181
 - Dependencies - Updated FunFair.Test.Common to 6.1.23.276
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.39
+- Dependencies - Updated xunit to 2.6.4
 ### Removed
 ### Deployment Changes
 
