@@ -14,7 +14,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 2.1.7
 - Dependencies - Updated DotNet SDK to 7.0.102
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.16
-- Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.8
 - Dependencies - Updated Credfeto.Services.Startup to 1.0.0.3
 - Dependencies - Updated coverlet to 6.0.0
 - Dependencies - Updated FluentValidation to 11.3.0
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.22.273
 - Dependencies - Updated Meziantou.Analyzer to 2.0.127
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.5.0
+- Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9
 ### Removed
 ### Deployment Changes
 
