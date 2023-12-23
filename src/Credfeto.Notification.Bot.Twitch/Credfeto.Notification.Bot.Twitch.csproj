@@ -41,7 +41,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Interfaces\Credfeto.Notification.Bot.Twitch.Interfaces.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Date.Interfaces" Version="1.1.8.149" />
+    <PackageReference Include="Credfeto.Date.Interfaces" Version="1.1.9.181" />
     <PackageReference Include="Credfeto.Random.Interfaces" Version="0.0.1.1" />
     <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.11.121" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />

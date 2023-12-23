@@ -31,7 +31,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Extensions.Logging to 8.0.0
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.28.143
-- Dependencies - Updated Credfeto.Date to 1.1.8.149
 - Dependencies - Updated Credfeto.Random to 1.0.15.136
 - Dependencies - Updated Discord.Net to 3.13.0
 - Dependencies - Updated Serilog.Sinks.Console to 5.0.1
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.9
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.16.0.82469
 - Dependencies - Updated xunit.analyzers to 1.8.0
+- Dependencies - Updated Credfeto.Date to 1.1.9.181
 ### Removed
 ### Deployment Changes
 
