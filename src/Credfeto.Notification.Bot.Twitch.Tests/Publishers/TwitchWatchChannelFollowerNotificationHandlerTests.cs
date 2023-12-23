@@ -31,15 +31,15 @@ public sealed class TwitchWatchChannelFollowerNotificationHandlerTests : TestBas
                                                          milestones: MockReferenceData.TwitchMilestones,
                                                          ignoredUsers: MockReferenceData.IgnoredUsers,
                                                          chatCommands: Array.Empty<TwitchChatCommand>(),
-                                                         channels: new TwitchModChannel[]
-                                                                   {
-                                                                       new(channelName: ModdingForStreamer.Value,
-                                                                           shoutOuts: MockReferenceData.TwitchChannelShoutout,
-                                                                           raids: MockReferenceData.TwitchChannelRaids,
-                                                                           thanks: MockReferenceData.TwitchChannelThanks,
-                                                                           welcome: MockReferenceData.TwitchChannelWelcome,
-                                                                           mileStones: MockReferenceData.TwitchChanelMileStone)
-                                                                   }));
+                                                         channels:
+                                                         [
+                                                             new(channelName: ModdingForStreamer.Value,
+                                                                 shoutOuts: MockReferenceData.TwitchChannelShoutout,
+                                                                 raids: MockReferenceData.TwitchChannelRaids,
+                                                                 thanks: MockReferenceData.TwitchChannelThanks,
+                                                                 welcome: MockReferenceData.TwitchChannelWelcome,
+                                                                 mileStones: MockReferenceData.TwitchChanelMileStone)
+                                                         ]));
 
         this._notificationHandler = new TwitchWatchChannelFollowerNotificationHandler(options: this._options,
                                                                                       followerDetector: this._followerDetector,

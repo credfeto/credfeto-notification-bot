@@ -36,21 +36,20 @@ public sealed class ShoutoutJoinerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
-                                                   channels: new TwitchModChannel[]
-                                                             {
-                                                                 new(channelName: StreamerShoutOutsEnabled.Value,
-                                                                     new(enabled: true,
-                                                                         new()
-                                                                         {
-                                                                             new(channel: VisitingChannelFriendWithMessage.Value,
-                                                                                 message: "Check out this weird and wonderful streamer!"),
-                                                                             new(channel: VisitingChannelFriendWithNoMessage.Value, message: null)
-                                                                         }),
-                                                                     raids: MockReferenceData.TwitchChannelRaids,
-                                                                     thanks: MockReferenceData.TwitchChannelThanks,
-                                                                     mileStones: MockReferenceData.TwitchChanelMileStone,
-                                                                     welcome: MockReferenceData.TwitchChannelWelcome)
-                                                             }));
+                                                   channels:
+                                                   [
+                                                       new(channelName: StreamerShoutOutsEnabled.Value,
+                                                           new(enabled: true,
+                                                           [
+                                                               new(channel: VisitingChannelFriendWithMessage.Value, message: "Check out this weird and wonderful streamer!"),
+
+                                                               new(channel: VisitingChannelFriendWithNoMessage.Value, message: null)
+                                                           ]),
+                                                           raids: MockReferenceData.TwitchChannelRaids,
+                                                           thanks: MockReferenceData.TwitchChannelThanks,
+                                                           mileStones: MockReferenceData.TwitchChanelMileStone,
+                                                           welcome: MockReferenceData.TwitchChannelWelcome)
+                                                   ]));
 
         this._twitchChatMessageChannel = GetSubstitute<IMessageChannel<TwitchChatMessage>>();
 
@@ -93,10 +92,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                           IsStreamer: true,
                                           new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled,
-                                                      visitingStreamer: visitingStreamer,
-                                                      isRegular: false,
-                                                      cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: false, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
     }
@@ -109,10 +105,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                           IsStreamer: true,
                                           new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsDisabled,
-                                                      visitingStreamer: visitingStreamer,
-                                                      isRegular: true,
-                                                      cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsDisabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
     }
@@ -125,10 +118,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                           IsStreamer: true,
                                           new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled,
-                                                      visitingStreamer: visitingStreamer,
-                                                      isRegular: true,
-                                                      cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"!so @{VisitingChannel}");
     }
@@ -141,10 +131,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                           IsStreamer: true,
                                           new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsException,
-                                                      visitingStreamer: visitingStreamer,
-                                                      isRegular: true,
-                                                      cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsException, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
         await this.DidNotReceivePublishMessageAsync();
     }
@@ -157,10 +144,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                           IsStreamer: true,
                                           new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled,
-                                                      visitingStreamer: visitingStreamer,
-                                                      isRegular: true,
-                                                      cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync($"!so @{VisitingChannelFriendWithNoMessage}");
         await this.ReceivedPublishMessageAsync($"/shoutout @{VisitingChannelFriendWithNoMessage}");
@@ -174,10 +158,7 @@ public sealed class ShoutoutJoinerTests : TestBase
                                           IsStreamer: true,
                                           new DateTime(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, kind: DateTimeKind.Utc).AsDateTimeOffset());
 
-        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled,
-                                                      visitingStreamer: visitingStreamer,
-                                                      isRegular: true,
-                                                      cancellationToken: CancellationToken.None);
+        await this._shoutoutJoiner.IssueShoutoutAsync(streamer: StreamerShoutOutsEnabled, visitingStreamer: visitingStreamer, isRegular: true, cancellationToken: CancellationToken.None);
 
         await this.ReceivedPublishMessageAsync("Check out this weird and wonderful streamer!");
         await this.ReceivedPublishMessageAsync($"/shoutout @{VisitingChannelFriendWithMessage}");

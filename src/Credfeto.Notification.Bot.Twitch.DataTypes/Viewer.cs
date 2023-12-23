@@ -3,7 +3,7 @@ using StronglyTypedIds;
 
 namespace Credfeto.Notification.Bot.Twitch.DataTypes;
 
-[StronglyTypedId(backingType: StronglyTypedIdBackingType.String, converters: StronglyTypedIdConverter.None, implementations: StronglyTypedIdImplementations.IEquatable)]
+[StronglyTypedId(Template.String)]
 [SuppressMessage(category: "ReSharper", checkId: "PartialTypeWithSinglePart", Justification = "Uses source generation")]
 public readonly partial struct Viewer
 {

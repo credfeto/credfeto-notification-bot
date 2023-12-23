@@ -34,7 +34,7 @@ public sealed class ChannelFollowCount : IChannelFollowCount
     {
         HttpClient client = this.GetClient();
 
-        Uri followCountUri = new("/twitch/followcount/" + streamer, uriKind: UriKind.Relative);
+        Uri followCountUri = new(string.Concat(str0: "/twitch/followcount/", streamer.Value), uriKind: UriKind.Relative);
         string result = await client.GetStringAsync(requestUri: followCountUri, cancellationToken: cancellationToken);
 
         if (int.TryParse(s: result, style: NumberStyles.Integer, provider: CultureInfo.InvariantCulture, out int followers))

@@ -31,15 +31,14 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
         this._twitchCustomMessageHandler = GetSubstitute<ITwitchCustomMessageHandler>();
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                   new TwitchModChannel[]
-                                                   {
+                                                   [
                                                        new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
                                                            raids: MockReferenceData.TwitchChannelRaids,
                                                            shoutOuts: MockReferenceData.TwitchChannelShoutout,
                                                            thanks: MockReferenceData.TwitchChannelThanks,
                                                            mileStones: MockReferenceData.TwitchChanelMileStone,
                                                            welcome: MockReferenceData.TwitchChannelWelcome)
-                                                   },
+                                                   ],
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    milestones: MockReferenceData.TwitchMilestones));
@@ -55,8 +54,7 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this.MockCustomMessageHandler(true);
 
-        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
 
         await this.ReceivedCustomMessageHandlerAsync();
         this.DidNotReceiveGetStreamer();
@@ -67,8 +65,7 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this.MockCustomMessageHandler(false);
 
-        await this._notificationHandler.Handle(new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
 
         await this.ReceivedCustomMessageHandlerAsync();
         this.DidNotReceiveGetStreamer();
@@ -79,8 +76,7 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this.MockCustomMessageHandler(false);
 
-        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"),
-                                               cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
 
         await this.ReceivedCustomMessageHandlerAsync();
         this.ReceivedGetStreamer();

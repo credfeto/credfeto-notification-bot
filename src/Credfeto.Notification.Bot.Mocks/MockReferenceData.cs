@@ -16,8 +16,7 @@ public static class MockReferenceData
 
     public static MockBase<TwitchAuthentication> TwitchAuthentication { get; } = new MockTwitchAuthentication();
 
-    public static TwitchMilestones TwitchMilestones { get; } = new(new[]
-                                                                   {
+    public static TwitchMilestones TwitchMilestones { get; } = new([
                                                                        1,
                                                                        10,
                                                                        100,
@@ -25,7 +24,7 @@ public static class MockReferenceData
                                                                        2000,
                                                                        3000,
                                                                        4000
-                                                                   },
+                                                                   ],
                                                                    Array.Empty<int>());
 
     public static MockBase<string[]> IgnoredUsers { get; } = new MockIgnoredUsers();

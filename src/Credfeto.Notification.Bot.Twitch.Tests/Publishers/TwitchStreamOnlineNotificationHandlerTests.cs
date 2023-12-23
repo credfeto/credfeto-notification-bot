@@ -34,15 +34,15 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
-                                                   channels: new TwitchModChannel[]
-                                                             {
-                                                                 new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
-                                                                     thanks: MockReferenceData.TwitchChannelThanks,
-                                                                     shoutOuts: MockReferenceData.TwitchChannelShoutout,
-                                                                     raids: MockReferenceData.TwitchChannelRaids,
-                                                                     mileStones: MockReferenceData.TwitchChanelMileStone,
-                                                                     welcome: MockReferenceData.TwitchChannelWelcome)
-                                                             }));
+                                                   channels:
+                                                   [
+                                                       new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
+                                                           thanks: MockReferenceData.TwitchChannelThanks,
+                                                           shoutOuts: MockReferenceData.TwitchChannelShoutout,
+                                                           raids: MockReferenceData.TwitchChannelRaids,
+                                                           mileStones: MockReferenceData.TwitchChanelMileStone,
+                                                           welcome: MockReferenceData.TwitchChannelWelcome)
+                                                   ]));
 
         this._notificationHandler = new TwitchStreamOnlineNotificationHandler(options: options,
                                                                               twitchChannelManager: this._twitchChannelManager,
@@ -65,9 +65,7 @@ public sealed class TwitchStreamOnlineNotificationHandlerTests : TestBase
             .GetStreamer(MockReferenceData.Streamer);
 
         await this._twitchChannelState.Received(1)
-                  .OnlineAsync(gameName: "IRL",
-                               new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, millisecond: 0, offset: TimeSpan.Zero),
-                               Arg.Any<CancellationToken>());
+                  .OnlineAsync(gameName: "IRL", new(year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, millisecond: 0, offset: TimeSpan.Zero), Arg.Any<CancellationToken>());
     }
 
     [Fact]

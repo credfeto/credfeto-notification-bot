@@ -36,40 +36,36 @@ public sealed class TwitchChannelManagerTests : TestBase
         this._mediator = GetSubstitute<IMediator>();
 
         int[] followerMilestones =
-        {
+        [
             10,
             20,
             30
-        };
+        ];
 
         int[] subscriberMilestones =
-        {
+        [
             10,
             20,
             30
-        };
+        ];
 
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                   ignoredUsers: new[]
-                                                                 {
-                                                                     MockReferenceData.Ignored.Value
-                                                                 },
+                                                   ignoredUsers:
+                                                   [
+                                                       MockReferenceData.Ignored.Value
+                                                   ],
                                                    milestones: new(followers: followerMilestones, subscribers: subscriberMilestones),
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
-                                                   channels: new TwitchModChannel[]
-                                                             {
-                                                                 new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
-                                                                     welcome: new(enabled: true),
-                                                                     mileStones: new(enabled: true),
-                                                                     raids: new(enabled: true, immediate: null, calmDown: null),
-                                                                     thanks: new(enabled: true),
-                                                                     shoutOuts: new(enabled: true,
-                                                                                    new()
-                                                                                    {
-                                                                                        new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null)
-                                                                                    }))
-                                                             }));
+                                                   channels:
+                                                   [
+                                                       new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
+                                                           welcome: new(enabled: true),
+                                                           mileStones: new(enabled: true),
+                                                           raids: new(enabled: true, immediate: null, calmDown: null),
+                                                           thanks: new(enabled: true),
+                                                           shoutOuts: new(enabled: true, [new(channel: Guest1.Value, message: "!guest"), new(channel: Guest2.Value, message: null)]))
+                                                   ]));
 
         this._twitchChannelManager = new TwitchChannelManager(options: options,
                                                               userInfoService: this._userInfoService,
@@ -252,8 +248,7 @@ public sealed class TwitchChannelManagerTests : TestBase
     private ValueTask ReceivedBitGiftNotificationAsync(Viewer viewer, int amount)
     {
         return this._mediator.Received(1)
-                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount),
-                            cancellationToken: CancellationToken.None);
+                   .Publish(Arg.Is<TwitchBitsGift>(t => t.Streamer == MockReferenceData.Streamer && t.User == viewer && t.Bits == amount), cancellationToken: CancellationToken.None);
     }
 
     private ValueTask<bool> ReceivedCheckForFirstMessageInStreamAsync()
@@ -298,8 +293,7 @@ public sealed class TwitchChannelManagerTests : TestBase
 
     private void MockIsFirstMessageInStream(bool isFirstMessage)
     {
-        this._twitchStreamerDataManager
-            .IsFirstMessageInStreamAsync(streamer: MockReferenceData.Streamer, StreamStartDate.AsDateTimeOffset(), Guest1.ToViewer(), Arg.Any<CancellationToken>())
+        this._twitchStreamerDataManager.IsFirstMessageInStreamAsync(streamer: MockReferenceData.Streamer, StreamStartDate.AsDateTimeOffset(), Guest1.ToViewer(), Arg.Any<CancellationToken>())
             .Returns(isFirstMessage);
     }
 

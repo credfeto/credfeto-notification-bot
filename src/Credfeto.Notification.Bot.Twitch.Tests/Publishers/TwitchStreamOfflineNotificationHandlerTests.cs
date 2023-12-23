@@ -33,15 +33,15 @@ public sealed class TwitchStreamOfflineNotificationHandlerTests : TestBase
                                                    milestones: MockReferenceData.TwitchMilestones,
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    chatCommands: Array.Empty<TwitchChatCommand>(),
-                                                   channels: new TwitchModChannel[]
-                                                             {
-                                                                 new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
-                                                                     shoutOuts: MockReferenceData.TwitchChannelShoutout,
-                                                                     raids: MockReferenceData.TwitchChannelRaids,
-                                                                     thanks: MockReferenceData.TwitchChannelThanks,
-                                                                     mileStones: MockReferenceData.TwitchChanelMileStone,
-                                                                     welcome: MockReferenceData.TwitchChannelWelcome)
-                                                             }));
+                                                   channels:
+                                                   [
+                                                       new(channelName: ((Streamer)MockReferenceData.Streamer).Value,
+                                                           shoutOuts: MockReferenceData.TwitchChannelShoutout,
+                                                           raids: MockReferenceData.TwitchChannelRaids,
+                                                           thanks: MockReferenceData.TwitchChannelThanks,
+                                                           mileStones: MockReferenceData.TwitchChanelMileStone,
+                                                           welcome: MockReferenceData.TwitchChannelWelcome)
+                                                   ]));
 
         this._notificationHandler = new TwitchStreamOfflineNotificationHandler(options: options,
                                                                                twitchChannelManager: this._twitchChannelManager,
