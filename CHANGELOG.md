@@ -31,7 +31,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.8.14
 - Dependencies - Updated Serilog.Extensions.Logging to 8.0.0
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.1.168
-- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.4.0
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.28.143
 - Dependencies - Updated Credfeto.Date to 1.1.8.149
 - Dependencies - Updated Credfeto.Random to 1.0.15.136
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit to 2.6.3
 - Dependencies - Updated FunFair.Test.Common to 6.1.22.273
 - Dependencies - Updated Meziantou.Analyzer to 2.0.127
+- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.5.0
 ### Removed
 ### Deployment Changes
 
