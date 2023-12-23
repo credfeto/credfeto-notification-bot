@@ -21,7 +21,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute to 5.1.0
 - Dependencies - Updated Serilog.Enrichers.Environment to 2.3.0
 - Dependencies - Updated TwitchLib to 3.9.0
-- Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.38
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.11.121
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.8.0
 - Dependencies - Updated Microsoft.Extensions to 8.0.0
@@ -46,6 +45,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.8.0
 - Dependencies - Updated Credfeto.Date to 1.1.9.181
 - Dependencies - Updated FunFair.Test.Common to 6.1.23.276
+- Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.39
 ### Removed
 ### Deployment Changes
 
