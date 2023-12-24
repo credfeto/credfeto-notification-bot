@@ -54,7 +54,8 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this.MockCustomMessageHandler(true);
 
-        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedCustomMessageHandlerAsync();
         this.DidNotReceiveGetStreamer();
@@ -65,7 +66,8 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this.MockCustomMessageHandler(false);
 
-        await this._notificationHandler.Handle(new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedCustomMessageHandlerAsync();
         this.DidNotReceiveGetStreamer();
@@ -76,7 +78,8 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this.MockCustomMessageHandler(false);
 
-        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"),
+                                               cancellationToken: CancellationToken.None);
 
         await this.ReceivedCustomMessageHandlerAsync();
         this.ReceivedGetStreamer();

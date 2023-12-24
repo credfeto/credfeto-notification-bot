@@ -31,7 +31,11 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
                                                    ignoredUsers: MockReferenceData.IgnoredUsers,
                                                    chatCommands:
                                                    [
-                                                       new(streamer: streamer.Value, bot: viewer.Value, match: "!play", matchType: TwitchMessageMatchType.EXACT.GetName(), issue: "!play")
+                                                       new(streamer: streamer.Value,
+                                                           bot: viewer.Value,
+                                                           match: "!play",
+                                                           matchType: TwitchMessageMatchType.EXACT.GetName(),
+                                                           issue: "!play")
                                                    ],
                                                    channels: Array.Empty<TwitchModChannel>()));
 
