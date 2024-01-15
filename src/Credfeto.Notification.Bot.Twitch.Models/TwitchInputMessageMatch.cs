@@ -36,7 +36,7 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
             return true;
         }
 
-        return this.Streamer.Equals(other.Streamer) && this.Chatter.Equals(other.Chatter) && this.Message == other.Message && this.MatchType == other.MatchType;
+        return this.Streamer.Equals(other.Streamer) && this.Chatter.Equals(other.Chatter) && StringComparer.Ordinal.Equals(x: this.Message, y: other.Message) && this.MatchType == other.MatchType;
     }
 
     public override bool Equals(object? obj)
