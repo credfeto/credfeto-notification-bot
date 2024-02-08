@@ -21,6 +21,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.40.352
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.9.28
 - Dependencies - Updated Credfeto.Date to 1.1.10.240
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.29.233
 ### Removed
 ### Deployment Changes
 
