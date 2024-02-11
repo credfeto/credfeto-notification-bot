@@ -16,7 +16,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.10.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.19.0.84025
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.9.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.140
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.9.28
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.29.233
 - Dependencies - Updated Credfeto.Date to 1.1.11.243
@@ -25,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.41.357
 - Dependencies - Updated Credfeto.Random to 1.0.17.233
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.15.161
+- Dependencies - Updated Meziantou.Analyzer to 2.0.141
 ### Removed
 ### Deployment Changes
 
