@@ -25,6 +25,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.15.161
 - Dependencies - Updated Meziantou.Analyzer to 2.0.141
 - Dependencies - Updated Credfeto.Date to 1.1.12.249
+- Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 ### Removed
 ### Deployment Changes
 
