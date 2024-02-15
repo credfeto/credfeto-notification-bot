@@ -8,64 +8,64 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchChatMessageGenerator : ITwitchChatMessageGenerator
 {
-    private static readonly IReadOnlyList<string> ThankBitsMessages = new[]
-                                                                      {
-                                                                          "Thanks @{0} for the bits!",
-                                                                          "Thanks @{0} for the bits! You're awesome!",
-                                                                          "Thanks @{0} for bits!",
-                                                                          "Thanks @{0} for giving {1} bits!",
-                                                                          "Thanks @{0} for the {1} bits!",
-                                                                          "@{0}, Thanks for the bits!",
-                                                                          "@{0}, Thanks for bits!",
-                                                                          "@{0}, Thanks for the bits! You're awesome!",
-                                                                          "@{0}, Thanks for the {1} bits! You're awesome!",
-                                                                          "@{0}, Thanks for giving {1} bits!",
-                                                                          "Thank you for the bits @{0}! VirtualHug",
-                                                                          "Thank you for the {1} bits @{0}! VirtualHug",
-                                                                          "Thanks for the bits @{0}!",
-                                                                          "Thanks for the {1} bits @{0}!",
-                                                                          "Thank you for cheering the bits @{0}!",
-                                                                          "Thank you for cheering {1} bits @{0}"
-                                                                      };
+    private static readonly IReadOnlyList<string> ThankBitsMessages =
+    [
+        "Thanks @{0} for the bits!",
+        "Thanks @{0} for the bits! You're awesome!",
+        "Thanks @{0} for bits!",
+        "Thanks @{0} for giving {1} bits!",
+        "Thanks @{0} for the {1} bits!",
+        "@{0}, Thanks for the bits!",
+        "@{0}, Thanks for bits!",
+        "@{0}, Thanks for the bits! You're awesome!",
+        "@{0}, Thanks for the {1} bits! You're awesome!",
+        "@{0}, Thanks for giving {1} bits!",
+        "Thank you for the bits @{0}! VirtualHug",
+        "Thank you for the {1} bits @{0}! VirtualHug",
+        "Thanks for the bits @{0}!",
+        "Thanks for the {1} bits @{0}!",
+        "Thank you for cheering the bits @{0}!",
+        "Thank you for cheering {1} bits @{0}"
+    ];
 
-    private static readonly IReadOnlyList<string> ThankNewPrimeSubMessages = new[]
-                                                                             {
-                                                                                 "Thanks @{0} for subscribing!",
-                                                                                 "Thanks @{0} for subscribing and using your prime sub here!"
-                                                                             };
+    private static readonly IReadOnlyList<string> ThankNewPrimeSubMessages =
+    [
+        "Thanks @{0} for subscribing!",
+        "Thanks @{0} for subscribing and using your prime sub here!"
+    ];
 
-    private static readonly IReadOnlyList<string> ThankNewPaidSubMessages = new[]
-                                                                            {
-                                                                                "Thanks @{0} for subscribing!"
-                                                                            };
+    private static readonly IReadOnlyList<string> ThankNewPaidSubMessages =
+    [
+        "Thanks @{0} for subscribing!"
+    ];
 
-    private static readonly IReadOnlyList<string> ThankPrimeReSubMessages = new[]
-                                                                            {
-                                                                                "Thanks @{0} for resubscribing!"
-                                                                            };
+    private static readonly IReadOnlyList<string> ThankPrimeReSubMessages =
+    [
+        "Thanks @{0} for resubscribing!"
+    ];
 
-    private static readonly IReadOnlyList<string> ThankPaidReSubMessages = new[]
-                                                                           {
-                                                                               "Thanks @{0} for resubscribing!"
-                                                                           };
+    private static readonly IReadOnlyList<string> ThankPaidReSubMessages =
+    [
+        "Thanks @{0} for resubscribing!"
+    ];
 
-    private static readonly IReadOnlyList<string> ThankGiftMultipleSubsMessages = new[]
-                                                                                  {
-                                                                                      "Thanks @{0} for gifting subs!"
-                                                                                  };
+    private static readonly IReadOnlyList<string> ThankGiftMultipleSubsMessages =
+    [
+        "Thanks @{0} for gifting subs!"
+    ];
 
-    private static readonly IReadOnlyList<string> ThankGiftOneSubMessages = new[]
-                                                                            {
-                                                                                "Thanks @{0} for gifting sub!"
-                                                                            };
+    private static readonly IReadOnlyList<string> ThankGiftOneSubMessages =
+    [
+        "Thanks @{0} for gifting sub!"
+    ];
 
-    private static readonly IReadOnlyList<string> WelcomeMessages = new[]
-                                                                    {
-                                                                        "Hi @{0}",
-                                                                        "Hi, @{0}",
-                                                                        "@{0}, Hi!",
-                                                                        "Hey, @{0}!"
-                                                                    };
+    private static readonly IReadOnlyList<string> WelcomeMessages =
+    [
+        "Hi @{0}",
+        "Hi, @{0}",
+        "@{0}, Hi!",
+        "Hey, @{0}!"
+    ];
 
     private readonly IRandomNumberGenerator _randomNumberGenerator;
 
