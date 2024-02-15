@@ -27,6 +27,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
 - Dependencies - Updated Credfeto.Date to 1.1.13.250
+- SDK - Updated DotNet SDK to 8.0.200
 ### Removed
 ### Deployment Changes
 
