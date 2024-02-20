@@ -13,4 +13,6 @@ END;$$;
 
 ALTER FUNCTION twitch.streamer_get (VARCHAR) OWNER TO markr;
 
-GRANT EXECUTE ON FUNCTION twitch.streamer_get (VARCHAR) TO notificationbot;
+GRANT EXECUTE
+    ON FUNCTION twitch.streamer_get(VARCHAR)
+    TO notificationbot;

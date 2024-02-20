@@ -37,14 +37,11 @@ BEGIN
             AND f.follower = follower_);
 END;$$;
 
-
 ALTER FUNCTION twitch.stream_follower_insert (
     TEXT,
     TEXT
     ) OWNER TO markr;
 
-
-GRANT EXECUTE ON FUNCTION twitch.stream_follower_insert (
-    TEXT,
-    TEXT
-    ) TO markr;
+GRANT EXECUTE
+    ON FUNCTION twitch.stream_follower_insert(TEXT, TEXT)
+    TO markr;

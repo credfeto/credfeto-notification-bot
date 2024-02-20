@@ -8,8 +8,6 @@ AS
 $$
 
 BEGIN
-
-
     INSERT INTO twitch.stream_chatter (
         channel,
         start_date,

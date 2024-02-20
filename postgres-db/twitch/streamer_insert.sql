@@ -9,53 +9,65 @@ $$
 
 BEGIN
     -- update followers with new username
-    update twitch.stream_follower
-    set follower = username_
-    where follower in (select username
-                       from twitch.streamer
-                       where username <> username_
-                         and id = id_
-                       union
-                       select username
-                       from twitch.viewer
-                       where username <> username_
-                         and id = id_);
+    UPDATE twitch.stream_follower
+    SET follower = username_
+    WHERE follower IN (
+            SELECT username
+            FROM twitch.streamer
+            WHERE username <> username_
+                AND id = id_
+            
+            UNION
+            
+            SELECT username
+            FROM twitch.viewer
+            WHERE username <> username_
+                AND id = id_
+            );
 
     -- update chatters with new username
-    update twitch.stream_chatter
-    set chat_user = username_
-    where chat_user in (select username
-                        from twitch.streamer
-                        where username <> username_
-                          and id = id_
-                        union
-                        select username
-                        from twitch.viewer
-                        where username <> username_
-                          and id = id_);
+    UPDATE twitch.stream_chatter
+    SET chat_user = username_
+    WHERE chat_user IN (
+            SELECT username
+            FROM twitch.streamer
+            WHERE username <> username_
+                AND id = id_
+            
+            UNION
+            
+            SELECT username
+            FROM twitch.viewer
+            WHERE username <> username_
+                AND id = id_
+            );
 
     -- update streamers with new username
-    update twitch.streamer
-    set username = username_
-    where id = id_
-      and username <> username_;
+    UPDATE twitch.streamer
+    SET username = username_
+    WHERE id = id_
+        AND username <> username_;
 
     -- remove any viewer
-    delete
-    from twitch.viewer
-    where username = username_
-       or id = id_;
+    DELETE
+    FROM twitch.viewer
+    WHERE username = username_
+        OR id = id_;
 
     -- add streamer if not exists
-    INSERT INTO twitch.streamer (username,
-                                 id,
-                                 date_created)
-    VALUES (userName_,
-            id_,
-            date_created_)
-    ON conflict do nothing;
+    INSERT INTO twitch.streamer (
+        username,
+        id,
+        date_created
+        )
+    VALUES (
+        userName_,
+        id_,
+        date_created_
+        )
+        ON conflict do nothing;
 
-    return FOUND;
+    RETURN FOUND;
 END $$;
 
 ALTER FUNCTION twitch.streamer_insert (
@@ -64,8 +76,6 @@ ALTER FUNCTION twitch.streamer_insert (
     TIMESTAMP WITH TIME zone
     ) OWNER TO markr;
 
-GRANT EXECUTE ON FUNCTION twitch.streamer_insert (
-    TEXT,
-    TEXT,
-    TIMESTAMP WITH TIME zone
-    ) TO notificationbot;
+GRANT EXECUTE
+    ON FUNCTION twitch.streamer_insert(TEXT, TEXT, TIMESTAMP WITH TIME zone)
+    TO notificationbot;
