@@ -20,7 +20,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.41.357
 - Dependencies - Updated Credfeto.Random to 1.0.17.233
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.15.161
-- Dependencies - Updated Meziantou.Analyzer to 2.0.141
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
 - Dependencies - Updated Credfeto.Date to 1.1.13.250
@@ -29,6 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.11.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.7
 - Dependencies - Updated xunit to 2.7.0
+- Dependencies - Updated Meziantou.Analyzer to 2.0.143
 ### Removed
 ### Deployment Changes
 
