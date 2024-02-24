@@ -28,9 +28,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.11.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.7
 - Dependencies - Updated xunit to 2.7.0
-- Dependencies - Updated Meziantou.Analyzer to 2.0.143
 - Dependencies - Updated coverlet to 6.0.1
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
+- Dependencies - Updated Meziantou.Analyzer to 2.0.144
 ### Removed
 ### Deployment Changes
 
