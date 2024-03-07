@@ -62,7 +62,7 @@
   <ItemGroup>
     <PackageReference Include="Credfeto.Database.Pgsql" Version="1.2.3.195" />
     <PackageReference Include="Credfeto.Date" Version="1.1.13.250" />
-    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.29.233" />
+    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.30.264" />
     <PackageReference Include="Credfeto.Random" Version="1.0.17.233" />
     <PackageReference Include="Credfeto.Services.Startup" Version="1.1.15.161" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
@@ -89,7 +89,7 @@
     <PackageReference Include="Roslynator.Analyzers" Version="4.11.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SmartAnalyzers.CSharpExtensions.Annotations" Version="4.2.9" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.20.0.85982" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
   </ItemGroup>
