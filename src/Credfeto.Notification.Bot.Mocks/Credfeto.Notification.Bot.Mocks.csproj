@@ -39,7 +39,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FunFair.Test.Common" Version="6.1.42.380" />
+    <PackageReference Include="FunFair.Test.Common" Version="6.1.44.386" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
@@ -54,7 +54,7 @@
     <PackageReference Include="Roslynator.Analyzers" Version="4.11.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SmartAnalyzers.CSharpExtensions.Annotations" Version="4.2.9" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.20.0.85982" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.21.0.86780" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
   </ItemGroup>
