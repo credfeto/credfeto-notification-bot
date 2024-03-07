@@ -17,7 +17,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.29.233
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.2.267
 - Dependencies - Updated Credfeto.Random to 1.0.17.233
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.15.161
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
 - Dependencies - Updated Credfeto.Date to 1.1.13.250
@@ -31,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.145
 - Dependencies - Updated FunFair.Test.Common to 6.1.42.380
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.9.296
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.16.186
 ### Removed
 ### Deployment Changes
 
