@@ -19,7 +19,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.15.161
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
-- Dependencies - Updated Credfeto.Date to 1.1.13.250
 - SDK - Updated DotNet SDK to 8.0.200
 - Dependencies - Updated Microsoft.Extensions to 8.0.2
 - Dependencies - Updated xunit.analyzers to 1.11.0
@@ -31,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.42.380
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.3.296
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.10.303
+- Dependencies - Updated Credfeto.Date to 1.1.15.277
 ### Removed
 ### Deployment Changes
 
