@@ -14,7 +14,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.19.0.84025
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.9.0
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.9.28
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.29.233
 - Dependencies - Updated Credfeto.Random to 1.0.17.233
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.15.161
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
@@ -31,6 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.42.380
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.10.303
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.4.303
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.32.272
 ### Removed
 ### Deployment Changes
 
