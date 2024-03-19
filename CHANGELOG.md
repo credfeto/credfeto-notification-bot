@@ -30,7 +30,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.42.380
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.10.303
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.4.303
-- SDK - Updated DotNet SDK to 8.0.202
+- SDK - Updated DotNet SDK to 8.0.203
 ### Removed
 ### Deployment Changes
 
