@@ -12,6 +12,9 @@ internal sealed class MockTwitchChannelShoutout : MockBase<TwitchChannelShoutout
 
     public override TwitchChannelShoutout Next()
     {
-        return new(enabled: true, new() { new(channel: "Friend1", message: "!friend1"), new(channel: "Friend2", message: null) });
+        TwitchFriendChannel fc1 = new(channel: "Friend1", message: "!friend1");
+        TwitchFriendChannel fc2 = new(channel: "Friend2", message: null);
+
+        return new(enabled: true, [fc1, fc2]);
     }
 }
