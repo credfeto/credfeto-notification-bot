@@ -43,22 +43,27 @@ public sealed class TwitchModule : ModuleBase<SocketCommandContext>
 
         string title = $"{streamerStatus.Streamer} Current Status.";
 
-        Embed embed = new EmbedBuilder().WithColor(streamerStatus.IsOnline
-                                                       ? Color.Green
-                                                       : Color.DarkGrey)
-                                        .WithCurrentTimestamp()
-                                        .WithTitle(title)
-                                        .WithUrl($"https://twitch.tv/{streamerStatus.Streamer}")
-                                        .AddField(name: "Online", value: streamerStatus.IsOnline)
-                                        .AddField(name: "Followers", value: followCount)
-                                        .AddField(name: "Welcome regulars", value: streamerStatus.Settings.ChatWelcomesEnabled)
-                                        .AddField(name: "Welcome raiders", value: streamerStatus.Settings.RaidWelcomesEnabled)
-                                        .AddField(name: "Thank sub/bit", value: streamerStatus.Settings.ThanksEnabled)
-                                        .AddField(name: "Shoutout", value: streamerStatus.Settings.ShoutOutsEnabled)
-                                        .AddField(name: "Milestone Announcements", value: streamerStatus.Settings.AnnounceMilestonesEnabled)
-                                        .Build();
+        Embed embed = BuildEmbed(streamerStatus: streamerStatus, title: title, followCount: followCount);
 
         await this.ReplyAsync(embed: embed);
+    }
+
+    private static Embed BuildEmbed(ITwitchChannelState streamerStatus, string title, int followCount)
+    {
+        return new EmbedBuilder().WithColor(streamerStatus.IsOnline
+                                                ? Color.Green
+                                                : Color.DarkGrey)
+                                 .WithCurrentTimestamp()
+                                 .WithTitle(title)
+                                 .WithUrl($"https://twitch.tv/{streamerStatus.Streamer}")
+                                 .AddField(name: "Online", value: streamerStatus.IsOnline)
+                                 .AddField(name: "Followers", value: followCount)
+                                 .AddField(name: "Welcome regulars", value: streamerStatus.Settings.ChatWelcomesEnabled)
+                                 .AddField(name: "Welcome raiders", value: streamerStatus.Settings.RaidWelcomesEnabled)
+                                 .AddField(name: "Thank sub/bit", value: streamerStatus.Settings.ThanksEnabled)
+                                 .AddField(name: "Shoutout", value: streamerStatus.Settings.ShoutOutsEnabled)
+                                 .AddField(name: "Milestone Announcements", value: streamerStatus.Settings.AnnounceMilestonesEnabled)
+                                 .Build();
     }
 
     [Command("welcome")]
