@@ -17,9 +17,7 @@ public sealed class TwitchWatchChannelFollowerNotificationHandler : INotificatio
     private readonly ILogger<TwitchWatchChannelFollowerNotificationHandler> _logger;
     private readonly TwitchBotOptions _options;
 
-    public TwitchWatchChannelFollowerNotificationHandler(IOptions<TwitchBotOptions> options,
-                                                         ITwitchFollowerDetector followerDetector,
-                                                         ILogger<TwitchWatchChannelFollowerNotificationHandler> logger)
+    public TwitchWatchChannelFollowerNotificationHandler(IOptions<TwitchBotOptions> options, ITwitchFollowerDetector followerDetector, ILogger<TwitchWatchChannelFollowerNotificationHandler> logger)
     {
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._followerDetector = followerDetector ?? throw new ArgumentNullException(nameof(followerDetector));
@@ -28,7 +26,7 @@ public sealed class TwitchWatchChannelFollowerNotificationHandler : INotificatio
 
     public ValueTask Handle(TwitchWatchChannel notification, CancellationToken cancellationToken)
     {
-        Streamer streamer = notification.Info.UserName.ToStreamer();
+        Streamer streamer = Streamer(notification);
 
         if (!this._options.IsModChannel(streamer))
         {
@@ -39,5 +37,10 @@ public sealed class TwitchWatchChannelFollowerNotificationHandler : INotificatio
         this._logger.LogInformation($"{streamer}: Enabling for follower tracking");
 
         return this._followerDetector.EnableAsync(streamer: notification.Info, cancellationToken: cancellationToken);
+    }
+
+    private static Streamer Streamer(TwitchWatchChannel notification)
+    {
+        return notification.Info.UserName.ToStreamer();
     }
 }

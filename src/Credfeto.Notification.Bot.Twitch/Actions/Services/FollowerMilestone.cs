@@ -31,8 +31,7 @@ public sealed class FollowerMilestone : IFollowerMilestone
     {
         this._logger.LogWarning($"{streamer}: Currently has {followers} followers");
 
-        int[] orderedFollowers = this._options.Milestones.Followers.OrderBy(i => i)
-                                     .ToArray();
+        int[] orderedFollowers = this.GetFollowerMilestonesInOrder();
         int lastMileStoneReached = orderedFollowers.LastOrDefault(f => f < followers);
         int nextMileStone = orderedFollowers.First(f => f > followers);
 
@@ -48,15 +47,19 @@ public sealed class FollowerMilestone : IFollowerMilestone
             return;
         }
 
-        bool milestoneFreshlyReached =
-            await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamer, followerCount: lastMileStoneReached, cancellationToken: cancellationToken);
+        bool milestoneFreshlyReached = await this._twitchStreamDataManager.UpdateFollowerMilestoneAsync(streamer: streamer, followerCount: lastMileStoneReached, cancellationToken: cancellationToken);
 
         if (milestoneFreshlyReached)
         {
-            await this._mediator.Publish(
-                new TwitchFollowerMilestoneReached(streamer: streamer, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
-                cancellationToken: cancellationToken);
+            await this._mediator.Publish(new TwitchFollowerMilestoneReached(streamer: streamer, milestoneReached: lastMileStoneReached, nextMilestone: nextMileStone, progress: progress),
+                                         cancellationToken: cancellationToken);
             this._logger.LogWarning($"{streamer}: Woo!! New follower milestone reached {lastMileStoneReached}");
         }
+    }
+
+    private int[] GetFollowerMilestonesInOrder()
+    {
+        return this._options.Milestones.Followers.OrderBy(i => i)
+                   .ToArray();
     }
 }

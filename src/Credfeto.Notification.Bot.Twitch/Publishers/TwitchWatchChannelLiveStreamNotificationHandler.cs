@@ -21,9 +21,14 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandler : INotificat
 
     public ValueTask Handle(TwitchWatchChannel notification, CancellationToken cancellationToken)
     {
-        Streamer streamer = notification.Info.UserName.ToStreamer();
+        Streamer streamer = Streamer(notification);
         this._logger.LogInformation($"{streamer}: Enabling for live status checks");
 
         return this._twitchStreamStatus.EnableAsync(streamer);
+    }
+
+    private static Streamer Streamer(TwitchWatchChannel notification)
+    {
+        return notification.Info.UserName.ToStreamer();
     }
 }
