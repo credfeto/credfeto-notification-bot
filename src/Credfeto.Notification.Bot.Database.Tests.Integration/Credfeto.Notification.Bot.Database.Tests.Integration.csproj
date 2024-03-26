@@ -51,9 +51,9 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Date" Version="1.1.13.250" />
-    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.29.233" />
-    <PackageReference Include="FunFair.Test.Common" Version="6.1.42.380" />
+    <PackageReference Include="Credfeto.Date" Version="1.1.16.295" />
+    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.33.280" />
+    <PackageReference Include="FunFair.Test.Common" Version="6.1.47.409" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
     <PackageReference Include="TeamCity.VSTest.TestAdapter" Version="1.0.40" />
@@ -63,8 +63,8 @@
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="codecracker.CSharp" Version="1.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="coverlet.collector" Version="6.0.1" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="coverlet.msbuild" Version="6.0.1" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="coverlet.msbuild" Version="6.0.2" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Credfeto.Enumeration.Source.Generation" Version="1.1.5.315" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="FunFair.CodeAnalysis" Version="7.0.12.324" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Meziantou.Analyzer" Version="2.0.146" PrivateAssets="All" ExcludeAssets="runtime" />
@@ -76,7 +76,7 @@
     <PackageReference Include="Roslynator.Analyzers" Version="4.12.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SmartAnalyzers.CSharpExtensions.Annotations" Version="4.2.9" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.20.0.85982" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.23.0.88079" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="xunit.analyzers" Version="1.11.0" PrivateAssets="All" ExcludeAssets="runtime" />
