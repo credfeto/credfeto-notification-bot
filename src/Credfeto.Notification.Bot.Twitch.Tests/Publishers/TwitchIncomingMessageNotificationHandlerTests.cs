@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
-using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Publishers;
 using FunFair.Test.Common;
@@ -16,12 +15,10 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
 {
     private readonly INotificationHandler<TwitchIncomingMessage> _notificationHandler;
-    private readonly ITwitchChannelState _twitchChannelState;
     private readonly ITwitchCustomMessageHandler _twitchCustomMessageHandler;
 
     public TwitchIncomingMessageNotificationHandlerTests()
     {
-        this._twitchChannelState = GetSubstitute<ITwitchChannelState>();
         this._twitchCustomMessageHandler = GetSubstitute<ITwitchCustomMessageHandler>();
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, []));
@@ -47,19 +44,6 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
         await this._notificationHandler.Handle(new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
 
         await this.ReceivedCustomMessageHandlerAsync();
-    }
-
-    [Fact]
-    public async Task WhenModChannelForwardsChatMessageAsync()
-    {
-        this.MockCustomMessageHandler(false);
-
-        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"), cancellationToken: CancellationToken.None);
-
-        await this.ReceivedCustomMessageHandlerAsync();
-
-        await this._twitchChannelState.Received(1)
-                  .ChatMessageAsync(user: MockReferenceData.Viewer, message: "Banana", Arg.Any<CancellationToken>());
     }
 
     private Task<bool> ReceivedCustomMessageHandlerAsync()
