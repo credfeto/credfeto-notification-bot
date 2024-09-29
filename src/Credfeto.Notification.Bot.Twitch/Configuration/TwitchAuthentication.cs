@@ -5,25 +5,13 @@ namespace Credfeto.Notification.Bot.Twitch.Configuration;
 public sealed class TwitchAuthentication
 {
     [JsonConstructor]
-    public TwitchAuthentication(string oAuthToken, string userName, string clientId, string clientSecret, string clientAccessToken)
+    public TwitchAuthentication(TwitchAuthenticationChat authenticationChat, TwitchAuthenticationApi api)
     {
-        // Chat
-        this.OAuthToken = oAuthToken;
-        this.UserName = userName;
-
-        // API
-        this.ClientId = clientId;
-        this.ClientSecret = clientSecret;
-        this.ClientAccessToken = clientAccessToken;
+        this.Chat = authenticationChat;
+        this.Api = api;
     }
 
-    public string OAuthToken { get; }
+    public TwitchAuthenticationApi Api { get; }
 
-    public string UserName { get; }
-
-    public string ClientId { get; }
-
-    public string ClientSecret { get; }
-
-    public string ClientAccessToken { get; }
+    public TwitchAuthenticationChat Chat { get; }
 }

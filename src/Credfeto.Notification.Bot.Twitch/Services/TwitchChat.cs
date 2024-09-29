@@ -57,11 +57,12 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         this._joinedStreamers = new();
         this._lastMessage = new();
 
-        ConnectionCredentials credentials = new(twitchUsername: this._options.Authentication.UserName, twitchOAuth: this._options.Authentication.OAuthToken);
+        TwitchAuthenticationChat chatApi = this._options.Authentication.Chat;
+        ConnectionCredentials credentials = new(twitchUsername: chatApi.UserName, twitchOAuth: chatApi.OAuthToken);
 
-        this._client.Initialize(credentials: credentials, [this._options.Authentication.UserName]);
+        this._client.Initialize(credentials: credentials, [this._options.Authentication.Chat.UserName]);
 
-        this._joinedStreamers.TryAdd(Streamer.FromString(this._options.Authentication.UserName), value: true);
+        this._joinedStreamers.TryAdd(Streamer.FromString(this._options.Authentication.Chat.UserName), value: true);
 
         // HEALTH
         this._chatConnected = this.SubscribeToChatConnection();
@@ -82,7 +83,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         this._client.Connect();
         this._connected = true;
 
-        this._client.JoinChannel(this._options.Authentication.UserName);
+        this._client.JoinChannel(this._options.Authentication.Chat.UserName);
     }
 
     public void Dispose()
@@ -105,7 +106,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
     public void LeaveChat(Streamer streamer)
     {
-        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._options.Authentication.UserName, y: streamer.Value))
+        if (StringComparer.InvariantCultureIgnoreCase.Equals(x: this._options.Authentication.Chat.UserName, y: streamer.Value))
         {
             // never leave own channel.
             return;
@@ -228,7 +229,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
             this._lastMessage.TryRemove(key: twitchChatMessage.Streamer, value: out _);
 
-            this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> {this._options.Authentication.UserName} SEND >>> {twitchChatMessage.Message}");
+            this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> {this._options.Authentication.Chat.UserName} SEND >>> {twitchChatMessage.Message}");
 
             this._client.SendMessage(channel: twitchChatMessage.Streamer.Value, message: twitchChatMessage.Message);
 

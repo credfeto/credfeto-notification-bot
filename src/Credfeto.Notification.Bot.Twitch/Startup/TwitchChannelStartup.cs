@@ -33,7 +33,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
 
         this._channels = new[]
             {
-                this._options.Authentication.UserName
+                this._options.Authentication.Chat.UserName
             }.Concat(this._options.ChatCommands.Select(channel => channel.Streamer))
              .Select(Streamer.FromString)
              .Distinct()
@@ -46,7 +46,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken: cancellationToken);
 
         // Explicitly join the bot's own channel
-        this._twitchChat.JoinChat(Streamer.FromString(this._options.Authentication.UserName));
+        this._twitchChat.JoinChat(Streamer.FromString(this._options.Authentication.Chat.UserName));
 
         foreach (Streamer streamer in this._channels)
         {

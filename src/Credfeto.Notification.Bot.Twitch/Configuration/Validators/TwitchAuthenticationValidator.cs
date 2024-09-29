@@ -7,27 +7,14 @@ public sealed class TwitchAuthenticationValidator : AbstractValidator<TwitchAuth
     public TwitchAuthenticationValidator()
     {
         // Chat
-        this.RuleFor(x => x.UserName)
+        this.RuleFor(x => x.Chat)
             .NotNull()
-            .NotEmpty();
+            .NotEmpty()
+            .SetValidator(new TwitchAuthenticationValidatorChat());
 
-        this.RuleFor(x => x.OAuthToken)
+        this.RuleFor(x => x.Api)
             .NotNull()
-            .NotEmpty();
-
-        // Api
-        this.RuleFor(x => x.ClientId)
-            .NotNull()
-            .NotEmpty();
-
-        this.RuleFor(x => x.ClientSecret)
-            .NotNull()
-            .NotEmpty();
-
-#if THIS_IS_NEEDED_IN_FUTURE_APIS
-        this.RuleFor(x=>x.ClientAccessToken)
-            .NotNull()
-            .NotEmpty();
-#endif
+            .NotEmpty()
+            .SetValidator(new TwitchAuthenticationValidatorApi());
     }
 }
