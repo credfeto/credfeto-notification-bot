@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
@@ -7,6 +8,11 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 [DebuggerDisplay("{Streamer.Value}: {Chatter.Value} -  {MatchType}: {Message}")]
 public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch>
 {
+    private const RegexOptions REGEX_OPTIONS = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant |
+                                               RegexOptions.Singleline;
+
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(5);
+
     public TwitchInputMessageMatch(in Streamer streamer, in Viewer chatter, string message, TwitchMessageMatchType matchType)
 
     {
@@ -14,7 +20,10 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
         this.Chatter = chatter;
         this.Message = message;
         this.MatchType = matchType;
+        this.Regex = BuildRegex(expression: message, matchType: matchType);
     }
+
+    public Regex? Regex { get; }
 
     public Streamer Streamer { get; }
 
@@ -36,8 +45,17 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
             return true;
         }
 
-        return this.Streamer.Equals(other.Streamer) && this.Chatter.Equals(other.Chatter) && StringComparer.Ordinal.Equals(x: this.Message, y: other.Message) &&
-               this.MatchType == other.MatchType;
+        return this.Streamer.Equals(other.Streamer) && this.Chatter.Equals(other.Chatter) && StringComparer.Ordinal.Equals(x: this.Message, y: other.Message) && this.MatchType == other.MatchType;
+    }
+
+    private static Regex? BuildRegex(TwitchMessageMatchType matchType, string expression)
+    {
+        if (matchType == TwitchMessageMatchType.REGEX)
+        {
+            return new(pattern: expression, options: REGEX_OPTIONS, matchTimeout: RegexTimeout);
+        }
+
+        return null;
     }
 
     public override bool Equals(object? obj)

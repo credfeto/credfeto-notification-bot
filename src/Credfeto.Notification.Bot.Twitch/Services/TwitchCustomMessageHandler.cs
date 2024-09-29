@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -15,10 +14,7 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 {
-    private const RegexOptions REGEX_OPTIONS = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant |
-                                               RegexOptions.Singleline;
-
-    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(5);
+    private readonly Viewer _chatUser;
 
     private readonly ILogger<TwitchCustomMessageHandler> _logger;
     private readonly IMediator _mediator;
@@ -34,6 +30,8 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         this._twitchMessageTriggerDebounceFilter = twitchMessageTriggerDebounceFilter ?? throw new ArgumentNullException(nameof(twitchMessageTriggerDebounceFilter));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         TwitchBotOptions opts = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+
+        this._chatUser = Viewer.FromString(opts.Authentication.Chat.UserName);
 
         this._twitchMessageTriggers = BuildMessageTriggers(marbles: opts.ChatCommands);
     }
@@ -109,20 +107,25 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
     private bool IsRegexMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
     {
-        if (message.Message.StartsWith(value: "@credfeto", comparisonType: StringComparison.InvariantCultureIgnoreCase))
+        if (trigger.Regex is null)
         {
-            bool isMatch = IsRegexMatch(message: message.Message, pattern: trigger.Message);
+            return false;
+        }
+
+        if (this.IsDirectedAtBot(message))
+        {
+            bool isMatch = trigger.Regex.IsMatch(message.Message);
             this._logger.LogInformation($"{trigger.Streamer}: Checking match \"{trigger.Message}\" : Pattern: \"{trigger.Message}\" : Message: \"{message.Message}\" : Match: {isMatch}");
 
             return isMatch;
         }
 
-        return IsRegexMatch(message: message.Message, pattern: trigger.Message);
+        return trigger.Regex.IsMatch(message.Message);
     }
 
-    private static bool IsRegexMatch(string message, string pattern)
+    private bool IsDirectedAtBot(TwitchIncomingMessage message)
     {
-        return Regex.IsMatch(input: message, pattern: pattern, options: REGEX_OPTIONS, matchTimeout: RegexTimeout);
+        return message.Message.StartsWith("@" + this._chatUser.Value, comparisonType: StringComparison.InvariantCultureIgnoreCase);
     }
 
     private static Dictionary<Streamer, Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>> BuildMessageTriggers(IReadOnlyList<TwitchChatCommand> marbles)
@@ -142,8 +145,9 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             Viewer viewer = Viewer.FromString(marble.Bot);
             Trace.WriteLine($"Adding chat command trigger: {marble.Streamer}");
             TwitchInputMessageMatch trigger = new(streamer: streamer, chatter: viewer, matchType: ConvertMatchType(marble.MatchType.ToUpperInvariant()), message: marble.Match);
+            TwitchOutputMessageMatch response = new(streamer: streamer, message: marble.Issue);
 
-            triggers.TryAdd(key: trigger, new(streamer: streamer, message: marble.Issue));
+            triggers.TryAdd(key: trigger, value: response);
         }
 
         return streamerTriggers;
