@@ -112,15 +112,14 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             return false;
         }
 
+        bool isMatch = trigger.Regex.IsMatch(message.Message);
+
         if (this.IsDirectedAtBot(message))
         {
-            bool isMatch = trigger.Regex.IsMatch(message.Message);
             this._logger.LogInformation($"{trigger.Streamer}: Checking match \"{trigger.Message}\" : Pattern: \"{trigger.Message}\" : Message: \"{message.Message}\" : Match: {isMatch}");
-
-            return isMatch;
         }
 
-        return trigger.Regex.IsMatch(message.Message);
+        return isMatch;
     }
 
     private bool IsDirectedAtBot(TwitchIncomingMessage message)
@@ -138,7 +137,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
             if (!streamerTriggers.TryGetValue(key: streamer, out Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>? triggers))
             {
-                triggers = new();
+                triggers = [];
                 streamerTriggers.Add(key: streamer, value: triggers);
             }
 

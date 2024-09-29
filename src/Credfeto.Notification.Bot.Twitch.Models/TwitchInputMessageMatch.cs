@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
@@ -12,6 +13,8 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
                                                RegexOptions.Singleline;
 
     private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(5);
+
+    private static readonly Dictionary<string, Regex> RegexCache = new(StringComparer.Ordinal);
 
     public TwitchInputMessageMatch(in Streamer streamer, in Viewer chatter, string message, TwitchMessageMatchType matchType)
 
@@ -52,7 +55,15 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
     {
         if (matchType == TwitchMessageMatchType.REGEX)
         {
-            return new(pattern: expression, options: REGEX_OPTIONS, matchTimeout: RegexTimeout);
+            if (RegexCache.TryGetValue(key: expression, out Regex? regex))
+            {
+                return regex;
+            }
+
+            regex = new(pattern: expression, options: REGEX_OPTIONS, matchTimeout: RegexTimeout);
+            RegexCache.Add(key: expression, value: regex);
+
+            return regex;
         }
 
         return null;
