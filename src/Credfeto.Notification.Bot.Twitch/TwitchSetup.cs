@@ -54,6 +54,7 @@ public static class TwitchSetup
                        .AddSingleton<ITwitchCustomMessageHandler, TwitchCustomMessageHandler>()
                        .AddSingleton<ITwitchMessageTriggerDebounceFilter, TwitchMessageTriggerDebounceFilter>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
+                       .AddSingleton<ITwitchStreamStateManager, TwitchStreamStateManager>()
                        .AddSingleton<IUserInfoService, UserInfoService>();
     }
 

@@ -42,14 +42,15 @@ public sealed class TwitchChannelState : ITwitchChannelState
         this._stream = null;
     }
 
-    [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0051:Method is too long", Justification = "Mainly logging")]
-    public ValueTask ChatMessageAsync(Viewer user, string message, CancellationToken cancellationToken)
+    public bool Chatted
     {
-        if (this._stream == null)
+        get => this._stream?.UserChatted == true;
+        set
         {
-            this._logger.LogDebug($"{this.Streamer}: Message from {user} while stream offline");
+            if (this._stream != null)
+            {
+                this._stream.UserChatted = value;
+            }
         }
-
-        return ValueTask.CompletedTask;
     }
 }

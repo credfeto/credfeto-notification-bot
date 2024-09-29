@@ -15,4 +15,6 @@ internal sealed class ActiveStream
     public string GameName { get; }
 
     public DateTimeOffset StartedAt { get; }
+
+    public bool UserChatted { get; set; }
 }

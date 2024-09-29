@@ -11,9 +11,9 @@ public interface ITwitchChannelState
 
     bool IsOnline { get; }
 
+    bool Chatted { get; set; }
+
     ValueTask OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken);
 
     void Offline();
-
-    ValueTask ChatMessageAsync(Viewer user, string message, CancellationToken cancellationToken);
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Mediator;
@@ -43,12 +44,20 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     [SuppressMessage(category: "ReSharper", checkId: "PrivateFieldCanBeConvertedToLocalVariable", Justification = "TODO: Review")]
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
+    private readonly ITwitchStreamStateManager _twitchStreamStateManager;
+
     private bool _connected;
 
-    public TwitchChat(IOptions<TwitchBotOptions> options, IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, IMediator mediator, ITwitchClient twitchClient, ILogger<TwitchChat> logger)
+    public TwitchChat(IOptions<TwitchBotOptions> options,
+                      IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+                      IMediator mediator,
+                      ITwitchClient twitchClient,
+                      ITwitchStreamStateManager twitchStreamStateManager,
+                      ILogger<TwitchChat> logger)
     {
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this._twitchStreamStateManager = twitchStreamStateManager ?? throw new ArgumentNullException(nameof(twitchStreamStateManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
@@ -288,14 +297,24 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                    .ToArray();
     }
 
-    private Task OnMessageReceivedAsync(OnMessageReceivedArgs e, in CancellationToken cancellationToken)
+    private async Task OnMessageReceivedAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
         Viewer viewer = Viewer.FromString(e.ChatMessage.Username);
 
-        string message = e.ChatMessage.Message;
+        ITwitchChannelState state = this._twitchStreamStateManager.Get(streamer);
 
-        return this.HandleChatMessageAsync(streamer: streamer, viewer: viewer, message: message, cancellationToken: cancellationToken);
+        if (StringComparer.OrdinalIgnoreCase.Equals(x: viewer.Value, y: this._options.Authentication.Chat.UserName))
+        {
+            state.Chatted = true;
+        }
+
+        if (state.Chatted)
+        {
+            string message = e.ChatMessage.Message;
+
+            await this.HandleChatMessageAsync(streamer: streamer, viewer: viewer, message: message, cancellationToken: cancellationToken);
+        }
     }
 
     private async Task HandleChatMessageAsync(Streamer streamer, Viewer viewer, string message, CancellationToken cancellationToken)
