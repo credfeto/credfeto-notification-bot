@@ -1,7 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Credfeto.Database.Pgsql;
-using Credfeto.Notification.Bot.Discord;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 
 namespace Credfeto.Notification.Bot.Server.Helpers;
@@ -12,7 +11,6 @@ namespace Credfeto.Notification.Bot.Server.Helpers;
                              DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                              WriteIndented = false,
                              IncludeFields = false)]
-[JsonSerializable(typeof(DiscordBotOptions))]
 [JsonSerializable(typeof(TwitchBotOptions))]
 [JsonSerializable(typeof(PgsqlServerConfiguration))]
 internal sealed partial class ServerConfigurationSerializationContext : JsonSerializerContext

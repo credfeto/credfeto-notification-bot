@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration.Validators;
 
-public sealed class TwitchMarblesValidator : AbstractValidator<TwitchChatCommand>
+public sealed class TwitchChatCommandValidator : AbstractValidator<TwitchChatCommand>
 {
-    public TwitchMarblesValidator()
+    public TwitchChatCommandValidator()
     {
         this.RuleFor(x => x.Streamer)
             .NotNull()

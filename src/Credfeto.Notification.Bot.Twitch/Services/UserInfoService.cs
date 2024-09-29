@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Configuration;
-using Credfeto.Notification.Bot.Twitch.Data.Interfaces;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
@@ -22,13 +21,9 @@ public sealed class UserInfoService : IUserInfoService
 
     private readonly ConcurrentDictionary<Viewer, TwitchUser?> _cache;
     private readonly ILogger<UserInfoService> _logger;
-    private readonly ITwitchStreamerDataManager _twitchStreamerDataManager;
-    private readonly ITwitchViewerDataManager _twitchViewerDataManager;
 
-    public UserInfoService(IOptions<TwitchBotOptions> options, ITwitchStreamerDataManager twitchStreamerDataManager, ITwitchViewerDataManager twitchViewerDataManager, ILogger<UserInfoService> logger)
+    public UserInfoService(IOptions<TwitchBotOptions> options, ILogger<UserInfoService> logger)
     {
-        this._twitchStreamerDataManager = twitchStreamerDataManager ?? throw new ArgumentNullException(nameof(twitchStreamerDataManager));
-        this._twitchViewerDataManager = twitchViewerDataManager ?? throw new ArgumentNullException(nameof(twitchViewerDataManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         TwitchBotOptions apiOptions = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
@@ -48,8 +43,6 @@ public sealed class UserInfoService : IUserInfoService
         {
             return user;
         }
-
-        user = await this.GetUserFromDatabaseAsync(userName: userName, cancellationToken: cancellationToken);
 
         if (user != null)
         {
@@ -73,15 +66,6 @@ public sealed class UserInfoService : IUserInfoService
             user = ConvertUser(result.Users[0]);
             this._cache.TryAdd(key: userName, value: user);
 
-            if (user.IsStreamer)
-            {
-                await this._twitchStreamerDataManager.AddStreamerAsync(user.UserName.ToStreamer(), streamerId: user.Id, startedStreaming: user.DateCreated, cancellationToken: cancellationToken);
-            }
-            else
-            {
-                await this._twitchViewerDataManager.AddViewerAsync(viewerName: user.UserName, viewerId: user.Id, dateCreated: user.DateCreated, cancellationToken: cancellationToken);
-            }
-
             return user;
         }
         catch (Exception exception)
@@ -95,12 +79,6 @@ public sealed class UserInfoService : IUserInfoService
     private Task<GetUsersResponse> GetUsersAsync(in Viewer userName)
     {
         return this._api.Helix.Users.GetUsersAsync(logins: [userName.Value]);
-    }
-
-    private async Task<TwitchUser?> GetUserFromDatabaseAsync(Viewer userName, CancellationToken cancellationToken)
-    {
-        return await this._twitchStreamerDataManager.GetByUserNameAsync(userName: userName, cancellationToken: cancellationToken) ??
-               await this._twitchViewerDataManager.GetByUserNameAsync(userName: userName, cancellationToken: cancellationToken);
     }
 
     private static TwitchUser ConvertUser(User user)

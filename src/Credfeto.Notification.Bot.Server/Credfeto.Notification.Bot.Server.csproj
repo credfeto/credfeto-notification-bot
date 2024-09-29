@@ -55,8 +55,6 @@
     <TrimmerRootAssembly Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Database\Credfeto.Notification.Bot.Database.csproj" />
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Discord\Credfeto.Notification.Bot.Discord.csproj" />
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>

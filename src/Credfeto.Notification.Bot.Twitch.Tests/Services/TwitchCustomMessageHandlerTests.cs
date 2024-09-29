@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
@@ -27,17 +26,9 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
         Viewer viewer = IncomingMessage.Chatter;
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
-                                                   milestones: MockReferenceData.TwitchMilestones,
-                                                   ignoredUsers: MockReferenceData.IgnoredUsers,
-                                                   chatCommands:
-                                                   [
-                                                       new(streamer: streamer.Value,
-                                                           bot: viewer.Value,
-                                                           match: "!play",
-                                                           matchType: TwitchMessageMatchType.EXACT.GetName(),
-                                                           issue: "!play")
-                                                   ],
-                                                   channels: Array.Empty<TwitchModChannel>()));
+        [
+            new(streamer: streamer.Value, bot: viewer.Value, match: "!play", matchType: TwitchMessageMatchType.EXACT.GetName(), issue: "!play")
+        ]));
 
         this._mediator = GetSubstitute<IMediator>();
         this._twitchMessageTriggerDebounceFilter = GetSubstitute<ITwitchMessageTriggerDebounceFilter>();

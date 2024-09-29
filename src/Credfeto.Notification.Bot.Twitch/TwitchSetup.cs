@@ -24,14 +24,8 @@ public static class TwitchSetup
         return services.AddTwitchLib()
                        .AddServices()
                        .AddActions()
-                       .AddHttpClients()
                        .AddStartupServices()
                        .AddBackgroundServices();
-    }
-
-    private static IServiceCollection AddHttpClients(this IServiceCollection services)
-    {
-        return ChannelFollowCount.RegisterHttpClient(services);
     }
 
     private static IServiceCollection AddTwitchLib(this IServiceCollection services)
@@ -45,40 +39,29 @@ public static class TwitchSetup
     {
         return new WebSocketClient(new ClientOptions
                                    {
-                                       MessagesAllowedInPeriod = 750,
-                                       ThrottlingPeriod = TimeSpan.FromSeconds(30),
-                                       ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
+                                       MessagesAllowedInPeriod = 750, ThrottlingPeriod = TimeSpan.FromSeconds(30), ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null)
                                    });
     }
 
     private static IServiceCollection AddActions(this IServiceCollection services)
     {
-        return services.AddSingleton<IRaidWelcome, RaidWelcome>()
-                       .AddSingleton<ICustomTriggeredMessageSender, CustomTriggeredMessageSender>()
-                       .AddSingleton<IShoutoutJoiner, ShoutoutJoiner>()
-                       .AddSingleton<IContributionThanks, ContributionThanks>()
-                       .AddSingleton<IWelcomeWaggon, WelcomeWaggon>();
+        return services.AddSingleton<ICustomTriggeredMessageSender, CustomTriggeredMessageSender>();
     }
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
-        return services.AddSingleton<ITwitchChannelManager, TwitchChannelManager>()
-                       .AddSingleton<ITwitchChat, TwitchChat>()
+        return services.AddSingleton<ITwitchChat, TwitchChat>()
                        .AddSingleton<ITwitchCustomMessageHandler, TwitchCustomMessageHandler>()
                        .AddSingleton<ITwitchMessageTriggerDebounceFilter, TwitchMessageTriggerDebounceFilter>()
                        .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
                        .AddSingleton<IUserInfoService, UserInfoService>()
-                       .AddSingleton<ITwitchFollowerDetector, TwitchFollowerDetector>()
-                       .AddSingleton<IChannelFollowCount, ChannelFollowCount>()
-                       .AddSingleton<IFollowerMilestone, FollowerMilestone>()
                        .AddSingleton<ITwitchChatMessageGenerator, TwitchChatMessageGenerator>();
     }
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
     {
         return services.AddHostedService<UpdateTwitchLiveStatusWorker>()
-                       .AddHostedService<RestoreTwitchChatConnectionWorker>()
-                       .AddHostedService<FollowersWorker>();
+                       .AddHostedService<RestoreTwitchChatConnectionWorker>();
     }
 
     private static IServiceCollection AddStartupServices(this IServiceCollection services)

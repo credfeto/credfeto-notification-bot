@@ -5,8 +5,6 @@ using Credfeto.Database.Pgsql.Validators;
 using Credfeto.Date;
 using Credfeto.Extensions.Configuration.Typed.Json;
 using Credfeto.Extensions.Configuration.Typed.Json.Exceptions;
-using Credfeto.Notification.Bot.Database;
-using Credfeto.Notification.Bot.Discord;
 using Credfeto.Notification.Bot.Server.Helpers;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch;
@@ -39,9 +37,6 @@ internal static class Service
                 .AddRandomNumbers()
                 .AddResources()
                 .AddRunOnStartupServices()
-                .AddPostgresql()
-                .AddApplicationDatabase()
-                .AddDiscord()
                 .AddTwitch();
     }
 
@@ -57,12 +52,7 @@ internal static class Service
                            .WithConfiguration<PgsqlServerConfigurationValidator, PgsqlServerConfiguration>(configurationRoot: configurationRoot,
                                                                                                            key: "Database:Postgres",
                                                                                                            jsonSerializerContext: jsonSerializerContext)
-                           .WithConfiguration<DiscordBotOptionsValidator, DiscordBotOptions>(configurationRoot: configurationRoot,
-                                                                                             key: "Discord",
-                                                                                             jsonSerializerContext: jsonSerializerContext)
-                           .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot,
-                                                                                           key: "Twitch",
-                                                                                           jsonSerializerContext: jsonSerializerContext);
+                           .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot, key: "Twitch", jsonSerializerContext: jsonSerializerContext);
         }
         catch (ConfigurationErrorsException exception)
         {

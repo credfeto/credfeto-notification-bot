@@ -65,4 +65,8 @@
     <PackageReference Include="ToStringWithoutOverrideAnalyzer" Version="0.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="xunit.analyzers" Version="1.11.0" PrivateAssets="All" ExcludeAssets="runtime" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Actions\"/>
+    <Folder Include="StreamState\"/>
+  </ItemGroup>
 </Project>
