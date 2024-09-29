@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Text.Json.Serialization;
-using Credfeto.Database.Pgsql;
-using Credfeto.Database.Pgsql.Validators;
 using Credfeto.Date;
 using Credfeto.Extensions.Configuration.Typed.Json;
 using Credfeto.Extensions.Configuration.Typed.Json.Exceptions;
@@ -49,9 +47,6 @@ internal static class Service
         try
         {
             return services.AddOptions()
-                           .WithConfiguration<PgsqlServerConfigurationValidator, PgsqlServerConfiguration>(configurationRoot: configurationRoot,
-                                                                                                           key: "Database:Postgres",
-                                                                                                           jsonSerializerContext: jsonSerializerContext)
                            .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot, key: "Twitch", jsonSerializerContext: jsonSerializerContext);
         }
         catch (ConfigurationErrorsException exception)

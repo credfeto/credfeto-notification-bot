@@ -5,9 +5,9 @@ namespace Credfeto.Notification.Bot.Twitch.Configuration;
 public sealed class TwitchAuthentication
 {
     [JsonConstructor]
-    public TwitchAuthentication(TwitchAuthenticationChat authenticationChat, TwitchAuthenticationApi api)
+    public TwitchAuthentication(TwitchAuthenticationChat chat, TwitchAuthenticationApi api)
     {
-        this.Chat = authenticationChat;
+        this.Chat = chat;
         this.Api = api;
     }
 

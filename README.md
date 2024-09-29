@@ -37,59 +37,20 @@ e.g: https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=clientI
 
  ```json
 {
-  "Database": {
-    "Postgres": {
-      "ConnectionString": "[Connection string to postgres DB]"
-    }
-  },
-  "Discord": {
-    "Token": "[Discord Bot User Token goes here]"
-  },
-  "Twitch": {
-    "Authentication": {
-      "UserName": "[Twitch Chat Bot Username goes here]",
-      "OAuthToken": "[Twitch Chat Bot OAUth Token goes here]",
-      "ClientId": "[Twitch API Client Id goes here]",
-      "ClientSecret": "[Twitch API Client Secret goes here]",
-      "ClientAccessToken": "[Twitch API Client Access Token goes here]"
-    },
-    "Channels": [
-      "[Channel 1 name to react with goes here]",
-      "[Channel 2 name to react with goes here]"
-    ],
-    "ShoutOuts": [
-      {
-        "Channel": "[Channel 1 name to issue shout-outs for with goes here]",
-        "FriendChannels": [
-          {
-              "Channel": "[Channel 1 friend channel to issue shoutout for goes here - using custom shoutout format]",
-              "Message": "Check out https://www.twitch.tv/[Channel 1 friend channel to issue shoutout for goes here] who streams wallpaper drying"
-          },
-          {
-            "Channel": "[Channel 1 friend channel to issue shoutout for goes here - uses standard shoutout format]",
-            "Message": null
-          }
-        ]
+   "Twitch": {
+      "Authentication": {
+         "Chat": {
+            "UserName": "[Twitch Chat Bot Username goes here]",
+            "OAuthToken": "[Twitch Chat Bot OAUth Token goes here]"
+         },
+         "Api": {
+            "ClientId": "[Twitch API Client Id goes here]",
+            "ClientSecret": "[Twitch API Client Secret goes here]",
+            "ClientAccessToken": "[Twitch API Client Access Token goes here]"
+         }
       },
-      {
-        "Channel": "[Channel 2 name to issue shout-outs for with goes here]",
-        "FriendChannels": [
-          {
-            "Channel": "[Channel 2 friend channel to issue shoutout for goes here - using custom shoutout format]",
-            "Message": "Check out https://www.twitch.tv/[Channel 2 friend channel to issue shoutout for goes here] who streams wallpaper drying"
-          },
-          {
-            "Channel": "[Channel 2 friend channel to issue shoutout for goes here - uses standard shoutout format]",
-            "Message": null
-          }
-        ]
-      }
-    ],
-    "Raids": [
-      "[Channel 1 name to issue raid welcomes for with goes here]",
-      "[Channel 2 name to issue raid welcomes for with goes here]"
-    ]
-  }
+      "ChatCommands": []
+   }
 }
 ```
 
