@@ -22,8 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
+
       - name: "Info"
         uses: actions/github-script@v7.0.1
         with:
@@ -38,6 +40,7 @@ jobs:
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: "Initialise Workspace"
+#        if: startsWith(runner.name, 'buildagent-')
 #        shell: bash
 #        run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 #      - name: "Checkout Source"
@@ -59,6 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -87,6 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -105,7 +110,7 @@ jobs:
 
       - name: "Install dotnet"
         if: (github.actor != 'dependabot[bot]' && !endsWith(github.repository , '-template'))
-        uses: actions/setup-dotnet@v4.0.0
+        uses: actions/setup-dotnet@v4.0.1
         env:
           GITHUB_TOKEN: ${{secrets.SOURCE_PUSH_TOKEN}}
           DDOTNET_ROOT: "${{github.workspace}}/.dotnet/${{github.sha}}-${{github.run_id}}-${{github.run_number}}-${{github.run_attempt}}"
@@ -113,8 +118,10 @@ jobs:
           DOTNET_MULTILEVEL_LOOKUP: "false"
           DOTNET_NOLOGO: "true"
           DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+          DOTNET_JitCollect64BitCounts: "1"
           DOTNET_ReadyToRun: "0"
           DOTNET_TC_QuickJitForLoops: "1"
+          DOTNET_TC_CallCountingDelayMs: "0"
           DOTNET_TieredPGO: "1"
           MSBUILDTERMINALLOGGER: "auto"
         with:
@@ -163,8 +170,10 @@ jobs:
           DOTNET_MULTILEVEL_LOOKUP: "false"
           DOTNET_NOLOGO: "true"
           DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+          DOTNET_JitCollect64BitCounts: "1"
           DOTNET_ReadyToRun: "0"
           DOTNET_TC_QuickJitForLoops: "1"
+          DOTNET_TC_CallCountingDelayMs: "0"
           DOTNET_TieredPGO: "1"
           MSBUILDTERMINALLOGGER: "auto"
 
@@ -185,8 +194,10 @@ jobs:
           DOTNET_MULTILEVEL_LOOKUP: "false"
           DOTNET_NOLOGO: "true"
           DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+          DOTNET_JitCollect64BitCounts: "1"
           DOTNET_ReadyToRun: "0"
           DOTNET_TC_QuickJitForLoops: "1"
+          DOTNET_TC_CallCountingDelayMs: "0"
           DOTNET_TieredPGO: "1"
           MSBUILDTERMINALLOGGER: "auto"
 
@@ -195,6 +206,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -220,6 +232,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -237,6 +250,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -254,6 +268,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -272,10 +287,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
-      - uses: credfeto/action-repo-visibility@v1.2.0
+      - name: "Check repo visibility"
+        uses: credfeto/action-repo-visibility@v1.2.0
         id: visibility
         with:
           # optional parameter defaults to the current repo
@@ -292,7 +309,7 @@ jobs:
 
       - name: 'Dependency Review'
         if: steps.visibility.outputs.is_public == 'true'
-        uses: actions/dependency-review-action@v4.2.5
+        uses: actions/dependency-review-action@v4.3.4
 
   no-merge-commits:
     # Check that there are no merge commits in the PR
@@ -300,6 +317,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -319,6 +337,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -329,7 +348,7 @@ jobs:
           fetch-tags: true
 
       - name: "Run Linter"
-        uses: github/super-linter@v5.0.0
+        uses: github/super-linter@v7
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{secrets.SOURCE_PUSH_TOKEN}}
