@@ -21,8 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
+
       - name: "Info"
         uses: actions/github-script@v7.0.1
         with:
@@ -43,9 +45,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
-      - uses: actions/labeler@v5
+
+      - name: "Add Labels"
+        uses: actions/labeler@v5
         with:
           repo-token: ${{secrets.SOURCE_PUSH_TOKEN}}
           configuration-path: .github/labeler.yml
@@ -60,8 +65,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
+
       - name: "Assign PR to the creator"
         uses: thomaseizinger/assign-pr-creator-action@v1.0.0
         with:
