@@ -18,14 +18,14 @@ runs:
       run: echo "Create SBOM..."
 
     - name: "Create SBOM"
-      uses: anchore/sbom-action@v0.15.8
+      uses: anchore/sbom-action@v0.15.10
       with:
         github-token: ${{inputs.GITHUB_TOKEN}}
         format: spdx-json
         output-file: "${{ github.event.repository.name }}-sbom.spdx.json"
         config: "${{ github.workspace }}.github/linters/syft.yml"
 
-    - name: "Create SBOM"
+    - name: "Log SBOM filename"
       shell: bash
       run: |
         echo "Output ${{ github.event.repository.name }}-sbom.spdx.json"
@@ -55,7 +55,7 @@ runs:
 
     - name: "Scan SBOM (private repo)"
       uses: anchore/scan-action@v3.6.4
-      if: always()
+      if: inputs.REPO_VISIBILITY == 'private'
       with:
         sbom: "${{ github.event.repository.name }}-sbom.spdx.json"
         fail-build: false
