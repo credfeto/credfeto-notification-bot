@@ -1,64 +1,52 @@
+".NET update":
+ - any: [ 'src/global.json' ]
 "C#":
  - any: [ './**/*.cs', './**/*.csproj' ]
 "C# Project":
  - any: [ './**/*.csproj' ]
 "C# Solution":
  - any: [ './**/*.sln' ]
-"Powershell":
- - any: [ './**/*.ps1', './**/*.psm1' ]
-"SQL":
- - any: [ 'db/**/*', './**/*.sql' ]
-"Solidity":
- - any: [ './**/*.sol' ]
-"unit-tests":
- - any: [ 'src/*.Tests.*/**/*', 'src/*.Tests/**/*', 'src/*.Tests.Integration.*/**/*', 'src/*.Tests.Integration/**/*' ]
-".NET update":
- - any: [ 'src/global.json' ]
-"Config Change":
- - any: [ 'src/**/*.json', '!src/global.json' ]
-"Static Code Analysis Rules":
- - any: [ 'src/CodeAnalysis.ruleset' ]
-"Migration Script":
- - any: [ 'tools/MigrationScripts/**/*' ]
-"Legal Text":
- - any: [ 'tools/LegalText/**/*' ]
 "Change Log":
  - any: [ 'CHANGELOG.md' ]
+"Config Change":
+ - any: [ 'src/**/*.json', '!src/global.json' ]
+"credfeto-notification-bot-mocks":
+ - any: [ 'src/$Credfeto.Notification.Bot.Mocks/**/*' ]
+"credfeto-notification-bot-server":
+ - any: [ 'src/$Credfeto.Notification.Bot.Server/**/*' ]
+"credfeto-notification-bot-shared":
+ - any: [ 'src/$Credfeto.Notification.Bot.Shared/**/*' ]
+"credfeto-notification-bot-shared-tests":
+ - any: [ 'src/$Credfeto.Notification.Bot.Shared.Tests/**/*' ]
+"credfeto-notification-bot-twitch":
+ - any: [ 'src/$Credfeto.Notification.Bot.Twitch/**/*' ]
+"credfeto-notification-bot-twitch-datatypes":
+ - any: [ 'src/$Credfeto.Notification.Bot.Twitch.DataTypes/**/*' ]
+"credfeto-notification-bot-twitch-interfaces":
+ - any: [ 'src/$Credfeto.Notification.Bot.Twitch.Interfaces/**/*' ]
+"credfeto-notification-bot-twitch-models":
+ - any: [ 'src/$Credfeto.Notification.Bot.Twitch.Models/**/*' ]
+"credfeto-notification-bot-twitch-tests":
+ - any: [ 'src/$Credfeto.Notification.Bot.Twitch.Tests/**/*' ]
+"github-actions":
+ - any: [ '.github/workflows/*.yml' ]
+"Legal Text":
+ - any: [ 'tools/LegalText/**/*' ]
+"Markdown":
+ - any: [ './**/*.md' ]
+"Migration Script":
+ - any: [ 'tools/MigrationScripts/**/*' ]
+"Powershell":
+ - any: [ './**/*.ps1', './**/*.psm1' ]
 "Read Me":
  - any: [ 'README.md' ]
 "Setup":
  - any: [ 'SETUP.md' ]
-"Markdown":
- - any: [ './**/*.md' ]
-"github-actions":
- - any: [ '.github/workflows/*.yml' ]
-"Database":
- - any: [ 'src/Credfeto.Notification.Bot.Database/**/*' ]
-"Database.Tests":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Tests/**/*' ]
-"Database.Tests.Integration":
- - any: [ 'src/Credfeto.Notification.Bot.Database.Tests.Integration/**/*' ]
-"Discord":
- - any: [ 'src/Credfeto.Notification.Bot.Discord/**/*' ]
-"Discord.Models":
- - any: [ 'src/Credfeto.Notification.Bot.Discord.Models/**/*' ]
-"Mocks":
- - any: [ 'src/Credfeto.Notification.Bot.Mocks/**/*' ]
-"Server":
- - any: [ 'src/Credfeto.Notification.Bot.Server/**/*' ]
-"Shared":
- - any: [ 'src/Credfeto.Notification.Bot.Shared/**/*' ]
-"Shared.Tests":
- - any: [ 'src/Credfeto.Notification.Bot.Shared.Tests/**/*' ]
-"Twitch":
- - any: [ 'src/Credfeto.Notification.Bot.Twitch/**/*' ]
-"Twitch.Data.Interfaces":
- - any: [ 'src/Credfeto.Notification.Bot.Twitch.Data.Interfaces/**/*' ]
-"Twitch.DataTypes":
- - any: [ 'src/Credfeto.Notification.Bot.Twitch.DataTypes/**/*' ]
-"Twitch.Interfaces":
- - any: [ 'src/Credfeto.Notification.Bot.Twitch.Interfaces/**/*' ]
-"Twitch.Models":
- - any: [ 'src/Credfeto.Notification.Bot.Twitch.Models/**/*' ]
-"Twitch.Tests":
- - any: [ 'src/Credfeto.Notification.Bot.Twitch.Tests/**/*' ]
+"Solidity":
+ - any: [ './**/*.sol' ]
+"SQL":
+ - any: [ './**/*.sql', 'db/**/*' ]
+"Static Code Analysis Rules":
+ - any: [ 'src/CodeAnalysis.ruleset' ]
+"unit-tests":
+ - any: [ 'src/*.Tests.*/**/*', 'src/*.Tests.Integration.*/**/*', 'src/*.Tests.Integration/**/*', 'src/*.Tests/**/*' ]
