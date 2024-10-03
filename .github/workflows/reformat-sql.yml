@@ -29,6 +29,7 @@ jobs:
 
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -43,7 +44,7 @@ jobs:
         uses: credfeto/action-sql-format@v1.5.1
 
       - name: "Commit Changes"
-        uses: stefanzweifel/git-auto-commit-action@v5.0.0
+        uses: stefanzweifel/git-auto-commit-action@v5.0.1
         with:
           commit_message: "[Reformat] SQL Files to common format"
           file_pattern: "*.sql"
