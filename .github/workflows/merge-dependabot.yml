@@ -15,11 +15,11 @@ on:
       - reopened
       - unlocked
   pull_request_review:
-      types:
-        - submitted
+    types:
+      - submitted
   check_suite:
-      types:
-        - completed
+    types:
+      - completed
   status: { }
 
 jobs:
@@ -37,16 +37,19 @@ jobs:
 
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
+
       - name: "Check Owner"
         uses: actions/github-script@v7.0.1
         with:
           script: |
             core.info('Owner: ${{github.repository_owner}}');
+
       - name: "Auto-Merge"
         if: github.repository_owner == 'funfair-tech'
-        uses: pascalgn/automerge-action@v0.16.2
+        uses: pascalgn/automerge-action@v0.16.4
         env:
           GITHUB_TOKEN: ${{secrets.SOURCE_PUSH_TOKEN}}
           MERGE_METHOD: merge
