@@ -37,8 +37,6 @@ public sealed class UpdateTwitchLiveStatusWorker : BackgroundService
         catch (Exception e)
         {
             this._logger.LogError(new(e.HResult), exception: e, message: "Failed to update twitch status");
-
-            throw;
         }
     }
 }
