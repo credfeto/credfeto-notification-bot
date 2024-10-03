@@ -39,6 +39,9 @@ inputs:
   BUILD_SQL:
     description: 'Whether to build SQL DB'
     required: true
+  DB_FOLDER:
+    description: 'Folder where SQL Files live'
+    required: false
 
   # GENERAL
   GITHUB_TOKEN:
@@ -48,12 +51,9 @@ inputs:
     description: 'Visibility of the repo'
     required: true
 
-  # Octopus
-  OCTOPUS_DEPLOY_PACKAGE:
+  # DEPLOYMENT
+  PROJECT_TO_PUBLISH:
     description: 'Package (root) to deploy'
-    required: false
-  OCTOPUS_DEPLOY_PACKAGE_ZIP:
-    description: 'Package (root) to deploy when zipped'
     required: false
 
 runs:
@@ -68,13 +68,19 @@ runs:
     if: env.Release == 'false'
     working-directory: ${{github.workspace}}/src
     shell: bash
-    run: echo "DOTNET_RELEASE_DEFINES=/p:IsProduction=false" >> "$GITHUB_ENV"
+    run: echo "DOTNET_RELEASE_DEFINES=-p:IsProduction=false" >> "$GITHUB_ENV"
 
   - name: "Dotnet: Define Release build settings"
     if: env.Release == 'false'
     working-directory: ${{github.workspace}}/src
     shell: bash
-    run: echo "DOTNET_RELEASE_DEFINES=/p:IsProduction=True" >> "$GITHUB_ENV"
+    run: echo "DOTNET_RELEASE_DEFINES=-p:IsProduction=True" >> "$GITHUB_ENV"
+
+  - name: "Dotnet: Run build check (Pre-Release)"
+    if: ${{ (!endsWith(github.repository, 'funfair-build-check')) && (!endsWith(github.repository, '-template')) }}
+    uses: ./.github/actions/build-check
+    with:
+      GITHUB_TOKEN: ${{inputs.GITHUB_TOKEN}}
 
   - name: "Dotnet: Restore packages"
     working-directory: ${{github.workspace}}/src
@@ -86,15 +92,17 @@ runs:
       DOTNET_MULTILEVEL_LOOKUP: "false"
       DOTNET_NOLOGO: "true"
       DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+      DOTNET_JitCollect64BitCounts: "1"
       DOTNET_ReadyToRun: "0"
       DOTNET_TC_QuickJitForLoops: "1"
+      DOTNET_TC_CallCountingDelayMs: "0"
       DOTNET_TieredPGO: "1"
       MSBUILDTERMINALLOGGER: "auto"
 
   - name: "Dotnet: Build (Non-Release)"
     working-directory: ${{github.workspace}}/src
     shell: bash
-    run: dotnet build --configuration Release "/p:Version=${{inputs.BUILD_VERSION}}" "/p:EnableSarif=True" "/p:IsProduction=${{inputs.PRODUCTION_BUILD}}" -nodeReuse:False -p:NoWarn=MSB4241 -p:SuppressNETCoreSdkPreviewMessage=true ${{env.DOTNET_RELEASE_DEFINES}}
+    run: dotnet build --no-restore --configuration Release "-p:Version=${{inputs.BUILD_VERSION}}" "-p:EnableSarif=True" "-p:IsProduction=${{inputs.PRODUCTION_BUILD}}" -nodeReuse:False -p:NoWarn=MSB4241 -p:SuppressNETCoreSdkPreviewMessage=true ${{env.DOTNET_RELEASE_DEFINES}}
     env:
       ReleaseNotes: ${{inputs.RELEASE_NOTES}}
       DOTNET_ROOT: "${{github.workspace}}/.dotnet/${{github.sha}}-${{github.run_id}}-${{github.run_number}}-${{github.run_attempt}}"
@@ -102,8 +110,10 @@ runs:
       DOTNET_MULTILEVEL_LOOKUP: "false"
       DOTNET_NOLOGO: "true"
       DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+      DOTNET_JitCollect64BitCounts: "1"
       DOTNET_ReadyToRun: "0"
       DOTNET_TC_QuickJitForLoops: "1"
+      DOTNET_TC_CallCountingDelayMs: "0"
       DOTNET_TieredPGO: "1"
       MSBUILDTERMINALLOGGER: "auto"
 
@@ -111,7 +121,7 @@ runs:
   - name: "Dotnet: Test"
     working-directory: ${{github.workspace}}/src
     shell: bash
-    run: dotnet test --no-build --no-restore -noConsoleLogger --configuration Release "/p:Version=${{inputs.BUILD_VERSION}}" "/p:IsProduction=${{inputs.PRODUCTION_BUILD}}" --filter FullyQualifiedName\!~Integration --logger:"trx;LogFilePrefix=testResults" --results-directory ../test-results -nodeReuse:False -p:NoWarn=MSB4241 -p:SuppressNETCoreSdkPreviewMessage=true
+    run: dotnet test --no-build --no-restore -noConsoleLogger --configuration Release "-p:Version=${{inputs.BUILD_VERSION}}" "-p:IsProduction=${{inputs.PRODUCTION_BUILD}}" --filter FullyQualifiedName\!~Integration --logger:"trx;LogFilePrefix=testResults" --results-directory ../test-results -nodeReuse:False -p:NoWarn=MSB4241 -p:SuppressNETCoreSdkPreviewMessage=true
     env:
       ReleaseNotes: ${{inputs.RELEASE_NOTES}}
       DOTNET_ROOT: "${{github.workspace}}/.dotnet/${{github.sha}}-${{github.run_id}}-${{github.run_number}}-${{github.run_attempt}}"
@@ -119,8 +129,10 @@ runs:
       DOTNET_MULTILEVEL_LOOKUP: "false"
       DOTNET_NOLOGO: "true"
       DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+      DOTNET_JitCollect64BitCounts: "1"
       DOTNET_ReadyToRun: "0"
       DOTNET_TC_QuickJitForLoops: "1"
+      DOTNET_TC_CallCountingDelayMs: "0"
       DOTNET_TieredPGO: "1"
       MSBUILDTERMINALLOGGER: "auto"
 
@@ -132,44 +144,21 @@ runs:
     uses: ./.github/actions/sql
     with:
       BUILD_VERSION: ${{inputs.BUILD_VERSION}}
-      OCTOPUS_DEPLOY_PACKAGE: ${{inputs.OCTOPUS_DEPLOY_PACKAGE}}
-      OCTOPUS_DEPLOY_PACKAGE_ZIP: ${{inputs.OCTOPUS_DEPLOY_PACKAGE_ZIP}}
+      DB_FOLDER: ${{inputs.DB_FOLDER}}
 
   ############################################################################################################
-  # Publish ready for deploy to octopus
+  # Publish ready for deploy
   ############################################################################################################
-  - name: "Dotnet: Pack Packages for Octopus (win-x64)"
-    if: inputs.OCTOPUS_DEPLOY_PACKAGE != ''
-    uses: ./.github/actions/dotnet-publish
-    with:
-      PRODUCTION_BUILD: ${{inputs.PRODUCTION_BUILD}}
-      BUILD_VERSION: ${{inputs.BUILD_VERSION}}
-      RELEASE_NOTES: ${{inputs.RELEASE_NOTES}}
-      PLATFORM: "win-x64"
-      OCTOPUS_DEPLOY_PACKAGE: ${{inputs.OCTOPUS_DEPLOY_PACKAGE}}
-      OCTOPUS_DEPLOY_PACKAGE_ZIP: ${{inputs.OCTOPUS_DEPLOY_PACKAGE_ZIP}}
 
-  - name: "Dotnet: Pack Packages for Octopus (linux-x64)"
-    if: inputs.OCTOPUS_DEPLOY_PACKAGE != ''
-    uses: ./.github/actions/dotnet-publish
-    with:
-      PRODUCTION_BUILD: ${{inputs.PRODUCTION_BUILD}}
-      BUILD_VERSION: ${{inputs.BUILD_VERSION}}
-      RELEASE_NOTES: ${{inputs.RELEASE_NOTES}}
-      PLATFORM: "linux-x64"
-      OCTOPUS_DEPLOY_PACKAGE: ${{inputs.OCTOPUS_DEPLOY_PACKAGE}}
-      OCTOPUS_DEPLOY_PACKAGE_ZIP: ${{inputs.OCTOPUS_DEPLOY_PACKAGE_ZIP}}
-
-  - name: "Dotnet: Pack Packages for Octopus (linux-arm64)"
-    if: inputs.OCTOPUS_DEPLOY_PACKAGE != ''
+  - name: "Dotnet: Publish Packages (linux-arm64)"
+    if: inputs.PROJECT_TO_PUBLISH != ''
     uses: ./.github/actions/dotnet-publish
     with:
       PRODUCTION_BUILD: ${{inputs.PRODUCTION_BUILD}}
       BUILD_VERSION: ${{inputs.BUILD_VERSION}}
       RELEASE_NOTES: ${{inputs.RELEASE_NOTES}}
       PLATFORM: "linux-arm64"
-      OCTOPUS_DEPLOY_PACKAGE: ${{inputs.OCTOPUS_DEPLOY_PACKAGE}}
-      OCTOPUS_DEPLOY_PACKAGE_ZIP: ${{inputs.OCTOPUS_DEPLOY_PACKAGE_ZIP}}
+      PROJECT_TO_PUBLISH: ${{inputs.PROJECT_TO_PUBLISH}}
 
   ############################################################################################################
   # DOTNET PUSH TO NUGET
@@ -178,7 +167,7 @@ runs:
     if: inputs.NUGET_PACK == 'true'
     working-directory: ${{github.workspace}}/src
     shell: bash
-    run: dotnet pack --configuration Release "/p:Version=${{inputs.BUILD_VERSION}}" "/p:IsProduction=${{inputs.PRODUCTION_BUILD}}" --no-restore -nodeReuse:False -p:NoWarn=MSB4241
+    run: dotnet pack --configuration Release "-p:Version=${{inputs.BUILD_VERSION}}" "-p:IsProduction=${{inputs.PRODUCTION_BUILD}}" --no-restore -nodeReuse:False -p:NoWarn=MSB4241
     env:
       ReleaseNotes: ${{inputs.RELEASE_NOTES}}
       DOTNET_ROOT: "${{github.workspace}}/.dotnet/${{github.sha}}-${{github.run_id}}-${{github.run_number}}-${{github.run_attempt}}"
@@ -186,8 +175,10 @@ runs:
       DOTNET_MULTILEVEL_LOOKUP: "false"
       DOTNET_NOLOGO: "true"
       DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+      DOTNET_JitCollect64BitCounts: "1"
       DOTNET_ReadyToRun: "0"
       DOTNET_TC_QuickJitForLoops: "1"
+      DOTNET_TC_CallCountingDelayMs: "0"
       DOTNET_TieredPGO: "1"
       MSBUILDTERMINALLOGGER: "auto"
 
@@ -214,8 +205,10 @@ runs:
       DOTNET_MULTILEVEL_LOOKUP: "false"
       DOTNET_NOLOGO: "true"
       DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+      DOTNET_JitCollect64BitCounts: "1"
       DOTNET_ReadyToRun: "0"
       DOTNET_TC_QuickJitForLoops: "1"
+      DOTNET_TC_CallCountingDelayMs: "0"
       DOTNET_TieredPGO: "1"
       MSBUILDTERMINALLOGGER: "auto"
 
@@ -233,8 +226,10 @@ runs:
       DOTNET_MULTILEVEL_LOOKUP: "false"
       DOTNET_NOLOGO: "true"
       DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+      DOTNET_JitCollect64BitCounts: "1"
       DOTNET_ReadyToRun: "0"
       DOTNET_TC_QuickJitForLoops: "1"
+      DOTNET_TC_CallCountingDelayMs: "0"
       DOTNET_TieredPGO: "1"
       MSBUILDTERMINALLOGGER: "auto"
 
@@ -262,7 +257,9 @@ runs:
       DOTNET_MULTILEVEL_LOOKUP: "false"
       DOTNET_NOLOGO: "true"
       DOTNET_PRINT_TELEMETRY_MESSAGE: "false"
+      DOTNET_JitCollect64BitCounts: "1"
       DOTNET_ReadyToRun: "0"
       DOTNET_TC_QuickJitForLoops: "1"
+      DOTNET_TC_CallCountingDelayMs: "0"
       DOTNET_TieredPGO: "1"
       MSBUILDTERMINALLOGGER: "auto"
