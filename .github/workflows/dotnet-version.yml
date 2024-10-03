@@ -23,6 +23,7 @@ jobs:
 
     steps:
       - name: "Initialise Workspace"
+        if: startsWith(runner.name, 'buildagent-')
         shell: bash
         run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
@@ -34,13 +35,26 @@ jobs:
           token: ${{secrets.SOURCE_PUSH_TOKEN}}
 
       - name: "Install Build tools"
+        if: startsWith(runner.name, 'buildagent-')
         uses: ./.github/actions/build-tools
         with:
           GITHUB_TOKEN: ${{secrets.SOURCE_PUSH_TOKEN}}
-          NUGET_PUBLIC_RESTORE_FEED_CACHE: ${{steps.nuget-local-cache.outputs.NUGET_BAGET_CACHE}}
+          NUGET_PUBLIC_RESTORE_FEED_CACHE: ${{vars.NUGET_BAGET_CACHE}}
           NUGET_PUBLIC_RESTORE_FEED: ${{vars.NUGET_PUBLIC_RESTORE_FEED}}
-          NUGET_ADDITIONAL_RESTORE_FEED_RELEASE_CACHE: ${{steps.nuget-local-cache.outputs.RELEASE_BAGET_CACHE}}
-          NUGET_ADDITIONAL_RESTORE_FEED_PRERELEASE_CACHE: ${{steps.nuget-local-cache.outputs.PRERELEASE_BAGET_CACHE}}
+          NUGET_ADDITIONAL_RESTORE_FEED_RELEASE_CACHE: ${{vars.RELEASE_BAGET_CACHE}}
+          NUGET_ADDITIONAL_RESTORE_FEED_PRERELEASE_CACHE: ${{vars.PRERELEASE_BAGET_CACHE}}
+          NUGET_ADDITIONAL_RESTORE_FEED_RELEASE: ${{vars.NUGET_ADDITIONAL_RESTORE_FEED_RELEASE}}
+          NUGET_ADDITIONAL_RESTORE_FEED_PRERELEASE: ${{vars.NUGET_ADDITIONAL_RESTORE_FEED_PRERELEASE}}
+
+      - name: "Install Build tools"
+        if: startsWith(runner.name, 'buildagent-') != true
+        uses: ./.github/actions/build-tools
+        with:
+          GITHUB_TOKEN: ${{secrets.SOURCE_PUSH_TOKEN}}
+          NUGET_PUBLIC_RESTORE_FEED_CACHE: ""
+          NUGET_PUBLIC_RESTORE_FEED: ${{vars.NUGET_PUBLIC_RESTORE_FEED}}
+          NUGET_ADDITIONAL_RESTORE_FEED_RELEASE_CACHE: ""
+          NUGET_ADDITIONAL_RESTORE_FEED_PRERELEASE_CACHE: ""
           NUGET_ADDITIONAL_RESTORE_FEED_RELEASE: ${{vars.NUGET_ADDITIONAL_RESTORE_FEED_RELEASE}}
           NUGET_ADDITIONAL_RESTORE_FEED_PRERELEASE: ${{vars.NUGET_ADDITIONAL_RESTORE_FEED_PRERELEASE}}
 
@@ -55,7 +69,7 @@ jobs:
           echo "Requested dotnet version: ${{env.DOTNET_VERSION}}"
 
       - name: "Switch to version branch"
-        if: ${{env.DOTNET_VERSION}} < ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
+        if: ${{env.DOTNET_VERSION < steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
         shell: bash
         run: |
           git checkout "depends/dotnet/${{env.NEW_DOTNET_VERSION}}" || git checkout -b "depends/dotnet/${{env.NEW_DOTNET_VERSION}}"
@@ -63,7 +77,7 @@ jobs:
           NEW_DOTNET_VERSION: ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
 
       - name: "Update global.json to latest version"
-        if: ${{env.DOTNET_VERSION}} < ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
+        if: ${{env.DOTNET_VERSION < steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
         shell: bash
         working-directory: src
         run: |
@@ -75,28 +89,14 @@ jobs:
         env:
           NEW_DOTNET_VERSION: ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
 
-      - name: "Push"
-        if: ${{env.DOTNET_VERSION}} < ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
-        shell: bash
-        working-directory: src
-        run: |
-          git config --global user.name 'fun-version[bot]'
-          git config --global user.email 'credfeto@users.noreply.github.com'
-          git diff
-          git add "global.json"
-          git commit -m "SDK - Update DotNet SDK to $NEW_DOTNET_VERSION"
-          git push --set-upstream origin "depends/dotnet/$NEW_DOTNET_VERSION"
-        env:
-          NEW_DOTNET_VERSION: ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
-
-#      - name: "Commit changes to new branch"
-#        if: ${{env.DOTNET_VERSION}} < ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
-#        uses: stefanzweifel/git-auto-commit-action@v5.0.0
-#        with:
-#          commit_message: "SDK - Update DotNet SDK to ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}"
-#          branch: "depends/dotnet/${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}"
-#          file_pattern: src/global.json
-#          commit_user_name: "fun-version[bot]"
-#          commit_user_email: "credfeto@users.noreply.github.com"
-#          commit_author: "fun-version[bot] <credfeto@users.noreply.github.com>"
-#          skip_dirty_check: false
+      - name: "Commit changes to new branch"
+        if: ${{env.DOTNET_VERSION < steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}
+        uses: stefanzweifel/git-auto-commit-action@v5.0.1
+        with:
+          commit_message: "SDK - Update DotNet SDK to ${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}"
+          branch: "depends/dotnet/${{steps.latest-dotnet-version.outputs.LATEST_RELEASE_VERSION}}"
+          file_pattern: src/global.json
+          commit_user_name: "fun-version[bot]"
+          commit_user_email: "credfeto@users.noreply.github.com"
+          commit_author: "fun-version[bot] <credfeto@users.noreply.github.com>"
+          skip_dirty_check: false
