@@ -27,7 +27,7 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication,
         [
-            new(streamer: streamer.Value, bot: viewer.Value, match: "!play", matchType: TwitchMessageMatchType.EXACT.GetName(), issue: "!play")
+            new(streamer: streamer.Value, bot: viewer.Value, match: "!play", issue: "!play", TwitchMessageMatchType.EXACT.GetName())
         ]));
 
         this._mediator = GetSubstitute<IMediator>();

@@ -143,7 +143,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
             Viewer viewer = Viewer.FromString(marble.Bot);
             Trace.WriteLine($"Adding chat command trigger: {marble.Streamer}");
-            TwitchInputMessageMatch trigger = new(streamer: streamer, chatter: viewer, matchType: ConvertMatchType(marble.MatchType.ToUpperInvariant()), message: marble.Match);
+            TwitchInputMessageMatch trigger = new(streamer: streamer, chatter: viewer, message: marble.Match, ConvertMatchType(marble.MatchType.ToUpperInvariant()));
             TwitchOutputMessageMatch response = new(streamer: streamer, message: marble.Issue);
 
             triggers.TryAdd(key: trigger, value: response);
