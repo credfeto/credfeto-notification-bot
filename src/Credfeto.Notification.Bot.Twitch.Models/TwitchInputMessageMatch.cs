@@ -23,7 +23,7 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
         this.Chatter = chatter;
         this.Message = message;
         this.MatchType = matchType;
-        this.Regex = BuildRegex(expression: message, matchType: matchType);
+        this.Regex = BuildRegex(matchType: matchType, expression: message);
     }
 
     public Regex? Regex { get; }
