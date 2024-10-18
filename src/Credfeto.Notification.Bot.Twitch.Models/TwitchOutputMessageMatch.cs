@@ -20,7 +20,7 @@ public sealed class TwitchOutputMessageMatch : IEquatable<TwitchOutputMessageMat
 
     public bool Equals(TwitchOutputMessageMatch? other)
     {
-        if (ReferenceEquals(objA: null, objB: other))
+        if (other is null)
         {
             return false;
         }
