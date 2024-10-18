@@ -129,7 +129,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
     private static Dictionary<Streamer, Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>> BuildMessageTriggers(IReadOnlyList<TwitchChatCommand> marbles)
     {
-        Dictionary<Streamer, Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>> streamerTriggers = new();
+        Dictionary<Streamer, Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>> streamerTriggers = [];
 
         foreach (TwitchChatCommand marble in marbles)
         {

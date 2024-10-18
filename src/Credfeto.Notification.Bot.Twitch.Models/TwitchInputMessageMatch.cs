@@ -38,7 +38,7 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
 
     public bool Equals(TwitchInputMessageMatch? other)
     {
-        if (ReferenceEquals(objA: null, objB: other))
+        if (other is null)
         {
             return false;
         }
