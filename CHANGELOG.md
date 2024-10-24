@@ -17,7 +17,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.15.161
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
-- Dependencies - Updated Credfeto.Date to 1.1.13.250
 - Dependencies - Updated Microsoft.Extensions to 8.0.2
 - Dependencies - Updated xunit.analyzers to 1.11.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.7
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.11.20
 - Dependencies - Updated Roslynator.Analyzers to 4.12.8
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
+- Dependencies - Updated Credfeto.Date to 1.1.24.528
 ### Removed
 ### Deployment Changes
 
