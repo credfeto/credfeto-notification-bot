@@ -35,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.175
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.11.20
 - Dependencies - Updated Roslynator.Analyzers to 4.12.8
+- Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
 ### Removed
 ### Deployment Changes
 
