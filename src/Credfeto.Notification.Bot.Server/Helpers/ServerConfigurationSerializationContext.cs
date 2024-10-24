@@ -11,6 +11,4 @@ namespace Credfeto.Notification.Bot.Server.Helpers;
                              WriteIndented = false,
                              IncludeFields = false)]
 [JsonSerializable(typeof(TwitchBotOptions))]
-internal sealed partial class ServerConfigurationSerializationContext : JsonSerializerContext
-{
-}
+internal sealed partial class ServerConfigurationSerializationContext : JsonSerializerContext;
