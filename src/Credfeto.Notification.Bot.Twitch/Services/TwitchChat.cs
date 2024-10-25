@@ -256,6 +256,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         }
     }
 
+    [SuppressMessage("codecracker.CSharp", "CC0091:Make method static", Justification="Needed for logging")]
     private void OnLog(OnLogArgs e)
     {
         this._logger.DebugLog(e.DateTime.AsDateTimeOffset(), username: e.BotUsername, data: e.Data);
