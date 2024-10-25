@@ -13,7 +13,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.9.0
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
-- Dependencies - Updated Microsoft.Extensions to 8.0.2
 - Dependencies - Updated coverlet to 6.0.1
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
 - Dependencies - Updated Discord.Net.Analyzers to 3.14.1
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.28.542
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.28.469
 - Dependencies - Updated FunFair.Test.Common to 6.1.229.911
+- Dependencies - Updated Microsoft.Extensions to 8.0.10
 ### Removed
 ### Deployment Changes
 
