@@ -16,7 +16,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 8.0.2
 - Dependencies - Updated coverlet to 6.0.1
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
-- Dependencies - Updated FunFair.Test.Common to 6.1.42.380
 - Dependencies - Updated Discord.Net.Analyzers to 3.14.1
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.5.315
 - SDK - Updated DotNet SDK to 9.0.100-rc.2.24474.11
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.50.525
 - Dependencies - Updated Credfeto.Random to 1.0.28.542
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.28.469
+- Dependencies - Updated FunFair.Test.Common to 6.1.229.911
 ### Removed
 ### Deployment Changes
 
