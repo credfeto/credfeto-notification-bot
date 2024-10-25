@@ -5,11 +5,13 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Mediator;
 using Microsoft.Extensions.Logging;
@@ -195,7 +197,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
         double delay = Jitter.WithJitter((int)priority, GetMaxSeconds(priority));
 
-        this._logger.LogInformation($"{twitchChatMessage.Streamer}: Delaying message for {delay} seconds for: {twitchChatMessage.Message}");
+        this._logger.DelayingMessage(streamer: twitchChatMessage.Streamer, delay: delay, message: twitchChatMessage.Message);
 
         return TimeSpan.FromSeconds(delay);
 
@@ -230,7 +232,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
             if (this._lastMessage.TryGetValue(key: twitchChatMessage.Streamer, out string? lastMessage) &&
                 StringComparer.InvariantCultureIgnoreCase.Equals(x: lastMessage, y: twitchChatMessage.Message))
             {
-                if (!twitchChatMessage.Message.StartsWith('!') && !twitchChatMessage.Message.StartsWith('/'))
+                if (!twitchChatMessage.IsCommand)
                 {
                     return;
                 }
@@ -238,7 +240,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
             this._lastMessage.TryRemove(key: twitchChatMessage.Streamer, value: out _);
 
-            this._logger.LogInformation($"{twitchChatMessage.Streamer}: >>> {this._options.Authentication.Chat.UserName} SEND >>> {twitchChatMessage.Message}");
+            this._logger.SendingMessage(streamer: twitchChatMessage.Streamer, Viewer.FromString(this._options.Authentication.Chat.UserName), message: twitchChatMessage.Message);
 
             this._client.SendMessage(channel: twitchChatMessage.Streamer.Value, message: twitchChatMessage.Message);
 
@@ -246,7 +248,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{twitchChatMessage.Streamer}: Failed to publish message : {exception.Message}");
+            this._logger.FailedToSendMessage(streamer: twitchChatMessage.Streamer, message: exception.Message, exception: exception);
         }
         finally
         {
@@ -256,18 +258,18 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
     private void OnLog(OnLogArgs e)
     {
-        this._logger.LogDebug($"{e.DateTime}: {e.BotUsername} - {e.Data}");
+        this._logger.DebugLog(e.DateTime.AsDateTimeOffset(), username: e.BotUsername, data: e.Data);
     }
 
     private void OnConnected(OnConnectedArgs e)
     {
-        this._logger.LogWarning($"Connected to {e.BotUsername} {e.AutoJoinChannel}");
+        this._logger.ChatConnected(username: e.BotUsername, autoJoinChannel: e.AutoJoinChannel);
         this._connected = true;
     }
 
     private void OnDisconnected(OnDisconnectedEventArgs e)
     {
-        this._logger.LogWarning("Chat Disconnected :(");
+        this._logger.ChatDisconnected();
         this._connected = false;
     }
 
@@ -286,7 +288,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
         foreach (Streamer streamer in streamers)
         {
-            this._logger.LogInformation($"{streamer}: Reconnecting to chat...");
+            this._logger.ChatReconnecting(streamer);
             this.JoinChat(streamer);
         }
     }
@@ -326,7 +328,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         }
         catch (Exception exception)
         {
-            this._logger.LogError($"{streamer}: Failed to handle chat message: {exception.Message}");
+            this._logger.FailedToHandleChatMessage(streamer: streamer, message: exception.Message, exception: exception);
         }
     }
 }
