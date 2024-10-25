@@ -10,7 +10,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6169
-- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.9.0
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
 - Dependencies - Updated Discord.Net to 3.13.1
 - Dependencies - Updated coverlet to 6.0.1
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.28.469
 - Dependencies - Updated FunFair.Test.Common to 6.1.229.911
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
+- Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
 ### Removed
 ### Deployment Changes
 
