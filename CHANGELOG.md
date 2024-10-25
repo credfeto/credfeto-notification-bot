@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net to 3.13.1
 - Dependencies - Updated Credfeto.Date to 1.1.13.250
 - Dependencies - Updated Microsoft.Extensions to 8.0.2
-- Dependencies - Updated xunit.analyzers to 1.11.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.5.7
 - Dependencies - Updated xunit to 2.7.0
 - Dependencies - Updated coverlet to 6.0.1
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.4.57
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.32.0.97167
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
+- Dependencies - Updated xunit.analyzers to 1.16.0
 ### Removed
 ### Deployment Changes
 
