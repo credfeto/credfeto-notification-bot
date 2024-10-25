@@ -12,7 +12,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6169
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.19.0.84025
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.9.0
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.29.233
 - Dependencies - Updated Credfeto.Random to 1.0.17.233
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.15.161
 - Dependencies - Updated NSubstitute.Analyzers.CSharp to 1.0.17
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
 - Dependencies - Updated Meziantou.Analyzer to 2.0.176
 - Dependencies - Updated Credfeto.Enumeration to 1.1.15.626
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.50.525
 ### Removed
 ### Deployment Changes
 
