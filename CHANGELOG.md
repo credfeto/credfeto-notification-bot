@@ -39,6 +39,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Enrichers.Environment to 3.0.1
 - Dependencies - Updated Serilog.Enrichers.Process to 3.0.0
 - Dependencies - Updated Serilog.Enrichers.Thread to 4.0.0
+- Dependencies - Updated Serilog.Sinks.Console to 6.0.0
 ### Removed
 ### Deployment Changes
 
