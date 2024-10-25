@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
+using Credfeto.Notification.Bot.Twitch.StreamState.LoggingExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.StreamState;
@@ -29,7 +30,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public ValueTask OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"{this.Streamer}: Going Online...");
+        this._logger.ChannelGoingOnline(this.Streamer);
         ActiveStream stream = new(gameName: gameName, startedAt: startDate);
         this._stream = stream;
 
@@ -38,7 +39,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public void Offline()
     {
-        this._logger.LogInformation($"{this.Streamer}: Going Offline...");
+        this._logger.ChannelGoingOffline(this.Streamer);
         this._stream = null;
     }
 

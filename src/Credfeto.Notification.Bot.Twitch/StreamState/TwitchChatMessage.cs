@@ -18,4 +18,6 @@ public sealed class TwitchChatMessage
     public string Message { get; }
 
     public MessagePriority Priority { get; }
+
+    public bool IsCommand => this.Message.StartsWith('!') || this.Message.StartsWith('/');
 }

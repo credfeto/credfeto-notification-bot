@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -33,7 +33,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
         this._chatUser = Viewer.FromString(opts.Authentication.Chat.UserName);
 
-        this._twitchMessageTriggers = BuildMessageTriggers(marbles: opts.ChatCommands);
+        this._twitchMessageTriggers = BuildMessageTriggers(twitchChatCommands: opts.ChatCommands, logger: logger);
     }
 
     public async Task<bool> HandleMessageAsync(TwitchIncomingMessage message, CancellationToken cancellationToken)
@@ -60,13 +60,13 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         if (!this._twitchMessageTriggerDebounceFilter.CanSend(command))
         {
-            this._logger.LogInformation($"{trigger.Streamer}: Debouncing... {trigger.Chatter}: {trigger.Message}");
+            this._logger.Debouncing(streamer: trigger.Streamer, chatter: trigger.Chatter, message: trigger.Message);
 
             // debounced.
             return true;
         }
 
-        this._logger.LogInformation($"{trigger.Streamer}: Matched... {trigger.Chatter}: {trigger.Message}");
+        this._logger.Matched(streamer: trigger.Streamer, chatter: trigger.Chatter, message: trigger.Message);
         await this._mediator.Publish(new CustomTriggeredMessage(streamer: trigger.Streamer, message: command.Message), cancellationToken: cancellationToken);
 
         return true;
@@ -116,7 +116,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
         if (this.IsDirectedAtBot(message))
         {
-            this._logger.LogInformation($"{trigger.Streamer}: Checking match \"{trigger.Message}\" : Pattern: \"{trigger.Message}\" : Message: \"{message.Message}\" : Match: {isMatch}");
+            this._logger.CheckingMatch(streamer: trigger.Streamer, chatter: trigger.Chatter, triggerMessage: trigger.Message, sendMessage: message.Message, isMatch: isMatch);
         }
 
         return isMatch;
@@ -127,13 +127,15 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         return message.Message.StartsWith("@" + this._chatUser.Value, comparisonType: StringComparison.InvariantCultureIgnoreCase);
     }
 
-    private static Dictionary<Streamer, Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>> BuildMessageTriggers(IReadOnlyList<TwitchChatCommand> marbles)
+    private static Dictionary<Streamer, Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>> BuildMessageTriggers(
+        IReadOnlyList<TwitchChatCommand> twitchChatCommands,
+        ILogger<TwitchCustomMessageHandler> logger)
     {
         Dictionary<Streamer, Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>> streamerTriggers = [];
 
-        foreach (TwitchChatCommand marble in marbles)
+        foreach (TwitchChatCommand twitchChatCommand in twitchChatCommands)
         {
-            Streamer streamer = Streamer.FromString(marble.Streamer);
+            Streamer streamer = Streamer.FromString(twitchChatCommand.Streamer);
 
             if (!streamerTriggers.TryGetValue(key: streamer, out Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>? triggers))
             {
@@ -141,10 +143,10 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
                 streamerTriggers.Add(key: streamer, value: triggers);
             }
 
-            Viewer viewer = Viewer.FromString(marble.Bot);
-            Trace.WriteLine($"Adding chat command trigger: {marble.Streamer}");
-            TwitchInputMessageMatch trigger = new(streamer: streamer, chatter: viewer, message: marble.Match, ConvertMatchType(marble.MatchType.ToUpperInvariant()));
-            TwitchOutputMessageMatch response = new(streamer: streamer, message: marble.Issue);
+            Viewer viewer = Viewer.FromString(twitchChatCommand.Bot);
+            logger.AddingChatCommandTrigger(streamer: streamer, chatter: viewer, triggerMessage: twitchChatCommand.Match);
+            TwitchInputMessageMatch trigger = new(streamer: streamer, chatter: viewer, message: twitchChatCommand.Match, ConvertMatchType(twitchChatCommand.MatchType.ToUpperInvariant()));
+            TwitchOutputMessageMatch response = new(streamer: streamer, message: twitchChatCommand.Issue);
 
             triggers.TryAdd(key: trigger, value: response);
         }

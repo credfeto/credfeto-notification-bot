@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Shared;
+using Credfeto.Notification.Bot.Twitch.Actions.Services.LoggingExtensions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.StreamState;
 using Microsoft.Extensions.Logging;
@@ -20,8 +21,8 @@ public sealed class CustomTriggeredMessageSender : MessageSenderBase, ICustomTri
 
     public async Task SendAsync(Streamer streamer, string message, CancellationToken cancellationToken)
     {
-        this._logger.LogInformation($"{streamer}: Custom message triggered [Sending]: {message}");
+        this._logger.CustomMessageTriggeredSending(streamer: streamer, message: message);
         await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
-        this._logger.LogInformation($"{streamer}: Custom message triggered [Sent]: {message}");
+        this._logger.CustomMessageTriggeredSent(streamer: streamer, message: message);
     }
 }

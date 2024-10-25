@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Notification.Bot.Twitch.BackgroundServices.LoggingExgtensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -34,9 +35,9 @@ public sealed class RestoreTwitchChatConnectionWorker : BackgroundService
         {
             await this._twitchChat.UpdateAsync();
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
-            this._logger.LogError(new(e.HResult), exception: e, message: "Failed to update twitch chat connection");
+            this._logger.FailedToUpdateTwitchChatConnection(message: exception.Message, exception: exception);
 
             throw;
         }

@@ -7,6 +7,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
+using Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NonBlocking;
@@ -44,36 +45,29 @@ public sealed class UserInfoService : IUserInfoService
             return user;
         }
 
-        if (user != null)
-        {
-            this._cache.TryAdd(key: userName, value: user);
-
-            return user;
-        }
-
         try
         {
-            this._logger.LogDebug($"Getting User information for {userName}");
+            this._logger.GettingUserInfo(userName);
             GetUsersResponse result = await this.GetUsersAsync(userName);
 
-            if (result.Users.Length == 0)
-            {
-                this._cache.TryAdd(key: userName, value: null);
-
-                return null;
-            }
-
-            user = ConvertUser(result.Users[0]);
-            this._cache.TryAdd(key: userName, value: user);
-
-            return user;
+            return this.AddUserToCache(userName: userName,
+                                       result.Users is []
+                                           ? null
+                                           : ConvertUser(result.Users[0]));
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"Failed to look up user information for {userName}: {exception.Message}");
+            this._logger.FailedToGetUserInformation(userName: userName, message: exception.Message, exception: exception);
 
             return null;
         }
+    }
+
+    private TwitchUser? AddUserToCache(in Viewer userName, TwitchUser? user)
+    {
+        this._cache.TryAdd(key: userName, value: user);
+
+        return user;
     }
 
     private Task<GetUsersResponse> GetUsersAsync(in Viewer userName)
