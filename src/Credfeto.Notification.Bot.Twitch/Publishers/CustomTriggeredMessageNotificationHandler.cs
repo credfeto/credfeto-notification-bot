@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Publishers.LoggingExtensions;
 using Mediator;
 using Microsoft.Extensions.Logging;
 
@@ -27,7 +28,7 @@ public sealed class CustomTriggeredMessageNotificationHandler : INotificationHan
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{notification.Streamer}: Failed to send custom message");
+            this._logger.FailedToSendCustomMessage(streamer: notification.Streamer, message: exception.Message, exception: exception);
         }
     }
 }

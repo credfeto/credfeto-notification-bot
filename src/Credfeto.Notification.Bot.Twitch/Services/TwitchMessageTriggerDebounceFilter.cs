@@ -1,6 +1,7 @@
 using System;
 using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 using Microsoft.Extensions.Logging;
 using NonBlocking;
 
@@ -28,7 +29,7 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
 
         bool canSend = when.CanSend(now: now, minIntervalBetweenMatches: MinIntervalBetweenMatches);
 
-        this._logger.LogDebug($"{match.Streamer}\\{match.Message}: {canSend}");
+        this._logger.CanSend(streamer: match.Streamer, message: match.Message, canSend: canSend);
 
         return canSend;
     }

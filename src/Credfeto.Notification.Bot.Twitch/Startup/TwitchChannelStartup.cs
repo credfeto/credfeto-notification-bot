@@ -7,6 +7,7 @@ using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 using Credfeto.Services.Startup.Interfaces;
 using Mediator;
 using Microsoft.Extensions.Logging;
@@ -50,12 +51,12 @@ public sealed class TwitchChannelStartup : IRunOnStartup
 
         foreach (Streamer streamer in this._channels)
         {
-            this._logger.LogInformation($"Looking for channel {streamer}");
+            this._logger.LookingForChannel(streamer);
             TwitchUser? info = await this._userInfoService.GetUserAsync(userName: streamer, cancellationToken: cancellationToken);
 
             if (info != null)
             {
-                this._logger.LogInformation($"Streamer: {streamer}");
+                this._logger.FoundChannel(streamer: streamer, userId: info.Id, isStreamer: info.IsStreamer, dateCreated: info.DateCreated);
                 await this._mediator.Publish(new TwitchWatchChannel(info), cancellationToken: cancellationToken);
             }
         }

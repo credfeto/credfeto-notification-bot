@@ -4,10 +4,12 @@ using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Credfeto.Date.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
+using Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -44,19 +46,17 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 
         this._lsm = new(options.Value.ConfigureTwitchApi());
 
-        this._onlineSubscription = Observable
-                                   .FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
-                                   .Select(messageEvent => messageEvent.EventArgs)
-                                   .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
-                                   .Concat()
-                                   .Subscribe();
+        this._onlineSubscription = Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
+                                             .Select(messageEvent => messageEvent.EventArgs)
+                                             .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
+                                             .Concat()
+                                             .Subscribe();
 
-        this._offlineSubscription = Observable
-                                    .FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
-                                    .Select(messageEvent => messageEvent.EventArgs)
-                                    .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
-                                    .Concat()
-                                    .Subscribe();
+        this._offlineSubscription = Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
+                                              .Select(messageEvent => messageEvent.EventArgs)
+                                              .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
+                                              .Concat()
+                                              .Subscribe();
     }
 
     public void Dispose()
@@ -97,7 +97,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
             }
 
             Streamer streamer = Streamer.FromString(match.Groups["streamer"].Value);
-            this._logger.LogError(new(exception.HResult), exception: exception, $"Streamer {streamer.Value} not found");
+            this._logger.StreamertNotFound(streamer: streamer, message: exception.Message, exception: exception);
 
             this._channels.TryRemove(key: streamer, value: out _);
         }
@@ -120,7 +120,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
     private async Task OnStreamOnlineAsync(OnStreamOnlineArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
-        this._logger.LogWarning($"{streamer}: Started streaming \"{e.Stream.Title}\" ({e.Stream.GameName}) at {e.Stream.StartedAt}");
+        this._logger.StreamStarted(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, e.Stream.StartedAt.AsDateTimeOffset());
 
         try
         {
@@ -129,7 +129,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{e.Channel}: Failed to notify Started streaming");
+            this._logger.FailedToNotifyStreamStarted(streamer: streamer, message: exception.Message, exception: exception);
         }
     }
 
@@ -144,7 +144,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
         catch (Exception exception)
         {
-            this._logger.LogError(new(exception.HResult), exception: exception, $"{e.Channel}: Failed to notify Stopped streaming");
+            this._logger.FailedToNotifyStreamStopped(streamer: streamer, message: exception.Message, exception: exception);
         }
     }
 }
