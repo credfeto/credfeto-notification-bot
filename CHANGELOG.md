@@ -36,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.229.911
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
+- Dependencies - Updated Serilog.Enrichers.Environment to 3.0.1
 ### Removed
 ### Deployment Changes
 
