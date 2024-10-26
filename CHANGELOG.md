@@ -27,7 +27,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.2
 - Dependencies - Updated xunit to 2.9.2
 - Dependencies - Updated Credfeto.Date to 1.1.25.556
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.50.525
 - Dependencies - Updated Credfeto.Random to 1.0.28.542
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.28.469
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.1.16.631
 - Dependencies - Updated FunFair.Test.Common to 6.1.230.918
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.26.665
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.51.530
 ### Removed
 ### Deployment Changes
 
