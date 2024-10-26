@@ -17,7 +17,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Discord.Net.Analyzers to 3.14.1
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.5.315
 - SDK - Updated DotNet SDK to 9.0.100-rc.2.24474.11
-- Dependencies - Updated Credfeto.Database to 1.2.21.574
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.24.635
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.11.20
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Enrichers.Thread to 4.0.0
 - Dependencies - Updated Serilog.Sinks.Console to 6.0.0
 - Dependencies - Updated System.Reactive to 6.0.1
+- Dependencies - Updated Credfeto.Database to 1.2.22.687
 ### Removed
 ### Deployment Changes
 
