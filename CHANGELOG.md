@@ -38,9 +38,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Reactive to 6.0.1
 - Dependencies - Updated Credfeto.Database to 1.2.22.687
 - Dependencies - Updated Credfeto.Enumeration to 1.1.16.631
-- Dependencies - Updated FunFair.Test.Common to 6.1.230.918
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.26.665
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.51.530
+- Dependencies - Updated FunFair.Test.Common to 6.1.231.921
 ### Removed
 ### Deployment Changes
 
