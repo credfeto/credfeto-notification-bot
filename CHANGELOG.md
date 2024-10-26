@@ -30,7 +30,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.50.525
 - Dependencies - Updated Credfeto.Random to 1.0.28.542
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.28.469
-- Dependencies - Updated FunFair.Test.Common to 6.1.229.911
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
 - Dependencies - Updated Serilog.Enrichers.Environment to 3.0.1
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.22.687
 - Dependencies - Updated Credfeto.Enumeration to 1.1.16.631
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.25.662
+- Dependencies - Updated FunFair.Test.Common to 6.1.230.918
 ### Removed
 ### Deployment Changes
 
