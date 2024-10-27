@@ -26,7 +26,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.16.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.2
 - Dependencies - Updated xunit to 2.9.2
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.28.469
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
 - Dependencies - Updated Serilog.Enrichers.Environment to 3.0.1
@@ -41,6 +40,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.26.563
 - Dependencies - Updated Credfeto.Random to 1.0.29.549
 - Dependencies - Updated Credfeto.Database to 1.2.23.693
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.29.476
 ### Removed
 ### Deployment Changes
 
