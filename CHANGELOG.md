@@ -19,7 +19,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 9.0.100-rc.2.24474.11
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.11.20
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
-- Dependencies - Updated Meziantou.Analyzer to 2.0.176
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.32.0.97167
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
 - Dependencies - Updated xunit.analyzers to 1.16.0
@@ -42,6 +41,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.7.77
 - Dependencies - Updated Credfeto.Random to 1.0.31.561
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.31.488
+- Dependencies - Updated Meziantou.Analyzer to 2.0.177
 ### Removed
 ### Deployment Changes
 
