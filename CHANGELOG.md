@@ -42,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.177
 - Dependencies - Updated Credfeto.Enumeration to 1.1.19.652
 - Dependencies - Updated Credfeto.Database to 1.2.28.714
+- Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 ### Removed
 ### Deployment Changes
 
