@@ -32,7 +32,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Sinks.Console to 6.0.0
 - Dependencies - Updated System.Reactive to 6.0.1
 - Dependencies - Updated NSubstitute to 5.3.0
-- Dependencies - Updated FunFair.Test.Common to 6.1.234.940
 - Dependencies - Updated Credfeto.Date to 1.1.28.575
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.7.77
 - Dependencies - Updated Credfeto.Random to 1.0.31.561
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.29.685
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.54.550
+- Dependencies - Updated FunFair.Test.Common to 6.1.235.945
 ### Removed
 ### Deployment Changes
 
