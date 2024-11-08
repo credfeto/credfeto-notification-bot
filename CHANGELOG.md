@@ -21,7 +21,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.32.0.97167
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
-- Dependencies - Updated xunit.analyzers to 1.16.0
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.2
 - Dependencies - Updated xunit to 2.9.2
 - Dependencies - Updated Microsoft.Extensions to 8.0.10
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.31.691
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.10.91
 - Dependencies - Updated FunFair.Test.Common to 6.1.237.951
+- Dependencies - Updated xunit.analyzers to 1.17.0
 ### Removed
 ### Deployment Changes
 
