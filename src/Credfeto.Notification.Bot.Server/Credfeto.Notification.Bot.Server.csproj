@@ -57,7 +57,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Database.Pgsql" Version="1.2.32.727" />
+    <PackageReference Include="Credfeto.Database.Pgsql" Version="1.2.33.744" />
     <PackageReference Include="Credfeto.Date" Version="1.1.31.603" />
     <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.56.572" />
     <PackageReference Include="Credfeto.Random" Version="1.0.33.571" />
