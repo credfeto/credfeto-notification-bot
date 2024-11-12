@@ -33,7 +33,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Serilog.Enrichers.Demystifier to 1.0.3
 - Dependencies - Updated xunit.analyzers to 1.17.0
 - Dependencies - Updated Credfeto.Date to 1.1.31.603
-- Dependencies - Updated Credfeto.Enumeration to 1.1.22.677
 - Dependencies - Updated Credfeto.Database to 1.2.33.744
 - Dependencies - Updated Credfeto.Random to 1.0.34.589
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.34.516
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.1.238.970
 - Dependencies - Updated Microsoft.Extensions to 9.0.0
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.57.579
+- Dependencies - Updated Credfeto.Enumeration to 1.1.23.685
 ### Removed
 ### Deployment Changes
 
