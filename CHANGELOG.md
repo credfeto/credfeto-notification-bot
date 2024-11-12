@@ -23,7 +23,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
 - Dependencies - Updated xunit.runner.visualstudio to 2.8.2
 - Dependencies - Updated xunit to 2.9.2
-- Dependencies - Updated Microsoft.Extensions to 8.0.10
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.11.1
 - Dependencies - Updated Serilog.Enrichers.Environment to 3.0.1
 - Dependencies - Updated Serilog.Enrichers.Process to 3.0.0
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.32.711
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.11.111
 - Dependencies - Updated FunFair.Test.Common to 6.1.238.970
+- Dependencies - Updated Microsoft.Extensions to 9.0.0
 ### Removed
 ### Deployment Changes
 
