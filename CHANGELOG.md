@@ -16,7 +16,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated TeamCity.VSTest.TestAdapter to 1.0.40
 - Dependencies - Updated Discord.Net.Analyzers to 3.14.1
 - Dependencies - Updated Credfeto.Enumeration.Source.Generation to 1.1.5.315
-- SDK - Updated DotNet SDK to 9.0.100-rc.2.24474.11
 - Dependencies - Updated SmartAnalyzers.CSharpExtensions.Annotations to 4.2.11
 - Dependencies - Updated SonarAnalyzer.CSharp to 9.32.0.97167
 - Dependencies - Updated Roslynator.Analyzers to 4.12.9
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.1.23.685
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.12.19
 - Dependencies - Updated Meziantou.Analyzer to 2.0.179
+- SDK - Updated DotNet SDK to 9.0.100
 ### Removed
 ### Deployment Changes
 
