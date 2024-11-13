@@ -35,7 +35,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.33.744
 - Dependencies - Updated Credfeto.Random to 1.0.34.589
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.34.516
-- Dependencies - Updated Meziantou.Analyzer to 2.0.178
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.32.711
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.11.111
 - Dependencies - Updated FunFair.Test.Common to 6.1.238.970
@@ -43,6 +42,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.57.579
 - Dependencies - Updated Credfeto.Enumeration to 1.1.23.685
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.12.19
+- Dependencies - Updated Meziantou.Analyzer to 2.0.179
 ### Removed
 ### Deployment Changes
 
