@@ -9,6 +9,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.12] - 2024-11-20
+### Changed
 - Dependencies - Updated Credfeto.Date to 1.1.32.629
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.58.593
 - Dependencies - Updated Credfeto.Random to 1.0.35.614
@@ -18,12 +26,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.12.127
 - Dependencies - Updated Meziantou.Analyzer to 2.0.180
 - Dependencies - Updated Microsoft.NET.Test.Sdk to 17.12.0
-### Removed
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [0.0.11] - 2024-11-15
 ### Changed
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6169
