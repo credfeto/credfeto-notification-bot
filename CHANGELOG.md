@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated Meziantou.Analyzer to 2.0.181
+- Dependencies - Updated Credfeto.Database to 1.2.44.816
 ### Removed
 ### Deployment Changes
 
