@@ -59,7 +59,7 @@
   <ItemGroup>
     <PackageReference Include="Credfeto.Database.Pgsql" Version="1.2.47.827" />
     <PackageReference Include="Credfeto.Date" Version="1.1.41.663" />
-    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.66.628" />
+    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.67.630" />
     <PackageReference Include="Credfeto.Random" Version="1.0.44.647" />
     <PackageReference Include="Credfeto.Services.Startup" Version="1.1.44.575" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.0" />
