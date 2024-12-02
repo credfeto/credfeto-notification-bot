@@ -42,7 +42,7 @@
   <ItemGroup>
     <PackageReference Include="Credfeto.Date.Interfaces" Version="1.1.45.671" />
     <PackageReference Include="Credfeto.Random.Interfaces" Version="1.0.18.264" />
-    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.48.583" />
+    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.49.585" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.0" />
     <PackageReference Include="NonBlocking" Version="2.1.2" />
