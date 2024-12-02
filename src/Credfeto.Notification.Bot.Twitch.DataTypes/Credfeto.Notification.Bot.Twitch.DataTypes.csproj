@@ -36,7 +36,7 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Database.Interfaces" Version="1.2.54.841" />
+    <PackageReference Include="Credfeto.Database.Interfaces" Version="1.2.55.843" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
