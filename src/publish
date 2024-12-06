@@ -1,0 +1,57 @@
+#! /bin/sh
+
+die() {
+    echo "$@"
+    exit 1
+}
+
+BASEDIR=$(dirname "$(readlink -f "$0")")
+
+PLATFORM=linux-x64
+OUTFOLDER="$BASEDIR/server-dist/$PLATFORM"
+
+#[ -z "$DISCORDTOKEN" ] && die "DISCORDTOKEN not set"
+
+echo "Clear $OUTFOLDER" \
+  && rm -fr "$BASEDIR/server-dist" \
+  && cd "$BASEDIR" \
+  && dotnet restore \
+  && echo "CD" \
+  && cd "$BASEDIR/Credfeto.Notification.Bot.Server" \
+  && echo "Build Credfeto.Notification.Bot.Server" \
+  && dotnet publish \
+          --no-restore \
+          -warnaserror \
+          --configuration:Release \
+          "-r:$PLATFORM" \
+          --self-contained \
+          -nodeReuse:False \
+          "-p:Deterministic=True" \
+          "-p:DisableSwagger=True" \
+          "-p:FFPublishing=True" \
+          "-p:IncludeNativeLibrariesForSelfExtract=True" \
+          "-p:IsProduction=True" \
+          "-p:NoWarn=NETSDK1179" \
+          "-p:Optimize=true" \
+          "-p:PublishAot=false" \
+          "-p:PublishReadyToRun=False" \
+          "-p:PublishReadyToRunShowWarnings=True" \
+          "-p:PublishSingleFile=true" \
+          "-p:SolutionDir=..\\" \
+          "-p:SuppressNETCoreSdkPreviewMessage=true" \
+          "-p:TreatWarningsAsErrors=True" \
+          "-p:Version=2.0.1.179-main" \
+          "-p:FFPublishing=True" \
+          "-p:SolutionDir=..\\" \
+          "-p:IsProduction=false" \
+          --output "$OUTFOLDER" \
+  && cd "$BASEDIR/server-dist/$PLATFORM" \
+  && cp "$BASEDIR/../Dockerfile" . \
+  && cp "$BASEDIR/../healthcheck" . \
+  && ls -lar \
+  && sudo docker buildx build  . -t "credfeto/notification-bot:latest" \
+  && sudo docker run \
+      --name notification-bot \
+      -it \
+      --rm "credfeto/notification-bot:latest"
+      

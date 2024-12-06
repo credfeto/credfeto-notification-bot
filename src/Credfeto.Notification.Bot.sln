@@ -11,6 +11,9 @@ ProjectSection(SolutionItems) = preProject
 	..\README.md = ..\README.md
 	..\.github\labeler.yml = ..\.github\labeler.yml
 	..\.github\labels.yml = ..\.github\labels.yml
+	publish = publish
+	..\Dockerfile = ..\Dockerfile
+	..\healthcheck = ..\healthcheck
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Credfeto.Notification.Bot.Server", "Credfeto.Notification.Bot.Server\Credfeto.Notification.Bot.Server.csproj", "{2DDAB2F1-7D26-48B5-8613-A8F973494365}"
