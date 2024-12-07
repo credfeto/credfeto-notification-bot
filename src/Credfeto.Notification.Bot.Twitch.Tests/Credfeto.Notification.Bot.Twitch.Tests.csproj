@@ -22,7 +22,7 @@
     <NoWarn />
     <NuGetAudit>true</NuGetAudit>
     <NuGetAuditLevel>high</NuGetAuditLevel>
-    <NuGetAuditMode>direct</NuGetAuditMode>
+    <NuGetAuditMode>all</NuGetAuditMode>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <RunAOTCompilation>false</RunAOTCompilation>

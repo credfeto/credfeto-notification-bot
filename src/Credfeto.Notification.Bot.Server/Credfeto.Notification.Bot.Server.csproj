@@ -24,7 +24,7 @@
     <NoWarn />
     <NuGetAudit>true</NuGetAudit>
     <NuGetAuditLevel>low</NuGetAuditLevel>
-    <NuGetAuditMode>direct</NuGetAuditMode>
+    <NuGetAuditMode>all</NuGetAuditMode>
     <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
     <RunAOTCompilation>false</RunAOTCompilation>
@@ -47,6 +47,14 @@
     <DefineConstants Condition="$(IsProduction)=='True'">$(DefineConstants);SINGLE_FILE_PUBLISH</DefineConstants>
     <DefineConstants>$(DefineConstants);DISABLE_COUNTERS</DefineConstants>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- error NU1903: Warning As Error: Package 'System.Private.Uri' 4.3.0 has a known high severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-5f2m-466j-3848"/>
+    <!-- error NU1902: Warning As Error: Package 'System.Private.Uri' 4.3.0 has a known moderate severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x5qj-9vmx-7g6g"/>
+    <!-- error NU1903: Warning As Error: Package 'System.Private.Uri' 4.3.0 has a known high severity vulnerability -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xhfc-gr8f-ffwc"/>
+  </ItemGroup>
   <ItemGroup>
     <TrimmerRootAssembly Include="System.Web.HttpUtility" />
     <TrimmerRootAssembly Include="System.Diagnostics.FileVersionInfo" />
