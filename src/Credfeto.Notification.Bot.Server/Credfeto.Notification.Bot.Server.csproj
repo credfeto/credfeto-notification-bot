@@ -66,7 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Database.Pgsql" Version="1.2.60.853" />
-    <PackageReference Include="Credfeto.Date" Version="1.1.49.692" />
+    <PackageReference Include="Credfeto.Date" Version="1.1.50.696" />
     <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.75.658" />
     <PackageReference Include="Credfeto.Random" Version="1.0.52.662" />
     <PackageReference Include="Credfeto.Services.Startup" Version="1.1.51.589" />
