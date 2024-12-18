@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.0
 - Dependencies - Updated Credfeto.Database to 1.2.61.881
 - Dependencies - Updated Roslynator.Analyzers to 4.12.10
+- Dependencies - Updated Credfeto.Random to 1.0.53.682
 ### Removed
 ### Deployment Changes
 
