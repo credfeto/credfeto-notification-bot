@@ -15,6 +15,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.61.881
 - Dependencies - Updated Roslynator.Analyzers to 4.12.10
 - Dependencies - Updated Credfeto.Random to 1.0.53.682
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.52.608
 ### Removed
 ### Deployment Changes
 
