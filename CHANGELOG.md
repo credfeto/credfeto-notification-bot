@@ -9,18 +9,21 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
-- Dependencies - Updated Meziantou.Analyzer to 2.0.184
-- Dependencies - Updated Credfeto.Enumeration to 1.2.44.798
-- Dependencies - Updated Credfeto.Date to 1.1.51.721
-- Dependencies - Updated Credfeto.Random to 1.0.54.701
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.53.627
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.48] - 2025-01-01
+### Changed
+- Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
+- Dependencies - Updated Meziantou.Analyzer to 2.0.184
+- Dependencies - Updated Credfeto.Enumeration to 1.2.44.798
+- Dependencies - Updated Credfeto.Date to 1.1.51.721
+- Dependencies - Updated Credfeto.Random to 1.0.54.701
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.53.627
+
 ## [0.0.47] - 2024-12-18
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.62.892
