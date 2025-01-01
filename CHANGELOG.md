@@ -9,18 +9,21 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Date to 1.1.52.723
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.77.687
-- Dependencies - Updated Credfeto.Random to 1.0.55.703
-- Dependencies - Updated Credfeto.Database to 1.2.63.904
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.33.225
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.54.629
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.49] - 2025-01-01
+### Changed
+- Dependencies - Updated Credfeto.Date to 1.1.52.723
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.77.687
+- Dependencies - Updated Credfeto.Random to 1.0.55.703
+- Dependencies - Updated Credfeto.Database to 1.2.63.904
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.33.225
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.54.629
+
 ## [0.0.48] - 2025-01-01
 ### Changed
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.15.6495
