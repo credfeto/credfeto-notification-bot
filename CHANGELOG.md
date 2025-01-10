@@ -9,12 +9,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Database to 1.2.81.948
 - Dependencies - Updated Credfeto.Enumeration to 1.2.53.824
 - Dependencies - Updated xunit.analyzers to 1.19.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.1
 - Dependencies - Updated Meziantou.Analyzer to 2.0.186
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.5.0.109200
+- Dependencies - Updated Credfeto.Database to 1.2.82.957
 ### Removed
 ### Deployment Changes
 
