@@ -52,7 +52,7 @@
     <PackageReference Include="Credfeto.Random.Interfaces" Version="1.0.18.264" />
     <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.62.654" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="9.0.1" />
     <PackageReference Include="NonBlocking" Version="2.1.2" />
     <PackageReference Include="System.Interactive.Async" Version="6.0.1" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
