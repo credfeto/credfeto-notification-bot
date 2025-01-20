@@ -9,16 +9,19 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated FunFair.Test.Common to 6.1.246.1079
-- Dependencies - Updated Credfeto.Database to 1.2.83.977
-- Dependencies - Updated Credfeto.Enumeration to 1.2.54.847
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.86.736
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.69] - 2025-01-20
+### Changed
+- Dependencies - Updated FunFair.Test.Common to 6.1.246.1079
+- Dependencies - Updated Credfeto.Database to 1.2.83.977
+- Dependencies - Updated Credfeto.Enumeration to 1.2.54.847
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.86.736
+
 ## [0.0.68] - 2025-01-18
 ### Changed
 - SDK - Updated DotNet SDK to 9.0.102
