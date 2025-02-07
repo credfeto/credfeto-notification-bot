@@ -10,7 +10,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.67.907
-- Dependencies - Updated FunFair.Test.Common to 6.1.256.1131
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.53.337
 - Dependencies - Updated Credfeto.Date to 1.1.73.838
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.98.801
@@ -18,6 +17,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.20.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated Credfeto.Random to 1.0.75.818
+- Dependencies - Updated FunFair.Test.Common to 6.1.257.1137
 ### Removed
 ### Deployment Changes
 
