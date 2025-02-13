@@ -4,7 +4,11 @@ using StronglyTypedIds;
 namespace Credfeto.Notification.Bot.Twitch.DataTypes;
 
 [StronglyTypedId(Template.String)]
-[SuppressMessage(category: "ReSharper", checkId: "PartialTypeWithSinglePart", Justification = "Uses source generation")]
+[SuppressMessage(
+    category: "ReSharper",
+    checkId: "PartialTypeWithSinglePart",
+    Justification = "Uses source generation"
+)]
 public readonly partial struct Viewer
 {
     public static Viewer FromString(string user)

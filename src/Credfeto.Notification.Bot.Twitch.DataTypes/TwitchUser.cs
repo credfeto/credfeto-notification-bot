@@ -10,5 +10,5 @@ public sealed record TwitchUser(
     int Id,
     [SqlFieldMap<ViewerMapper, Viewer>] Viewer UserName,
     bool IsStreamer,
-    [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>]
-    in DateTimeOffset DateCreated);
+    [SqlFieldMap<DateTimeOffsetMapper, DateTimeOffset>] in DateTimeOffset DateCreated
+);
