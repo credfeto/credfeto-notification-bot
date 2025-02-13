@@ -3,7 +3,6 @@ using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.StreamState;
-using Credfeto.Random.Interfaces;
 using FunFair.Test.Common;
 using Mediator;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +24,6 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
     {
         return service.AddMockedService<ICurrentTimeSource>()
                       .AddMockedService<IMessageChannel<TwitchChatMessage>>()
-                      .AddMockedService<IRandomNumberGenerator>()
                       .AddMockedService<IOptions<TwitchBotOptions>>(options => { options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, [])); })
                       .AddMockedService<IMediator>()
 
