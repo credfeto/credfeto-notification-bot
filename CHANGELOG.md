@@ -11,7 +11,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Date to 1.1.73.838
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.98.801
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.74.744
 - Dependencies - Updated xunit.analyzers to 1.20.0
 - Dependencies - Updated xunit.runner.visualstudio to 3.0.2
 - Dependencies - Updated Credfeto.Random to 1.0.75.818
@@ -22,6 +21,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 2.0.187
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.2
 - Dependencies - Updated Roslynator.Analyzers to 4.13.0
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.75.757
 ### Removed
 ### Deployment Changes
 
