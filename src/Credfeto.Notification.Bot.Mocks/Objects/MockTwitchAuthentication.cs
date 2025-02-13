@@ -5,12 +5,13 @@ namespace Credfeto.Notification.Bot.Mocks.Objects;
 
 internal sealed class MockTwitchAuthentication : MockBase<TwitchAuthentication>
 {
-    private static readonly TwitchAuthentication Invalid = new(new(oAuthToken: "INVALID", userName: "INVALID"), new(clientId: "INVALID", clientSecret: "INVALID", clientAccessToken: "INVALID"));
+    private static readonly TwitchAuthentication Invalid = new(
+        new(oAuthToken: "INVALID", userName: "INVALID"),
+        new(clientId: "INVALID", clientSecret: "INVALID", clientAccessToken: "INVALID")
+    );
 
     public MockTwitchAuthentication()
-        : base(Invalid)
-    {
-    }
+        : base(Invalid) { }
 
     public override TwitchAuthentication Next()
     {

@@ -7,9 +7,7 @@ namespace Credfeto.Notification.Bot.Mocks.Objects;
 internal sealed class MockStreamer : MockBase<Streamer>
 {
     public MockStreamer()
-        : base(Streamer.FromString(nameof(Streamer)))
-    {
-    }
+        : base(Streamer.FromString(nameof(Streamer))) { }
 
     public override Streamer Next()
     {

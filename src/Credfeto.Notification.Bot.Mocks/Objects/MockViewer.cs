@@ -7,9 +7,7 @@ namespace Credfeto.Notification.Bot.Mocks.Objects;
 internal sealed class MockViewer : MockBase<Viewer>
 {
     public MockViewer()
-        : base(Viewer.FromString(nameof(Viewer)))
-    {
-    }
+        : base(Viewer.FromString(nameof(Viewer))) { }
 
     public override Viewer Next()
     {
