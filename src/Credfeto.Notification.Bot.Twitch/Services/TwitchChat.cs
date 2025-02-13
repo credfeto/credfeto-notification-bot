@@ -296,8 +296,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
     private IReadOnlyList<Streamer> GetPreviouslyJoinedStreamers()
     {
-        return this._joinedStreamers.Keys.Where(streamer => !this.IsConnectedToChat(streamer))
-                   .ToArray();
+        return [..this._joinedStreamers.Keys.Where(streamer => !this.IsConnectedToChat(streamer))];
     }
 
     private async Task OnMessageReceivedAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)

@@ -32,13 +32,14 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
-        this._channels = new[]
+
+        this._channels = [..new[]
             {
                 this._options.Authentication.Chat.UserName
             }.Concat(this._options.ChatCommands.Select(channel => channel.Streamer))
              .Select(Streamer.FromString)
              .Distinct()
-             .ToList();
+             ];
     }
 
     public async ValueTask StartAsync(CancellationToken cancellationToken)

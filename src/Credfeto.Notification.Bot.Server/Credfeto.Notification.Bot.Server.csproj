@@ -24,7 +24,7 @@
     <NoWarn />
     <NuGetAudit>true</NuGetAudit>
     <NuGetAuditLevel>low</NuGetAuditLevel>
-    <NuGetAuditMode>all</NuGetAuditMode>
+    <NuGetAuditMode>direct</NuGetAuditMode>
     <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
     <RunAOTCompilation>false</RunAOTCompilation>
@@ -65,7 +65,6 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Database.Pgsql" Version="1.2.97.1052" />
     <PackageReference Include="Credfeto.Date" Version="1.1.73.838" />
     <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.98.801" />
     <PackageReference Include="Credfeto.Random" Version="1.0.75.818" />

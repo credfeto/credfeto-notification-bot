@@ -79,8 +79,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         {
             if (this._lastVersion != this._version)
             {
-                this._lsm.SetChannelsByName(this._channels.Keys.Select(c => c.Value)
-                                                .ToList());
+                this._lsm.SetChannelsByName([..this._channels.Keys.Select(c => c.Value)]);
                 this._lastVersion = this._version;
             }
 
