@@ -10,7 +10,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.67.907
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.53.337
 - Dependencies - Updated Credfeto.Date to 1.1.73.838
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.98.801
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.74.744
@@ -19,6 +18,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.75.818
 - Dependencies - Updated FunFair.Test.Common to 6.1.257.1137
 - SDK - Updated DotNet SDK to 9.0.200
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.54.350
 ### Removed
 ### Deployment Changes
 
