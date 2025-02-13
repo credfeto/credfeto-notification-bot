@@ -42,7 +42,11 @@ public static class ApplicationConfig
         return path;
     }
 
-    [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0008: Don't disable warnings", Justification = "TODO: Review")]
+    [SuppressMessage(
+        category: "FunFair.CodeAnalysis",
+        checkId: "FFS0008: Don't disable warnings",
+        Justification = "TODO: Review"
+    )]
     private static string AppLocation()
     {
 #pragma warning disable IL3000

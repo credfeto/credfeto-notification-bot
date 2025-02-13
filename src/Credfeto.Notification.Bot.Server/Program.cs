@@ -14,10 +14,7 @@ internal static class Program
     {
         StartupBanner.Show();
 
-        return CreateHostBuilder(args)
-               .Build()
-               .InitializeLogging()
-               .RunAsync(CancellationToken.None);
+        return CreateHostBuilder(args).Build().InitializeLogging().RunAsync(CancellationToken.None);
     }
 
     private static IHost InitializeLogging(this IHost host)
@@ -32,11 +29,11 @@ internal static class Program
     private static IHostBuilder CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
-                   .UseDefaultServiceProvider(InitialiseServiceProvider)
-                   .ConfigureServices(Service.Configure)
-                   .ConfigureLogging(InitialiseProviders)
-                   .UseWindowsService()
-                   .UseSystemd();
+            .UseDefaultServiceProvider(InitialiseServiceProvider)
+            .ConfigureServices(Service.Configure)
+            .ConfigureLogging(InitialiseProviders)
+            .UseWindowsService()
+            .UseSystemd();
     }
 
     private static void InitialiseServiceProvider(ServiceProviderOptions options)
@@ -45,7 +42,10 @@ internal static class Program
         options.ValidateOnBuild = true;
     }
 
-    private static void InitialiseProviders(HostBuilderContext hostBuilderContext, ILoggingBuilder logger)
+    private static void InitialiseProviders(
+        HostBuilderContext hostBuilderContext,
+        ILoggingBuilder logger
+    )
     {
         logger.ClearProviders();
     }

@@ -6,7 +6,8 @@ internal static class StartupBanner
 {
     public static void Show()
     {
-        const string banner = @"
+        const string banner =
+            @"
 .88b  d88.  .d88b.  d8888b.        d8888b.  .d88b.  d888888b
 88'YbdP`88 .8P  Y8. 88  `8D        88  `8D .8P  Y8. `~~88~~'
 88  88  88 88    88 88   88        88oooY' 88    88    88
@@ -17,7 +18,9 @@ YP  YP  YP  `Y88P'  Y8888D'        Y8888P'  `Y88P'     YP";
         Console.WriteLine("");
         Console.WriteLine("");
         Console.WriteLine("");
-        Console.WriteLine($"{VersionInformation.Product} ({VersionInformation.Version}): Starting...");
+        Console.WriteLine(
+            $"{VersionInformation.Product} ({VersionInformation.Version}): Starting..."
+        );
         Console.WriteLine("");
     }
 }

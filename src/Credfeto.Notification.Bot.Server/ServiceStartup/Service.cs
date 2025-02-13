@@ -28,26 +28,33 @@ internal static class Service
 
         Log.Logger = CreateLogger();
 
-        services.AddConfiguration()
-                .AddMediator()
-                .AddAppLogging()
-                .AddDate()
-                .AddRandomNumbers()
-                .AddResources()
-                .AddRunOnStartupServices()
-                .AddTwitch();
+        services
+            .AddConfiguration()
+            .AddMediator()
+            .AddAppLogging()
+            .AddDate()
+            .AddRandomNumbers()
+            .AddResources()
+            .AddRunOnStartupServices()
+            .AddTwitch();
     }
 
     private static IServiceCollection AddConfiguration(this IServiceCollection services)
     {
         IConfigurationRoot configurationRoot = LoadConfigFile();
 
-        JsonSerializerContext jsonSerializerContext = ServerConfigurationSerializationContext.Default;
+        JsonSerializerContext jsonSerializerContext =
+            ServerConfigurationSerializationContext.Default;
 
         try
         {
-            return services.AddOptions()
-                           .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(configurationRoot: configurationRoot, key: "Twitch", jsonSerializerContext: jsonSerializerContext);
+            return services
+                .AddOptions()
+                .WithConfiguration<TwitchBotOptionsValidator, TwitchBotOptions>(
+                    configurationRoot: configurationRoot,
+                    key: "Twitch",
+                    jsonSerializerContext: jsonSerializerContext
+                );
         }
         catch (ConfigurationErrorsException exception)
         {
@@ -64,17 +71,16 @@ internal static class Service
 
     private static Logger CreateLogger()
     {
-        return new LoggerConfiguration().Enrich.FromLogContext()
-                                        .WriteTo.Console()
-                                        .CreateLogger();
+        return new LoggerConfiguration().Enrich.FromLogContext().WriteTo.Console().CreateLogger();
     }
 
     private static IConfigurationRoot LoadConfigFile()
     {
-        return new ConfigurationBuilder().SetBasePath(ApplicationConfig.ConfigurationFilesPath)
-                                         .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
-                                         .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
-                                         .AddEnvironmentVariables()
-                                         .Build();
+        return new ConfigurationBuilder()
+            .SetBasePath(ApplicationConfig.ConfigurationFilesPath)
+            .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
+            .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
+            .AddEnvironmentVariables()
+            .Build();
     }
 }
