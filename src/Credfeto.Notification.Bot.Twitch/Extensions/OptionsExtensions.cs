@@ -8,13 +8,14 @@ internal static class OptionsExtensions
     public static TwitchAPI ConfigureTwitchApi(this TwitchBotOptions options)
     {
         return new()
-               {
-                   Settings =
-                   {
-                       ClientId = options.Authentication.Api.ClientId, Secret = options.Authentication.Api.ClientSecret
-                       /*
-                       , AccessToken = options.Authentication.ClientAccessToken */
-                   }
-               };
+        {
+            Settings =
+            {
+                ClientId = options.Authentication.Api.ClientId,
+                Secret = options.Authentication.Api.ClientSecret,
+                /*
+                , AccessToken = options.Authentication.ClientAccessToken */
+            },
+        };
     }
 }

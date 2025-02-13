@@ -7,18 +7,29 @@ using Mediator;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-public sealed class TwitchIncomingMessageNotificationHandler : INotificationHandler<TwitchIncomingMessage>
+public sealed class TwitchIncomingMessageNotificationHandler
+    : INotificationHandler<TwitchIncomingMessage>
 {
     private readonly ITwitchCustomMessageHandler _twitchCustomMessageHandler;
 
-    public TwitchIncomingMessageNotificationHandler(ITwitchCustomMessageHandler twitchCustomMessageHandler)
+    public TwitchIncomingMessageNotificationHandler(
+        ITwitchCustomMessageHandler twitchCustomMessageHandler
+    )
     {
-        this._twitchCustomMessageHandler = twitchCustomMessageHandler ?? throw new ArgumentNullException(nameof(twitchCustomMessageHandler));
+        this._twitchCustomMessageHandler =
+            twitchCustomMessageHandler
+            ?? throw new ArgumentNullException(nameof(twitchCustomMessageHandler));
     }
 
-    public async ValueTask Handle(TwitchIncomingMessage notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(
+        TwitchIncomingMessage notification,
+        CancellationToken cancellationToken
+    )
     {
-        bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(message: notification, cancellationToken: cancellationToken);
+        bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(
+            message: notification,
+            cancellationToken: cancellationToken
+        );
 
         if (handled)
         {

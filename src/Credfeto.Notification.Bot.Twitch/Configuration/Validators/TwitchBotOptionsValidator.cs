@@ -10,8 +10,7 @@ public sealed class TwitchBotOptionsValidator : AbstractValidator<TwitchBotOptio
             .NotNull()
             .SetValidator(new TwitchAuthenticationValidator());
 
-        this.RuleFor(x => x.ChatCommands)
-            .NotNull();
+        this.RuleFor(x => x.ChatCommands).NotNull();
 
         this.RuleForEach(x => x.ChatCommands)
             .NotNull()

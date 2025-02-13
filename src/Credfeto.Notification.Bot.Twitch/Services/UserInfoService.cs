@@ -26,19 +26,27 @@ public sealed class UserInfoService : IUserInfoService
     public UserInfoService(IOptions<TwitchBotOptions> options, ILogger<UserInfoService> logger)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        TwitchBotOptions apiOptions = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+        TwitchBotOptions apiOptions = (
+            options ?? throw new ArgumentNullException(nameof(options))
+        ).Value;
 
         this._api = apiOptions.ConfigureTwitchApi();
 
         this._cache = new();
     }
 
-    public Task<TwitchUser?> GetUserAsync(in Streamer userName, in CancellationToken cancellationToken)
+    public Task<TwitchUser?> GetUserAsync(
+        in Streamer userName,
+        in CancellationToken cancellationToken
+    )
     {
         return this.GetUserAsync(userName.ToViewer(), cancellationToken: cancellationToken);
     }
 
-    public async Task<TwitchUser?> GetUserAsync(Viewer userName, CancellationToken cancellationToken)
+    public async Task<TwitchUser?> GetUserAsync(
+        Viewer userName,
+        CancellationToken cancellationToken
+    )
     {
         if (this._cache.TryGetValue(key: userName, out TwitchUser? user))
         {
@@ -50,14 +58,18 @@ public sealed class UserInfoService : IUserInfoService
             this._logger.GettingUserInfo(userName);
             GetUsersResponse result = await this.GetUsersAsync(userName);
 
-            return this.AddUserToCache(userName: userName,
-                                       result.Users is []
-                                           ? null
-                                           : ConvertUser(result.Users[0]));
+            return this.AddUserToCache(
+                userName: userName,
+                result.Users is [] ? null : ConvertUser(result.Users[0])
+            );
         }
         catch (Exception exception)
         {
-            this._logger.FailedToGetUserInformation(userName: userName, message: exception.Message, exception: exception);
+            this._logger.FailedToGetUserInformation(
+                userName: userName,
+                message: exception.Message,
+                exception: exception
+            );
 
             return null;
         }
@@ -77,9 +89,11 @@ public sealed class UserInfoService : IUserInfoService
 
     private static TwitchUser ConvertUser(User user)
     {
-        return new(Convert.ToInt32(value: user.Id, provider: CultureInfo.InvariantCulture),
-                   Viewer.FromString(user.Login),
-                   !string.IsNullOrWhiteSpace(user.BroadcasterType),
-                   user.CreatedAt.AsDateTimeOffset());
+        return new(
+            Convert.ToInt32(value: user.Id, provider: CultureInfo.InvariantCulture),
+            Viewer.FromString(user.Login),
+            !string.IsNullOrWhiteSpace(user.BroadcasterType),
+            user.CreatedAt.AsDateTimeOffset()
+        );
     }
 }

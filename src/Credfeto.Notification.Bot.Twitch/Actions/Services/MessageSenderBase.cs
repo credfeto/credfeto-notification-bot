@@ -15,10 +15,18 @@ public abstract class MessageSenderBase
         this._twitchChatMessageChannel = twitchChatMessageChannel;
     }
 
-    protected ValueTask SendMessageAsync(in Streamer streamer, MessagePriority priority, string message, in CancellationToken cancellationToken)
+    protected ValueTask SendMessageAsync(
+        in Streamer streamer,
+        MessagePriority priority,
+        string message,
+        in CancellationToken cancellationToken
+    )
     {
         TwitchChatMessage toSend = new(streamer: streamer, priority: priority, message: message);
 
-        return this._twitchChatMessageChannel.PublishAsync(message: toSend, cancellationToken: cancellationToken);
+        return this._twitchChatMessageChannel.PublishAsync(
+            message: toSend,
+            cancellationToken: cancellationToken
+        );
     }
 }

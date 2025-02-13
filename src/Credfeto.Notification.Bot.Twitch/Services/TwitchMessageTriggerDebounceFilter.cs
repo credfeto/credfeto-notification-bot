@@ -14,9 +14,13 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
     private readonly ConcurrentDictionary<TwitchOutputMessageMatch, When> _debounce;
     private readonly ILogger<TwitchMessageTriggerDebounceFilter> _logger;
 
-    public TwitchMessageTriggerDebounceFilter(ICurrentTimeSource currentTimeSource, ILogger<TwitchMessageTriggerDebounceFilter> logger)
+    public TwitchMessageTriggerDebounceFilter(
+        ICurrentTimeSource currentTimeSource,
+        ILogger<TwitchMessageTriggerDebounceFilter> logger
+    )
     {
-        this._currentTimeSource = currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
+        this._currentTimeSource =
+            currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._debounce = new();
     }

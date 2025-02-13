@@ -6,5 +6,5 @@ public enum MessagePriority
 
     NATURAL = 15,
 
-    SLOW = 30
+    SLOW = 30,
 }

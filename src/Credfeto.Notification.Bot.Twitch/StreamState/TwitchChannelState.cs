@@ -17,8 +17,15 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     private ActiveStream? _stream;
 
-    public TwitchChannelState(in Streamer streamerStreamer,
-                              [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
+    public TwitchChannelState(
+        in Streamer streamerStreamer,
+        [SuppressMessage(
+            category: "FunFair.CodeAnalysis",
+            checkId: "FFS0024:ILogger should be typed",
+            Justification = "Not created by DI"
+        )]
+            ILogger logger
+    )
     {
         this.Streamer = streamerStreamer;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -28,7 +35,11 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public bool IsOnline => this._stream != null;
 
-    public ValueTask OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken)
+    public ValueTask OnlineAsync(
+        string gameName,
+        DateTimeOffset startDate,
+        CancellationToken cancellationToken
+    )
     {
         this._logger.ChannelGoingOnline(this.Streamer);
         ActiveStream stream = new(gameName: gameName, startedAt: startDate);

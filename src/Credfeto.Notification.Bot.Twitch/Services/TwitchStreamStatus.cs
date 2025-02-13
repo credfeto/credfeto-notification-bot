@@ -34,7 +34,11 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
     private int _lastVersion;
     private int _version;
 
-    public TwitchStreamStatus(IOptions<TwitchBotOptions> options, IMediator mediator, ILogger<TwitchStreamStatus> logger)
+    public TwitchStreamStatus(
+        IOptions<TwitchBotOptions> options,
+        IMediator mediator,
+        ILogger<TwitchStreamStatus> logger
+    )
     {
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -46,17 +50,33 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 
         this._lsm = new(options.Value.ConfigureTwitchApi());
 
-        this._onlineSubscription = Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
-                                             .Select(messageEvent => messageEvent.EventArgs)
-                                             .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
-                                             .Concat()
-                                             .Subscribe();
+        this._onlineSubscription = Observable
+            .FromEventPattern<OnStreamOnlineArgs>(
+                addHandler: h => this._lsm.OnStreamOnline += h,
+                removeHandler: h => this._lsm.OnStreamOnline -= h
+            )
+            .Select(messageEvent => messageEvent.EventArgs)
+            .Select(e =>
+                Observable.FromAsync(cancellationToken =>
+                    this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)
+                )
+            )
+            .Concat()
+            .Subscribe();
 
-        this._offlineSubscription = Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
-                                              .Select(messageEvent => messageEvent.EventArgs)
-                                              .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
-                                              .Concat()
-                                              .Subscribe();
+        this._offlineSubscription = Observable
+            .FromEventPattern<OnStreamOfflineArgs>(
+                addHandler: h => this._lsm.OnStreamOffline += h,
+                removeHandler: h => this._lsm.OnStreamOffline -= h
+            )
+            .Select(messageEvent => messageEvent.EventArgs)
+            .Select(e =>
+                Observable.FromAsync(cancellationToken =>
+                    this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)
+                )
+            )
+            .Concat()
+            .Subscribe();
     }
 
     public void Dispose()
@@ -79,7 +99,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         {
             if (this._lastVersion != this._version)
             {
-                this._lsm.SetChannelsByName([..this._channels.Keys.Select(c => c.Value)]);
+                this._lsm.SetChannelsByName([.. this._channels.Keys.Select(c => c.Value)]);
                 this._lastVersion = this._version;
             }
 
@@ -96,7 +116,11 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
             }
 
             Streamer streamer = Streamer.FromString(match.Groups["streamer"].Value);
-            this._logger.StreamertNotFound(streamer: streamer, message: exception.Message, exception: exception);
+            this._logger.StreamertNotFound(
+                streamer: streamer,
+                message: exception.Message,
+                exception: exception
+            );
 
             this._channels.TryRemove(key: streamer, value: out _);
         }
@@ -116,34 +140,67 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
     }
 
-    private async Task OnStreamOnlineAsync(OnStreamOnlineArgs e, CancellationToken cancellationToken)
+    private async Task OnStreamOnlineAsync(
+        OnStreamOnlineArgs e,
+        CancellationToken cancellationToken
+    )
     {
         Streamer streamer = Streamer.FromString(e.Channel);
-        this._logger.StreamStarted(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, e.Stream.StartedAt.AsDateTimeOffset());
+        this._logger.StreamStarted(
+            streamer: streamer,
+            title: e.Stream.Title,
+            gameName: e.Stream.GameName,
+            e.Stream.StartedAt.AsDateTimeOffset()
+        );
 
         try
         {
-            await this._mediator.Publish(new TwitchStreamOnline(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
-                                         cancellationToken: cancellationToken);
+            await this._mediator.Publish(
+                new TwitchStreamOnline(
+                    streamer: streamer,
+                    title: e.Stream.Title,
+                    gameName: e.Stream.GameName,
+                    startedAt: e.Stream.StartedAt
+                ),
+                cancellationToken: cancellationToken
+            );
         }
         catch (Exception exception)
         {
-            this._logger.FailedToNotifyStreamStarted(streamer: streamer, message: exception.Message, exception: exception);
+            this._logger.FailedToNotifyStreamStarted(
+                streamer: streamer,
+                message: exception.Message,
+                exception: exception
+            );
         }
     }
 
-    private async Task OnStreamOfflineAsync(OnStreamOfflineArgs e, CancellationToken cancellationToken)
+    private async Task OnStreamOfflineAsync(
+        OnStreamOfflineArgs e,
+        CancellationToken cancellationToken
+    )
     {
         Streamer streamer = Streamer.FromString(e.Channel);
 
         try
         {
-            await this._mediator.Publish(new TwitchStreamOffline(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
-                                         cancellationToken: cancellationToken);
+            await this._mediator.Publish(
+                new TwitchStreamOffline(
+                    streamer: streamer,
+                    title: e.Stream.Title,
+                    gameName: e.Stream.GameName,
+                    startedAt: e.Stream.StartedAt
+                ),
+                cancellationToken: cancellationToken
+            );
         }
         catch (Exception exception)
         {
-            this._logger.FailedToNotifyStreamStopped(streamer: streamer, message: exception.Message, exception: exception);
+            this._logger.FailedToNotifyStreamStopped(
+                streamer: streamer,
+                message: exception.Message,
+                exception: exception
+            );
         }
     }
 }

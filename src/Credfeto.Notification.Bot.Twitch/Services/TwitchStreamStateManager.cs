@@ -20,6 +20,9 @@ public sealed class TwitchStreamStateManager : ITwitchStreamStateManager
     {
         return this._channels.TryGetValue(key: streamer, out ITwitchChannelState? status)
             ? status
-            : this._channels.GetOrAdd(key: streamer, new TwitchChannelState(streamerStreamer: streamer, logger: this._logger));
+            : this._channels.GetOrAdd(
+                key: streamer,
+                new TwitchChannelState(streamerStreamer: streamer, logger: this._logger)
+            );
     }
 }

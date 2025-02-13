@@ -14,7 +14,10 @@ public sealed class RestoreTwitchChatConnectionWorker : BackgroundService
     private readonly ILogger<RestoreTwitchChatConnectionWorker> _logger;
     private readonly ITwitchChat _twitchChat;
 
-    public RestoreTwitchChatConnectionWorker(ITwitchChat twitchChat, ILogger<RestoreTwitchChatConnectionWorker> logger)
+    public RestoreTwitchChatConnectionWorker(
+        ITwitchChat twitchChat,
+        ILogger<RestoreTwitchChatConnectionWorker> logger
+    )
     {
         this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -37,7 +40,10 @@ public sealed class RestoreTwitchChatConnectionWorker : BackgroundService
         }
         catch (Exception exception)
         {
-            this._logger.FailedToUpdateTwitchChatConnection(message: exception.Message, exception: exception);
+            this._logger.FailedToUpdateTwitchChatConnection(
+                message: exception.Message,
+                exception: exception
+            );
 
             throw;
         }

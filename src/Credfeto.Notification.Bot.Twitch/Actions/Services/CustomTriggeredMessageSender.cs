@@ -13,16 +13,28 @@ public sealed class CustomTriggeredMessageSender : MessageSenderBase, ICustomTri
 {
     private readonly ILogger<CustomTriggeredMessageSender> _logger;
 
-    public CustomTriggeredMessageSender(IMessageChannel<TwitchChatMessage> twitchChatMessageChannel, ILogger<CustomTriggeredMessageSender> logger)
+    public CustomTriggeredMessageSender(
+        IMessageChannel<TwitchChatMessage> twitchChatMessageChannel,
+        ILogger<CustomTriggeredMessageSender> logger
+    )
         : base(twitchChatMessageChannel)
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task SendAsync(Streamer streamer, string message, CancellationToken cancellationToken)
+    public async Task SendAsync(
+        Streamer streamer,
+        string message,
+        CancellationToken cancellationToken
+    )
     {
         this._logger.CustomMessageTriggeredSending(streamer: streamer, message: message);
-        await this.SendMessageAsync(streamer: streamer, priority: MessagePriority.NATURAL, message: message, cancellationToken: cancellationToken);
+        await this.SendMessageAsync(
+            streamer: streamer,
+            priority: MessagePriority.NATURAL,
+            message: message,
+            cancellationToken: cancellationToken
+        );
         this._logger.CustomMessageTriggeredSent(streamer: streamer, message: message);
     }
 }

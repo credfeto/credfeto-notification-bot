@@ -24,22 +24,28 @@ public sealed class TwitchChannelStartup : IRunOnStartup
     private readonly ITwitchChat _twitchChat;
     private readonly IUserInfoService _userInfoService;
 
-    public TwitchChannelStartup(IOptions<TwitchBotOptions> options, IUserInfoService userInfoService, ITwitchChat twitchChat, IMediator mediator, ILogger<TwitchChannelStartup> logger)
+    public TwitchChannelStartup(
+        IOptions<TwitchBotOptions> options,
+        IUserInfoService userInfoService,
+        ITwitchChat twitchChat,
+        IMediator mediator,
+        ILogger<TwitchChannelStartup> logger
+    )
     {
-        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
+        this._userInfoService =
+            userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
-
-        this._channels = [..new[]
-            {
-                this._options.Authentication.Chat.UserName
-            }.Concat(this._options.ChatCommands.Select(channel => channel.Streamer))
-             .Select(Streamer.FromString)
-             .Distinct()
-             ];
+        this._channels =
+        [
+            .. new[] { this._options.Authentication.Chat.UserName }
+                .Concat(this._options.ChatCommands.Select(channel => channel.Streamer))
+                .Select(Streamer.FromString)
+                .Distinct(),
+        ];
     }
 
     public async ValueTask StartAsync(CancellationToken cancellationToken)
@@ -53,12 +59,23 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         foreach (Streamer streamer in this._channels)
         {
             this._logger.LookingForChannel(streamer);
-            TwitchUser? info = await this._userInfoService.GetUserAsync(userName: streamer, cancellationToken: cancellationToken);
+            TwitchUser? info = await this._userInfoService.GetUserAsync(
+                userName: streamer,
+                cancellationToken: cancellationToken
+            );
 
             if (info != null)
             {
-                this._logger.FoundChannel(streamer: streamer, userId: info.Id, isStreamer: info.IsStreamer, dateCreated: info.DateCreated);
-                await this._mediator.Publish(new TwitchWatchChannel(info), cancellationToken: cancellationToken);
+                this._logger.FoundChannel(
+                    streamer: streamer,
+                    userId: info.Id,
+                    isStreamer: info.IsStreamer,
+                    dateCreated: info.DateCreated
+                );
+                await this._mediator.Publish(
+                    new TwitchWatchChannel(info),
+                    cancellationToken: cancellationToken
+                );
             }
         }
     }

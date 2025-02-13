@@ -6,12 +6,8 @@ public sealed class TwitchAuthenticationValidatorChat : AbstractValidator<Twitch
 {
     public TwitchAuthenticationValidatorChat()
     {
-        this.RuleFor(x => x.UserName)
-            .NotNull()
-            .NotEmpty();
+        this.RuleFor(x => x.UserName).NotNull().NotEmpty();
 
-        this.RuleFor(x => x.OAuthToken)
-            .NotNull()
-            .NotEmpty();
+        this.RuleFor(x => x.OAuthToken).NotNull().NotEmpty();
     }
 }

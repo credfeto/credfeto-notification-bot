@@ -9,26 +9,43 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-public sealed class CustomTriggeredMessageNotificationHandler : INotificationHandler<CustomTriggeredMessage>
+public sealed class CustomTriggeredMessageNotificationHandler
+    : INotificationHandler<CustomTriggeredMessage>
 {
     private readonly ICustomTriggeredMessageSender _customTriggeredMessageSender;
     private readonly ILogger<CustomTriggeredMessageNotificationHandler> _logger;
 
-    public CustomTriggeredMessageNotificationHandler(ICustomTriggeredMessageSender customTriggeredMessageSender, ILogger<CustomTriggeredMessageNotificationHandler> logger)
+    public CustomTriggeredMessageNotificationHandler(
+        ICustomTriggeredMessageSender customTriggeredMessageSender,
+        ILogger<CustomTriggeredMessageNotificationHandler> logger
+    )
     {
-        this._customTriggeredMessageSender = customTriggeredMessageSender ?? throw new ArgumentNullException(nameof(customTriggeredMessageSender));
+        this._customTriggeredMessageSender =
+            customTriggeredMessageSender
+            ?? throw new ArgumentNullException(nameof(customTriggeredMessageSender));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async ValueTask Handle(CustomTriggeredMessage notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(
+        CustomTriggeredMessage notification,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
-            await this._customTriggeredMessageSender.SendAsync(streamer: notification.Streamer, message: notification.Message, cancellationToken: cancellationToken);
+            await this._customTriggeredMessageSender.SendAsync(
+                streamer: notification.Streamer,
+                message: notification.Message,
+                cancellationToken: cancellationToken
+            );
         }
         catch (Exception exception)
         {
-            this._logger.FailedToSendCustomMessage(streamer: notification.Streamer, message: exception.Message, exception: exception);
+            this._logger.FailedToSendCustomMessage(
+                streamer: notification.Streamer,
+                message: exception.Message,
+                exception: exception
+            );
         }
     }
 }
