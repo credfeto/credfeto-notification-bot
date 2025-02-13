@@ -19,15 +19,23 @@ public sealed class UserInfoServiceTests : TestBase
     public UserInfoServiceTests()
     {
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, []));
+        options.Value.Returns(
+            new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, [])
+        );
 
-        this._userInfoService = new UserInfoService(options: options, this.GetTypedLogger<UserInfoService>());
+        this._userInfoService = new UserInfoService(
+            options: options,
+            this.GetTypedLogger<UserInfoService>()
+        );
     }
 
     [Fact]
     public async Task GetUserReturnsNullIfNotFoundAsync()
     {
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, cancellationToken: CancellationToken.None);
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(
+            userName: MockReferenceData.Viewer,
+            cancellationToken: CancellationToken.None
+        );
 
         Assert.Null(twitchUser);
     }

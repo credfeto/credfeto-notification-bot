@@ -22,24 +22,36 @@ public sealed class TwitchStreamOnlineJoinChatNotificationHandlerTests : TestBas
         this._twitchChat = GetSubstitute<ITwitchChat>();
         this._twitchStreamStateManager = GetSubstitute<ITwitchStreamStateManager>();
 
-        this._notificationHandler = new TwitchStreamOnlineJoinChatNotificationHandler(twitchChat: this._twitchChat, twitchStreamStateManager: this._twitchStreamStateManager);
+        this._notificationHandler = new TwitchStreamOnlineJoinChatNotificationHandler(
+            twitchChat: this._twitchChat,
+            twitchStreamStateManager: this._twitchStreamStateManager
+        );
     }
 
     [Fact]
     public async Task HandleShouldJoinChatAsync()
     {
-        TwitchStreamOnline notification = new(streamer: MockReferenceData.Streamer,
-                                              title: "Banana",
-                                              gameName: "GameName",
-                                              new(year: 2024, month: 1, day: 1, hour: 1, minute: 1, second: 1, kind: DateTimeKind.Utc));
+        TwitchStreamOnline notification = new(
+            streamer: MockReferenceData.Streamer,
+            title: "Banana",
+            gameName: "GameName",
+            new(year: 2024, month: 1, day: 1, hour: 1, minute: 1, second: 1, kind: DateTimeKind.Utc)
+        );
 
-        await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(
+            notification: notification,
+            cancellationToken: CancellationToken.None
+        );
 
-        await this._twitchStreamStateManager.Received(1)
-                  .Get(streamer: MockReferenceData.Streamer)
-                  .OnlineAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset>(), Arg.Any<CancellationToken>());
+        await this
+            ._twitchStreamStateManager.Received(1)
+            .Get(streamer: MockReferenceData.Streamer)
+            .OnlineAsync(
+                Arg.Any<string>(),
+                Arg.Any<DateTimeOffset>(),
+                Arg.Any<CancellationToken>()
+            );
 
-        this._twitchChat.Received(1)
-            .JoinChat(streamer: MockReferenceData.Streamer);
+        this._twitchChat.Received(1).JoinChat(streamer: MockReferenceData.Streamer);
     }
 }

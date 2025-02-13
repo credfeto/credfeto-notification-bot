@@ -24,14 +24,19 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     {
         this._customTriggeredMessageSender = GetSubstitute<ICustomTriggeredMessageSender>();
 
-        this._notificationHandler = new CustomTriggeredMessageNotificationHandler(customTriggeredMessageSender: this._customTriggeredMessageSender,
-                                                                                  this.GetTypedLogger<CustomTriggeredMessageNotificationHandler>());
+        this._notificationHandler = new CustomTriggeredMessageNotificationHandler(
+            customTriggeredMessageSender: this._customTriggeredMessageSender,
+            this.GetTypedLogger<CustomTriggeredMessageNotificationHandler>()
+        );
     }
 
     [Fact]
     public async Task HandleAsync()
     {
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, message: MESSAGE), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(
+            new(streamer: MockReferenceData.Streamer, message: MESSAGE),
+            cancellationToken: CancellationToken.None
+        );
 
         await this.ReceivedJoinHeistAsync();
     }
@@ -39,17 +44,29 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     [Fact]
     public async Task HandleExceptionAsync()
     {
-        this._customTriggeredMessageSender.SendAsync(Arg.Any<Streamer>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+        this._customTriggeredMessageSender.SendAsync(
+                Arg.Any<Streamer>(),
+                Arg.Any<string>(),
+                Arg.Any<CancellationToken>()
+            )
             .ThrowsAsync<TimeoutException>();
 
-        await this._notificationHandler.Handle(new(streamer: MockReferenceData.Streamer, message: MESSAGE), cancellationToken: CancellationToken.None);
+        await this._notificationHandler.Handle(
+            new(streamer: MockReferenceData.Streamer, message: MESSAGE),
+            cancellationToken: CancellationToken.None
+        );
 
         await this.ReceivedJoinHeistAsync();
     }
 
     private Task ReceivedJoinHeistAsync()
     {
-        return this._customTriggeredMessageSender.Received(1)
-                   .SendAsync(streamer: MockReferenceData.Streamer, message: MESSAGE, Arg.Any<CancellationToken>());
+        return this
+            ._customTriggeredMessageSender.Received(1)
+            .SendAsync(
+                streamer: MockReferenceData.Streamer,
+                message: MESSAGE,
+                Arg.Any<CancellationToken>()
+            );
     }
 }

@@ -21,18 +21,24 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandlerTests : TestB
     {
         this._twitchStreamStatus = GetSubstitute<ITwitchStreamStatus>();
 
-        this._notificationHandler = new TwitchWatchChannelLiveStreamNotificationHandler(twitchStreamStatus: this._twitchStreamStatus,
-                                                                                        this.GetTypedLogger<TwitchWatchChannelLiveStreamNotificationHandler>());
+        this._notificationHandler = new TwitchWatchChannelLiveStreamNotificationHandler(
+            twitchStreamStatus: this._twitchStreamStatus,
+            this.GetTypedLogger<TwitchWatchChannelLiveStreamNotificationHandler>()
+        );
     }
 
     [Fact]
     public async Task ShouldEnableStreamStatusAsync()
     {
         Viewer viewer = MockReferenceData.Viewer;
-        TwitchWatchChannel notification = new(new(Id: 42, UserName: viewer, IsStreamer: false, DateCreated: DateTimeOffset.MinValue));
-        await this._notificationHandler.Handle(notification: notification, cancellationToken: CancellationToken.None);
+        TwitchWatchChannel notification = new(
+            new(Id: 42, UserName: viewer, IsStreamer: false, DateCreated: DateTimeOffset.MinValue)
+        );
+        await this._notificationHandler.Handle(
+            notification: notification,
+            cancellationToken: CancellationToken.None
+        );
 
-        await this._twitchStreamStatus.Received(1)
-                  .EnableAsync(viewer.ToStreamer());
+        await this._twitchStreamStatus.Received(1).EnableAsync(viewer.ToStreamer());
     }
 }

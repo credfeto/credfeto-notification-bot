@@ -9,15 +9,24 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 [DebuggerDisplay("{Streamer.Value}: {Chatter.Value} -  {MatchType}: {Message}")]
 public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch>
 {
-    private const RegexOptions REGEX_OPTIONS = RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.NonBacktracking | RegexOptions.CultureInvariant |
-                                               RegexOptions.Singleline;
+    private const RegexOptions REGEX_OPTIONS =
+        RegexOptions.IgnoreCase
+        | RegexOptions.Compiled
+        | RegexOptions.ExplicitCapture
+        | RegexOptions.NonBacktracking
+        | RegexOptions.CultureInvariant
+        | RegexOptions.Singleline;
 
     private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(5);
 
     private static readonly Dictionary<string, Regex> RegexCache = new(StringComparer.Ordinal);
 
-    public TwitchInputMessageMatch(in Streamer streamer, in Viewer chatter, string message, TwitchMessageMatchType matchType)
-
+    public TwitchInputMessageMatch(
+        in Streamer streamer,
+        in Viewer chatter,
+        string message,
+        TwitchMessageMatchType matchType
+    )
     {
         this.Streamer = streamer;
         this.Chatter = chatter;
@@ -48,7 +57,10 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
             return true;
         }
 
-        return this.Streamer.Equals(other.Streamer) && this.Chatter.Equals(other.Chatter) && StringComparer.Ordinal.Equals(x: this.Message, y: other.Message) && this.MatchType == other.MatchType;
+        return this.Streamer.Equals(other.Streamer)
+            && this.Chatter.Equals(other.Chatter)
+            && StringComparer.Ordinal.Equals(x: this.Message, y: other.Message)
+            && this.MatchType == other.MatchType;
     }
 
     private static Regex? BuildRegex(TwitchMessageMatchType matchType, string expression)
@@ -71,12 +83,18 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
 
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, objB: obj) || obj is TwitchInputMessageMatch other && this.Equals(other);
+        return ReferenceEquals(this, objB: obj)
+            || obj is TwitchInputMessageMatch other && this.Equals(other);
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(value1: this.Streamer, value2: this.Chatter, value3: this.Message, value4: this.MatchType);
+        return HashCode.Combine(
+            value1: this.Streamer,
+            value2: this.Chatter,
+            value3: this.Message,
+            value4: this.MatchType
+        );
     }
 
     public static bool operator ==(TwitchInputMessageMatch? left, TwitchInputMessageMatch? right)

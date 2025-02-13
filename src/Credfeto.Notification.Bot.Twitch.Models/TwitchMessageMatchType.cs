@@ -10,5 +10,5 @@ public enum TwitchMessageMatchType
 
     CONTAINS = 3,
 
-    REGEX = 4
+    REGEX = 4,
 }

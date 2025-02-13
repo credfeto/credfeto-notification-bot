@@ -8,7 +8,6 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 public sealed class TwitchOutputMessageMatch : IEquatable<TwitchOutputMessageMatch>
 {
     public TwitchOutputMessageMatch(in Streamer streamer, string message)
-
     {
         this.Streamer = streamer;
         this.Message = message;
@@ -30,12 +29,14 @@ public sealed class TwitchOutputMessageMatch : IEquatable<TwitchOutputMessageMat
             return true;
         }
 
-        return this.Streamer.Equals(other.Streamer) && StringComparer.Ordinal.Equals(x: this.Message, y: other.Message);
+        return this.Streamer.Equals(other.Streamer)
+            && StringComparer.Ordinal.Equals(x: this.Message, y: other.Message);
     }
 
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, objB: obj) || obj is TwitchInputMessageMatch other && this.Equals(other);
+        return ReferenceEquals(this, objB: obj)
+            || obj is TwitchInputMessageMatch other && this.Equals(other);
     }
 
     public override int GetHashCode()
