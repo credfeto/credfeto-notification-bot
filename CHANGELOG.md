@@ -22,6 +22,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.2
 - Dependencies - Updated Roslynator.Analyzers to 4.13.0
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.75.757
+- Dependencies - Updated Microsoft.Extensions to 9.0.2
 ### Removed
 ### Deployment Changes
 

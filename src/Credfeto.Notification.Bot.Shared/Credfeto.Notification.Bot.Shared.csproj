@@ -44,7 +44,7 @@
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xhfc-gr8f-ffwc" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CSharpier.MSBuild" Version="0.30.6" PrivateAssets="All" ExcludeAssets="runtime" />
