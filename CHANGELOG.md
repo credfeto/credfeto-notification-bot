@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.99.826
+- Dependencies - Updated Meziantou.Analyzer to 2.0.188
 ### Removed
 ### Deployment Changes
 
