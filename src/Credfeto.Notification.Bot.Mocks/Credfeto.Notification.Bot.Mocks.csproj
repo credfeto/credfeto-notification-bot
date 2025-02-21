@@ -47,7 +47,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FunFair.Test.Common" Version="6.1.258.1152" />
+    <PackageReference Include="FunFair.Test.Common" Version="6.1.259.1162" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
