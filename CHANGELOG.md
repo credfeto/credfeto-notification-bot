@@ -11,9 +11,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.99.826
 - Dependencies - Updated Meziantou.Analyzer to 2.0.188
-- Dependencies - Updated FunFair.Test.Common to 6.1.259.1162
 - Dependencies - Updated Roslynator.Analyzers to 4.13.1
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.55.367
+- Dependencies - Updated FunFair.Test.Common to 6.1.260.1166
 ### Removed
 ### Deployment Changes
 
