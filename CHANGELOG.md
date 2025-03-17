@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 9.0.3
 - Dependencies - Updated Credfeto.Enumeration to 1.2.68.969
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.100.855
+- Dependencies - Updated Credfeto.Random to 1.0.78.870
 ### Removed
 ### Deployment Changes
 
