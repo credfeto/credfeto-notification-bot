@@ -14,10 +14,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.100.855
 - Dependencies - Updated Credfeto.Random to 1.0.78.870
 - SDK - Updated DotNet SDK to 9.0.201
-- Dependencies - Updated FunFair.CodeAnalysis to 7.0.70.968
 - Dependencies - Updated FunFair.Test.Common to 6.1.263.1191
 - Dependencies - Updated Credfeto.Database to 1.2.102.1123
 - Dependencies - Updated Credfeto.Enumeration to 1.2.69.973
+- Dependencies - Updated FunFair.CodeAnalysis to 7.0.71.973
 ### Removed
 ### Deployment Changes
 
