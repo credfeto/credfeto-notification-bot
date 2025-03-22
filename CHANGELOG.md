@@ -9,6 +9,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.96] - 2025-03-22
+### Changed
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 17.13.61
 - Dependencies - Updated Microsoft.Extensions to 9.0.3
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.100.855
@@ -19,12 +27,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 9.0.202
 - Dependencies - Updated FunFair.CodeAnalysis to 7.0.73.978
 - Dependencies - Updated FunFair.Test.Common to 6.1.264.1201
-### Removed
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [0.0.95] - 2025-03-06
 ### Changed
 - Dependencies - Updated FunFair.Test.Common to 6.1.262.1177
