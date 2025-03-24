@@ -34,7 +34,7 @@ public sealed class UserInfoServiceTests : TestBase
     {
         TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(
             userName: MockReferenceData.Viewer,
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         Assert.Null(twitchUser);

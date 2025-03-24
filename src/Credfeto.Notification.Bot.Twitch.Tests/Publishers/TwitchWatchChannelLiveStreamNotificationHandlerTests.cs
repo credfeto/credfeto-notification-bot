@@ -36,7 +36,7 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandlerTests : TestB
         );
         await this._notificationHandler.Handle(
             notification: notification,
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         await this._twitchStreamStatus.Received(1).EnableAsync(viewer.ToStreamer());

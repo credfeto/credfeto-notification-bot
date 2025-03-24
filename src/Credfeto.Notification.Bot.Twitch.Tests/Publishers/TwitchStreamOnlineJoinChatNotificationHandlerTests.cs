@@ -40,7 +40,7 @@ public sealed class TwitchStreamOnlineJoinChatNotificationHandlerTests : TestBas
 
         await this._notificationHandler.Handle(
             notification: notification,
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         await this
