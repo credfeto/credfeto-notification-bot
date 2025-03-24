@@ -35,7 +35,7 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     {
         await this._notificationHandler.Handle(
             new(streamer: MockReferenceData.Streamer, message: MESSAGE),
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         await this.ReceivedJoinHeistAsync();
@@ -53,7 +53,7 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
 
         await this._notificationHandler.Handle(
             new(streamer: MockReferenceData.Streamer, message: MESSAGE),
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         await this.ReceivedJoinHeistAsync();

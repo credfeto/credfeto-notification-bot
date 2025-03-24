@@ -23,7 +23,7 @@ public sealed class MessageChannelTests : TestBase
 
         await this._messageChannel.PublishAsync(
             message: message,
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         using (CancellationTokenSource cts = new(TimeSpan.FromSeconds(1)))

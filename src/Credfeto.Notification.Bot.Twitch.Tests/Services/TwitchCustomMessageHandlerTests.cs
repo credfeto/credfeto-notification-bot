@@ -62,7 +62,7 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
         this.MockCanSend(false);
         bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(
             message: IncomingMessage,
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         Assert.True(condition: handled, userMessage: "Should have been handled");
@@ -82,7 +82,7 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
 
         bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(
             message: misMatchMessage,
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         Assert.False(condition: handled, userMessage: "Should not have been handled");
@@ -97,7 +97,7 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
         this.MockCanSend(true);
         bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(
             message: IncomingMessage,
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         Assert.True(condition: handled, userMessage: "Should have been handled");

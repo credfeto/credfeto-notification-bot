@@ -40,7 +40,7 @@ public sealed class TwitchStreamOfflineLeaveChatNotificationHandlerTests : TestB
 
         await this._notificationHandler.Handle(
             notification: notification,
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         this._twitchStreamStateManager.Received(1)

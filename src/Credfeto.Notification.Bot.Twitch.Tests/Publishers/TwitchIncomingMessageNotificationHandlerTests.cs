@@ -41,7 +41,7 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
                 Chatter: MockReferenceData.Viewer,
                 Message: "Banana"
             ),
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         await this.ReceivedCustomMessageHandlerAsync();
@@ -58,7 +58,7 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
                 Chatter: MockReferenceData.Viewer,
                 Message: "Banana"
             ),
-            cancellationToken: CancellationToken.None
+            cancellationToken: this.CancellationToken()
         );
 
         await this.ReceivedCustomMessageHandlerAsync();
