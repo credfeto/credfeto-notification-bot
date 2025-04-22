@@ -15,6 +15,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.84.982
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.109.950
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.64.491
+- Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Credfeto.Random to 1.0.86.964
 ### Removed
 ### Deployment Changes
