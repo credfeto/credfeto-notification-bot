@@ -9,6 +9,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.107] - 2025-04-24
+### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.77.1054
 - Dependencies - Updated Credfeto.Database to 1.2.108.1213
 - Dependencies - Updated Credfeto.Date to 1.1.84.982
@@ -17,12 +25,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated CSharpier.MSBuild to 1.0.0
 - Dependencies - Updated Credfeto.Random to 1.0.86.964
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.84.890
-### Removed
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [0.0.106] - 2025-04-21
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.76.1049
