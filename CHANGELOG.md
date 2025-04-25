@@ -16,6 +16,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.87.969
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.85.895
 - Dependencies - Updated Credfeto.Database to 1.2.110.1228
+- Dependencies - Updated Meziantou.Analyzer to 2.0.198
 ### Removed
 ### Deployment Changes
 
