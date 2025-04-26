@@ -42,10 +42,7 @@ internal static class Program
         options.ValidateOnBuild = true;
     }
 
-    private static void InitialiseProviders(
-        HostBuilderContext hostBuilderContext,
-        ILoggingBuilder logger
-    )
+    private static void InitialiseProviders(HostBuilderContext hostBuilderContext, ILoggingBuilder logger)
     {
         logger.ClearProviders();
     }
