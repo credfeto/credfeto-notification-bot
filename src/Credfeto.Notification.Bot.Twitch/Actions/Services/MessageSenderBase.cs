@@ -24,9 +24,6 @@ public abstract class MessageSenderBase
     {
         TwitchChatMessage toSend = new(streamer: streamer, priority: priority, message: message);
 
-        return this._twitchChatMessageChannel.PublishAsync(
-            message: toSend,
-            cancellationToken: cancellationToken
-        );
+        return this._twitchChatMessageChannel.PublishAsync(message: toSend, cancellationToken: cancellationToken);
     }
 }
