@@ -19,8 +19,7 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
         ILogger<TwitchMessageTriggerDebounceFilter> logger
     )
     {
-        this._currentTimeSource =
-            currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
+        this._currentTimeSource = currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._debounce = new();
     }
