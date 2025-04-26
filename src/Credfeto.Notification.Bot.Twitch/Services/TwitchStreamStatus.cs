@@ -116,11 +116,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
             }
 
             Streamer streamer = Streamer.FromString(match.Groups["streamer"].Value);
-            this._logger.StreamertNotFound(
-                streamer: streamer,
-                message: exception.Message,
-                exception: exception
-            );
+            this._logger.StreamertNotFound(streamer: streamer, message: exception.Message, exception: exception);
 
             this._channels.TryRemove(key: streamer, value: out _);
         }
@@ -140,10 +136,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
     }
 
-    private async Task OnStreamOnlineAsync(
-        OnStreamOnlineArgs e,
-        CancellationToken cancellationToken
-    )
+    private async Task OnStreamOnlineAsync(OnStreamOnlineArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.StreamStarted(
@@ -175,10 +168,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
     }
 
-    private async Task OnStreamOfflineAsync(
-        OnStreamOfflineArgs e,
-        CancellationToken cancellationToken
-    )
+    private async Task OnStreamOfflineAsync(OnStreamOfflineArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
 
