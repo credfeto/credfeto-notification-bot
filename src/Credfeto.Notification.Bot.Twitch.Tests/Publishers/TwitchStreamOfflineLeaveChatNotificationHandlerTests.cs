@@ -38,14 +38,9 @@ public sealed class TwitchStreamOfflineLeaveChatNotificationHandlerTests : TestB
             new(year: 2024, month: 1, day: 1, hour: 1, minute: 1, second: 1, kind: DateTimeKind.Utc)
         );
 
-        await this._notificationHandler.Handle(
-            notification: notification,
-            cancellationToken: this.CancellationToken()
-        );
+        await this._notificationHandler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
-        this._twitchStreamStateManager.Received(1)
-            .Get(streamer: MockReferenceData.Streamer)
-            .Offline();
+        this._twitchStreamStateManager.Received(1).Get(streamer: MockReferenceData.Streamer).Offline();
 
         this._twitchChat.Received(1).LeaveChat(streamer: MockReferenceData.Streamer);
     }
