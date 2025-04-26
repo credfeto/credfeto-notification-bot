@@ -17,11 +17,7 @@ internal static partial class TwitchCustomMessageHandlerLoggingExtensions
         string message
     );
 
-    [LoggerMessage(
-        EventId = 2,
-        Level = LogLevel.Information,
-        Message = "{streamer}: Matched {chatter}: {message}"
-    )]
+    [LoggerMessage(EventId = 2, Level = LogLevel.Information, Message = "{streamer}: Matched {chatter}: {message}")]
     public static partial void Matched(
         this ILogger<TwitchCustomMessageHandler> logger,
         Streamer streamer,
