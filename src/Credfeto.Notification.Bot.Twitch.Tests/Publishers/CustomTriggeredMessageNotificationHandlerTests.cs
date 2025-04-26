@@ -63,10 +63,6 @@ public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
     {
         return this
             ._customTriggeredMessageSender.Received(1)
-            .SendAsync(
-                streamer: MockReferenceData.Streamer,
-                message: MESSAGE,
-                Arg.Any<CancellationToken>()
-            );
+            .SendAsync(streamer: MockReferenceData.Streamer, message: MESSAGE, Arg.Any<CancellationToken>());
     }
 }
