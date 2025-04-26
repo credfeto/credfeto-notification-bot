@@ -6,8 +6,5 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface ITwitchCustomMessageHandler
 {
-    Task<bool> HandleMessageAsync(
-        TwitchIncomingMessage message,
-        CancellationToken cancellationToken
-    );
+    Task<bool> HandleMessageAsync(TwitchIncomingMessage message, CancellationToken cancellationToken);
 }
