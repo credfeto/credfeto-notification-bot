@@ -21,12 +21,7 @@ public static class TwitchSetup
 {
     public static IServiceCollection AddTwitch(this IServiceCollection services)
     {
-        return services
-            .AddTwitchLib()
-            .AddServices()
-            .AddActions()
-            .AddStartupServices()
-            .AddBackgroundServices();
+        return services.AddTwitchLib().AddServices().AddActions().AddStartupServices().AddBackgroundServices();
     }
 
     private static IServiceCollection AddTwitchLib(this IServiceCollection services)
