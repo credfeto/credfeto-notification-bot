@@ -18,8 +18,7 @@ public sealed class UpdateTwitchLiveStatusWorker : BackgroundService
         ILogger<UpdateTwitchLiveStatusWorker> logger
     )
     {
-        this._twitchStreamStatus =
-            twitchStreamStatus ?? throw new ArgumentNullException(nameof(twitchStreamStatus));
+        this._twitchStreamStatus = twitchStreamStatus ?? throw new ArgumentNullException(nameof(twitchStreamStatus));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -40,11 +39,7 @@ public sealed class UpdateTwitchLiveStatusWorker : BackgroundService
         }
         catch (Exception e)
         {
-            this._logger.LogError(
-                new(e.HResult),
-                exception: e,
-                message: "Failed to update twitch status"
-            );
+            this._logger.LogError(new(e.HResult), exception: e, message: "Failed to update twitch status");
         }
     }
 }
