@@ -6,12 +6,7 @@ namespace Credfeto.Notification.Bot.Twitch.Models;
 
 public sealed class TwitchStreamOnline : INotification
 {
-    public TwitchStreamOnline(
-        in Streamer streamer,
-        string title,
-        string gameName,
-        in DateTime startedAt
-    )
+    public TwitchStreamOnline(in Streamer streamer, string title, string gameName, in DateTime startedAt)
     {
         this.Streamer = streamer;
         this.Title = title;
