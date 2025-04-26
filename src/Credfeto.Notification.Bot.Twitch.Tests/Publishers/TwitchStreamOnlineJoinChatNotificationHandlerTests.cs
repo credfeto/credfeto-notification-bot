@@ -38,19 +38,12 @@ public sealed class TwitchStreamOnlineJoinChatNotificationHandlerTests : TestBas
             new(year: 2024, month: 1, day: 1, hour: 1, minute: 1, second: 1, kind: DateTimeKind.Utc)
         );
 
-        await this._notificationHandler.Handle(
-            notification: notification,
-            cancellationToken: this.CancellationToken()
-        );
+        await this._notificationHandler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
         await this
             ._twitchStreamStateManager.Received(1)
             .Get(streamer: MockReferenceData.Streamer)
-            .OnlineAsync(
-                Arg.Any<string>(),
-                Arg.Any<DateTimeOffset>(),
-                Arg.Any<CancellationToken>()
-            );
+            .OnlineAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset>(), Arg.Any<CancellationToken>());
 
         this._twitchChat.Received(1).JoinChat(streamer: MockReferenceData.Streamer);
     }
