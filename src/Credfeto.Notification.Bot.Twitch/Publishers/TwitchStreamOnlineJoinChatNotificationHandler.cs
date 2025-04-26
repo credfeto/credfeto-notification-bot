@@ -7,8 +7,7 @@ using Mediator;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-public sealed class TwitchStreamOnlineJoinChatNotificationHandler
-    : INotificationHandler<TwitchStreamOnline>
+public sealed class TwitchStreamOnlineJoinChatNotificationHandler : INotificationHandler<TwitchStreamOnline>
 {
     private readonly ITwitchChat _twitchChat;
     private readonly ITwitchStreamStateManager _twitchStreamStateManager;
@@ -22,10 +21,7 @@ public sealed class TwitchStreamOnlineJoinChatNotificationHandler
         this._twitchStreamStateManager = twitchStreamStateManager;
     }
 
-    public async ValueTask Handle(
-        TwitchStreamOnline notification,
-        CancellationToken cancellationToken
-    )
+    public async ValueTask Handle(TwitchStreamOnline notification, CancellationToken cancellationToken)
     {
         await this
             ._twitchStreamStateManager.Get(notification.Streamer)
