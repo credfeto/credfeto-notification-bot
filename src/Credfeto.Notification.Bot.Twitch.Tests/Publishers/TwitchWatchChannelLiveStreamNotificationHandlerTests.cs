@@ -34,10 +34,7 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandlerTests : TestB
         TwitchWatchChannel notification = new(
             new(Id: 42, UserName: viewer, IsStreamer: false, DateCreated: DateTimeOffset.MinValue)
         );
-        await this._notificationHandler.Handle(
-            notification: notification,
-            cancellationToken: this.CancellationToken()
-        );
+        await this._notificationHandler.Handle(notification: notification, cancellationToken: this.CancellationToken());
 
         await this._twitchStreamStatus.Received(1).EnableAsync(viewer.ToStreamer());
     }
