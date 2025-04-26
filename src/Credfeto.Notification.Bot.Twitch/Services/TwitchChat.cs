@@ -66,32 +66,21 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         this._twitchChatMessageChannel = twitchChatMessageChannel;
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._twitchStreamStateManager =
-            twitchStreamStateManager
-            ?? throw new ArgumentNullException(nameof(twitchStreamStateManager));
+            twitchStreamStateManager ?? throw new ArgumentNullException(nameof(twitchStreamStateManager));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
-        this._client =
-            twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
+        this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
 
         this._lastMessageLock = new(initialCount: 1, maxCount: 1);
         this._joinedStreamers = new();
         this._lastMessage = new();
 
         TwitchAuthenticationChat chatApi = this._options.Authentication.Chat;
-        ConnectionCredentials credentials = new(
-            twitchUsername: chatApi.UserName,
-            twitchOAuth: chatApi.OAuthToken
-        );
+        ConnectionCredentials credentials = new(twitchUsername: chatApi.UserName, twitchOAuth: chatApi.OAuthToken);
 
-        this._client.Initialize(
-            credentials: credentials,
-            [this._options.Authentication.Chat.UserName]
-        );
+        this._client.Initialize(credentials: credentials, [this._options.Authentication.Chat.UserName]);
 
-        this._joinedStreamers.TryAdd(
-            Streamer.FromString(this._options.Authentication.Chat.UserName),
-            value: true
-        );
+        this._joinedStreamers.TryAdd(Streamer.FromString(this._options.Authentication.Chat.UserName), value: true);
 
         // HEALTH
         this._chatConnected = this.SubscribeToChatConnection();
@@ -99,9 +88,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         this._chatReconnected = this.SubscribeToChatReconnections();
 
         // LOGGING
-        this._chatLogMessage = this._logger.IsEnabled(LogLevel.Debug)
-            ? this.SubscribeToChatLogMessages()
-            : null;
+        this._chatLogMessage = this._logger.IsEnabled(LogLevel.Debug) ? this.SubscribeToChatLogMessages() : null;
 
         // CHAT
         this._chatMessageReceived = this.SubscribeToIncomingChatMessages();
@@ -175,10 +162,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
             .Where(this.IsConnectedToChat)
             .Select(message =>
                 Observable.FromAsync(cancellationToken =>
-                    this.PublishChatMessageAsync(
-                        twitchChatMessage: message,
-                        cancellationToken: cancellationToken
-                    )
+                    this.PublishChatMessageAsync(twitchChatMessage: message, cancellationToken: cancellationToken)
                 )
             )
             .Concat()
@@ -284,31 +268,19 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     private bool IsConnectedToChat(Streamer streamer)
     {
         return this._client.JoinedChannels.Any(joinedChannel =>
-            StringComparer.InvariantCultureIgnoreCase.Equals(
-                x: streamer.Value,
-                y: joinedChannel.Channel
-            )
+            StringComparer.InvariantCultureIgnoreCase.Equals(x: streamer.Value, y: joinedChannel.Channel)
         );
     }
 
-    private async Task PublishChatMessageAsync(
-        TwitchChatMessage twitchChatMessage,
-        CancellationToken cancellationToken
-    )
+    private async Task PublishChatMessageAsync(TwitchChatMessage twitchChatMessage, CancellationToken cancellationToken)
     {
         await this._lastMessageLock.WaitAsync(cancellationToken);
 
         try
         {
             if (
-                this._lastMessage.TryGetValue(
-                    key: twitchChatMessage.Streamer,
-                    out string? lastMessage
-                )
-                && StringComparer.InvariantCultureIgnoreCase.Equals(
-                    x: lastMessage,
-                    y: twitchChatMessage.Message
-                )
+                this._lastMessage.TryGetValue(key: twitchChatMessage.Streamer, out string? lastMessage)
+                && StringComparer.InvariantCultureIgnoreCase.Equals(x: lastMessage, y: twitchChatMessage.Message)
             )
             {
                 if (!twitchChatMessage.IsCommand)
@@ -325,15 +297,9 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                 message: twitchChatMessage.Message
             );
 
-            this._client.SendMessage(
-                channel: twitchChatMessage.Streamer.Value,
-                message: twitchChatMessage.Message
-            );
+            this._client.SendMessage(channel: twitchChatMessage.Streamer.Value, message: twitchChatMessage.Message);
 
-            this._lastMessage.TryAdd(
-                key: twitchChatMessage.Streamer,
-                value: twitchChatMessage.Message
-            );
+            this._lastMessage.TryAdd(key: twitchChatMessage.Streamer, value: twitchChatMessage.Message);
         }
         catch (Exception exception)
         {
@@ -349,11 +315,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         }
     }
 
-    [SuppressMessage(
-        "codecracker.CSharp",
-        "CC0091:Make method static",
-        Justification = "Needed for logging"
-    )]
+    [SuppressMessage("codecracker.CSharp", "CC0091:Make method static", Justification = "Needed for logging")]
     private void OnLog(OnLogArgs e)
     {
         this._logger.DebugLog(e.DateTime.AsDateTimeOffset(), username: e.BotUsername, data: e.Data);
@@ -396,22 +358,14 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         return [.. this._joinedStreamers.Keys.Where(streamer => !this.IsConnectedToChat(streamer))];
     }
 
-    private async Task OnMessageReceivedAsync(
-        OnMessageReceivedArgs e,
-        CancellationToken cancellationToken
-    )
+    private async Task OnMessageReceivedAsync(OnMessageReceivedArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.ChatMessage.Channel);
         Viewer viewer = Viewer.FromString(e.ChatMessage.Username);
 
         ITwitchChannelState state = this._twitchStreamStateManager.Get(streamer);
 
-        if (
-            StringComparer.OrdinalIgnoreCase.Equals(
-                x: viewer.Value,
-                y: this._options.Authentication.Chat.UserName
-            )
-        )
+        if (StringComparer.OrdinalIgnoreCase.Equals(x: viewer.Value, y: this._options.Authentication.Chat.UserName))
         {
             state.Chatted = true;
         }
@@ -438,15 +392,8 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     {
         try
         {
-            TwitchIncomingMessage incomingMessage = new(
-                Streamer: streamer,
-                Chatter: viewer,
-                Message: message
-            );
-            await this._mediator.Publish(
-                notification: incomingMessage,
-                cancellationToken: cancellationToken
-            );
+            TwitchIncomingMessage incomingMessage = new(Streamer: streamer, Chatter: viewer, Message: message);
+            await this._mediator.Publish(notification: incomingMessage, cancellationToken: cancellationToken);
         }
         catch (Exception exception)
         {
