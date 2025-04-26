@@ -31,11 +31,7 @@ internal static partial class TwitchStreamStatusLoggingExtensions
         Exception exception
     );
 
-    [LoggerMessage(
-        EventId = 3,
-        Level = LogLevel.Error,
-        Message = "{streamer}: Not Found: {message}"
-    )]
+    [LoggerMessage(EventId = 3, Level = LogLevel.Error, Message = "{streamer}: Not Found: {message}")]
     public static partial void StreamertNotFound(
         this ILogger<TwitchStreamStatus> logger,
         Streamer streamer,
