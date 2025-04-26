@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Serialization;
 using Credfeto.Date;
 using Credfeto.Extensions.Configuration.Typed.Json;
@@ -43,8 +43,7 @@ internal static class Service
     {
         IConfigurationRoot configurationRoot = LoadConfigFile();
 
-        JsonSerializerContext jsonSerializerContext =
-            ServerConfigurationSerializationContext.Default;
+        JsonSerializerContext jsonSerializerContext = ServerConfigurationSerializationContext.Default;
 
         try
         {
