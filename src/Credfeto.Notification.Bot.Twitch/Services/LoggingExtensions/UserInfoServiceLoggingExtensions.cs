@@ -8,15 +8,8 @@ namespace Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 internal static partial class UserInfoServiceLoggingExtensions
 {
     [Conditional("DEBUG")]
-    [LoggerMessage(
-        EventId = 1,
-        Level = LogLevel.Information,
-        Message = "{userName}: Getting User information"
-    )]
-    public static partial void GettingUserInfo(
-        this ILogger<UserInfoService> logger,
-        Viewer userName
-    );
+    [LoggerMessage(EventId = 1, Level = LogLevel.Information, Message = "{userName}: Getting User information")]
+    public static partial void GettingUserInfo(this ILogger<UserInfoService> logger, Viewer userName);
 
     [LoggerMessage(
         EventId = 2,
