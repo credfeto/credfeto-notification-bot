@@ -22,11 +22,7 @@ public sealed class CustomTriggeredMessageSender : MessageSenderBase, ICustomTri
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task SendAsync(
-        Streamer streamer,
-        string message,
-        CancellationToken cancellationToken
-    )
+    public async Task SendAsync(Streamer streamer, string message, CancellationToken cancellationToken)
     {
         this._logger.CustomMessageTriggeredSending(streamer: streamer, message: message);
         await this.SendMessageAsync(
