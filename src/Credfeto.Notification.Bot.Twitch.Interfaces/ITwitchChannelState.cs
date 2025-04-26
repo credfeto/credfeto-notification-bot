@@ -13,11 +13,7 @@ public interface ITwitchChannelState
 
     bool Chatted { get; set; }
 
-    ValueTask OnlineAsync(
-        string gameName,
-        DateTimeOffset startDate,
-        CancellationToken cancellationToken
-    );
+    ValueTask OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken);
 
     void Offline();
 }
