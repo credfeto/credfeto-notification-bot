@@ -18,9 +18,7 @@ YP  YP  YP  `Y88P'  Y8888D'        Y8888P'  `Y88P'     YP";
         Console.WriteLine("");
         Console.WriteLine("");
         Console.WriteLine("");
-        Console.WriteLine(
-            $"{VersionInformation.Product} ({VersionInformation.Version}): Starting..."
-        );
+        Console.WriteLine($"{VersionInformation.Product} ({VersionInformation.Version}): Starting...");
         Console.WriteLine("");
     }
 }
