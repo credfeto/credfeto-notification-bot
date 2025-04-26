@@ -35,11 +35,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     public bool IsOnline => this._stream != null;
 
-    public ValueTask OnlineAsync(
-        string gameName,
-        DateTimeOffset startDate,
-        CancellationToken cancellationToken
-    )
+    public ValueTask OnlineAsync(string gameName, DateTimeOffset startDate, CancellationToken cancellationToken)
     {
         this._logger.ChannelGoingOnline(this.Streamer);
         ActiveStream stream = new(gameName: gameName, startedAt: startDate);
