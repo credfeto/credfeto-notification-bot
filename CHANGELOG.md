@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.0.1124
 - Dependencies - Updated Microsoft.Extensions to 9.0.5
+- Dependencies - Updated Credfeto.Date to 1.1.89.1028
 ### Removed
 ### Deployment Changes
 
