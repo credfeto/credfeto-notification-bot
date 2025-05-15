@@ -9,16 +9,19 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.70.545
-- Dependencies - Updated Credfeto.Random to 1.0.92.1015
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.89.944
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.115.1003
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.116] - 2025-05-15
+### Changed
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.70.545
+- Dependencies - Updated Credfeto.Random to 1.0.92.1015
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.89.944
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.115.1003
+
 ## [0.0.115] - 2025-05-14
 ### Changed
 - SDK - Updated DotNet SDK to 9.0.300
