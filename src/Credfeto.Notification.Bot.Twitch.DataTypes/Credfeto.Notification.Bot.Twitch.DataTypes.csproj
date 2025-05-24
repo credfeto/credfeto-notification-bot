@@ -44,7 +44,7 @@
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xhfc-gr8f-ffwc" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Database.Interfaces" Version="1.2.131.1345" />
+    <PackageReference Include="Credfeto.Database.Interfaces" Version="1.2.132.1347" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.6.0" PrivateAssets="All" ExcludeAssets="runtime" />
