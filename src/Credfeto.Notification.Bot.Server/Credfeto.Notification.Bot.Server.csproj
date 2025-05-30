@@ -68,7 +68,7 @@
     <PackageReference Include="Credfeto.Date" Version="1.1.107.1087" />
     <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.131.1054" />
     <PackageReference Include="Credfeto.Random" Version="1.0.107.1065" />
-    <PackageReference Include="Credfeto.Services.Startup" Version="1.1.103.988" />
+    <PackageReference Include="Credfeto.Services.Startup" Version="1.1.104.992" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.5" />
     <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
