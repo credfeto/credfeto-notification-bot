@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.138.1074
 - Dependencies - Updated Credfeto.Date to 1.1.114.1107
 - Dependencies - Updated Credfeto.Random to 1.0.114.1085
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.111.1012
 ### Removed
 ### Deployment Changes
 
