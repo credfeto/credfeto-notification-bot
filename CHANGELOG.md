@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.110.1215
 - Dependencies - Updated Microsoft.Extensions to 9.0.6
+- Dependencies - Updated Credfeto.Date to 1.1.120.1127
 ### Removed
 ### Deployment Changes
 
