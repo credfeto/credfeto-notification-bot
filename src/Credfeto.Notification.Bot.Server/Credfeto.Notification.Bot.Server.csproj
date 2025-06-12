@@ -66,7 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Date" Version="1.1.120.1127" />
-    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.144.1099" />
+    <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.145.1104" />
     <PackageReference Include="Credfeto.Random" Version="1.0.120.1105" />
     <PackageReference Include="Credfeto.Services.Startup" Version="1.1.117.1033" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.6" />
