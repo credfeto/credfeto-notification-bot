@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.177.1470
 - Dependencies - Updated System.Interactive.Async to 6.0.3
+- Dependencies - Updated Credfeto.Enumeration to 1.2.114.1235
 ### Removed
 ### Deployment Changes
 
