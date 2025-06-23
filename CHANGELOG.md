@@ -9,17 +9,20 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Random to 1.0.130.1154
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.126.1080
-- Dependencies - Updated Credfeto.Database to 1.2.188.1512
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.107.685
-- Dependencies - Updated FunFair.Test.Common to 6.1.274.1486
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.195] - 2025-06-23
+### Changed
+- Dependencies - Updated Credfeto.Random to 1.0.130.1154
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.126.1080
+- Dependencies - Updated Credfeto.Database to 1.2.188.1512
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.107.685
+- Dependencies - Updated FunFair.Test.Common to 6.1.274.1486
+
 ## [0.0.194] - 2025-06-23
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.6.1242
