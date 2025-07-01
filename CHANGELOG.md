@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.6.2
 - Dependencies - Updated Meziantou.Analyzer to 2.0.203
+- Dependencies - Updated TwitchLib to 3.4.0
 ### Removed
 ### Deployment Changes
 
