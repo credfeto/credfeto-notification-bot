@@ -9,15 +9,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.6.2
-- Dependencies - Updated Meziantou.Analyzer to 2.0.203
-- Dependencies - Updated TwitchLib to 3.4.0
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.196] - 2025-07-01
+### Changed
+- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.6.2
+- Dependencies - Updated Meziantou.Analyzer to 2.0.203
+- Dependencies - Updated TwitchLib to 3.4.0
+
 ## [0.0.195] - 2025-06-23
 ### Changed
 - Dependencies - Updated Credfeto.Random to 1.0.130.1154
