@@ -20,6 +20,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.23.0
 - Dependencies - Updated xunit.v3 to 3.0.0
 - Dependencies - Updated FunFair.Test.Common to 6.1.280.1580
+- Dependencies - Updated Mediator to 3.0.1
 ### Removed
 ### Deployment Changes
 
