@@ -16,6 +16,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.127.1157
 - Dependencies - Updated Credfeto.Database to 1.2.190.1592
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.108.756
+- Dependencies - Updated FunFair.CodeAnalysis to 7.1.14.1336
 ### Removed
 ### Deployment Changes
 
