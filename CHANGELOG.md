@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.194.1609
 - Dependencies - Updated Credfeto.Enumeration to 1.2.124.1351
+- SDK - Updated DotNet SDK to 9.0.304
 ### Removed
 ### Deployment Changes
 
