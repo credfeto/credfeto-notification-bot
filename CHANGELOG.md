@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Date to 1.1.135.1271
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.7.0
+- Dependencies - Updated Credfeto.Database to 1.2.195.1616
 ### Removed
 ### Deployment Changes
 
