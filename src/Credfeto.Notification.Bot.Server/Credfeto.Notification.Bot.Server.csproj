@@ -67,8 +67,8 @@
   <ItemGroup>
     <PackageReference Include="Credfeto.Date" Version="1.1.135.1271" />
     <PackageReference Include="Credfeto.Extensions.Configuration.Typed.Json" Version="1.0.159.1233" />
-    <PackageReference Include="Credfeto.Random" Version="1.0.134.1240" />
-    <PackageReference Include="Credfeto.Services.Startup" Version="1.1.129.1166" />
+    <PackageReference Include="Credfeto.Random" Version="1.0.135.1248" />
+    <PackageReference Include="Credfeto.Services.Startup" Version="1.1.130.1176" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.8" />
     <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
@@ -89,7 +89,7 @@
     <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6581" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Philips.CodeAnalysis.DuplicateCodeAnalyzer" Version="1.6.4" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="Philips.CodeAnalysis.MaintainabilityAnalyzers" Version="1.6.4" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="Philips.CodeAnalysis.MaintainabilityAnalyzers" Version="1.7.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Roslynator.Analyzers" Version="4.14.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="SmartAnalyzers.CSharpExtensions.Annotations" Version="4.2.11" PrivateAssets="All" ExcludeAssets="runtime" />
