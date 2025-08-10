@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.126.1361
 - Dependencies - Updated Credfeto.Database to 1.2.196.1621
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.161.1241
+- Dependencies - Updated FunFair.Test.Common to 6.1.284.1617
 ### Removed
 ### Deployment Changes
 
