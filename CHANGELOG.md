@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.161.1241
 - Dependencies - Updated FunFair.Test.Common to 6.1.284.1617
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.112.779
+- Dependencies - Updated FunFair.CodeAnalysis to 7.1.20.1362
 ### Removed
 ### Deployment Changes
 
