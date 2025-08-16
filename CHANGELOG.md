@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.8.0
 - Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.163.1249
 - Dependencies - Updated Credfeto.Random to 1.0.137.1263
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.132.1191
 ### Removed
 ### Deployment Changes
 
