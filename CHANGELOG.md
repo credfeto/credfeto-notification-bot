@@ -9,18 +9,21 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.114.790
-- Dependencies - Updated FunFair.CodeAnalysis to 7.1.22.1366
-- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.8.0
-- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.163.1249
-- Dependencies - Updated Credfeto.Random to 1.0.137.1263
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.132.1191
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.211] - 2025-08-17
+### Changed
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.114.790
+- Dependencies - Updated FunFair.CodeAnalysis to 7.1.22.1366
+- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.8.0
+- Dependencies - Updated Credfeto.Extensions.Configuration.Typed.Json to 1.0.163.1249
+- Dependencies - Updated Credfeto.Random to 1.0.137.1263
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.132.1191
+
 ## [0.0.210] - 2025-08-12
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.198.1632
