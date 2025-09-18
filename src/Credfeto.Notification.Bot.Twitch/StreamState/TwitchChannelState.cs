@@ -17,15 +17,8 @@ public sealed class TwitchChannelState : ITwitchChannelState
 
     private ActiveStream? _stream;
 
-    public TwitchChannelState(
-        in Streamer streamerStreamer,
-        [SuppressMessage(
-            category: "FunFair.CodeAnalysis",
-            checkId: "FFS0024:ILogger should be typed",
-            Justification = "Not created by DI"
-        )]
-            ILogger logger
-    )
+    public TwitchChannelState(in Streamer streamerStreamer,
+                              [SuppressMessage(category: "FunFair.CodeAnalysis", checkId: "FFS0024:ILogger should be typed", Justification = "Not created by DI")] ILogger logger)
     {
         this.Streamer = streamerStreamer;
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -55,10 +48,15 @@ public sealed class TwitchChannelState : ITwitchChannelState
         get => this._stream?.UserChatted == true;
         set
         {
-            if (this._stream != null)
+            if (this._stream is not null)
             {
-                this._stream.UserChatted = value;
+                SetHasChatted(stream: this._stream, value: value);
             }
         }
+    }
+
+    private static void SetHasChatted(ActiveStream stream, bool value)
+    {
+        stream.UserChatted = value;
     }
 }
