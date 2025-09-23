@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/Config/">
+    <File Path="../.github/labeler.yml" />
+    <File Path="../.github/labels.yml" />
+    <File Path="../CHANGELOG.md" />
+    <File Path="../Dockerfile" />
+    <File Path="../healthcheck" />
+    <File Path="../README.md" />
+    <File Path="CodeAnalysis.ruleset" />
+    <File Path="global.json" />
+    <File Path="publish" />
+  </Folder>
+  <Folder Name="/Server/">
+    <Project Path="Credfeto.Notification.Bot.Server/Credfeto.Notification.Bot.Server.csproj" />
+  </Folder>
+  <Folder Name="/Services/" />
+  <Folder Name="/Services/Twitch/">
+    <Project Path="Credfeto.Notification.Bot.Twitch.DataTypes/Credfeto.Notification.Bot.Twitch.DataTypes.csproj" />
+    <Project Path="Credfeto.Notification.Bot.Twitch.Interfaces/Credfeto.Notification.Bot.Twitch.Interfaces.csproj" />
+    <Project Path="Credfeto.Notification.Bot.Twitch.Models/Credfeto.Notification.Bot.Twitch.Models.csproj" />
+    <Project Path="Credfeto.Notification.Bot.Twitch.Tests/Credfeto.Notification.Bot.Twitch.Tests.csproj" />
+    <Project Path="Credfeto.Notification.Bot.Twitch/Credfeto.Notification.Bot.Twitch.csproj" />
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="Credfeto.Notification.Bot.Mocks/Credfeto.Notification.Bot.Mocks.csproj" />
+    <Project Path="Credfeto.Notification.Bot.Shared.Tests/Credfeto.Notification.Bot.Shared.Tests.csproj" />
+    <Project Path="Credfeto.Notification.Bot.Shared/Credfeto.Notification.Bot.Shared.csproj" />
+  </Folder>
+</Solution>
