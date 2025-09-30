@@ -139,7 +139,6 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         {
             this._logger.LogDebug("Chat Reconnecting...");
 
-            //this._client.Connect();
             this._connected = true;
         }
 
