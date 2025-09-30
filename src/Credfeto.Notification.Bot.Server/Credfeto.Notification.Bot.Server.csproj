@@ -37,6 +37,7 @@
     <UseSystemResourceKeys>true</UseSystemResourceKeys>
     <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
     <WarningsAsErrors />
+    <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition="$(IsProduction)!='True'">$(DefineConstants);SWAGGER_ENABLED</DefineConstants>
