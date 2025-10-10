@@ -50,19 +50,26 @@ internal static class ServerStartup
         string configPath = ApplicationConfigLocator.ConfigurationFilesPath;
 
         return Host.CreateApplicationBuilder(args)
-                   .ConfigureSettings(configPath)
-                   .ConfigureServices()
-                   .ConfigureAppHost()
-                   .ConfigureLogging()
-                   .Build();
+            .ConfigureSettings(configPath)
+            .ConfigureServices()
+            .ConfigureAppHost()
+            .ConfigureLogging()
+            .Build();
     }
 
-    [SuppressMessage(category: "Microsoft.Reliability", checkId: "CA2000:DisposeObjectsBeforeLosingScope", Justification = "Lives for program lifetime")]
-    [SuppressMessage(category: "SmartAnalyzers.CSharpExtensions.Annotations", checkId: "CSE007:DisposeObjectsBeforeLosingScope", Justification = "Lives for program lifetime")]
+    [SuppressMessage(
+        category: "Microsoft.Reliability",
+        checkId: "CA2000:DisposeObjectsBeforeLosingScope",
+        Justification = "Lives for program lifetime"
+    )]
+    [SuppressMessage(
+        category: "SmartAnalyzers.CSharpExtensions.Annotations",
+        checkId: "CSE007:DisposeObjectsBeforeLosingScope",
+        Justification = "Lives for program lifetime"
+    )]
     private static HostApplicationBuilder ConfigureLogging(this HostApplicationBuilder builder)
     {
-        builder.Logging.ClearProviders()
-               .AddSerilog(CreateLogger(), dispose: true);
+        builder.Logging.ClearProviders().AddSerilog(CreateLogger(), dispose: true);
 
         return builder;
     }
@@ -70,10 +77,11 @@ internal static class ServerStartup
     private static HostApplicationBuilder ConfigureSettings(this HostApplicationBuilder builder, string configPath)
     {
         builder.Configuration.Sources.Clear();
-        builder.Configuration.SetBasePath(configPath)
-               .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
-               .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
-               .AddEnvironmentVariables();
+        builder
+            .Configuration.SetBasePath(configPath)
+            .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: false)
+            .AddJsonFile(path: "appsettings-local.json", optional: true, reloadOnChange: false)
+            .AddEnvironmentVariables();
 
         return builder;
     }
@@ -82,13 +90,14 @@ internal static class ServerStartup
     {
         IConfigurationSection twitchSection = builder.Configuration.GetSection("Twitch");
 
-        builder.Services.Configure<TwitchBotOptions>(twitchSection)
-               .AddMediator()
-               .AddDate()
-               .AddRandomNumbers()
-               .AddResources()
-               .AddRunOnStartupServices()
-               .AddTwitch();
+        builder
+            .Services.Configure<TwitchBotOptions>(twitchSection)
+            .AddMediator()
+            .AddDate()
+            .AddRandomNumbers()
+            .AddResources()
+            .AddRunOnStartupServices()
+            .AddTwitch();
 
         return builder;
     }
@@ -100,23 +109,22 @@ internal static class ServerStartup
 
     private static Logger CreateLogger()
     {
-        return new LoggerConfiguration().Enrich.WithDemystifiedStackTraces()
-                                        .Enrich.FromLogContext()
-                                        .Enrich.WithMachineName()
-                                        .Enrich.WithProcessId()
-                                        .Enrich.WithThreadId()
-                                        .Enrich.WithProperty(name: "ServerVersion", value: VersionInformation.Version)
-                                        .Enrich.WithProperty(name: "ProcessName", value: VersionInformation.Product)
-                                        .WriteToDebuggerAwareOutput()
-                                        .CreateLogger();
+        return new LoggerConfiguration()
+            .Enrich.WithDemystifiedStackTraces()
+            .Enrich.FromLogContext()
+            .Enrich.WithMachineName()
+            .Enrich.WithProcessId()
+            .Enrich.WithThreadId()
+            .Enrich.WithProperty(name: "ServerVersion", value: VersionInformation.Version)
+            .Enrich.WithProperty(name: "ProcessName", value: VersionInformation.Product)
+            .WriteToDebuggerAwareOutput()
+            .CreateLogger();
     }
 
     private static LoggerConfiguration WriteToDebuggerAwareOutput(this LoggerConfiguration configuration)
     {
         LoggerSinkConfiguration writeTo = configuration.WriteTo;
 
-        return Debugger.IsAttached
-            ? writeTo.Debug()
-            : writeTo.Console();
+        return Debugger.IsAttached ? writeTo.Debug() : writeTo.Console();
     }
 }
