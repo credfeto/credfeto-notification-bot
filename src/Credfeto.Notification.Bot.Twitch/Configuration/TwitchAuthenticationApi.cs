@@ -1,20 +1,20 @@
-using System.Text.Json.Serialization;
+using System.Diagnostics;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
+[DebuggerDisplay("ClientId: {ClientId}")]
 public sealed class TwitchAuthenticationApi
 {
-    [JsonConstructor]
-    public TwitchAuthenticationApi(string clientId, string clientSecret, string clientAccessToken)
+    public TwitchAuthenticationApi()
     {
-        this.ClientId = clientId;
-        this.ClientSecret = clientSecret;
-        this.ClientAccessToken = clientAccessToken;
+        this.ClientId = "n/a";
+        this.ClientSecret = "n/a";
+        this.ClientAccessToken = "n/a";
     }
 
-    public string ClientId { get; }
+    public string ClientId { get; set; }
 
-    public string ClientSecret { get; }
+    public string ClientSecret { get; set; }
 
-    public string ClientAccessToken { get; }
+    public string ClientAccessToken { get; set; }
 }

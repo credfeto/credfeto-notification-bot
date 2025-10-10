@@ -1,4 +1,3 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -19,7 +18,7 @@ public sealed class UserInfoServiceTests : TestBase
     public UserInfoServiceTests()
     {
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, []));
+        options.Value.Returns(new TwitchBotOptions { Authentication = MockReferenceData.TwitchAuthentication, ChatCommands = [] });
 
         this._userInfoService = new UserInfoService(options: options, this.GetTypedLogger<UserInfoService>());
     }
@@ -27,10 +26,7 @@ public sealed class UserInfoServiceTests : TestBase
     [Fact]
     public async Task GetUserReturnsNullIfNotFoundAsync()
     {
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(
-            userName: MockReferenceData.Viewer,
-            cancellationToken: this.CancellationToken()
-        );
+        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, this.CancellationToken());
 
         Assert.Null(twitchUser);
     }

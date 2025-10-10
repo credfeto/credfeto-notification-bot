@@ -1,17 +1,17 @@
-using System.Text.Json.Serialization;
+using System.Diagnostics;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
+[DebuggerDisplay("Username: {UserName}")]
 public sealed class TwitchAuthenticationChat
 {
-    [JsonConstructor]
-    public TwitchAuthenticationChat(string oAuthToken, string userName)
+    public TwitchAuthenticationChat()
     {
-        this.OAuthToken = oAuthToken;
-        this.UserName = userName;
+        this.OAuthToken = "n/a";
+        this.UserName = "n/a";
     }
 
-    public string OAuthToken { get; }
+    public string OAuthToken { get; set; }
 
-    public string UserName { get; }
+    public string UserName { get; set; }
 }

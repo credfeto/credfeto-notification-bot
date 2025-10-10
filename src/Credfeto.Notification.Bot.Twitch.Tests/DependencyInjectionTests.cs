@@ -15,20 +15,22 @@ namespace Credfeto.Notification.Bot.Twitch.Tests;
 public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
 {
     public DependencyInjectionTests(ITestOutputHelper output)
-        : base(output: output, dependencyInjectionRegistration: Configure) { }
+        : base(output: output, dependencyInjectionRegistration: Configure)
+    {
+    }
 
     private static IServiceCollection Configure(IServiceCollection service)
     {
-        return service
-            .AddMockedService<ICurrentTimeSource>()
-            .AddMockedService<IMessageChannel<TwitchChatMessage>>()
-            .AddMockedService<IOptions<TwitchBotOptions>>(options =>
-            {
-                options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, []));
-            })
-            .AddMockedService<IMediator>()
-            // Items being tested
-            .AddTwitch();
+        return service.AddMockedService<ICurrentTimeSource>()
+                      .AddMockedService<IMessageChannel<TwitchChatMessage>>()
+                      .AddMockedService<IOptions<TwitchBotOptions>>(options =>
+                                                                    {
+                                                                        options.Value.Returns(new TwitchBotOptions { Authentication = MockReferenceData.TwitchAuthentication, ChatCommands = [] });
+                                                                    })
+                      .AddMockedService<IMediator>()
+
+                      // Items being tested
+                      .AddTwitch();
     }
 
     [Fact]

@@ -21,11 +21,9 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this._twitchCustomMessageHandler = GetSubstitute<ITwitchCustomMessageHandler>();
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
-        options.Value.Returns(new TwitchBotOptions(authentication: MockReferenceData.TwitchAuthentication, []));
+        options.Value.Returns(new TwitchBotOptions { Authentication = MockReferenceData.TwitchAuthentication, ChatCommands = [] });
 
-        this._notificationHandler = new TwitchIncomingMessageNotificationHandler(
-            twitchCustomMessageHandler: this._twitchCustomMessageHandler
-        );
+        this._notificationHandler = new TwitchIncomingMessageNotificationHandler(twitchCustomMessageHandler: this._twitchCustomMessageHandler);
     }
 
     [Fact]
@@ -33,10 +31,7 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this.MockCustomMessageHandler(true);
 
-        await this._notificationHandler.Handle(
-            new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"),
-            cancellationToken: this.CancellationToken()
-        );
+        await this._notificationHandler.Handle(new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"), this.CancellationToken());
 
         await this.ReceivedCustomMessageHandlerAsync();
     }
@@ -46,27 +41,20 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
     {
         this.MockCustomMessageHandler(false);
 
-        await this._notificationHandler.Handle(
-            new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"),
-            cancellationToken: this.CancellationToken()
-        );
+        await this._notificationHandler.Handle(new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"), this.CancellationToken());
 
         await this.ReceivedCustomMessageHandlerAsync();
     }
 
     private Task<bool> ReceivedCustomMessageHandlerAsync()
     {
-        return this
-            ._twitchCustomMessageHandler.Received(1)
-            .HandleMessageAsync(Arg.Any<TwitchIncomingMessage>(), Arg.Any<CancellationToken>());
+        return this._twitchCustomMessageHandler.Received(1)
+                   .HandleMessageAsync(Arg.Any<TwitchIncomingMessage>(), Arg.Any<CancellationToken>());
     }
 
     private void MockCustomMessageHandler(bool handled)
     {
-        this._twitchCustomMessageHandler.HandleMessageAsync(
-                Arg.Any<TwitchIncomingMessage>(),
-                Arg.Any<CancellationToken>()
-            )
+        this._twitchCustomMessageHandler.HandleMessageAsync(Arg.Any<TwitchIncomingMessage>(), Arg.Any<CancellationToken>())
             .Returns(handled);
     }
 }

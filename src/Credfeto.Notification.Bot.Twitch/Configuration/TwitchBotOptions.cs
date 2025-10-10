@@ -1,19 +1,16 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
 public sealed class TwitchBotOptions
 {
-    [JsonConstructor]
-    [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0109: Use a span", Justification = "Not in this case")]
-    public TwitchBotOptions(TwitchAuthentication authentication, TwitchChatCommand[] chatCommands)
+    public TwitchBotOptions()
     {
-        this.Authentication = authentication;
-        this.ChatCommands = chatCommands;
+        this.Authentication = new();
+        this.ChatCommands = [];
     }
 
-    public TwitchAuthentication Authentication { get; }
+    public TwitchAuthentication Authentication { get; set; }
 
-    public TwitchChatCommand[] ChatCommands { get; }
+    public List<TwitchChatCommand> ChatCommands { get; set; }
 }
