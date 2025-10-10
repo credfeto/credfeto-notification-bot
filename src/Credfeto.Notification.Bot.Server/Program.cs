@@ -1,49 +1,43 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Server.Helpers;
-using Credfeto.Notification.Bot.Server.ServiceStartup;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Server;
 
 internal static class Program
 {
-    public static Task Main(string[] args)
+    private const int MIN_THREADS = 32;
+
+    public static async Task<int> Main(string[] args)
     {
         StartupBanner.Show();
+        ServerStartup.SetThreads(MIN_THREADS);
 
-        return CreateHostBuilder(args).Build().InitializeLogging().RunAsync(CancellationToken.None);
+        try
+        {
+            using (IHost app = ServerStartup.CreateApp(args))
+            {
+                await RunAsync(app);
+
+                return 0;
+            }
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine("An error occurred:");
+            Console.WriteLine(exception.Message);
+            Console.WriteLine(exception.StackTrace);
+
+            return 1;
+        }
     }
 
-    private static IHost InitializeLogging(this IHost host)
+    private static Task RunAsync(IHost application)
     {
-        ILoggerFactory loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+        Console.WriteLine("App Created");
 
-        Logging.InitializeLogging(loggerFactory: loggerFactory);
-
-        return host;
-    }
-
-    private static IHostBuilder CreateHostBuilder(string[] args)
-    {
-        return Host.CreateDefaultBuilder(args)
-            .UseDefaultServiceProvider(InitialiseServiceProvider)
-            .ConfigureServices(Service.Configure)
-            .ConfigureLogging(InitialiseProviders)
-            .UseWindowsService()
-            .UseSystemd();
-    }
-
-    private static void InitialiseServiceProvider(ServiceProviderOptions options)
-    {
-        options.ValidateScopes = true;
-        options.ValidateOnBuild = true;
-    }
-
-    private static void InitialiseProviders(HostBuilderContext hostBuilderContext, ILoggingBuilder logger)
-    {
-        logger.ClearProviders();
+        return application.RunAsync(CancellationToken.None);
     }
 }

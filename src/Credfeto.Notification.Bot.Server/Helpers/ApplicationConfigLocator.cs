@@ -4,17 +4,17 @@ using System.IO;
 
 namespace Credfeto.Notification.Bot.Server.Helpers;
 
-public static class ApplicationConfig
+[SuppressMessage(category: "ReSharper", checkId: "UnusedType.Global", Justification = "Used in exe code. Not possible to unit test.")]
+internal static class ApplicationConfigLocator
 {
-    // really should be using AppContext.BaseDirectory, but this seems to break sometimes when running unit tests with dotnet-xuint.
-
+    [SuppressMessage(category: "ReSharper", checkId: "UnusedMember.Global", Justification = "Used in exe code. Not possible to unit test.")]
     public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
 
     private static string LookupConfigurationFilesPath()
     {
         string? path = LookupAppSettingsLocationByAssemblyName();
 
-        if (path == null)
+        if (path is null)
         {
             // https://stackoverflow.com/questions/57222718/how-to-configure-self-contained-single-file-program
             return Environment.CurrentDirectory;
@@ -25,7 +25,7 @@ public static class ApplicationConfig
 
     private static string? LookupAppSettingsLocationByAssemblyName()
     {
-        string location = AppLocation();
+        string location = AppContext.BaseDirectory;
 
         string? path = Path.GetDirectoryName(location);
 
@@ -34,23 +34,10 @@ public static class ApplicationConfig
             return null;
         }
 
-        if (!File.Exists(Path.Combine(path1: path, path2: "appsettings.json")))
-        {
-            return null;
-        }
+        string appSettings = Path.Combine(path1: path, path2: "appsettings.json");
 
-        return path;
-    }
-
-    [SuppressMessage(
-        category: "FunFair.CodeAnalysis",
-        checkId: "FFS0008: Don't disable warnings",
-        Justification = "TODO: Review"
-    )]
-    private static string AppLocation()
-    {
-#pragma warning disable IL3000
-        return typeof(ApplicationConfig).Assembly.Location;
-#pragma warning restore IL3000
+        return File.Exists(appSettings)
+            ? path
+            : null;
     }
 }
