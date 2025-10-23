@@ -115,7 +115,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         return message.Message.Contains(
             value: trigger.Message,
-            comparisonType: StringComparison.InvariantCultureIgnoreCase
+            comparisonType: StringComparison.OrdinalIgnoreCase
         );
     }
 
@@ -128,7 +128,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         return message.Message.StartsWith(
             value: trigger.Message,
-            comparisonType: StringComparison.InvariantCultureIgnoreCase
+            comparisonType: StringComparison.OrdinalIgnoreCase
         );
     }
 
@@ -136,7 +136,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         return message.Message.EndsWith(
             value: trigger.Message,
-            comparisonType: StringComparison.InvariantCultureIgnoreCase
+            comparisonType: StringComparison.OrdinalIgnoreCase
         );
     }
 
@@ -167,7 +167,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         return message.Message.StartsWith(
             "@" + this._chatUser.Value,
-            comparisonType: StringComparison.InvariantCultureIgnoreCase
+            comparisonType: StringComparison.OrdinalIgnoreCase
         );
     }
 
