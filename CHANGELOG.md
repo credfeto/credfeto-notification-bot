@@ -9,18 +9,21 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated xunit.analyzers to 1.24.0
-- Dependencies - Updated xunit.v3 to 3.0.1
-- Dotnet 10
-- Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.115.836
-- Dependencies - Updated FunFair.CodeAnalysis to 7.1.25.1550
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.212] - 2025-10-23
+### Changed
+- Dependencies - Updated xunit.analyzers to 1.24.0
+- Dependencies - Updated xunit.v3 to 3.0.1
+- Dotnet 10
+- Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.115.836
+- Dependencies - Updated FunFair.CodeAnalysis to 7.1.25.1550
+
 ## [0.0.211] - 2025-08-17
 ### Changed
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.114.790
