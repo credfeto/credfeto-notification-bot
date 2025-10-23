@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 1.24.0
 - Dependencies - Updated xunit.v3 to 3.0.1
 - Dotnet 10
+- Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
 ### Removed
 ### Deployment Changes
 
