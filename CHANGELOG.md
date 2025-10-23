@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 3.0.1
 - Dotnet 10
 - Dependencies - Updated Credfeto.Enumeration to 1.2.129.1430
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.115.836
 ### Removed
 ### Deployment Changes
 
