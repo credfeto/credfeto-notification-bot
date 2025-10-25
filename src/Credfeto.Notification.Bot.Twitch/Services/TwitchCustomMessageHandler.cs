@@ -113,10 +113,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
     private static bool IsContainsMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
     {
-        return message.Message.Contains(
-            value: trigger.Message,
-            comparisonType: StringComparison.OrdinalIgnoreCase
-        );
+        return message.Message.Contains(value: trigger.Message, comparisonType: StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsExactMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
@@ -126,18 +123,12 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
     private static bool IsStartsWithMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
     {
-        return message.Message.StartsWith(
-            value: trigger.Message,
-            comparisonType: StringComparison.OrdinalIgnoreCase
-        );
+        return message.Message.StartsWith(value: trigger.Message, comparisonType: StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsEndsWithMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
     {
-        return message.Message.EndsWith(
-            value: trigger.Message,
-            comparisonType: StringComparison.OrdinalIgnoreCase
-        );
+        return message.Message.EndsWith(value: trigger.Message, comparisonType: StringComparison.OrdinalIgnoreCase);
     }
 
     private bool IsRegexMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
