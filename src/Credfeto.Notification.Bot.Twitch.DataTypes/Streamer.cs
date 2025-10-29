@@ -4,7 +4,6 @@ using StronglyTypedIds;
 namespace Credfeto.Notification.Bot.Twitch.DataTypes;
 
 [StronglyTypedId(Template.String)]
-
 public readonly partial struct Streamer
 {
     public static Streamer FromString(string username)
