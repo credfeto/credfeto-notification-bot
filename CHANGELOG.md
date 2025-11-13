@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - SDK - Updated DotNet SDK to 10.0.100
 - Dependencies - Updated Meziantou.Analyzer to 2.0.252
+- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.9.1
 ### Removed
 ### Deployment Changes
 
