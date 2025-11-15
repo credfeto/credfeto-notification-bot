@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated FunFair.Test.Common to 6.2.5.1856
 - Dependencies - Updated Serilog.Sinks.Console to 6.1.1
+- Dependencies - Updated System.Reactive to 6.1.0
 ### Removed
 ### Deployment Changes
 
