@@ -65,7 +65,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Date" Version="1.1.138.1330" />
+    <PackageReference Include="Credfeto.Date" Version="1.1.139.1389" />
     <PackageReference Include="Credfeto.Random" Version="1.0.140.1381" />
     <PackageReference Include="Credfeto.Services.Startup" Version="1.1.135.1309" />
     <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
