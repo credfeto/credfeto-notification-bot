@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated AsyncFixer to 2.1.0
 - Dependencies - Updated Credfeto.Database to 1.2.202.1950
+- Dependencies - Updated Credfeto.Enumeration to 1.2.135.1701
 ### Removed
 ### Deployment Changes
 
