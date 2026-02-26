@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -43,7 +43,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     private readonly TwitchBotOptions _options;
     private readonly IDisposable _sentChatMessages;
 
-    [SuppressMessage(category: "ReSharper", checkId: "PrivateFieldCanBeConvertedToLocalVariable", Justification = "Makes more sense to be a member")]
+    
     private readonly IMessageChannel<TwitchChatMessage> _twitchChatMessageChannel;
 
     private readonly ITwitchStreamStateManager _twitchStreamStateManager;
