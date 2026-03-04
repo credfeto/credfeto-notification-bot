@@ -9,14 +9,17 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Database to 1.2.203.1974
-- Dependencies - Updated Credfeto.Enumeration to 1.2.137.1722
 ### Removed
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.222] - 2026-03-04
+### Changed
+- Dependencies - Updated Credfeto.Database to 1.2.203.1974
+- Dependencies - Updated Credfeto.Enumeration to 1.2.137.1722
+
 ## [0.0.221] - 2026-02-23
 ### Changed
 - Dependencies - Updated AsyncFixer to 2.1.0
