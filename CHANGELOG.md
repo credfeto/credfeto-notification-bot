@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.36.1750
 - Dependencies - Updated Meziantou.Analyzer to 3.0.24
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.21.0.135717
 ### Removed
 ### Deployment Changes
 
