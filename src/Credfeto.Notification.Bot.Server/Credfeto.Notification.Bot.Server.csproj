@@ -79,7 +79,7 @@
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="codecracker.CSharp" Version="1.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Credfeto.Enumeration.Source.Generation" Version="1.2.140.1751" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="Figgle.Generator" Version="0.6.5" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Figgle.Generator" Version="0.6.6" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="FunFair.CodeAnalysis" Version="7.1.34.1724" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Mediator.SourceGenerator" Version="3.0.1" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="Meziantou.Analyzer" Version="3.0.19" PrivateAssets="All" ExcludeAssets="runtime" />
