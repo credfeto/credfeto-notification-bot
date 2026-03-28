@@ -9,6 +9,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.227] - 2026-03-28
+### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.140.1751
 - Dependencies - Updated Figgle to 0.6.6
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.36.1750
@@ -17,12 +25,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.148.1619
 - Dependencies - Updated Credfeto.Random to 1.0.147.1581
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.142.1510
-### Removed
-### Deployment Changes
 
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 ## [0.0.226] - 2026-03-14
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.138.1737
