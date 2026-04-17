@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.0.0
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.23.0.137933
 - Dependencies - Updated Credfeto.Date to 1.1.149.1657
+- Dependencies - Updated Credfeto.Random to 1.0.148.1626
 ### Removed
 ### Deployment Changes
 
