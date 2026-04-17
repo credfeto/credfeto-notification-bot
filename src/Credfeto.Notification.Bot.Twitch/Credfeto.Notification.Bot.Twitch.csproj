@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Date.Interfaces" Version="1.1.149.1657" />
-    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.142.1510" />
+    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.143.1554" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="10.0.0" />
     <PackageReference Include="NonBlocking" Version="2.1.2" />
