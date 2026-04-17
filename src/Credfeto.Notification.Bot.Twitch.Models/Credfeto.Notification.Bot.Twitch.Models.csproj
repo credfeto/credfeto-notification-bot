@@ -46,7 +46,7 @@
     <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.DataTypes\Credfeto.Notification.Bot.Twitch.DataTypes.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Mediator.Abstractions" Version="3.0.1" />
+    <PackageReference Include="Mediator.Abstractions" Version="3.0.2" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
