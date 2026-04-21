@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.19.2017
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated Microsoft.Extensions to 10.0.6
+- Dependencies - Updated Meziantou.Analyzer to 3.0.50
 ### Removed
 ### Deployment Changes
 
