@@ -20,6 +20,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 10.0.6
 - Dependencies - Updated Credfeto.Date to 1.1.150.1668
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
+- Dependencies - Updated System.Interactive.Async to 7.0.1
 ### Removed
 ### Deployment Changes
 
