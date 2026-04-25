@@ -23,6 +23,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated Meziantou.Analyzer to 3.0.50
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.123.1157
+- Dependencies - Updated FunFair.CodeAnalysis to 7.1.39.1841
 ### Removed
 ### Deployment Changes
 
