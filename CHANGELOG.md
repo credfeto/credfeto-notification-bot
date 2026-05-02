@@ -22,9 +22,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.144.1565
 - Dependencies - Updated Microsoft.Extensions to 10.0.7
 - Dependencies - Updated Credfeto.Enumeration to 1.2.141.1822
-- Dependencies - Updated Meziantou.Analyzer to 3.0.54
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.124.1183
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.41.1934
+- Dependencies - Updated Meziantou.Analyzer to 3.0.58
 ### Removed
 ### Deployment Changes
 
