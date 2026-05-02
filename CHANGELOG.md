@@ -14,7 +14,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Common to 6.2.19.2017
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.19.2017
 - Dependencies - Updated Mediator to 3.0.2
-- Dependencies - Updated Credfeto.Date to 1.1.150.1668
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated System.Interactive.Async to 7.0.1
 - Dependencies - Updated Credfeto.Random to 1.0.149.1635
@@ -25,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.1.41.1934
 - Dependencies - Updated Meziantou.Analyzer to 3.0.58
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.25.0.139117
+- Dependencies - Updated Credfeto.Date to 1.1.151.1695
 ### Removed
 ### Deployment Changes
 
