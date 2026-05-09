@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-public sealed class TwitchWatchChannelLiveStreamNotificationHandler : INotificationHandler<TwitchWatchChannel>
+public sealed class TwitchWatchChannelLiveStreamNotificationHandler
+    : INotificationHandler<TwitchWatchChannel>
 {
     private readonly ILogger<TwitchWatchChannelLiveStreamNotificationHandler> _logger;
     private readonly ITwitchStreamStatus _twitchStreamStatus;
@@ -19,7 +20,8 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandler : INotificat
         ILogger<TwitchWatchChannelLiveStreamNotificationHandler> logger
     )
     {
-        this._twitchStreamStatus = twitchStreamStatus ?? throw new ArgumentNullException(nameof(twitchStreamStatus));
+        this._twitchStreamStatus =
+            twitchStreamStatus ?? throw new ArgumentNullException(nameof(twitchStreamStatus));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 

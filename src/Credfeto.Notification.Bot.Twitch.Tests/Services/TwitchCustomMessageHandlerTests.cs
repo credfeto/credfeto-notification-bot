@@ -48,7 +48,8 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
         );
 
         this._mediator = GetSubstitute<IMediator>();
-        this._twitchMessageTriggerDebounceFilter = GetSubstitute<ITwitchMessageTriggerDebounceFilter>();
+        this._twitchMessageTriggerDebounceFilter =
+            GetSubstitute<ITwitchMessageTriggerDebounceFilter>();
 
         this._twitchCustomMessageHandler = new TwitchCustomMessageHandler(
             options: options,
@@ -110,12 +111,14 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
 
     private void ReceivedCanSend()
     {
-        this._twitchMessageTriggerDebounceFilter.Received(1).CanSend(Arg.Any<TwitchOutputMessageMatch>());
+        this._twitchMessageTriggerDebounceFilter.Received(1)
+            .CanSend(Arg.Any<TwitchOutputMessageMatch>());
     }
 
     private void DidNotReceiveCanSend()
     {
-        this._twitchMessageTriggerDebounceFilter.DidNotReceive().CanSend(Arg.Any<TwitchOutputMessageMatch>());
+        this._twitchMessageTriggerDebounceFilter.DidNotReceive()
+            .CanSend(Arg.Any<TwitchOutputMessageMatch>());
     }
 
     private ValueTask ReceivedSendCustomMessageAsync()
@@ -130,11 +133,14 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
 
     private ValueTask DidNotReceiveSendCustomMessageAsync()
     {
-        return this._mediator.DidNotReceive().Publish(Arg.Any<CustomTriggeredMessage>(), Arg.Any<CancellationToken>());
+        return this
+            ._mediator.DidNotReceive()
+            .Publish(Arg.Any<CustomTriggeredMessage>(), Arg.Any<CancellationToken>());
     }
 
     private void MockCanSend(bool canSend)
     {
-        this._twitchMessageTriggerDebounceFilter.CanSend(Arg.Any<TwitchOutputMessageMatch>()).Returns(canSend);
+        this._twitchMessageTriggerDebounceFilter.CanSend(Arg.Any<TwitchOutputMessageMatch>())
+            .Returns(canSend);
     }
 }

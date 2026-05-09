@@ -1,4 +1,3 @@
-using System;
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.BackgroundServices;
@@ -21,7 +20,12 @@ public static class TwitchSetup
 {
     public static IServiceCollection AddTwitch(this IServiceCollection services)
     {
-        return services.AddTwitchLib().AddServices().AddActions().AddStartupServices().AddBackgroundServices();
+        return services
+            .AddTwitchLib()
+            .AddServices()
+            .AddActions()
+            .AddStartupServices()
+            .AddBackgroundServices();
     }
 
     private static IServiceCollection AddTwitchLib(this IServiceCollection services)
@@ -35,12 +39,7 @@ public static class TwitchSetup
     private static IClient CreateWebSocketClient()
     {
         return new WebSocketClient(
-            new ClientOptions
-            {
-                MessagesAllowedInPeriod = 750,
-                ThrottlingPeriod = TimeSpan.FromSeconds(30),
-                ReconnectionPolicy = new(reconnectInterval: 1000, maxAttempts: null),
-            }
+            new ClientOptions(reconnectionPolicy: new(reconnectInterval: 1000, maxAttempts: null))
         );
     }
 

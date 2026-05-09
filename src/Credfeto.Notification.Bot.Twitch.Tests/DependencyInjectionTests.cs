@@ -25,7 +25,11 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
             .AddMockedService<IOptions<TwitchBotOptions>>(options =>
             {
                 options.Value.Returns(
-                    new TwitchBotOptions { Authentication = MockReferenceData.TwitchAuthentication, ChatCommands = [] }
+                    new TwitchBotOptions
+                    {
+                        Authentication = MockReferenceData.TwitchAuthentication,
+                        ChatCommands = [],
+                    }
                 );
             })
             .AddMockedService<IMediator>()

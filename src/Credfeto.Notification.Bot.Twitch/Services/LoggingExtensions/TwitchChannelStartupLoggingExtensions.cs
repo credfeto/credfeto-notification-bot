@@ -7,8 +7,15 @@ namespace Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 
 internal static partial class TwitchChannelStartupLoggingExtensions
 {
-    [LoggerMessage(EventId = 1, Level = LogLevel.Information, Message = "{streamer}: Looking for channel")]
-    public static partial void LookingForChannel(this ILogger<TwitchChannelStartup> logger, Streamer streamer);
+    [LoggerMessage(
+        EventId = 1,
+        Level = LogLevel.Information,
+        Message = "{streamer}: Looking for channel"
+    )]
+    public static partial void LookingForChannel(
+        this ILogger<TwitchChannelStartup> logger,
+        Streamer streamer
+    );
 
     [LoggerMessage(
         EventId = 2,

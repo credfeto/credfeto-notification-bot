@@ -22,7 +22,11 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
         this._twitchCustomMessageHandler = GetSubstitute<ITwitchCustomMessageHandler>();
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(
-            new TwitchBotOptions { Authentication = MockReferenceData.TwitchAuthentication, ChatCommands = [] }
+            new TwitchBotOptions
+            {
+                Authentication = MockReferenceData.TwitchAuthentication,
+                ChatCommands = [],
+            }
         );
 
         this._notificationHandler = new TwitchIncomingMessageNotificationHandler(
@@ -36,7 +40,11 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
         this.MockCustomMessageHandler(true);
 
         await this._notificationHandler.Handle(
-            new(Streamer: MockReferenceData.Streamer, Chatter: MockReferenceData.Viewer, Message: "Banana"),
+            new(
+                Streamer: MockReferenceData.Streamer,
+                Chatter: MockReferenceData.Viewer,
+                Message: "Banana"
+            ),
             this.CancellationToken()
         );
 
@@ -49,7 +57,11 @@ public sealed class TwitchIncomingMessageNotificationHandlerTests : TestBase
         this.MockCustomMessageHandler(false);
 
         await this._notificationHandler.Handle(
-            new(MockReferenceData.Streamer.Next(), Chatter: MockReferenceData.Viewer, Message: "Banana"),
+            new(
+                MockReferenceData.Streamer.Next(),
+                Chatter: MockReferenceData.Viewer,
+                Message: "Banana"
+            ),
             this.CancellationToken()
         );
 

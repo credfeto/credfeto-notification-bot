@@ -13,5 +13,6 @@ public static class MockReferenceData
 
     public static Viewer Ignored { get; } = Viewer.Next();
 
-    public static MockBase<TwitchAuthentication> TwitchAuthentication { get; } = new MockTwitchAuthentication();
+    public static MockBase<TwitchAuthentication> TwitchAuthentication { get; } =
+        new MockTwitchAuthentication();
 }

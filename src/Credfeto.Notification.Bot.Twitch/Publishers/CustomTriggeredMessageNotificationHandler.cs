@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-public sealed class CustomTriggeredMessageNotificationHandler : INotificationHandler<CustomTriggeredMessage>
+public sealed class CustomTriggeredMessageNotificationHandler
+    : INotificationHandler<CustomTriggeredMessage>
 {
     private readonly ICustomTriggeredMessageSender _customTriggeredMessageSender;
     private readonly ILogger<CustomTriggeredMessageNotificationHandler> _logger;
@@ -20,11 +21,15 @@ public sealed class CustomTriggeredMessageNotificationHandler : INotificationHan
     )
     {
         this._customTriggeredMessageSender =
-            customTriggeredMessageSender ?? throw new ArgumentNullException(nameof(customTriggeredMessageSender));
+            customTriggeredMessageSender
+            ?? throw new ArgumentNullException(nameof(customTriggeredMessageSender));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async ValueTask Handle(CustomTriggeredMessage notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(
+        CustomTriggeredMessage notification,
+        CancellationToken cancellationToken
+    )
     {
         try
         {

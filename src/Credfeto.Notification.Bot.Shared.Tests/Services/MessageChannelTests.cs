@@ -21,7 +21,10 @@ public sealed class MessageChannelTests : TestBase
     {
         const string message = "Hello World";
 
-        await this._messageChannel.PublishAsync(message: message, cancellationToken: this.CancellationToken());
+        await this._messageChannel.PublishAsync(
+            message: message,
+            cancellationToken: this.CancellationToken()
+        );
 
         using (CancellationTokenSource cts = new(TimeSpan.FromSeconds(1)))
         {

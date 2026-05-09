@@ -19,10 +19,17 @@ public sealed class UserInfoServiceTests : TestBase
     {
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
         options.Value.Returns(
-            new TwitchBotOptions { Authentication = MockReferenceData.TwitchAuthentication, ChatCommands = [] }
+            new TwitchBotOptions
+            {
+                Authentication = MockReferenceData.TwitchAuthentication,
+                ChatCommands = [],
+            }
         );
 
-        this._userInfoService = new UserInfoService(options: options, this.GetTypedLogger<UserInfoService>());
+        this._userInfoService = new UserInfoService(
+            options: options,
+            this.GetTypedLogger<UserInfoService>()
+        );
     }
 
     [Fact]

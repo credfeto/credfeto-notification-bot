@@ -29,8 +29,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
     private readonly ILogger<TwitchStreamStatus> _logger;
     private readonly LiveStreamMonitorService _lsm;
     private readonly IMediator _mediator;
-    private readonly IDisposable _offlineSubscription;
-    private readonly IDisposable _onlineSubscription;
+    private readonly CancellationTokenSource _cts;
     private int _lastVersion;
     private int _version;
 
@@ -43,6 +42,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
+        this._cts = new();
         this._version = 0;
         this._lastVersion = 0;
         this._channels = new();
@@ -50,7 +50,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 
         this._lsm = new(options.Value.ConfigureTwitchApi());
 
-        this._onlineSubscription = Observable
+        Observable
             .FromEventPattern<OnStreamOnlineArgs>(
                 addHandler: h => this._lsm.OnStreamOnline += h,
                 removeHandler: h => this._lsm.OnStreamOnline -= h
@@ -62,9 +62,9 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
                 )
             )
             .Concat()
-            .Subscribe();
+            .Subscribe(this._cts.Token);
 
-        this._offlineSubscription = Observable
+        Observable
             .FromEventPattern<OnStreamOfflineArgs>(
                 addHandler: h => this._lsm.OnStreamOffline += h,
                 removeHandler: h => this._lsm.OnStreamOffline -= h
@@ -76,14 +76,14 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
                 )
             )
             .Concat()
-            .Subscribe();
+            .Subscribe(this._cts.Token);
     }
 
     public void Dispose()
     {
-        this._offlineSubscription.Dispose();
-        this._onlineSubscription.Dispose();
+        this._cts.Cancel();
         this._lock.Dispose();
+        this._cts.Dispose();
     }
 
     public async Task UpdateAsync()
@@ -93,7 +93,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
             return;
         }
 
-        await this._lock.WaitAsync();
+        await this._lock.WaitAsync(this._cts.Token);
 
         try
         {
@@ -116,7 +116,11 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
             }
 
             Streamer streamer = Streamer.FromString(match.Groups["streamer"].Value);
-            this._logger.StreamertNotFound(streamer: streamer, message: exception.Message, exception: exception);
+            this._logger.StreamertNotFound(
+                streamer: streamer,
+                message: exception.Message,
+                exception: exception
+            );
 
             this._channels.TryRemove(key: streamer, value: out _);
         }
@@ -136,7 +140,10 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
     }
 
-    private async Task OnStreamOnlineAsync(OnStreamOnlineArgs e, CancellationToken cancellationToken)
+    private async Task OnStreamOnlineAsync(
+        OnStreamOnlineArgs e,
+        CancellationToken cancellationToken
+    )
     {
         Streamer streamer = Streamer.FromString(e.Channel);
         this._logger.StreamStarted(
@@ -168,7 +175,10 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
     }
 
-    private async Task OnStreamOfflineAsync(OnStreamOfflineArgs e, CancellationToken cancellationToken)
+    private async Task OnStreamOfflineAsync(
+        OnStreamOfflineArgs e,
+        CancellationToken cancellationToken
+    )
     {
         Streamer streamer = Streamer.FromString(e.Channel);
 

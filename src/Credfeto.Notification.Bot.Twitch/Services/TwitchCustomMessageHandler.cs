@@ -41,10 +41,16 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
 
         this._chatUser = Viewer.FromString(opts.Authentication.Chat.UserName);
 
-        this._twitchMessageTriggers = BuildMessageTriggers(twitchChatCommands: opts.ChatCommands, logger: logger);
+        this._twitchMessageTriggers = BuildMessageTriggers(
+            twitchChatCommands: opts.ChatCommands,
+            logger: logger
+        );
     }
 
-    public async Task<bool> HandleMessageAsync(TwitchIncomingMessage message, CancellationToken cancellationToken)
+    public async Task<bool> HandleMessageAsync(
+        TwitchIncomingMessage message,
+        CancellationToken cancellationToken
+    )
     {
         if (
             !this._twitchMessageTriggers.TryGetValue(
@@ -81,13 +87,21 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         if (!this._twitchMessageTriggerDebounceFilter.CanSend(command))
         {
-            this._logger.Debouncing(streamer: trigger.Streamer, chatter: trigger.Chatter, message: trigger.Message);
+            this._logger.Debouncing(
+                streamer: trigger.Streamer,
+                chatter: trigger.Chatter,
+                message: trigger.Message
+            );
 
             // debounced.
             return true;
         }
 
-        this._logger.Matched(streamer: trigger.Streamer, chatter: trigger.Chatter, message: trigger.Message);
+        this._logger.Matched(
+            streamer: trigger.Streamer,
+            chatter: trigger.Chatter,
+            message: trigger.Message
+        );
         await this._mediator.Publish(
             new CustomTriggeredMessage(streamer: trigger.Streamer, message: command.Message),
             cancellationToken: cancellationToken
@@ -103,17 +117,35 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
             && trigger.MatchType switch
             {
                 TwitchMessageMatchType.EXACT => IsExactMatch(message: message, trigger: trigger),
-                TwitchMessageMatchType.CONTAINS => IsContainsMatch(message: message, trigger: trigger),
-                TwitchMessageMatchType.STARTS_WITH => IsStartsWithMatch(message: message, trigger: trigger),
-                TwitchMessageMatchType.ENDS_WITH => IsEndsWithMatch(message: message, trigger: trigger),
-                TwitchMessageMatchType.REGEX => this.IsRegexMatch(message: message, trigger: trigger),
+                TwitchMessageMatchType.CONTAINS => IsContainsMatch(
+                    message: message,
+                    trigger: trigger
+                ),
+                TwitchMessageMatchType.STARTS_WITH => IsStartsWithMatch(
+                    message: message,
+                    trigger: trigger
+                ),
+                TwitchMessageMatchType.ENDS_WITH => IsEndsWithMatch(
+                    message: message,
+                    trigger: trigger
+                ),
+                TwitchMessageMatchType.REGEX => this.IsRegexMatch(
+                    message: message,
+                    trigger: trigger
+                ),
                 _ => false,
             };
     }
 
-    private static bool IsContainsMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    private static bool IsContainsMatch(
+        TwitchIncomingMessage message,
+        TwitchInputMessageMatch trigger
+    )
     {
-        return message.Message.Contains(value: trigger.Message, comparisonType: StringComparison.OrdinalIgnoreCase);
+        return message.Message.Contains(
+            value: trigger.Message,
+            comparisonType: StringComparison.OrdinalIgnoreCase
+        );
     }
 
     private static bool IsExactMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
@@ -121,14 +153,26 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         return StringComparer.OrdinalIgnoreCase.Equals(x: message.Message, y: trigger.Message);
     }
 
-    private static bool IsStartsWithMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    private static bool IsStartsWithMatch(
+        TwitchIncomingMessage message,
+        TwitchInputMessageMatch trigger
+    )
     {
-        return message.Message.StartsWith(value: trigger.Message, comparisonType: StringComparison.OrdinalIgnoreCase);
+        return message.Message.StartsWith(
+            value: trigger.Message,
+            comparisonType: StringComparison.OrdinalIgnoreCase
+        );
     }
 
-    private static bool IsEndsWithMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
+    private static bool IsEndsWithMatch(
+        TwitchIncomingMessage message,
+        TwitchInputMessageMatch trigger
+    )
     {
-        return message.Message.EndsWith(value: trigger.Message, comparisonType: StringComparison.OrdinalIgnoreCase);
+        return message.Message.EndsWith(
+            value: trigger.Message,
+            comparisonType: StringComparison.OrdinalIgnoreCase
+        );
     }
 
     private bool IsRegexMatch(TwitchIncomingMessage message, TwitchInputMessageMatch trigger)
@@ -170,7 +214,10 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         ILogger<TwitchCustomMessageHandler> logger
     )
     {
-        Dictionary<Streamer, Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>> streamerTriggers = [];
+        Dictionary<
+            Streamer,
+            Dictionary<TwitchInputMessageMatch, TwitchOutputMessageMatch>
+        > streamerTriggers = [];
 
         foreach (TwitchChatCommand twitchChatCommand in twitchChatCommands)
         {
@@ -199,7 +246,10 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
                 message: twitchChatCommand.Match,
                 ConvertMatchType(twitchChatCommand.MatchType.ToUpperInvariant())
             );
-            TwitchOutputMessageMatch response = new(streamer: streamer, message: twitchChatCommand.Issue);
+            TwitchOutputMessageMatch response = new(
+                streamer: streamer,
+                message: twitchChatCommand.Issue
+            );
 
             triggers.TryAdd(key: trigger, value: response);
         }

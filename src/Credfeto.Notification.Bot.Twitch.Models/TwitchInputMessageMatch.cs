@@ -83,7 +83,8 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
 
     public override bool Equals(object? obj)
     {
-        return ReferenceEquals(this, objB: obj) || obj is TwitchInputMessageMatch other && this.Equals(other);
+        return ReferenceEquals(this, objB: obj)
+            || obj is TwitchInputMessageMatch other && this.Equals(other);
     }
 
     public override int GetHashCode()

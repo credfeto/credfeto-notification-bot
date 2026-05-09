@@ -6,7 +6,8 @@ using Mediator;
 
 namespace Credfeto.Notification.Bot.Twitch.Publishers;
 
-public sealed class TwitchStreamOfflineLeaveChatNotificationHandler : INotificationHandler<TwitchStreamOffline>
+public sealed class TwitchStreamOfflineLeaveChatNotificationHandler
+    : INotificationHandler<TwitchStreamOffline>
 {
     private readonly ITwitchChat _twitchChat;
     private readonly ITwitchStreamStateManager _twitchStreamStateManager;

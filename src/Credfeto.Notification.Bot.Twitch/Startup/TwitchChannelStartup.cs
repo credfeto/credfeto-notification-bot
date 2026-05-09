@@ -32,7 +32,8 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         ILogger<TwitchChannelStartup> logger
     )
     {
-        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
+        this._userInfoService =
+            userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
         this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -71,7 +72,10 @@ public sealed class TwitchChannelStartup : IRunOnStartup
                     isStreamer: info.IsStreamer,
                     dateCreated: info.DateCreated
                 );
-                await this._mediator.Publish(new TwitchWatchChannel(info), cancellationToken: cancellationToken);
+                await this._mediator.Publish(
+                    new TwitchWatchChannel(info),
+                    cancellationToken: cancellationToken
+                );
             }
         }
     }

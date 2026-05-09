@@ -9,18 +9,19 @@ namespace Credfeto.Notification.Bot.Twitch.Resources;
 
 public static class HttpPolicyExtensions
 {
-    private static readonly Func<HttpResponseMessage, bool> TransientHttpStatusCodePredicate = response =>
-    {
-        return response.StatusCode switch
+    private static readonly Func<HttpResponseMessage, bool> TransientHttpStatusCodePredicate =
+        response =>
         {
-            HttpStatusCode.TooManyRequests => true,
-            HttpStatusCode.ServiceUnavailable => true,
-            HttpStatusCode.BadGateway => true,
-            HttpStatusCode.GatewayTimeout => true,
-            HttpStatusCode.RequestTimeout => true,
-            _ => false,
+            return response.StatusCode switch
+            {
+                HttpStatusCode.TooManyRequests => true,
+                HttpStatusCode.ServiceUnavailable => true,
+                HttpStatusCode.BadGateway => true,
+                HttpStatusCode.GatewayTimeout => true,
+                HttpStatusCode.RequestTimeout => true,
+                _ => false,
+            };
         };
-    };
 
     public static PolicyBuilder<HttpResponseMessage> SensiblyHandleTransientHttpError()
     {
