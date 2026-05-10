@@ -93,8 +93,20 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
         // MESSAGES BEING SENT
         this.SubscribeToOutgoingChatMessages();
 
-        _ = this._client.ConnectAsync();
-        this._connected = true;
+        _ = this._client
+            .ConnectAsync()
+            .ContinueWith(
+                t =>
+                {
+                    if (t.Exception is not null)
+                    {
+                        this._logger.FailedToConnect(t.Exception.GetBaseException());
+                    }
+                },
+                CancellationToken.None,
+                TaskContinuationOptions.OnlyOnFaulted,
+                TaskScheduler.Default
+            );
     }
 
     public void Dispose()
@@ -159,10 +171,9 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
                 add(HandlerAsync);
 
-                TaskCompletionSource tcs = new();
+                TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
                 await using CancellationTokenRegistration registration = cancellationToken.Register(
-                    () =>
-                        tcs.TrySetResult()
+                    () => tcs.TrySetResult()
                 );
                 await tcs.Task.ConfigureAwait(false);
 
@@ -173,7 +184,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
 
     private void SubscribeToOutgoingChatMessages()
     {
-        this._twitchChatMessageChannel.ReadAllAsync(CancellationToken.None)
+        this._twitchChatMessageChannel.ReadAllAsync(this._cts.Token)
             .ToObservable()
             .Delay(d => Observable.Timer(this.CalculateWithJitter(d)))
             .Where(this.IsConnectedToChat)
@@ -210,7 +221,7 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
                 h => this._client.OnDisconnected += h,
                 h => this._client.OnDisconnected -= h
             )
-            .Subscribe(onNext: this.OnDisconnected, token: this._cts.Token);
+            .Subscribe(onNext: this.OnDisconnected, this._cts.Token);
     }
 
     private void SubscribeToChatConnection()

@@ -60,11 +60,14 @@ internal static partial class TwitchChatLoggingExtensions
         Exception exception
     );
 
-    [LoggerMessage(EventId = 5, Level = LogLevel.Error, Message = "{username}: Chat connected")]
+    [LoggerMessage(EventId = 5, Level = LogLevel.Information, Message = "{username}: Chat connected")]
     public static partial void ChatConnected(this ILogger<TwitchChat> logger, string username);
 
-    [LoggerMessage(EventId = 6, Level = LogLevel.Error, Message = "Chat disconnected :(")]
+    [LoggerMessage(EventId = 6, Level = LogLevel.Warning, Message = "Chat disconnected :(")]
     public static partial void ChatDisconnected(this ILogger<TwitchChat> logger);
+
+    [LoggerMessage(EventId = 9, Level = LogLevel.Error, Message = "Failed to connect to chat")]
+    public static partial void FailedToConnect(this ILogger<TwitchChat> logger, Exception exception);
 
     [LoggerMessage(
         EventId = 7,
