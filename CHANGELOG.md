@@ -17,7 +17,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 10.0.7
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.25.0.139117
 - Dependencies - Updated Credfeto.Date to 1.1.151.1695
-- Dependencies - Updated FunFair.Test.Source.Generator to 6.2.22.2198
 - Dependencies - Updated Credfeto.Enumeration to 1.2.142.1836
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.125.1199
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.0.1978
@@ -25,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.151.1679
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.146.1608
 - Dependencies - Updated FunFair.Test.Common to 6.2.25.2243
+- Dependencies - Updated FunFair.Test.Source.Generator to 6.2.25.2243
 ### Removed
 ### Deployment Changes
 
