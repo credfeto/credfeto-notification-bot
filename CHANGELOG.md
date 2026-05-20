@@ -14,7 +14,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Mediator to 3.0.2
 - Dependencies - Updated Serilog.Extensions.Logging to 10.0.0
 - Dependencies - Updated System.Interactive.Async to 7.0.1
-- Dependencies - Updated Microsoft.Extensions to 10.0.7
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.25.0.139117
 - Dependencies - Updated Credfeto.Date to 1.1.151.1695
 - Dependencies - Updated Credfeto.Enumeration to 1.2.142.1836
@@ -25,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.146.1608
 - Dependencies - Updated FunFair.Test.Common to 6.2.25.2243
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.25.2243
+- Dependencies - Updated Microsoft.Extensions to 10.0.8
 ### Removed
 ### Deployment Changes
 
