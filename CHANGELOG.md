@@ -26,6 +26,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 10.0.300
 - Dependencies - Updated Meziantou.Analyzer to 3.0.96
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.27.0.140913
+- Dependencies - Updated Credfeto.Database to 1.2.209.2134
 ### Removed
 ### Deployment Changes
 
