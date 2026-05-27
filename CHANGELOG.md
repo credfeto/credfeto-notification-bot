@@ -17,7 +17,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Date to 1.1.151.1695
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.125.1199
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.0.1978
-- Dependencies - Updated Credfeto.Random to 1.0.151.1679
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.146.1608
 - Dependencies - Updated FunFair.Test.Common to 6.2.25.2243
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.2.25.2243
@@ -27,6 +26,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Meziantou.Analyzer to 3.0.96
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.27.0.140913
 - Dependencies - Updated Credfeto.Database to 1.2.209.2134
+- Dependencies - Updated Credfeto.Random to 1.0.152.1703
 ### Removed
 ### Deployment Changes
 

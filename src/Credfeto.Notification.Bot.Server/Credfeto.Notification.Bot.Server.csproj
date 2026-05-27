@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Date" Version="1.1.151.1695" />
-    <PackageReference Include="Credfeto.Random" Version="1.0.151.1679" />
+    <PackageReference Include="Credfeto.Random" Version="1.0.152.1703" />
     <PackageReference Include="Credfeto.Services.Startup" Version="1.1.146.1608" />
     <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
