@@ -18,6 +18,7 @@
     <Project Path="Credfeto.Notification.Bot.Twitch.DataTypes/Credfeto.Notification.Bot.Twitch.DataTypes.csproj" />
     <Project Path="Credfeto.Notification.Bot.Twitch.Interfaces/Credfeto.Notification.Bot.Twitch.Interfaces.csproj" />
     <Project Path="Credfeto.Notification.Bot.Twitch.Models/Credfeto.Notification.Bot.Twitch.Models.csproj" />
+    <Project Path="Credfeto.Notification.Bot.Twitch.Models.Tests/Credfeto.Notification.Bot.Twitch.Models.Tests.csproj" />
     <Project Path="Credfeto.Notification.Bot.Twitch.Tests/Credfeto.Notification.Bot.Twitch.Tests.csproj" />
     <Project Path="Credfeto.Notification.Bot.Twitch/Credfeto.Notification.Bot.Twitch.csproj" />
   </Folder>
