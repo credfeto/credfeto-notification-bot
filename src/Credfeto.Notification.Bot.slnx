@@ -12,6 +12,7 @@
   </Folder>
   <Folder Name="/Server/">
     <Project Path="Credfeto.Notification.Bot.Server/Credfeto.Notification.Bot.Server.csproj" />
+    <Project Path="Credfeto.Notification.Bot.Server.Tests/Credfeto.Notification.Bot.Server.Tests.csproj" />
   </Folder>
   <Folder Name="/Services/" />
   <Folder Name="/Services/Twitch/">
