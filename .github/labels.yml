@@ -70,6 +70,10 @@
    color: "96f7d2"
    description: "Changes in Credfeto.Notification.Bot.Twitch.Models project"
 
+ - name: "credfeto-notification-bot-twitch-models-tests"
+   color: "0e8a16"
+   description: "Changes in Credfeto.Notification.Bot.Twitch.Models.Tests project"
+
  - name: "credfeto-notification-bot-twitch-tests"
    color: "0e8a16"
    description: "Changes in Credfeto.Notification.Bot.Twitch.Tests project"

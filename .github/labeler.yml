@@ -26,6 +26,8 @@
  - any: [ 'src/$Credfeto.Notification.Bot.Twitch.Interfaces/**/*' ]
 "credfeto-notification-bot-twitch-models":
  - any: [ 'src/$Credfeto.Notification.Bot.Twitch.Models/**/*' ]
+"credfeto-notification-bot-twitch-models-tests":
+ - any: [ 'src/$Credfeto.Notification.Bot.Twitch.Models.Tests/**/*' ]
 "credfeto-notification-bot-twitch-tests":
  - any: [ 'src/$Credfeto.Notification.Bot.Twitch.Tests/**/*' ]
 "dotnet":
