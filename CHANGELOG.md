@@ -6,7 +6,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 -->
 
 ## [Unreleased]
+### Security
 ### Added
+- Tests for Credfeto.Notification.Bot.Twitch.Models to achieve 100% code coverage
 ### Fixed
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.144.1906
@@ -14,7 +16,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.153.1723
 ### Removed
 ### Deployment Changes
-
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
@@ -1717,7 +1718,6 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 - Ability to generate different messages rather than a single message for each type
 - Fluent validation for json config
 ### Changed
-
 - Dependencies - Updated NonBlocking to 2.1.0
 - Dependencies - Updated NSubstitute to 4.4.0
 - Dependencies - Updated xunit.analyzers to 1.0.0
@@ -1763,7 +1763,6 @@ Releases that have at least been deployed to staging, BUT NOT necessarily releas
 
 ## [0.0.3] - 2022-05-30
 ### Changed
-
 - Dependencies - Updated Discord.Net to 3.7.1
 - Added ability to use JSON serializer with the JSON serializer decoders to read the settings from appsettings
 
