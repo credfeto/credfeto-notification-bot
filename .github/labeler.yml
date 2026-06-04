@@ -14,6 +14,8 @@
  - any: [ 'src/$Credfeto.Notification.Bot.Mocks/**/*' ]
 "credfeto-notification-bot-server":
  - any: [ 'src/$Credfeto.Notification.Bot.Server/**/*' ]
+"credfeto-notification-bot-server-tests":
+ - any: [ 'src/$Credfeto.Notification.Bot.Server.Tests/**/*' ]
 "credfeto-notification-bot-shared":
  - any: [ 'src/$Credfeto.Notification.Bot.Shared/**/*' ]
 "credfeto-notification-bot-shared-tests":
