@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
-public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
+public sealed class TwitchMessageTriggerDebounceFilterTests : LoggingTestBase
 {
     private static readonly DateTimeOffset Initial = new(
         year: 2020,
@@ -29,7 +29,8 @@ public sealed class TwitchMessageTriggerDebounceFilterTests : TestBase
     private readonly ICurrentTimeSource _currentTimeSource;
     private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
 
-    public TwitchMessageTriggerDebounceFilterTests()
+    public TwitchMessageTriggerDebounceFilterTests(ITestOutputHelper output)
+        : base(output)
     {
         this._currentTimeSource = GetSubstitute<ICurrentTimeSource>();
         this._twitchMessageTriggerDebounceFilter = new TwitchMessageTriggerDebounceFilter(

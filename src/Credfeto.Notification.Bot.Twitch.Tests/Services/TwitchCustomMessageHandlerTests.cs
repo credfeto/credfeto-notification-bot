@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
-public sealed class TwitchCustomMessageHandlerTests : TestBase
+public sealed class TwitchCustomMessageHandlerTests : LoggingTestBase
 {
     private static readonly TwitchIncomingMessage IncomingMessage = new(
         Streamer: MockReferenceData.Streamer,
@@ -25,7 +25,8 @@ public sealed class TwitchCustomMessageHandlerTests : TestBase
     private readonly ITwitchCustomMessageHandler _twitchCustomMessageHandler;
     private readonly ITwitchMessageTriggerDebounceFilter _twitchMessageTriggerDebounceFilter;
 
-    public TwitchCustomMessageHandlerTests()
+    public TwitchCustomMessageHandlerTests(ITestOutputHelper output)
+        : base(output)
     {
         Streamer streamer = IncomingMessage.Streamer;
         Viewer viewer = IncomingMessage.Chatter;
