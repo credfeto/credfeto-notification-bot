@@ -11,11 +11,11 @@ using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 
-public sealed class UserInfoServiceTests : LoggingTestBase
+public sealed class UserInfoServiceCacheTests : LoggingTestBase
 {
     private readonly IUserInfoService _userInfoService;
 
-    public UserInfoServiceTests(ITestOutputHelper output)
+    public UserInfoServiceCacheTests(ITestOutputHelper output)
         : base(output)
     {
         IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
@@ -27,10 +27,22 @@ public sealed class UserInfoServiceTests : LoggingTestBase
     }
 
     [Fact]
-    public async Task GetUserReturnsNullIfNotFoundAsync()
+    public async Task SecondCallForSameViewerShouldReturnCachedResultAsync()
+    {
+        Viewer viewer = MockReferenceData.Viewer;
+
+        TwitchUser? firstResult = await this._userInfoService.GetUserAsync(userName: viewer, this.CancellationToken());
+        TwitchUser? secondResult = await this._userInfoService.GetUserAsync(userName: viewer, this.CancellationToken());
+
+        Assert.Null(firstResult);
+        Assert.Null(secondResult);
+    }
+
+    [Fact]
+    public async Task GetUserAsyncWithStreamerShouldReturnNullIfNotFoundAsync()
     {
         TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(
-            userName: MockReferenceData.Viewer,
+            userName: MockReferenceData.Streamer,
             this.CancellationToken()
         );
 

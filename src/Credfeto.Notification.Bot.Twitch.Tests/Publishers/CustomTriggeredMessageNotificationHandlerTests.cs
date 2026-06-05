@@ -14,13 +14,14 @@ using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
-public sealed class CustomTriggeredMessageNotificationHandlerTests : TestBase
+public sealed class CustomTriggeredMessageNotificationHandlerTests : LoggingTestBase
 {
     private const string MESSAGE = "!hello";
     private readonly ICustomTriggeredMessageSender _customTriggeredMessageSender;
     private readonly INotificationHandler<CustomTriggeredMessage> _notificationHandler;
 
-    public CustomTriggeredMessageNotificationHandlerTests()
+    public CustomTriggeredMessageNotificationHandlerTests(ITestOutputHelper output)
+        : base(output)
     {
         this._customTriggeredMessageSender = GetSubstitute<ICustomTriggeredMessageSender>();
 

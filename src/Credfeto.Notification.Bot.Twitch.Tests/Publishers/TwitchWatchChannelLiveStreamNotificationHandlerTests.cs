@@ -12,12 +12,13 @@ using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Publishers;
 
-public sealed class TwitchWatchChannelLiveStreamNotificationHandlerTests : TestBase
+public sealed class TwitchWatchChannelLiveStreamNotificationHandlerTests : LoggingTestBase
 {
     private readonly INotificationHandler<TwitchWatchChannel> _notificationHandler;
     private readonly ITwitchStreamStatus _twitchStreamStatus;
 
-    public TwitchWatchChannelLiveStreamNotificationHandlerTests()
+    public TwitchWatchChannelLiveStreamNotificationHandlerTests(ITestOutputHelper output)
+        : base(output)
     {
         this._twitchStreamStatus = GetSubstitute<ITwitchStreamStatus>();
 
