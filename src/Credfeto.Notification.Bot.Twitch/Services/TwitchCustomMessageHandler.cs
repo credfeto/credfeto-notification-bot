@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -107,7 +107,9 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
                 TwitchMessageMatchType.STARTS_WITH => IsStartsWithMatch(message: message, trigger: trigger),
                 TwitchMessageMatchType.ENDS_WITH => IsEndsWithMatch(message: message, trigger: trigger),
                 TwitchMessageMatchType.REGEX => this.IsRegexMatch(message: message, trigger: trigger),
-                _ => false,
+                _ => throw new System.Diagnostics.UnreachableException(
+                    $"Unknown match type: {trigger.MatchType.GetName()}"
+                ),
             };
     }
 
@@ -135,7 +137,7 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
     {
         if (trigger.Regex is null)
         {
-            return false;
+            throw new System.Diagnostics.UnreachableException("REGEX trigger should always have a non-null regex");
         }
 
         bool isMatch = trigger.Regex.IsMatch(message.Message);
