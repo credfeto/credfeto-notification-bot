@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Added unit test project for Credfeto.Notification.Bot.Server achieving 100% code coverage
 - Tests for Credfeto.Notification.Bot.Twitch.DataTypes assembly - Streamer, Viewer, TwitchUser, and mapper types
 - Increased code coverage for Credfeto.Notification.Bot.Twitch to 100%
+- Tests to increase code coverage to 100% for Credfeto.Notification.Bot.Shared
 ### Fixed
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.144.1906
