@@ -53,7 +53,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken: cancellationToken);
 
         // Explicitly join the bot's own channel
-        this._twitchChat.JoinChat(Streamer.FromString(this._options.Authentication.Chat.UserName));
+        await this._twitchChat.JoinChatAsync(Streamer.FromString(this._options.Authentication.Chat.UserName));
 
         foreach (Streamer streamer in this._channels)
         {
