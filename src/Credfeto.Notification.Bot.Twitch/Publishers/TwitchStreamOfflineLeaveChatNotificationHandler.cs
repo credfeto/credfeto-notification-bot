@@ -20,11 +20,9 @@ public sealed class TwitchStreamOfflineLeaveChatNotificationHandler : INotificat
         this._twitchStreamStateManager = twitchStreamStateManager;
     }
 
-    public ValueTask Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(TwitchStreamOffline notification, CancellationToken cancellationToken)
     {
         this._twitchStreamStateManager.Get(notification.Streamer).Offline();
-        this._twitchChat.LeaveChat(notification.Streamer);
-
-        return ValueTask.CompletedTask;
+        await this._twitchChat.LeaveChatAsync(notification.Streamer);
     }
 }
