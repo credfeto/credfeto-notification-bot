@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 using Microsoft.Extensions.Logging;
@@ -49,17 +48,8 @@ internal static partial class TwitchChatLoggingExtensions
         Exception exception
     );
 
-    [Conditional("DEBUG")]
-    [LoggerMessage(EventId = 4, Level = LogLevel.Error, Message = "{dateTimeOffset}: {username} - {data}")]
-    public static partial void DebugLog(
-        this ILogger<TwitchChat> logger,
-        DateTimeOffset dateTimeOffset,
-        string username,
-        string data
-    );
-
-    [LoggerMessage(EventId = 5, Level = LogLevel.Error, Message = "{username}: Chat connected - {autoJoinChannel}")]
-    public static partial void ChatConnected(this ILogger<TwitchChat> logger, string username, string autoJoinChannel);
+    [LoggerMessage(EventId = 5, Level = LogLevel.Information, Message = "{username}: Chat connected")]
+    public static partial void ChatConnected(this ILogger<TwitchChat> logger, string username);
 
     [LoggerMessage(EventId = 6, Level = LogLevel.Error, Message = "Chat disconnected :(")]
     public static partial void ChatDisconnected(this ILogger<TwitchChat> logger);

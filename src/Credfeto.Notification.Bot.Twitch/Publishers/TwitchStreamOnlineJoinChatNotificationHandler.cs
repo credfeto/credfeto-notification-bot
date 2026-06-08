@@ -31,6 +31,6 @@ public sealed class TwitchStreamOnlineJoinChatNotificationHandler : INotificatio
                 cancellationToken: cancellationToken
             );
 
-        this._twitchChat.JoinChat(notification.Streamer);
+        await this._twitchChat.JoinChatAsync(notification.Streamer);
     }
 }
