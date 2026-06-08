@@ -18,7 +18,7 @@ using Serilog.Core;
 
 namespace Credfeto.Notification.Bot.Server.Helpers;
 
-internal static class ServerStartup
+public static class ServerStartup
 {
     public static void SetThreads(int minThreads)
     {
@@ -45,7 +45,7 @@ internal static class ServerStartup
         Console.WriteLine($"Max worker threads {maxWorker}, Max IOC threads {maxIoc}");
     }
 
-    public static IHost CreateApp(string[] args)
+    internal static IHost CreateApp(string[] args)
     {
         string configPath = ApplicationConfigLocator.ConfigurationFilesPath;
 

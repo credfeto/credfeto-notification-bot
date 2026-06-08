@@ -20,6 +20,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.149.1669
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.127.1265
 - Dependencies - Updated Meziantou.Analyzer to 3.0.100
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.1.2035
+- Removed InternalsVisibleTo and made previously internal types public to comply with FFS0051 code analysis rule
 ### Removed
 ### Deployment Changes
 <!--
