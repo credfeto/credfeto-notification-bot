@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Credfeto.Notification.Bot.Server.Helpers;
 
-internal static class ApplicationConfigLocator
+public static class ApplicationConfigLocator
 {
     public static string ConfigurationFilesPath { get; } = LookupConfigurationFilesPath();
 
