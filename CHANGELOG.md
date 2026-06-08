@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.153.1723
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.126.1251
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.1.2035
+- Removed InternalsVisibleTo and made previously internal types public to comply with FFS0051 code analysis rule
 ### Removed
 ### Deployment Changes
 <!--
