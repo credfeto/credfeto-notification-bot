@@ -84,7 +84,7 @@ public sealed class TwitchChannelStartupTests : LoggingTestBase
 
         await this._startup.StartAsync(this.CancellationToken());
 
-        this._twitchChat.Received(1).JoinChat(Arg.Any<Streamer>());
+        await this._twitchChat.Received(1).JoinChatAsync(Arg.Any<Streamer>());
 
         await this._mediator.Received(1).Publish(Arg.Any<TwitchWatchChannel>(), Arg.Any<CancellationToken>());
     }
@@ -112,7 +112,7 @@ public sealed class TwitchChannelStartupTests : LoggingTestBase
 
         await startup.StartAsync(this.CancellationToken());
 
-        twitchChat.Received(1).JoinChat(Arg.Any<Streamer>());
+        await twitchChat.Received(1).JoinChatAsync(Arg.Any<Streamer>());
     }
 
     [Fact]
@@ -123,7 +123,7 @@ public sealed class TwitchChannelStartupTests : LoggingTestBase
 
         await this._startup.StartAsync(this.CancellationToken());
 
-        this._twitchChat.Received(1).JoinChat(Arg.Any<Streamer>());
+        await this._twitchChat.Received(1).JoinChatAsync(Arg.Any<Streamer>());
 
         await this._mediator.DidNotReceive().Publish(Arg.Any<TwitchWatchChannel>(), Arg.Any<CancellationToken>());
     }
