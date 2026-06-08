@@ -5,9 +5,9 @@ namespace Credfeto.Notification.Bot.Twitch;
 
 public interface ITwitchChat
 {
-    void JoinChat(Streamer streamer);
+    Task JoinChatAsync(Streamer streamer);
 
-    void LeaveChat(Streamer streamer);
+    Task LeaveChatAsync(Streamer streamer);
 
     Task UpdateAsync();
 }

@@ -45,6 +45,6 @@ public sealed class TwitchStreamOnlineJoinChatNotificationHandlerTests : TestBas
             .Get(streamer: MockReferenceData.Streamer)
             .OnlineAsync(Arg.Any<string>(), Arg.Any<DateTimeOffset>(), Arg.Any<CancellationToken>());
 
-        this._twitchChat.Received(1).JoinChat(streamer: MockReferenceData.Streamer);
+        await this._twitchChat.Received(1).JoinChatAsync(streamer: MockReferenceData.Streamer);
     }
 }

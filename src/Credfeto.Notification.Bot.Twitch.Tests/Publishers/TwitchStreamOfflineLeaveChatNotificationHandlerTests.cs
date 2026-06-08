@@ -42,6 +42,6 @@ public sealed class TwitchStreamOfflineLeaveChatNotificationHandlerTests : TestB
 
         this._twitchStreamStateManager.Received(1).Get(streamer: MockReferenceData.Streamer).Offline();
 
-        this._twitchChat.Received(1).LeaveChat(streamer: MockReferenceData.Streamer);
+        await this._twitchChat.Received(1).LeaveChatAsync(streamer: MockReferenceData.Streamer);
     }
 }
