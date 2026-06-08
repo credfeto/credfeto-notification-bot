@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
 
-internal static class Jitter
+public static class Jitter
 {
     public static double WithJitter(double delaySeconds, int maxSeconds)
     {
