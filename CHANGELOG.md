@@ -14,6 +14,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Increased code coverage for Credfeto.Notification.Bot.Twitch to 100%
 - Tests to increase code coverage to 100% for Credfeto.Notification.Bot.Shared
 ### Fixed
+- Fixed build errors caused by breaking API changes in TwitchLib.Client 4.0.1
+- Fixed missing PublishAot setting in server project
+- Fixed missing UnitTests.props import in mocks project
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.144.1906
 - Dependencies - Updated Credfeto.Random to 1.0.154.1739
@@ -21,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.127.1265
 - Dependencies - Updated Meziantou.Analyzer to 3.0.100
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.1.2035
+- Dependencies - Updated TwitchLib to 4.0.1
 - Removed InternalsVisibleTo and made previously internal types public to comply with FFS0051 code analysis rule
 ### Removed
 ### Deployment Changes
