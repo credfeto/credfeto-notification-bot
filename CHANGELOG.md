@@ -8,6 +8,15 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ## [Unreleased]
 ### Security
 ### Added
+### Fixed
+### Changed
+### Removed
+### Deployment Changes
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.229] - 2026-06-09
+### Added
 - Tests for Credfeto.Notification.Bot.Twitch.Models to achieve 100% code coverage
 - Added unit test project for Credfeto.Notification.Bot.Server achieving 100% code coverage
 - Tests for Credfeto.Notification.Bot.Twitch.DataTypes assembly - Streamer, Viewer, TwitchUser, and mapper types
@@ -26,11 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.1.2035
 - Dependencies - Updated TwitchLib to 4.0.1
 - Removed InternalsVisibleTo and made previously internal types public to comply with FFS0051 code analysis rule
-### Removed
-### Deployment Changes
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
+
 ## [0.0.228] - 2026-05-28
 ### Changed
 - Dependencies - Updated Philips.CodeAnalysis.DuplicateCodeAnalyzer to 2.0.0
