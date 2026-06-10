@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+- Fixed on_new_pr workflow to inline GitHub Script logic instead of referencing local composite actions in pull_request_target context where actions resolve before checkout
 ### Changed
 ### Removed
 ### Deployment Changes
