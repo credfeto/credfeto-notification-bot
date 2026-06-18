@@ -1,5 +1,5 @@
 using Credfeto.Notification.Bot.Twitch.Configuration;
-using FunFair.Test.Common.Mocks;
+using FunFair.Test.Infrastructure.Mocks;
 
 namespace Credfeto.Notification.Bot.Mocks.Objects;
 
