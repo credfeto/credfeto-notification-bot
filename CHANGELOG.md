@@ -10,7 +10,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Enumeration to 1.2.146.1978
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.129.1310
 - Dependencies - Updated Meziantou.Analyzer to 3.0.104
 - Dependencies - Updated Credfeto.Random to 1.0.156.1797
@@ -18,6 +17,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.1.2342
 - Dependencies - Updated Microsoft.Extensions to 10.0.9
 - Dependencies - Updated Credfeto.Database to 1.2.213.2307
+- Dependencies - Updated Credfeto.Enumeration to 1.2.147.2001
 ### Removed
 ### Deployment Changes
 <!--
