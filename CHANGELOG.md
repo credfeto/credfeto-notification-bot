@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+- Updated namespaces for MockBase and AddMockedService following FunFair.Test.Common 6.3.1.2342 API changes
 ### Changed
 - Dependencies - Updated Meziantou.Analyzer to 3.0.104
 - Dependencies - Updated Credfeto.Random to 1.0.156.1797
@@ -18,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.213.2307
 - Dependencies - Updated Credfeto.Enumeration to 1.2.147.2001
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.130.1322
+- Dependencies - Updated FunFair.Test.Common to 6.3.1.2342
 ### Removed
 ### Deployment Changes
 <!--
