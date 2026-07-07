@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+- Increment version after removing unknown Twitch streamer so the next poll refreshes the channel list
 ### Changed
 ### Removed
 ### Deployment Changes
