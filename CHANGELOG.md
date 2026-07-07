@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+- Increment version after removing unknown Twitch streamer so the next poll refreshes the channel list
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.6.2145
 - Dependencies - Updated Meziantou.Analyzer to 3.0.121
