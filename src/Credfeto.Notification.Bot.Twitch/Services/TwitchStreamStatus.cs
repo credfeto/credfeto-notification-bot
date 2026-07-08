@@ -6,16 +6,12 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Date.Interfaces;
-using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
-using Credfeto.Notification.Bot.Twitch.Extensions;
 using Credfeto.Notification.Bot.Twitch.Models;
 using Credfeto.Notification.Bot.Twitch.Services.LoggingExtensions;
 using Mediator;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NonBlocking;
-using TwitchLib.Api.Services;
 using TwitchLib.Api.Services.Events.LiveStreamMonitor;
 
 namespace Credfeto.Notification.Bot.Twitch.Services;
@@ -28,15 +24,20 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 
     private readonly SemaphoreSlim _lock;
     private readonly ILogger<TwitchStreamStatus> _logger;
-    private readonly LiveStreamMonitorService _lsm;
+    private readonly ILiveStreamMonitor _lsm;
     private readonly IMediator _mediator;
     private readonly IDisposable _offlineSubscription;
     private readonly IDisposable _onlineSubscription;
     private int _lastVersion;
     private int _version;
 
-    public TwitchStreamStatus(IOptions<TwitchBotOptions> options, IMediator mediator, ILogger<TwitchStreamStatus> logger)
+    public TwitchStreamStatus(
+        ILiveStreamMonitor liveStreamMonitor,
+        IMediator mediator,
+        ILogger<TwitchStreamStatus> logger
+    )
     {
+        this._lsm = liveStreamMonitor ?? throw new ArgumentNullException(nameof(liveStreamMonitor));
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -44,8 +45,6 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         this._lastVersion = 0;
         this._channels = new();
         this._lock = new(1);
-
-        this._lsm = new(options.Value.ConfigureTwitchApi());
 
         this._onlineSubscription = this.SubscribeToStreamOnlineNotifications();
 
@@ -92,6 +91,7 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
             this._logger.StreamertNotFound(streamer: streamer, message: exception.Message, exception: exception);
 
             this._channels.TryRemove(key: streamer, value: out _);
+            Interlocked.Increment(location: ref this._version);
         }
         finally
         {
@@ -109,39 +109,79 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         }
     }
 
-    [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0032: Use CancellationToken", Justification = "Using IDisposable instead")]
+    [SuppressMessage(
+        category: "Meziantou.Analyzer",
+        checkId: "MA0032: Use CancellationToken",
+        Justification = "Using IDisposable instead"
+    )]
     private IDisposable SubscribeToStreamOfflineNotifications()
     {
-        return Observable.FromEventPattern<OnStreamOfflineArgs>(addHandler: h => this._lsm.OnStreamOffline += h, removeHandler: h => this._lsm.OnStreamOffline -= h)
-                         .Select(messageEvent => messageEvent.EventArgs)
-                         .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)))
-                         .Concat()
-                         .Subscribe();
+        return Observable
+            .FromEventPattern<OnStreamOfflineArgs>(
+                addHandler: h => this._lsm.OnStreamOffline += h,
+                removeHandler: h => this._lsm.OnStreamOffline -= h
+            )
+            .Select(messageEvent => messageEvent.EventArgs)
+            .Select(e =>
+                Observable.FromAsync(cancellationToken =>
+                    this.OnStreamOfflineAsync(e: e, cancellationToken: cancellationToken)
+                )
+            )
+            .Concat()
+            .Subscribe();
     }
 
-    [SuppressMessage(category: "Meziantou.Analyzer", checkId: "MA0032: Use CancellationToken", Justification = "Using IDisposable instead")]
+    [SuppressMessage(
+        category: "Meziantou.Analyzer",
+        checkId: "MA0032: Use CancellationToken",
+        Justification = "Using IDisposable instead"
+    )]
     private IDisposable SubscribeToStreamOnlineNotifications()
     {
-        return Observable.FromEventPattern<OnStreamOnlineArgs>(addHandler: h => this._lsm.OnStreamOnline += h, removeHandler: h => this._lsm.OnStreamOnline -= h)
-                         .Select(messageEvent => messageEvent.EventArgs)
-                         .Select(e => Observable.FromAsync(cancellationToken => this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)))
-                         .Concat()
-                         .Subscribe();
+        return Observable
+            .FromEventPattern<OnStreamOnlineArgs>(
+                addHandler: h => this._lsm.OnStreamOnline += h,
+                removeHandler: h => this._lsm.OnStreamOnline -= h
+            )
+            .Select(messageEvent => messageEvent.EventArgs)
+            .Select(e =>
+                Observable.FromAsync(cancellationToken =>
+                    this.OnStreamOnlineAsync(e: e, cancellationToken: cancellationToken)
+                )
+            )
+            .Concat()
+            .Subscribe();
     }
 
     private async Task OnStreamOnlineAsync(OnStreamOnlineArgs e, CancellationToken cancellationToken)
     {
         Streamer streamer = Streamer.FromString(e.Channel);
-        this._logger.StreamStarted(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, e.Stream.StartedAt.AsDateTimeOffset());
+        this._logger.StreamStarted(
+            streamer: streamer,
+            title: e.Stream.Title,
+            gameName: e.Stream.GameName,
+            e.Stream.StartedAt.AsDateTimeOffset()
+        );
 
         try
         {
-            await this._mediator.Publish(new TwitchStreamOnline(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
-                                         cancellationToken: cancellationToken);
+            await this._mediator.Publish(
+                new TwitchStreamOnline(
+                    streamer: streamer,
+                    title: e.Stream.Title,
+                    gameName: e.Stream.GameName,
+                    startedAt: e.Stream.StartedAt
+                ),
+                cancellationToken: cancellationToken
+            );
         }
         catch (Exception exception)
         {
-            this._logger.FailedToNotifyStreamStarted(streamer: streamer, message: exception.Message, exception: exception);
+            this._logger.FailedToNotifyStreamStarted(
+                streamer: streamer,
+                message: exception.Message,
+                exception: exception
+            );
         }
     }
 
@@ -151,12 +191,23 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 
         try
         {
-            await this._mediator.Publish(new TwitchStreamOffline(streamer: streamer, title: e.Stream.Title, gameName: e.Stream.GameName, startedAt: e.Stream.StartedAt),
-                                         cancellationToken: cancellationToken);
+            await this._mediator.Publish(
+                new TwitchStreamOffline(
+                    streamer: streamer,
+                    title: e.Stream.Title,
+                    gameName: e.Stream.GameName,
+                    startedAt: e.Stream.StartedAt
+                ),
+                cancellationToken: cancellationToken
+            );
         }
         catch (Exception exception)
         {
-            this._logger.FailedToNotifyStreamStopped(streamer: streamer, message: exception.Message, exception: exception);
+            this._logger.FailedToNotifyStreamStopped(
+                streamer: streamer,
+                message: exception.Message,
+                exception: exception
+            );
         }
     }
 }

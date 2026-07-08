@@ -49,6 +49,7 @@ public static class TwitchSetup
             .AddSingleton<ITwitchChat, TwitchChat>()
             .AddSingleton<ITwitchCustomMessageHandler, TwitchCustomMessageHandler>()
             .AddSingleton<ITwitchMessageTriggerDebounceFilter, TwitchMessageTriggerDebounceFilter>()
+            .AddSingleton<ILiveStreamMonitor, LiveStreamMonitorAdapter>()
             .AddSingleton<ITwitchStreamStatus, TwitchStreamStatus>()
             .AddSingleton<ITwitchStreamStateManager, TwitchStreamStateManager>()
             .AddSingleton<IUserInfoService, UserInfoService>();
