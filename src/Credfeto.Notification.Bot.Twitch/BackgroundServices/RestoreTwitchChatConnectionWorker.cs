@@ -38,8 +38,6 @@ public sealed class RestoreTwitchChatConnectionWorker : BackgroundService
         catch (Exception exception)
         {
             this._logger.FailedToUpdateTwitchChatConnection(message: exception.Message, exception: exception);
-
-            throw;
         }
     }
 }

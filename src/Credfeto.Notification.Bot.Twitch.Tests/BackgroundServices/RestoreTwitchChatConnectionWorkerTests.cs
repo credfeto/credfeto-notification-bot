@@ -39,7 +39,7 @@ public sealed class RestoreTwitchChatConnectionWorkerTests : LoggingTestBase
     }
 
     [Fact]
-    public async Task ExceptionInUpdateAsyncShouldPropagate()
+    public async Task ExceptionInUpdateAsyncShouldBeSwallowed()
     {
         using System.Threading.CancellationTokenSource cts = new(TimeSpan.FromMilliseconds(200));
 
