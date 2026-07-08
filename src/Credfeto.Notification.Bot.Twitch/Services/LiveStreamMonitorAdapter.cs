@@ -15,6 +15,7 @@ public sealed class LiveStreamMonitorAdapter : ILiveStreamMonitor
 
     public LiveStreamMonitorAdapter(IOptions<TwitchBotOptions> options)
     {
+        ArgumentNullException.ThrowIfNull(options);
         this._service = new(options.Value.ConfigureTwitchApi());
     }
 
