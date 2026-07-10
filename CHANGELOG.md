@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 - Increment version after removing unknown Twitch streamer so the next poll refreshes the channel list
 - RestoreTwitchChatConnectionWorker now logs and swallows exceptions rather than rethrowing them, preventing a transient ITwitchChat.UpdateAsync failure from crashing the host or permanently disabling chat reconnection
+- Twitch channel watching now retries transient startup lookup failures instead of permanently skipping the channel
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.7.2152
 - Dependencies - Updated Meziantou.Analyzer to 3.0.122
