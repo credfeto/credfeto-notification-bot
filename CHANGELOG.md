@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - RestoreTwitchChatConnectionWorker now logs and swallows exceptions rather than rethrowing them, preventing a transient ITwitchChat.UpdateAsync failure from crashing the host or permanently disabling chat reconnection
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.7.2152
+- Dependencies - Updated Meziantou.Analyzer to 3.0.122
 ### Removed
 ### Deployment Changes
 <!--
