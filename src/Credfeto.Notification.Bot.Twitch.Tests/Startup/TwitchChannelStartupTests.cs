@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
@@ -12,6 +12,7 @@ using FunFair.Test.Common;
 using Mediator;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using NSubstitute.Core;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests.Startup;
@@ -71,6 +72,7 @@ public sealed class TwitchChannelStartupTests : LoggingTestBase
             userInfoService: this._userInfoService,
             twitchChat: this._twitchChat,
             mediator: this._mediator,
+            retryDelay: TimeSpan.Zero,
             logger: this.GetTypedLogger<TwitchChannelStartup>()
         );
     }
@@ -104,6 +106,7 @@ public sealed class TwitchChannelStartupTests : LoggingTestBase
             userInfoService: userInfoService,
             twitchChat: twitchChat,
             mediator: mediator,
+            retryDelay: TimeSpan.Zero,
             logger: this.GetTypedLogger<TwitchChannelStartup>()
         );
 
@@ -124,6 +127,52 @@ public sealed class TwitchChannelStartupTests : LoggingTestBase
         await this._startup.StartAsync(this.CancellationToken());
 
         await this._twitchChat.Received(1).JoinChatAsync(Arg.Any<Streamer>());
+
+        await this._mediator.DidNotReceive().Publish(Arg.Any<TwitchWatchChannel>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task StartAsyncShouldRetryTransientLookupFailureAndPublishWatchChannelOnEventualSuccessAsync()
+    {
+        TwitchUser user = new(Id: 42, UserName: Viewer.FromString("botuser"), IsStreamer: false, DateCreated: TestDate);
+        int attempt = 0;
+
+        TwitchUser? ThrowOnceThenReturnUser(CallInfo callInfo)
+        {
+            ++attempt;
+
+            if (attempt == 1)
+            {
+                throw new InvalidOperationException("transient lookup failure");
+            }
+
+            return user;
+        }
+
+        this._userInfoService.GetUserAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
+            .Returns(ThrowOnceThenReturnUser);
+
+        await this._startup.StartAsync(this.CancellationToken());
+
+        await this._userInfoService.Received(2).GetUserAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>());
+
+        await this._mediator.Received(1).Publish(Arg.Any<TwitchWatchChannel>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task StartAsyncShouldSkipChannelWhenLookupFailsOnEveryRetryAsync()
+    {
+        static TwitchUser? ThrowPersistentFailure(CallInfo callInfo)
+        {
+            throw new InvalidOperationException("persistent lookup failure");
+        }
+
+        this._userInfoService.GetUserAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>())
+            .Returns(ThrowPersistentFailure);
+
+        await this._startup.StartAsync(this.CancellationToken());
+
+        await this._userInfoService.Received(3).GetUserAsync(Arg.Any<Streamer>(), Arg.Any<CancellationToken>());
 
         await this._mediator.DidNotReceive().Publish(Arg.Any<TwitchWatchChannel>(), Arg.Any<CancellationToken>());
     }
