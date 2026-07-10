@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -27,25 +28,23 @@ public sealed class UserInfoServiceCacheTests : LoggingTestBase
     }
 
     [Fact]
-    public async Task SecondCallForSameViewerShouldReturnCachedResultAsync()
+    public async Task FailedLookupsAreNotCachedAndEachCallPropagatesAnExceptionAsync()
     {
         Viewer viewer = MockReferenceData.Viewer;
 
-        TwitchUser? firstResult = await this._userInfoService.GetUserAsync(userName: viewer, this.CancellationToken());
-        TwitchUser? secondResult = await this._userInfoService.GetUserAsync(userName: viewer, this.CancellationToken());
-
-        Assert.Null(firstResult);
-        Assert.Null(secondResult);
+        await Assert.ThrowsAnyAsync<Exception>(() =>
+            this._userInfoService.GetUserAsync(userName: viewer, this.CancellationToken())
+        );
+        await Assert.ThrowsAnyAsync<Exception>(() =>
+            this._userInfoService.GetUserAsync(userName: viewer, this.CancellationToken())
+        );
     }
 
     [Fact]
-    public async Task GetUserAsyncWithStreamerShouldReturnNullIfNotFoundAsync()
+    public Task GetUserAsyncWithStreamerPropagatesExceptionOnLookupFailureAsync()
     {
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(
-            userName: MockReferenceData.Streamer,
-            this.CancellationToken()
+        return Assert.ThrowsAnyAsync<Exception>(() =>
+            this._userInfoService.GetUserAsync(userName: MockReferenceData.Streamer, this.CancellationToken())
         );
-
-        Assert.Null(twitchUser);
     }
 }
