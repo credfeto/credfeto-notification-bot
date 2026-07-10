@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
 using Credfeto.Notification.Bot.Twitch.Configuration;
@@ -27,13 +28,10 @@ public sealed class UserInfoServiceTests : LoggingTestBase
     }
 
     [Fact]
-    public async Task GetUserReturnsNullIfNotFoundAsync()
+    public Task GetUserPropagatesExceptionOnLookupFailureAsync()
     {
-        TwitchUser? twitchUser = await this._userInfoService.GetUserAsync(
-            userName: MockReferenceData.Viewer,
-            this.CancellationToken()
+        return Assert.ThrowsAnyAsync<Exception>(() =>
+            this._userInfoService.GetUserAsync(userName: MockReferenceData.Viewer, this.CancellationToken())
         );
-
-        Assert.Null(twitchUser);
     }
 }
