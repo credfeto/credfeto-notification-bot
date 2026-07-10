@@ -22,4 +22,30 @@ internal static partial class TwitchChannelStartupLoggingExtensions
         bool isStreamer,
         DateTimeOffset dateCreated
     );
+
+    [LoggerMessage(
+        EventId = 3,
+        Level = LogLevel.Warning,
+        Message = "{streamer}: Retrying channel lookup (attempt {attempt}) after failure: {message}"
+    )]
+    public static partial void RetryingChannelLookup(
+        this ILogger<TwitchChannelStartup> logger,
+        Streamer streamer,
+        int attempt,
+        string message,
+        Exception exception
+    );
+
+    [LoggerMessage(
+        EventId = 4,
+        Level = LogLevel.Error,
+        Message = "{streamer}: Giving up on channel lookup after {attempts} attempts: {message}"
+    )]
+    public static partial void GivingUpOnChannelLookup(
+        this ILogger<TwitchChannelStartup> logger,
+        Streamer streamer,
+        int attempts,
+        string message,
+        Exception exception
+    );
 }
