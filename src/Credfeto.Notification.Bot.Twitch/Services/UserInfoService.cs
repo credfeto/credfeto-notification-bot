@@ -60,7 +60,7 @@ public sealed class UserInfoService : IUserInfoService
                 exception: exception
             );
 
-            return null;
+            throw;
         }
     }
 

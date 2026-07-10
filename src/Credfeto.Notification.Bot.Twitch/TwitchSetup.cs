@@ -1,11 +1,15 @@
 using Credfeto.Notification.Bot.Twitch.Actions;
 using Credfeto.Notification.Bot.Twitch.Actions.Services;
 using Credfeto.Notification.Bot.Twitch.BackgroundServices;
+using Credfeto.Notification.Bot.Twitch.Configuration;
 using Credfeto.Notification.Bot.Twitch.Interfaces;
 using Credfeto.Notification.Bot.Twitch.Services;
 using Credfeto.Notification.Bot.Twitch.Startup;
 using Credfeto.Services.Startup.Interfaces;
+using Mediator;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TwitchLib.Client;
 using TwitchLib.Client.Interfaces;
 using TwitchLib.Communication.Clients;
@@ -64,6 +68,13 @@ public static class TwitchSetup
 
     private static IServiceCollection AddStartupServices(this IServiceCollection services)
     {
-        return services.AddRunOnStartupTask<TwitchChannelStartup>();
+        return services.AddSingleton<IRunOnStartup>(serviceProvider => new TwitchChannelStartup(
+            options: serviceProvider.GetRequiredService<IOptions<TwitchBotOptions>>(),
+            userInfoService: serviceProvider.GetRequiredService<IUserInfoService>(),
+            twitchChat: serviceProvider.GetRequiredService<ITwitchChat>(),
+            mediator: serviceProvider.GetRequiredService<IMediator>(),
+            retryDelay: TwitchChannelStartup.DefaultRetryDelay,
+            logger: serviceProvider.GetRequiredService<ILogger<TwitchChannelStartup>>()
+        ));
     }
 }
