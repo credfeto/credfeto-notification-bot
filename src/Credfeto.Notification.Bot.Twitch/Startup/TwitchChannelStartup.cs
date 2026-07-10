@@ -56,7 +56,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         ];
 
         this._retryPolicy = Policy<TwitchUser?>
-            .Handle<Exception>()
+            .Handle<Exception>(exception => exception is not OperationCanceledException)
             .WaitAndRetryAsync(
                 retryCount: MaxAttempts - 1,
                 sleepDurationProvider: _ => retryDelay,
@@ -116,6 +116,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
             );
         }
         catch (Exception exception)
+            when (exception is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
         {
             this._logger.GivingUpOnChannelLookup(
                 streamer: streamer,
