@@ -12,15 +12,23 @@ using Credfeto.Services.Startup.Interfaces;
 using Mediator;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Polly;
+using Polly.Retry;
 
 namespace Credfeto.Notification.Bot.Twitch.Startup;
 
 public sealed class TwitchChannelStartup : IRunOnStartup
 {
+    public static readonly TimeSpan DefaultRetryDelay = TimeSpan.FromSeconds(5);
+
+    private const int MaxAttempts = 3;
+    private const string StreamerContextKey = "streamer";
+
     private readonly IReadOnlyList<Streamer> _channels;
     private readonly ILogger<TwitchChannelStartup> _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
+    private readonly AsyncRetryPolicy<TwitchUser?> _retryPolicy;
     private readonly ITwitchChat _twitchChat;
     private readonly IUserInfoService _userInfoService;
 
@@ -29,6 +37,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         IUserInfoService userInfoService,
         ITwitchChat twitchChat,
         IMediator mediator,
+        TimeSpan retryDelay,
         ILogger<TwitchChannelStartup> logger
     )
     {
@@ -45,6 +54,24 @@ public sealed class TwitchChannelStartup : IRunOnStartup
                 .Select(Streamer.FromString)
                 .Distinct(),
         ];
+
+        this._retryPolicy = Policy<TwitchUser?>
+            .Handle<Exception>(exception => exception is not OperationCanceledException)
+            .WaitAndRetryAsync(
+                retryCount: MaxAttempts - 1,
+                sleepDurationProvider: _ => retryDelay,
+                onRetry: (outcome, _, retryAttempt, context) =>
+                {
+                    Streamer streamer = (Streamer)context[StreamerContextKey];
+
+                    this._logger.RetryingChannelLookup(
+                        streamer: streamer,
+                        attempt: retryAttempt,
+                        message: outcome.Exception.Message,
+                        exception: outcome.Exception
+                    );
+                }
+            );
     }
 
     public async ValueTask StartAsync(CancellationToken cancellationToken)
@@ -58,8 +85,8 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         foreach (Streamer streamer in this._channels)
         {
             this._logger.LookingForChannel(streamer);
-            TwitchUser? info = await this._userInfoService.GetUserAsync(
-                userName: streamer,
+            TwitchUser? info = await this.GetUserWithRetryAsync(
+                streamer: streamer,
                 cancellationToken: cancellationToken
             );
 
@@ -73,6 +100,32 @@ public sealed class TwitchChannelStartup : IRunOnStartup
                 );
                 await this._mediator.Publish(new TwitchWatchChannel(info), cancellationToken: cancellationToken);
             }
+        }
+    }
+
+    private async ValueTask<TwitchUser?> GetUserWithRetryAsync(Streamer streamer, CancellationToken cancellationToken)
+    {
+        Context context = new() { [StreamerContextKey] = streamer };
+
+        try
+        {
+            return await this._retryPolicy.ExecuteAsync(
+                action: (_, ct) => this._userInfoService.GetUserAsync(userName: streamer, cancellationToken: ct),
+                context: context,
+                cancellationToken: cancellationToken
+            );
+        }
+        catch (Exception exception)
+            when (exception is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            this._logger.GivingUpOnChannelLookup(
+                streamer: streamer,
+                attempts: MaxAttempts,
+                message: exception.Message,
+                exception: exception
+            );
+
+            return null;
         }
     }
 }
