@@ -54,4 +54,3 @@ echo "Clear $OUTFOLDER" \
       --name notification-bot \
       -it \
       --rm "credfeto/notification-bot:latest"
-      
