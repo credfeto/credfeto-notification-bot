@@ -10,14 +10,17 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Database to 1.2.218.2504
-- Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.135.1491
 ### Removed
 ### Deployment Changes
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.239] - 2026-07-17
+### Changed
+- Dependencies - Updated Credfeto.Database to 1.2.218.2504
+- Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.135.1491
+
 ## [0.0.238] - 2026-07-15
 ### Fixed
 - Increment version after removing unknown Twitch streamer so the next poll refreshes the channel list
