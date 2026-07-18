@@ -55,7 +55,9 @@ public sealed class UserInfoService : IUserInfoService
             DateTimeOffset now = this._currentTimeSource.UtcNow();
             CacheEntry entry = this._cache.GetOrAdd(
                 key: userName,
-                value: new CacheEntry(fetch: () => this.FetchUserAsync(userName), createdAt: now)
+                valueFactory: static (key, arg) =>
+                    new CacheEntry(fetch: () => arg.Service.FetchUserAsync(key), createdAt: arg.Now),
+                factoryArgument: (Service: this, Now: now)
             );
 
             TwitchUser? user;
