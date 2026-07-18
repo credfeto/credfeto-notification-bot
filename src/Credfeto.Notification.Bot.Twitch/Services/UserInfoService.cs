@@ -70,7 +70,7 @@ public sealed class UserInfoService : IUserInfoService
             }
             catch
             {
-                this._cache.TryRemove(key: userName, out _);
+                this._cache.TryRemove(new(key: userName, value: entry));
 
                 throw;
             }
@@ -82,7 +82,7 @@ public sealed class UserInfoService : IUserInfoService
                 return user;
             }
 
-            this._cache.TryRemove(key: userName, out _);
+            this._cache.TryRemove(new(key: userName, value: entry));
         }
     }
 
