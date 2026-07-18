@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+- UserInfoService now caches Twitch user lookups with a TTL and coalesces concurrent lookups for the same viewer, instead of caching missing users forever and issuing duplicate API calls
 ### Changed
 ### Removed
 ### Deployment Changes
