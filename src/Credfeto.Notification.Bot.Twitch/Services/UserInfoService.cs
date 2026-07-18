@@ -64,6 +64,10 @@ public sealed class UserInfoService : IUserInfoService
             {
                 user = await entry.GetValueAsync(cancellationToken);
             }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
             catch
             {
                 this._cache.TryRemove(key: userName, out _);
