@@ -68,4 +68,30 @@ public sealed class TwitchStreamStatusTests : LoggingTestBase
         this._liveStreamMonitor.Received(1)
             .SetChannelsByName(Arg.Is<List<string>>(l => l.Count == 1 && l.Contains(streamer2.Value)));
     }
+
+    [Fact]
+    public async Task UpdateAsyncShouldNotLoseVersionBumpFromConcurrentEnableAsync()
+    {
+        Streamer streamer1 = Streamer.FromString("teststreamer1");
+        Streamer streamer2 = Streamer.FromString("teststreamer2");
+
+        Task? reentrantEnableTask = null;
+
+        this._liveStreamMonitor.When(x => x.SetChannelsByName(Arg.Any<List<string>>()))
+            .Do(_ => reentrantEnableTask ??= this._twitchStreamStatus.EnableAsync(streamer2).AsTask());
+
+        await this._twitchStreamStatus.EnableAsync(streamer1);
+
+        Assert.NotNull(reentrantEnableTask);
+
+        await reentrantEnableTask;
+
+        this._liveStreamMonitor.Received(1)
+            .SetChannelsByName(Arg.Is<List<string>>(l => l.Count == 1 && l.Contains(streamer1.Value)));
+
+        this._liveStreamMonitor.Received(1)
+            .SetChannelsByName(
+                Arg.Is<List<string>>(l => l.Count == 2 && l.Contains(streamer1.Value) && l.Contains(streamer2.Value))
+            );
+    }
 }
