@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,14 +19,23 @@ namespace Credfeto.Notification.Bot.Twitch.Services;
 
 public sealed class UserInfoService : IUserInfoService
 {
-    private readonly TwitchAPI _api;
+    private static readonly TimeSpan NegativeCacheTtl = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan PositiveCacheTtl = TimeSpan.FromMinutes(30);
 
-    private readonly ConcurrentDictionary<Viewer, TwitchUser?> _cache;
+    private readonly TwitchAPI _api;
+    private readonly ICurrentTimeSource _currentTimeSource;
+
+    private readonly ConcurrentDictionary<Viewer, CacheEntry> _cache;
     private readonly ILogger<UserInfoService> _logger;
 
-    public UserInfoService(IOptions<TwitchBotOptions> options, ILogger<UserInfoService> logger)
+    public UserInfoService(
+        IOptions<TwitchBotOptions> options,
+        ICurrentTimeSource currentTimeSource,
+        ILogger<UserInfoService> logger
+    )
     {
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._currentTimeSource = currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
         TwitchBotOptions apiOptions = (options ?? throw new ArgumentNullException(nameof(options))).Value;
 
         this._api = apiOptions.ConfigureTwitchApi();
@@ -40,17 +50,52 @@ public sealed class UserInfoService : IUserInfoService
 
     public async Task<TwitchUser?> GetUserAsync(Viewer userName, CancellationToken cancellationToken)
     {
-        if (this._cache.TryGetValue(key: userName, out TwitchUser? user))
+        while (true)
         {
-            return user;
-        }
+            DateTimeOffset now = this._currentTimeSource.UtcNow();
+            CacheEntry entry = this._cache.GetOrAdd(
+                key: userName,
+                valueFactory: static (key, arg) =>
+                    new CacheEntry(fetch: () => arg.Service.FetchUserAsync(key), createdAt: arg.Now),
+                factoryArgument: (Service: this, Now: now)
+            );
 
+            TwitchUser? user;
+
+            try
+            {
+                user = await entry.GetValueAsync(cancellationToken);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch
+            {
+                this._cache.TryRemove(new(key: userName, value: entry));
+
+                throw;
+            }
+
+            TimeSpan ttl = user is null ? NegativeCacheTtl : PositiveCacheTtl;
+
+            if (now < entry.CreatedAt + ttl)
+            {
+                return user;
+            }
+
+            this._cache.TryRemove(new(key: userName, value: entry));
+        }
+    }
+
+    private async Task<TwitchUser?> FetchUserAsync(Viewer userName)
+    {
         try
         {
             this._logger.GettingUserInfo(userName);
             GetUsersResponse result = await this.GetUsersAsync(userName);
 
-            return this.AddUserToCache(userName: userName, result.Users is [] ? null : ConvertUser(result.Users[0]));
+            return result.Users is [] ? null : ConvertUser(result.Users[0]);
         }
         catch (Exception exception)
         {
@@ -62,13 +107,6 @@ public sealed class UserInfoService : IUserInfoService
 
             throw;
         }
-    }
-
-    private TwitchUser? AddUserToCache(in Viewer userName, TwitchUser? user)
-    {
-        this._cache.TryAdd(key: userName, value: user);
-
-        return user;
     }
 
     private Task<GetUsersResponse> GetUsersAsync(in Viewer userName)
@@ -84,5 +122,28 @@ public sealed class UserInfoService : IUserInfoService
             !string.IsNullOrWhiteSpace(user.BroadcasterType),
             user.CreatedAt.AsDateTimeOffset()
         );
+    }
+
+    private sealed class CacheEntry
+    {
+        private readonly Lazy<Task<TwitchUser?>> _fetch;
+
+        [SuppressMessage(
+            category: "Microsoft.VisualStudio.Threading",
+            checkId: "VSTHRD011: Use AsyncLazy<T> instead",
+            Justification = "Background worker service has no JoinableTaskFactory/UI thread to deadlock against; Lazy<Task<T>> coalesces concurrent fetches for the same cache key"
+        )]
+        public CacheEntry(Func<Task<TwitchUser?>> fetch, in DateTimeOffset createdAt)
+        {
+            this._fetch = new(fetch, mode: LazyThreadSafetyMode.ExecutionAndPublication);
+            this.CreatedAt = createdAt;
+        }
+
+        public DateTimeOffset CreatedAt { get; }
+
+        public Task<TwitchUser?> GetValueAsync(in CancellationToken cancellationToken)
+        {
+            return this._fetch.Value.WaitAsync(cancellationToken);
+        }
     }
 }
