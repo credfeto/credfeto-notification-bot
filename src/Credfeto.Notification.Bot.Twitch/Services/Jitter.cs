@@ -29,13 +29,10 @@ public static class Jitter
 
     private static double GetRandom()
     {
-        using (RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create())
-        {
-            Span<byte> rnd = stackalloc byte[sizeof(uint)];
-            randomNumberGenerator.GetBytes(rnd);
-            uint random = BitConverter.ToUInt32(value: rnd);
+        Span<byte> rnd = stackalloc byte[sizeof(uint)];
+        RandomNumberGenerator.Fill(rnd);
+        uint random = BitConverter.ToUInt32(value: rnd);
 
-            return random / (double)uint.MaxValue;
-        }
+        return random / (double)uint.MaxValue;
     }
 }
