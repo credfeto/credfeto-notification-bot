@@ -1,6 +1,9 @@
 ﻿# Changelog
 All notable changes to this project will be documented in this file.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 <!--
 Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 -->
@@ -10,7 +13,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 - UserInfoService now caches Twitch user lookups with a TTL and coalesces concurrent lookups for the same viewer, instead of caching missing users forever and issuing duplicate API calls
+- Fixed a race in TwitchStreamStatus version tracking that could leave a newly-enabled Twitch channel permanently unmonitored.
 ### Changed
+### Deprecated
 ### Removed
 ### Deployment Changes
 <!--

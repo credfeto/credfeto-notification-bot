@@ -69,10 +69,12 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
 
         try
         {
-            if (this._lastVersion != this._version)
+            int version = this._version;
+
+            if (this._lastVersion != version)
             {
                 this._lsm.SetChannelsByName([.. this._channels.Keys.Select(c => c.Value)]);
-                this._lastVersion = this._version;
+                this._lastVersion = version;
             }
 
             await this._lsm.UpdateLiveStreamersAsync();
