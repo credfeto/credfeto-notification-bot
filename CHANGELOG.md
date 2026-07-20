@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 - UserInfoService now caches Twitch user lookups with a TTL and coalesces concurrent lookups for the same viewer, instead of caching missing users forever and issuing duplicate API calls
 - Fixed a race in TwitchStreamStatus version tracking that could leave a newly-enabled Twitch channel permanently unmonitored.
+- Jitter calculation no longer allocates and disposes a cryptographic RandomNumberGenerator per outgoing chat message
 ### Changed
 ### Deprecated
 ### Removed
