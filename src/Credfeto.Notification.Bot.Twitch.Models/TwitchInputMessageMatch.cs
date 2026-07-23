@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
+using NonBlocking;
 
 namespace Credfeto.Notification.Bot.Twitch.Models;
 
@@ -19,7 +19,7 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
 
     private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(5);
 
-    private static readonly Dictionary<string, Regex> RegexCache = new(StringComparer.Ordinal);
+    private static readonly ConcurrentDictionary<string, Regex> RegexCache = new(StringComparer.Ordinal);
 
     public TwitchInputMessageMatch(
         in Streamer streamer,
@@ -67,15 +67,12 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
     {
         if (matchType == TwitchMessageMatchType.REGEX)
         {
-            if (RegexCache.TryGetValue(key: expression, out Regex? regex))
-            {
-                return regex;
-            }
-
-            regex = new(pattern: expression, options: REGEX_OPTIONS, matchTimeout: RegexTimeout);
-            RegexCache.Add(key: expression, value: regex);
-
-            return regex;
+            return RegexCache.GetOrAdd(
+                key: expression,
+                valueFactory: static (expr, timeout) =>
+                    new(pattern: expr, options: REGEX_OPTIONS, matchTimeout: timeout),
+                factoryArgument: RegexTimeout
+            );
         }
 
         return null;
