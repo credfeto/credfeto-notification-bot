@@ -16,6 +16,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Fixed a race in TwitchStreamStatus version tracking that could leave a newly-enabled Twitch channel permanently unmonitored.
 - Jitter calculation no longer allocates and disposes a cryptographic RandomNumberGenerator per outgoing chat message
 - Fixed potential thread-safety hazard in TwitchInputMessageMatch's regex cache by switching to a concurrent dictionary
+- Raise .globalconfig analyzer severities from suggestion to error (FFS0040, FFS0042, MA0026, S125) and fix violations surfaced by dotnet buildcheck
 ### Changed
 ### Deprecated
 ### Removed
