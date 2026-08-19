@@ -17,6 +17,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Jitter calculation no longer allocates and disposes a cryptographic RandomNumberGenerator per outgoing chat message
 - Fixed potential thread-safety hazard in TwitchInputMessageMatch's regex cache by switching to a concurrent dictionary
 ### Changed
+- SDK - Updated DotNet SDK to 10.0.400
 ### Deprecated
 ### Removed
 ### Deployment Changes
