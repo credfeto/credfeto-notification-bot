@@ -12,18 +12,22 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
-- UserInfoService now caches Twitch user lookups with a TTL and coalesces concurrent lookups for the same viewer, instead of caching missing users forever and issuing duplicate API calls
-- Fixed a race in TwitchStreamStatus version tracking that could leave a newly-enabled Twitch channel permanently unmonitored.
-- Jitter calculation no longer allocates and disposes a cryptographic RandomNumberGenerator per outgoing chat message
-- Fixed potential thread-safety hazard in TwitchInputMessageMatch's regex cache by switching to a concurrent dictionary
 ### Changed
-- SDK - Updated DotNet SDK to 10.0.400
 ### Deprecated
 ### Removed
 ### Deployment Changes
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.240] - 2026-08-19
+### Fixed
+- UserInfoService now caches Twitch user lookups with a TTL and coalesces concurrent lookups for the same viewer, instead of caching missing users forever and issuing duplicate API calls
+- Fixed a race in TwitchStreamStatus version tracking that could leave a newly-enabled Twitch channel permanently unmonitored.
+- Jitter calculation no longer allocates and disposes a cryptographic RandomNumberGenerator per outgoing chat message
+- Fixed potential thread-safety hazard in TwitchInputMessageMatch's regex cache by switching to a concurrent dictionary
+### Changed
+- SDK - Updated DotNet SDK to 10.0.400
+
 ## [0.0.239] - 2026-07-17
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.218.2504
