@@ -15,6 +15,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Meziantou.Analyzer to 3.0.203
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.156.1920
 ### Deprecated
 ### Removed
 ### Deployment Changes
