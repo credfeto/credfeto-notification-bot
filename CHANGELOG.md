@@ -19,6 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
 - Dependencies - Updated Credfeto.Enumeration to 1.2.153.2254
 - Dependencies - Updated Meziantou.Analyzer to 3.0.217
+- Dependencies - Updated Credfeto.Random to 1.0.162.2014
 ### Deprecated
 ### Removed
 ### Deployment Changes
