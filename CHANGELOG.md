@@ -14,12 +14,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.156.1920
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.3.2685
 - Dependencies - Updated Microsoft.Extensions to 10.0.11
 - Dependencies - Updated Credfeto.Enumeration to 1.2.153.2254
 - Dependencies - Updated Meziantou.Analyzer to 3.0.217
 - Dependencies - Updated Credfeto.Random to 1.0.162.2014
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.158.1981
 ### Deprecated
 ### Removed
 ### Deployment Changes
