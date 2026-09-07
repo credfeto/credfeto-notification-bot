@@ -16,7 +16,13 @@ namespace Credfeto.Notification.Bot.Twitch.Tests.Services;
 public sealed class UserInfoServiceTests : LoggingTestBase
 {
     private static readonly DateTimeOffset Now = new(
-        year: 2020, month: 1, day: 1, hour: 0, minute: 0, second: 0, offset: TimeSpan.Zero
+        year: 2020,
+        month: 1,
+        day: 1,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        offset: TimeSpan.Zero
     );
 
     private readonly IUserInfoService _userInfoService;
