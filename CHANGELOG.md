@@ -20,6 +20,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.158.1981
 - Dependencies - Updated Meziantou.Analyzer to 3.0.231
 - Dependencies - Updated Microsoft.Extensions to 10.0.12
+- SDK - Updated DotNet SDK to 10.0.401
 ### Deprecated
 ### Removed
 ### Deployment Changes
