@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.Extensions to 10.0.12
 - SDK - Updated DotNet SDK to 10.0.401
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.137.1543
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.34.0.3385
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
 - Dependencies - Updated System.Reactive to 7.0.0
@@ -26,6 +25,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.1.0
 - Dependencies - Updated xunit.v3 to 4.0.1
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.160.2003
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.138.1557
 ### Deprecated
 ### Removed
 ### Deployment Changes
