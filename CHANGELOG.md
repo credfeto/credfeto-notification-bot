@@ -16,7 +16,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
 - Dependencies - Updated Credfeto.Random to 1.0.162.2014
 - Dependencies - Updated Microsoft.Extensions to 10.0.12
-- SDK - Updated DotNet SDK to 10.0.401
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.34.0.3385
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
@@ -26,12 +25,14 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 4.0.1
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.160.2003
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.138.1557
+- SDK - Updated DotNet SDK to 10.0.402
 ### Deprecated
 ### Removed
 ### Deployment Changes
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
 ## [0.0.242] - 2026-08-23
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.220.2547
