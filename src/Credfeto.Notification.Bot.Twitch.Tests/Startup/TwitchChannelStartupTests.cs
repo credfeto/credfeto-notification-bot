@@ -73,8 +73,15 @@ public sealed class TwitchChannelStartupTests : LoggingTestBase
             twitchChat: this._twitchChat,
             mediator: this._mediator,
             retryDelay: TimeSpan.Zero,
+            startupDelay: TimeSpan.Zero,
             logger: this.GetTypedLogger<TwitchChannelStartup>()
         );
+    }
+
+    [Fact]
+    public static void DefaultStartupDelayShouldBeThreeSeconds()
+    {
+        Assert.Equal(expected: TimeSpan.FromSeconds(3), actual: TwitchChannelStartup.DefaultStartupDelay);
     }
 
     [Fact]
@@ -107,6 +114,7 @@ public sealed class TwitchChannelStartupTests : LoggingTestBase
             twitchChat: twitchChat,
             mediator: mediator,
             retryDelay: TimeSpan.Zero,
+            startupDelay: TimeSpan.Zero,
             logger: this.GetTypedLogger<TwitchChannelStartup>()
         );
 
