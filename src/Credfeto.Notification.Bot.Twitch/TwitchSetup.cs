@@ -74,6 +74,7 @@ public static class TwitchSetup
             twitchChat: serviceProvider.GetRequiredService<ITwitchChat>(),
             mediator: serviceProvider.GetRequiredService<IMediator>(),
             retryDelay: TwitchChannelStartup.DefaultRetryDelay,
+            startupDelay: TwitchChannelStartup.DefaultStartupDelay,
             logger: serviceProvider.GetRequiredService<ILogger<TwitchChannelStartup>>()
         ));
     }

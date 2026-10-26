@@ -20,6 +20,7 @@ namespace Credfeto.Notification.Bot.Twitch.Startup;
 public sealed class TwitchChannelStartup : IRunOnStartup
 {
     public static readonly TimeSpan DefaultRetryDelay = TimeSpan.FromSeconds(5);
+    public static readonly TimeSpan DefaultStartupDelay = TimeSpan.FromSeconds(3);
 
     private const int MaxAttempts = 3;
     private const string StreamerContextKey = "streamer";
@@ -29,6 +30,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
     private readonly AsyncRetryPolicy<TwitchUser?> _retryPolicy;
+    private readonly TimeSpan _startupDelay;
     private readonly ITwitchChat _twitchChat;
     private readonly IUserInfoService _userInfoService;
 
@@ -38,6 +40,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         ITwitchChat twitchChat,
         IMediator mediator,
         TimeSpan retryDelay,
+        in TimeSpan startupDelay,
         ILogger<TwitchChannelStartup> logger
     )
     {
@@ -46,6 +49,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
         this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+        this._startupDelay = startupDelay;
 
         this._channels =
         [
@@ -77,7 +81,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
     public async ValueTask StartAsync(CancellationToken cancellationToken)
     {
         // Explicitly give some time for things to initialize
-        await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken: cancellationToken);
+        await Task.Delay(delay: this._startupDelay, cancellationToken: cancellationToken);
 
         // Explicitly join the bot's own channel
         await this._twitchChat.JoinChatAsync(Streamer.FromString(this._options.Authentication.Chat.UserName));

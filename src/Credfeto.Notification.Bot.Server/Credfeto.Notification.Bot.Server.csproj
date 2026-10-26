@@ -5,6 +5,7 @@
     <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
     <DebuggerSupport>true</DebuggerSupport>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
     <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
@@ -62,19 +63,19 @@
     <TrimmerRootAssembly Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch\Credfeto.Notification.Bot.Twitch.csproj" />
+    <ProjectReference Include="../Credfeto.Notification.Bot.Twitch/Credfeto.Notification.Bot.Twitch.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Date" Version="1.1.151.1695" />
-    <PackageReference Include="Credfeto.Random" Version="1.0.162.2014" />
-    <PackageReference Include="Credfeto.Services.Startup" Version="1.1.160.2003" />
-    <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
-    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
-    <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
-    <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
-    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+    <PackageReference Include="Credfeto.Date" Version="1.1.151.1695" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Credfeto.Random" Version="1.0.162.2014" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Credfeto.Services.Startup" Version="1.1.160.2003" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" IncludeAssets="compile;runtime" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />

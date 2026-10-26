@@ -43,11 +43,11 @@
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xhfc-gr8f-ffwc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.DataTypes\Credfeto.Notification.Bot.Twitch.DataTypes.csproj" />
+    <ProjectReference Include="../Credfeto.Notification.Bot.Twitch.DataTypes/Credfeto.Notification.Bot.Twitch.DataTypes.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Mediator.Abstractions" Version="3.0.2" />
-    <PackageReference Include="NonBlocking" Version="2.1.2" />
+    <PackageReference Include="Mediator.Abstractions" Version="3.0.2" IncludeAssets="compile;runtime" />
+    <PackageReference Include="NonBlocking" Version="2.1.2" IncludeAssets="compile;runtime" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />

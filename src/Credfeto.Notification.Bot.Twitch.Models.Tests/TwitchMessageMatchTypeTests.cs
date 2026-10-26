@@ -13,7 +13,7 @@ public sealed class TwitchMessageMatchTypeTests : TestBase
     [InlineData(TwitchMessageMatchType.ENDS_WITH, "ENDS_WITH")]
     [InlineData(TwitchMessageMatchType.CONTAINS, "CONTAINS")]
     [InlineData(TwitchMessageMatchType.REGEX, "REGEX")]
-    public void GetName_ReturnsExpectedName(TwitchMessageMatchType matchType, string expectedName)
+    public static void GetName_ReturnsExpectedName(TwitchMessageMatchType matchType, string expectedName)
     {
         Assert.Equal(expected: expectedName, actual: matchType.GetName());
     }
@@ -37,7 +37,7 @@ public sealed class TwitchMessageMatchTypeTests : TestBase
     [InlineData(TwitchMessageMatchType.ENDS_WITH, true)]
     [InlineData(TwitchMessageMatchType.CONTAINS, true)]
     [InlineData(TwitchMessageMatchType.REGEX, true)]
-    public void IsDefined_ReturnsTrueForValidValues(TwitchMessageMatchType matchType, bool expected)
+    public static void IsDefined_ReturnsTrueForValidValues(TwitchMessageMatchType matchType, bool expected)
     {
         Assert.Equal(expected: expected, actual: matchType.IsDefined());
     }

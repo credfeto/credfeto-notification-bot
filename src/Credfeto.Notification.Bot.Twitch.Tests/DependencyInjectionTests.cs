@@ -7,8 +7,10 @@ using FunFair.Test.Common;
 using FunFair.Test.Infrastructure;
 using Mediator;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
+using TwitchLib.Communication.Interfaces;
 using Xunit;
 
 namespace Credfeto.Notification.Bot.Twitch.Tests;
@@ -20,18 +22,36 @@ public sealed class DependencyInjectionTests : DependencyInjectionTestsBase
 
     private static IServiceCollection Configure(IServiceCollection service)
     {
-        return service
-            .AddMockedService<ICurrentTimeSource>()
-            .AddMockedService<IMessageChannel<TwitchChatMessage>>()
-            .AddMockedService<IOptions<TwitchBotOptions>>(options =>
+        return ReplaceWebSocketClientWithOfflineClient(
+            service
+                .AddMockedService<ICurrentTimeSource>()
+                .AddMockedService<IMessageChannel<TwitchChatMessage>>()
+                .AddMockedService<IOptions<TwitchBotOptions>>(options =>
+                {
+                    options.Value.Returns(
+                        new TwitchBotOptions
+                        {
+                            Authentication = MockReferenceData.TwitchAuthentication,
+                            ChatCommands = [],
+                        }
+                    );
+                })
+                .AddMockedService<IMediator>()
+                // Items being tested
+                .AddTwitch()
+        );
+    }
+
+    private static IServiceCollection ReplaceWebSocketClientWithOfflineClient(IServiceCollection services)
+    {
+        return services
+            .RemoveAll<IClient>()
+            .AddMockedService<IClient>(client =>
             {
-                options.Value.Returns(
-                    new TwitchBotOptions { Authentication = MockReferenceData.TwitchAuthentication, ChatCommands = [] }
-                );
-            })
-            .AddMockedService<IMediator>()
-            // Items being tested
-            .AddTwitch();
+                client.IsConnected.Returns(true);
+                client.OpenAsync().Returns(true);
+                client.SendAsync(Arg.Any<string>()).Returns(true);
+            });
     }
 
     [Fact]

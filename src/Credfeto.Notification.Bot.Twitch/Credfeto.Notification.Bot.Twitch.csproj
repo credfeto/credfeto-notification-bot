@@ -43,19 +43,19 @@
     <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xhfc-gr8f-ffwc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Shared\Credfeto.Notification.Bot.Shared.csproj" />
-    <ProjectReference Include="..\Credfeto.Notification.Bot.Twitch.Interfaces\Credfeto.Notification.Bot.Twitch.Interfaces.csproj" />
+    <ProjectReference Include="../Credfeto.Notification.Bot.Shared/Credfeto.Notification.Bot.Shared.csproj" />
+    <ProjectReference Include="../Credfeto.Notification.Bot.Twitch.Interfaces/Credfeto.Notification.Bot.Twitch.Interfaces.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Credfeto.Date.Interfaces" Version="1.1.151.1695" />
-    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.160.2003" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
-    <PackageReference Include="Polly" Version="8.7.0" />
-    <PackageReference Include="System.Interactive.Async" Version="7.0.1" />
-    <PackageReference Include="System.Reactive" Version="7.0.0" />
-    <PackageReference Include="TwitchLib.Api" Version="3.10.2" />
-    <PackageReference Include="TwitchLib.Client" Version="4.0.1" />
-    <PackageReference Include="TwitchLib.PubSub" Version="3.2.6" />
+    <PackageReference Include="Credfeto.Date.Interfaces" Version="1.1.151.1695" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.160.2003" IncludeAssets="compile;runtime" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Polly" Version="8.7.0" IncludeAssets="compile;runtime" />
+    <PackageReference Include="System.Interactive.Async" Version="7.0.1" IncludeAssets="compile;runtime" />
+    <PackageReference Include="System.Reactive" Version="7.0.0" IncludeAssets="compile;runtime;analyzers" />
+    <PackageReference Include="TwitchLib.Api" Version="3.10.2" IncludeAssets="compile;runtime" />
+    <PackageReference Include="TwitchLib.Client" Version="4.0.1" IncludeAssets="compile;runtime" />
+    <PackageReference Include="TwitchLib.PubSub" Version="3.2.6" IncludeAssets="compile;runtime" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="2.1.0" PrivateAssets="All" ExcludeAssets="runtime" />
