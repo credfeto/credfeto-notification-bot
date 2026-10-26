@@ -68,7 +68,7 @@
   <ItemGroup>
     <PackageReference Include="Credfeto.Date" Version="1.1.151.1695" IncludeAssets="compile;runtime" />
     <PackageReference Include="Credfeto.Random" Version="1.0.162.2014" IncludeAssets="compile;runtime" />
-    <PackageReference Include="Credfeto.Services.Startup" Version="1.1.160.2003" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Credfeto.Services.Startup" Version="1.1.162.2130" IncludeAssets="compile;runtime" />
     <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" IncludeAssets="compile;runtime" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" IncludeAssets="compile;runtime" />
     <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" IncludeAssets="compile;runtime" />
