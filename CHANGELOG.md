@@ -15,7 +15,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Unit tests no longer hang the test run (time-bounded TwitchStreamStatusTests concurrency test; Twitch DI test no longer opens a real Twitch connection)
 - Pre-commit and buildcheck compliance (MSBuild path separators, PackageReference IncludeAssets, configuration binding generator)
 ### Changed
-- Dependencies - Updated Nullable.Extended.Analyzer to 1.16.6891
 - Dependencies - Updated Credfeto.Random to 1.0.162.2014
 - Dependencies - Updated Microsoft.Extensions to 10.0.12
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
@@ -35,6 +34,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.20.2501
 - Dependencies - Updated Meziantou.Analyzer to 3.0.317
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.12.1
+- Dependencies - Updated Nullable.Extended.Analyzer to 1.18.2
 ### Deprecated
 ### Removed
 ### Deployment Changes
