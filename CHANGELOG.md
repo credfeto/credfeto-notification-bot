@@ -16,7 +16,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Pre-commit and buildcheck compliance (MSBuild path separators, PackageReference IncludeAssets, configuration binding generator)
 ### Changed
 - Dependencies - Updated Credfeto.Random to 1.0.162.2014
-- Dependencies - Updated Microsoft.Extensions to 10.0.12
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
 - Dependencies - Updated System.Reactive to 7.0.0
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.2.0
 - Dependencies - Updated xunit.v3 to 4.0.2
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.162.2130
+- Dependencies - Updated Microsoft.Extensions to 10.0.14
 ### Deprecated
 ### Removed
 ### Deployment Changes
