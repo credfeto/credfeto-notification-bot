@@ -18,7 +18,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Random to 1.0.162.2014
 - Dependencies - Updated Microsoft.Extensions to 10.0.12
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.34.0.3385
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
 - Dependencies - Updated System.Reactive to 7.0.0
 - Dependencies - Updated xunit.analyzers to 2.1.0
@@ -36,6 +35,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.12.1
 - Dependencies - Updated Nullable.Extended.Analyzer to 1.18.2
 - Dependencies - Updated Roslynator.Analyzers to 5.0.1
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.35.0.4138
 ### Deprecated
 ### Removed
 ### Deployment Changes
