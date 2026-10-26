@@ -36,6 +36,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3 to 4.0.2
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.162.2130
 - Dependencies - Updated Microsoft.Extensions to 10.0.14
+- Dependencies - Updated Polly to 8.8.1
 ### Deprecated
 ### Removed
 ### Deployment Changes
