@@ -11,7 +11,7 @@ public sealed class MessagePriorityTests : TestBase
     [InlineData(MessagePriority.ASAP, "ASAP")]
     [InlineData(MessagePriority.NATURAL, "NATURAL")]
     [InlineData(MessagePriority.SLOW, "SLOW")]
-    public void GetNameShouldReturnCorrectName(MessagePriority priority, string expectedName)
+    public static void GetNameShouldReturnCorrectName(MessagePriority priority, string expectedName)
     {
         string name = priority.GetName();
 
@@ -36,7 +36,7 @@ public sealed class MessagePriorityTests : TestBase
     [InlineData(MessagePriority.ASAP)]
     [InlineData(MessagePriority.NATURAL)]
     [InlineData(MessagePriority.SLOW)]
-    public void IsDefinedShouldReturnTrueForKnownValues(MessagePriority priority)
+    public static void IsDefinedShouldReturnTrueForKnownValues(MessagePriority priority)
     {
         bool isDefined = priority.IsDefined();
 

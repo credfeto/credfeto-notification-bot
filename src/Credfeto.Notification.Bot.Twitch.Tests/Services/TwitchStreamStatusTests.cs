@@ -52,10 +52,10 @@ public sealed class TwitchStreamStatusTests : LoggingTestBase
 
         this._liveStreamMonitor.UpdateLiveStreamersAsync()
             .Returns(
-                Task.CompletedTask,
-                Task.CompletedTask,
-                Task.FromException(new InvalidOperationException(exceptionMessage)),
-                Task.CompletedTask
+                _ => Task.CompletedTask,
+                _ => Task.CompletedTask,
+                _ => Task.FromException(new InvalidOperationException(exceptionMessage)),
+                _ => Task.CompletedTask
             );
 
         await this._twitchStreamStatus.EnableAsync(streamer1);
@@ -78,13 +78,22 @@ public sealed class TwitchStreamStatusTests : LoggingTestBase
         Task? reentrantEnableTask = null;
 
         this._liveStreamMonitor.When(x => x.SetChannelsByName(Arg.Any<List<string>>()))
-            .Do(_ => reentrantEnableTask ??= this._twitchStreamStatus.EnableAsync(streamer2).AsTask());
+            .Do(_ =>
+            {
+                reentrantEnableTask ??= Task.Run(
+                    () => this._twitchStreamStatus.EnableAsync(streamer2).AsTask(),
+                    this.CancellationToken()
+                );
+            });
 
-        await this._twitchStreamStatus.EnableAsync(streamer1);
+        await this
+            ._twitchStreamStatus.EnableAsync(streamer1)
+            .AsTask()
+            .WaitAsync(timeout: TimeSpan.FromSeconds(10), this.CancellationToken());
 
         Assert.NotNull(reentrantEnableTask);
 
-        await reentrantEnableTask;
+        await reentrantEnableTask.WaitAsync(timeout: TimeSpan.FromSeconds(10), this.CancellationToken());
 
         this._liveStreamMonitor.Received(1)
             .SetChannelsByName(Arg.Is<List<string>>(l => l.Count == 1 && l.Contains(streamer1.Value)));

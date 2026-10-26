@@ -24,7 +24,7 @@ public sealed class HttpPolicyExtensionsTests : TestBase
     [InlineData(HttpStatusCode.BadGateway)]
     [InlineData(HttpStatusCode.GatewayTimeout)]
     [InlineData(HttpStatusCode.RequestTimeout)]
-    public async Task TransientStatusCodesShouldTriggerRetry(HttpStatusCode statusCode)
+    public static async Task TransientStatusCodesShouldTriggerRetryAsync(HttpStatusCode statusCode)
     {
         IAsyncPolicy<HttpResponseMessage> policy = HttpPolicyExtensions
             .SensiblyHandleTransientHttpError()

@@ -44,7 +44,7 @@ public sealed class UpdateTwitchLiveStatusWorkerTests : LoggingTestBase
         using System.Threading.CancellationTokenSource cts = new(TimeSpan.FromMilliseconds(200));
 
         this._twitchStreamStatus.UpdateAsync()
-            .Returns(Task.FromException(new InvalidOperationException("Test exception")));
+            .Returns(_ => Task.FromException(new InvalidOperationException("Test exception")));
 
         await this._worker.StartAsync(cts.Token);
         await Task.Delay(delay: TimeSpan.FromMilliseconds(300), cancellationToken: this.CancellationToken());

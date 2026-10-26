@@ -27,12 +27,15 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.160.2003
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.138.1557
 - Dependencies - Updated FunFair.Test to 6.4.6.2749
+- Package references now declare IncludeAssets, tests use xunit.v3.aot.mtp-v2 and NSubstitute 6.2.0 to satisfy build checks
 ### Deprecated
 ### Removed
 ### Deployment Changes
+
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
 ## [0.0.242] - 2026-08-23
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.220.2547

@@ -37,7 +37,7 @@ public sealed class ServerStartupSetThreadsTests : TestBase
 
     [Theory]
     [MemberData(nameof(SetThreadsScenarios))]
-    public void SetThreadsAdjustsPoolCorrectly(int initialWorker, int initialIoc, int threshold)
+    public static void SetThreadsAdjustsPoolCorrectly(int initialWorker, int initialIoc, int threshold)
     {
         ThreadPool.GetMinThreads(out int savedWorker, out int savedIoc);
 
