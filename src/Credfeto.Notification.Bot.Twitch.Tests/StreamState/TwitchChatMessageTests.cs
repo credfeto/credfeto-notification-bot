@@ -13,7 +13,7 @@ public sealed class TwitchChatMessageTests : TestBase
     [InlineData("Hello there", false)]
     [InlineData("regular message", false)]
     [InlineData("", false)]
-    public void IsCommandShouldReturnCorrectValue(string message, bool expectedIsCommand)
+    public static void IsCommandShouldReturnCorrectValue(string message, bool expectedIsCommand)
     {
         TwitchChatMessage chatMessage = new(
             streamer: MockReferenceData.Streamer,

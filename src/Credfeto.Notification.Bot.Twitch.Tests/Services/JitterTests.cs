@@ -10,7 +10,7 @@ public sealed class JitterTests : TestBase
     [InlineData(30.0, 2)]
     [InlineData(15.0, 3)]
     [InlineData(60.0, 5)]
-    public void WithJitterShouldReturnPositiveValue(double delaySeconds, int maxSeconds)
+    public static void WithJitterShouldReturnPositiveValue(double delaySeconds, int maxSeconds)
     {
         double result = Jitter.WithJitter(delaySeconds: delaySeconds, maxSeconds: maxSeconds);
 
@@ -21,7 +21,7 @@ public sealed class JitterTests : TestBase
     [InlineData(30.0, 2)]
     [InlineData(15.0, 3)]
     [InlineData(60.0, 5)]
-    public void WithJitterShouldReturnValueWithinExpectedRange(double delaySeconds, int maxSeconds)
+    public static void WithJitterShouldReturnValueWithinExpectedRange(double delaySeconds, int maxSeconds)
     {
         double result = Jitter.WithJitter(delaySeconds: delaySeconds, maxSeconds: maxSeconds);
 

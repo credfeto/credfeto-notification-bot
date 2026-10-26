@@ -23,7 +23,7 @@ public sealed class TwitchStreamStatusRegexTests : TestBase
     [InlineData("No channel found")]
     [InlineData("No channel with the name \"\" could be found.")]
     [InlineData("")]
-    public void NoChannelWithNameShouldNotMatchInvalidMessages(string message)
+    public static void NoChannelWithNameShouldNotMatchInvalidMessages(string message)
     {
         Match match = TwitchStreamStatusRegex.NoChannelWithName().Match(message);
 
