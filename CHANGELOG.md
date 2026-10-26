@@ -33,6 +33,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - SDK - Updated DotNet SDK to 10.0.403
 - Dependencies - Updated FunFair.Test to 6.4.6.2749
 - Dependencies - Updated Credfeto.Database to 1.2.223.2744
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.20.2501
 ### Deprecated
 ### Removed
 ### Deployment Changes
