@@ -43,7 +43,8 @@ public sealed class RestoreTwitchChatConnectionWorkerTests : LoggingTestBase
     {
         using System.Threading.CancellationTokenSource cts = new(TimeSpan.FromMilliseconds(200));
 
-        this._twitchChat.UpdateAsync().Returns(Task.FromException(new InvalidOperationException("Test exception")));
+        this._twitchChat.UpdateAsync()
+            .Returns(_ => Task.FromException(new InvalidOperationException("Test exception")));
 
         await this._worker.StartAsync(cts.Token);
         await Task.Delay(delay: TimeSpan.FromMilliseconds(300), cancellationToken: this.CancellationToken());
