@@ -32,6 +32,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.v3.mtp-v2 to xunit.v3.aot.mtp-v2 4.0.1
 - SDK - Updated DotNet SDK to 10.0.403
 - Dependencies - Updated FunFair.Test to 6.4.6.2749
+- Dependencies - Updated Credfeto.Database to 1.2.223.2744
 ### Deprecated
 ### Removed
 ### Deployment Changes
