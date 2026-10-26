@@ -22,7 +22,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.34.0.3385
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.4.6.2749
 - Dependencies - Updated System.Reactive to 7.0.0
-- Dependencies - Updated Meziantou.Analyzer to 3.0.257
 - Dependencies - Updated xunit.analyzers to 2.1.0
 - Dependencies - Updated xunit.v3 to 4.0.1
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.160.2003
@@ -34,6 +33,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test to 6.4.6.2749
 - Dependencies - Updated Credfeto.Database to 1.2.223.2744
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.20.2501
+- Dependencies - Updated Meziantou.Analyzer to 3.0.317
 ### Deprecated
 ### Removed
 ### Deployment Changes
