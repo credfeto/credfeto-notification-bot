@@ -12,6 +12,17 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+### Changed
+### Deprecated
+### Removed
+### Deployment Changes
+
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+
+## [0.0.243] - 2026-10-27
+### Fixed
 - Unit tests no longer hang the test run (time-bounded TwitchStreamStatusTests concurrency test; Twitch DI test no longer opens a real Twitch connection)
 - Pre-commit and buildcheck compliance (MSBuild path separators, PackageReference IncludeAssets, configuration binding generator)
 ### Changed
@@ -37,13 +48,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.162.2130
 - Dependencies - Updated Microsoft.Extensions to 10.0.14
 - Dependencies - Updated Polly to 8.8.1
-### Deprecated
-### Removed
-### Deployment Changes
-
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
 
 ## [0.0.242] - 2026-08-23
 ### Changed
