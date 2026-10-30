@@ -15,6 +15,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.224.2800
 - Dependencies - Updated Credfeto.Enumeration to 1.2.156.2472
+- Dependencies - Updated Credfeto.Random to 1.0.166.2205
 ### Deprecated
 ### Removed
 ### Deployment Changes
