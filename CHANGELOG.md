@@ -17,6 +17,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.156.2472
 - Dependencies - Updated Credfeto.Random to 1.0.166.2205
 - Dependencies - Updated TwitchLib to 3.11.0
+- Dependencies - Updated Meziantou.Analyzer to 3.0.318
 ### Deprecated
 ### Removed
 ### Deployment Changes
