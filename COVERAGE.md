@@ -22,5 +22,5 @@ being added.
 | Credfeto.Notification.Bot.Shared | 100.00% |
 | Credfeto.Notification.Bot.Twitch.DataTypes | 100.00% |
 | Credfeto.Notification.Bot.Twitch.Models | 100.00% |
-| Credfeto.Notification.Bot.Twitch | 78.71% |
-| **Overall** | **77.43%** |
+| Credfeto.Notification.Bot.Twitch | 81.78% |
+| **Overall** | **80.00%** |

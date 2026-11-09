@@ -52,4 +52,16 @@ public sealed class RestoreTwitchChatConnectionWorkerTests : LoggingTestBase
 
         await this._twitchChat.Received(1).UpdateAsync();
     }
+
+    [Fact]
+    public async Task ExecuteWithCancelledTokenShouldNotCallUpdateAsync()
+    {
+        using System.Threading.CancellationTokenSource cts = new();
+        await cts.CancelAsync();
+
+        await this._worker.StartAsync(cts.Token);
+        await this._worker.StopAsync(this.CancellationToken());
+
+        await this._twitchChat.DidNotReceive().UpdateAsync();
+    }
 }

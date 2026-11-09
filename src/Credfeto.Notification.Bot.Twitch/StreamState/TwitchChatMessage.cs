@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Credfeto.Notification.Bot.Twitch.DataTypes;
 
@@ -19,5 +20,7 @@ public sealed class TwitchChatMessage
 
     public MessagePriority Priority { get; }
 
-    public bool IsCommand => this.Message.StartsWith('!') || this.Message.StartsWith('/');
+    public bool IsCommand =>
+        this.Message.StartsWith('!', StringComparison.Ordinal)
+        || this.Message.StartsWith('/', StringComparison.Ordinal);
 }
