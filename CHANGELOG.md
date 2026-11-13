@@ -15,8 +15,8 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.158.2511
 - Dependencies - Updated Credfeto.Database to 1.2.227.2845
-- SDK - Updated DotNet SDK to 11.0.100-rc.3.26522.148
 - Target .NET 11 with runtime-async enabled across all projects, Docker runtime base moved to 11.0-resolute, removed unneeded Microsoft.Extensions.DependencyInjection.Abstractions reference, and TwitchChatMessage.IsCommand uses the char StartsWith overload (#288)
+- SDK - Updated DotNet SDK to 11.0.100
 ### Deprecated
 ### Removed
 ### Deployment Changes
