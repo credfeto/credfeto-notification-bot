@@ -22,9 +22,9 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated TwitchLib to 4.0.2
 - Dependencies - Updated Meziantou.Analyzer to 3.0.340
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.2.0
-- Dependencies - Updated FunFair.CodeAnalysis to 7.2.26.2691
 - Dependencies - Updated Credfeto.Database to 1.2.228.2884
 - Dependencies - Updated Credfeto.Enumeration to 1.2.159.2554
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.27.2695
 ### Deprecated
 ### Removed
 ### Deployment Changes
