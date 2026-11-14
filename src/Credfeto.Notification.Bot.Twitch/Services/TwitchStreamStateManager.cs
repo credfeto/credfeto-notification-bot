@@ -18,11 +18,13 @@ public sealed class TwitchStreamStateManager : ITwitchStreamStateManager
 
     public ITwitchChannelState Get(Streamer streamer)
     {
-        return this._channels.TryGetValue(key: streamer, out ITwitchChannelState? status)
-            ? status
-            : this._channels.GetOrAdd(
-                key: streamer,
-                new TwitchChannelState(streamerStreamer: streamer, logger: this._logger)
-            );
+        if (this._channels.TryGetValue(key: streamer, out ITwitchChannelState? status))
+        {
+            return status;
+        }
+
+        ITwitchChannelState created = new TwitchChannelState(streamerStreamer: streamer, logger: this._logger);
+
+        return this._channels.TryAdd(key: streamer, value: created) ? created : this._channels[streamer];
     }
 }

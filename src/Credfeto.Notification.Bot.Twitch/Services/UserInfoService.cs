@@ -53,12 +53,7 @@ public sealed class UserInfoService : IUserInfoService
         while (true)
         {
             DateTimeOffset now = this._currentTimeSource.UtcNow();
-            CacheEntry entry = this._cache.GetOrAdd(
-                key: userName,
-                valueFactory: static (key, arg) =>
-                    new CacheEntry(fetch: () => arg.Service.FetchUserAsync(key), createdAt: arg.Now),
-                factoryArgument: (Service: this, Now: now)
-            );
+            CacheEntry entry = this.GetOrCreateEntry(userName: userName, now: now);
 
             TwitchUser? user;
 
@@ -85,6 +80,24 @@ public sealed class UserInfoService : IUserInfoService
             }
 
             this._cache.TryRemove(new(key: userName, value: entry));
+        }
+    }
+
+    private CacheEntry GetOrCreateEntry(Viewer userName, in DateTimeOffset now)
+    {
+        while (true)
+        {
+            if (this._cache.TryGetValue(key: userName, out CacheEntry? existing))
+            {
+                return existing;
+            }
+
+            CacheEntry created = new(fetch: () => this.FetchUserAsync(userName), createdAt: now);
+
+            if (this._cache.TryAdd(key: userName, value: created))
+            {
+                return created;
+            }
         }
     }
 
