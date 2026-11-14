@@ -13,7 +13,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Enumeration to 1.2.158.2511
 - Target .NET 11 with runtime-async enabled across all projects, Docker runtime base moved to 11.0-resolute, removed unneeded Microsoft.Extensions.DependencyInjection.Abstractions reference, and TwitchChatMessage.IsCommand uses the char StartsWith overload (#288)
 - SDK - Updated DotNet SDK to 11.0.100
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.36.0.15337
@@ -25,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.2.0
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.26.2691
 - Dependencies - Updated Credfeto.Database to 1.2.228.2884
+- Dependencies - Updated Credfeto.Enumeration to 1.2.159.2554
 ### Deprecated
 ### Removed
 ### Deployment Changes
