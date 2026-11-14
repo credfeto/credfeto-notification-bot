@@ -67,15 +67,22 @@ public sealed class TwitchInputMessageMatch : IEquatable<TwitchInputMessageMatch
     {
         if (matchType == TwitchMessageMatchType.REGEX)
         {
-            return RegexCache.GetOrAdd(
-                key: expression,
-                valueFactory: static (expr, timeout) =>
-                    new(pattern: expr, options: REGEX_OPTIONS, matchTimeout: timeout),
-                factoryArgument: RegexTimeout
-            );
+            return GetOrCreateRegex(expression);
         }
 
         return null;
+    }
+
+    private static Regex GetOrCreateRegex(string expression)
+    {
+        if (RegexCache.TryGetValue(key: expression, out Regex? existing))
+        {
+            return existing;
+        }
+
+        Regex created = new(pattern: expression, options: REGEX_OPTIONS, matchTimeout: RegexTimeout);
+
+        return RegexCache.TryAdd(key: expression, value: created) ? created : RegexCache[expression];
     }
 
     public override bool Equals(object? obj)

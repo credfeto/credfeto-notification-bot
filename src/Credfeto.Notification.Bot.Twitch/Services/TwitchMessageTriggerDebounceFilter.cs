@@ -44,7 +44,9 @@ public sealed class TwitchMessageTriggerDebounceFilter : ITwitchMessageTriggerDe
             return when;
         }
 
-        return this._debounce.GetOrAdd(key: match, new When(lastMatch: DateTimeOffset.MinValue));
+        When created = new(lastMatch: DateTimeOffset.MinValue);
+
+        return this._debounce.TryAdd(key: match, value: created) ? created : this._debounce[match];
     }
 
     private sealed class When
