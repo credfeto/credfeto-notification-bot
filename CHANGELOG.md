@@ -24,6 +24,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Polly to 8.9.1
 - Dependencies - Updated TwitchLib to 4.0.2
 - Dependencies - Updated Meziantou.Analyzer to 3.0.340
+- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.2.0
 ### Deprecated
 ### Removed
 ### Deployment Changes
