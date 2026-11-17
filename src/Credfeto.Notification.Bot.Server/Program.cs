@@ -13,6 +13,15 @@ internal static class Program
     public static async Task<int> Main(string[] args)
     {
         StartupBanner.Show();
+
+        if (SelfTest.IsRequested(args))
+        {
+            return SelfTest.Run(
+                createApp: () => ServerStartup.CreateSelfTestApp(SelfTest.WithoutSwitch(args)),
+                output: Console.Out
+            );
+        }
+
         ServerStartup.SetThreads(MIN_THREADS);
 
         try

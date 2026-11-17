@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -47,14 +48,30 @@ public static class ServerStartup
 
     internal static IHost CreateApp(string[] args)
     {
+        return CreateBuilder(args).Build();
+    }
+
+    public static IHost CreateSelfTestApp(IReadOnlyList<string> args)
+    {
+        HostApplicationBuilder builder = CreateBuilder([.. args]);
+        builder.ConfigureContainer(
+            new DefaultServiceProviderFactory(
+                new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true }
+            )
+        );
+
+        return builder.Build();
+    }
+
+    private static HostApplicationBuilder CreateBuilder(string[] args)
+    {
         string configPath = ApplicationConfigLocator.ConfigurationFilesPath;
 
         return Host.CreateApplicationBuilder(args)
             .ConfigureSettings(configPath)
             .ConfigureServices()
             .ConfigureAppHost()
-            .ConfigureLogging()
-            .Build();
+            .ConfigureLogging();
     }
 
     [SuppressMessage(

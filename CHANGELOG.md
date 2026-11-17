@@ -11,11 +11,13 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ## [Unreleased]
 ### Security
 ### Added
+- Server `--self-test` switch that checks the binary can start (native dependencies, configuration and service wiring) without opening ports; the Docker image build runs it so a binary that cannot start fails the build
 ### Fixed
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.232.2930
 ### Deprecated
 ### Removed
+- Removed the assembly-level code analysis suppression from the Mocks project
 ### Deployment Changes
 
 <!--
