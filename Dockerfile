@@ -9,6 +9,8 @@ COPY healthcheck .
 
 RUN apt-get update && apt-get upgrade -y && apt-get install curl -y --no-install-recommends && apt-get autoremove -y && apt-get clean
 
+RUN ["/usr/src/app/Credfeto.Notification.Bot.Server", "--self-test"]
+
 EXPOSE 8080
 ENTRYPOINT [ "/usr/src/app/Credfeto.Notification.Bot.Server" ]
 
