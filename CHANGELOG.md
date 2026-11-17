@@ -11,6 +11,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ## [Unreleased]
 ### Security
 ### Added
+- Build-time `--self-test` switch run in the Docker image so a binary that cannot start fails the build
 ### Fixed
 ### Changed
 - Dependencies - Updated Credfeto.Database to 1.2.232.2930
