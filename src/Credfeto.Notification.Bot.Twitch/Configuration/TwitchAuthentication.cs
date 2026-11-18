@@ -1,4 +1,6 @@
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using Microsoft.Extensions.Options;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
 
@@ -11,7 +13,11 @@ public sealed class TwitchAuthentication
         this.Chat = new();
     }
 
+    [Required]
+    [ValidateObjectMembers]
     public TwitchAuthenticationApi Api { get; set; }
 
+    [Required]
+    [ValidateObjectMembers]
     public TwitchAuthenticationChat Chat { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,12 +32,10 @@ public sealed class TwitchCustomMessageHandler : ITwitchCustomMessageHandler
         ILogger<TwitchCustomMessageHandler> logger
     )
     {
-        this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this._twitchMessageTriggerDebounceFilter =
-            twitchMessageTriggerDebounceFilter
-            ?? throw new ArgumentNullException(nameof(twitchMessageTriggerDebounceFilter));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        TwitchBotOptions opts = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+        this._mediator = mediator;
+        this._twitchMessageTriggerDebounceFilter = twitchMessageTriggerDebounceFilter;
+        this._logger = logger;
+        TwitchBotOptions opts = options.Value;
 
         this._chatUser = Viewer.FromString(opts.Authentication.Chat.UserName);
 

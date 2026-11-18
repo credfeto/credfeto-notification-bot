@@ -19,7 +19,7 @@ public sealed class CustomTriggeredMessageSender : MessageSenderBase, ICustomTri
     )
         : base(twitchChatMessageChannel)
     {
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._logger = logger;
     }
 
     public async Task SendAsync(Streamer streamer, string message, CancellationToken cancellationToken)

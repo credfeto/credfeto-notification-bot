@@ -34,9 +34,9 @@ public sealed class UserInfoService : IUserInfoService
         ILogger<UserInfoService> logger
     )
     {
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._currentTimeSource = currentTimeSource ?? throw new ArgumentNullException(nameof(currentTimeSource));
-        TwitchBotOptions apiOptions = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+        this._logger = logger;
+        this._currentTimeSource = currentTimeSource;
+        TwitchBotOptions apiOptions = options.Value;
 
         this._api = apiOptions.ConfigureTwitchApi();
 

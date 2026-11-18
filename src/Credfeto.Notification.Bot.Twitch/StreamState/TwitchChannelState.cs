@@ -28,7 +28,7 @@ public sealed class TwitchChannelState : ITwitchChannelState
     )
     {
         this.Streamer = streamerStreamer;
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._logger = logger;
     }
 
     public Streamer Streamer { get; }

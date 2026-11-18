@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -65,11 +65,10 @@ public sealed class TwitchChat : ITwitchChat, IDisposable
     )
     {
         this._twitchChatMessageChannel = twitchChatMessageChannel;
-        this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this._twitchStreamStateManager =
-            twitchStreamStateManager ?? throw new ArgumentNullException(nameof(twitchStreamStateManager));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+        this._mediator = mediator;
+        this._twitchStreamStateManager = twitchStreamStateManager;
+        this._logger = logger;
+        this._options = options.Value;
         this._client = twitchClient as TwitchClient ?? throw new ArgumentNullException(nameof(twitchClient));
 
         this._lastMessageLock = new(initialCount: 1, maxCount: 1);

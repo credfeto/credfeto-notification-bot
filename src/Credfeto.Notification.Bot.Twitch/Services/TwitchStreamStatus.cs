@@ -37,9 +37,9 @@ public sealed class TwitchStreamStatus : ITwitchStreamStatus, IDisposable
         ILogger<TwitchStreamStatus> logger
     )
     {
-        this._lsm = liveStreamMonitor ?? throw new ArgumentNullException(nameof(liveStreamMonitor));
-        this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._lsm = liveStreamMonitor;
+        this._mediator = mediator;
+        this._logger = logger;
 
         this._version = 0;
         this._lastVersion = 0;
