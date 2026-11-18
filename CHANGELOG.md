@@ -16,9 +16,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.161.2590
 - Dependencies - Updated Serilog.Extensions.Logging to 11.0.0
 - Dependencies - Updated Credfeto.Database to 1.2.232.2930
-- TBD - to be finalized after review
+- Validated options - FluentValidation validators replaced by source-generated validated options with ValidateOnStart, so invalid configuration fails at startup
+- Dependencies - Twitch channel lookup retry moved to a Polly v8 ResiliencePipeline, and Polly replaced by Polly.Core 8.9.1
+- Twitch - removed redundant ArgumentNullException constructor guards, as null checks are already enforced by nullable reference types
 ### Deprecated
 ### Removed
+- Removed HttpPolicyExtensions, which is no longer used now that resilience is provided by Polly v8 pipelines
 ### Deployment Changes
 
 <!--
