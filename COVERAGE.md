@@ -18,9 +18,9 @@ being added.
 
 | Component | Coverage |
 | --- | --- |
-| Credfeto.Notification.Bot.Server | 83.06% |
+| Credfeto.Notification.Bot.Server | 83.33% |
 | Credfeto.Notification.Bot.Shared | 100.00% |
 | Credfeto.Notification.Bot.Twitch.DataTypes | 100.00% |
 | Credfeto.Notification.Bot.Twitch.Models | 100.00% |
 | Credfeto.Notification.Bot.Twitch | 81.76% |
-| **Overall** | **83.31%** |
+| **Overall** | **83.38%** |
