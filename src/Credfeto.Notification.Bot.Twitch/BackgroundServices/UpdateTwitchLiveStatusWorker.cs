@@ -18,8 +18,8 @@ public sealed class UpdateTwitchLiveStatusWorker : BackgroundService
         ILogger<UpdateTwitchLiveStatusWorker> logger
     )
     {
-        this._twitchStreamStatus = twitchStreamStatus ?? throw new ArgumentNullException(nameof(twitchStreamStatus));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._twitchStreamStatus = twitchStreamStatus;
+        this._logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

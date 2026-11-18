@@ -13,8 +13,7 @@ public sealed class TwitchIncomingMessageNotificationHandler : INotificationHand
 
     public TwitchIncomingMessageNotificationHandler(ITwitchCustomMessageHandler twitchCustomMessageHandler)
     {
-        this._twitchCustomMessageHandler =
-            twitchCustomMessageHandler ?? throw new ArgumentNullException(nameof(twitchCustomMessageHandler));
+        this._twitchCustomMessageHandler = twitchCustomMessageHandler;
     }
 
     public async ValueTask Handle(TwitchIncomingMessage notification, CancellationToken cancellationToken)

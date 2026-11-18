@@ -19,8 +19,8 @@ public sealed class TwitchWatchChannelLiveStreamNotificationHandler : INotificat
         ILogger<TwitchWatchChannelLiveStreamNotificationHandler> logger
     )
     {
-        this._twitchStreamStatus = twitchStreamStatus ?? throw new ArgumentNullException(nameof(twitchStreamStatus));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._twitchStreamStatus = twitchStreamStatus;
+        this._logger = logger;
     }
 
     public ValueTask Handle(TwitchWatchChannel notification, CancellationToken cancellationToken)

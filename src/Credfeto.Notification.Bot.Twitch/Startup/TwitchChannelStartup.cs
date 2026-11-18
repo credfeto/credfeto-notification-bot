@@ -45,11 +45,11 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         ILogger<TwitchChannelStartup> logger
     )
     {
-        this._userInfoService = userInfoService ?? throw new ArgumentNullException(nameof(userInfoService));
-        this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
-        this._mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        this._options = (options ?? throw new ArgumentNullException(nameof(options))).Value;
+        this._userInfoService = userInfoService;
+        this._twitchChat = twitchChat;
+        this._mediator = mediator;
+        this._logger = logger;
+        this._options = options.Value;
         this._startupDelay = startupDelay;
 
         this._channels =

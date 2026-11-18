@@ -17,7 +17,7 @@ public sealed class TwitchStreamOnlineJoinChatNotificationHandler : INotificatio
         ITwitchStreamStateManager twitchStreamStateManager
     )
     {
-        this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
+        this._twitchChat = twitchChat;
         this._twitchStreamStateManager = twitchStreamStateManager;
     }
 
