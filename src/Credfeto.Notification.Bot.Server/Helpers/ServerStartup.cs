@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
@@ -63,6 +64,16 @@ public static class ServerStartup
         return builder.Build();
     }
 
+    public static IServiceCollection AddValidatedTwitchOptions(
+        this IServiceCollection services,
+        IConfiguration twitchSection
+    )
+    {
+        services.AddOptions<TwitchBotOptions>().Bind(twitchSection).ValidateOnStart();
+
+        return services.AddSingleton<IValidateOptions<TwitchBotOptions>, TwitchBotOptionsValidator>();
+    }
+
     private static HostApplicationBuilder CreateBuilder(string[] args)
     {
         string configPath = ApplicationConfigLocator.ConfigurationFilesPath;
@@ -108,7 +119,7 @@ public static class ServerStartup
         IConfigurationSection twitchSection = builder.Configuration.GetSection("Twitch");
 
         builder
-            .Services.Configure<TwitchBotOptions>(twitchSection)
+            .Services.AddValidatedTwitchOptions(twitchSection)
             .AddMediator()
             .AddDate()
             .AddRandomNumbers()

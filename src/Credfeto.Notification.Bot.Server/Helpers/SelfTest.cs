@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using Credfeto.Notification.Bot.Twitch.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace Credfeto.Notification.Bot.Server.Helpers;
 
@@ -64,6 +64,8 @@ public static class SelfTest
 
     private static void BindConfiguration(IServiceProvider services)
     {
-        _ = services.GetRequiredService<IOptions<TwitchBotOptions>>().Value;
+        // The image runs the self-test at build time with placeholder settings, so this proves the Twitch section
+        // binds without running the options validation that real deployments must pass on start.
+        _ = services.GetRequiredService<IConfiguration>().GetSection("Twitch").Get<TwitchBotOptions>();
     }
 }

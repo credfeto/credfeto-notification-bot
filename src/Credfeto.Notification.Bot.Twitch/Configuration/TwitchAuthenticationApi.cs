@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace Credfeto.Notification.Bot.Twitch.Configuration;
@@ -12,8 +13,10 @@ public sealed class TwitchAuthenticationApi
         this.ClientAccessToken = "n/a";
     }
 
+    [Required]
     public string ClientId { get; set; }
 
+    [Required]
     public string ClientSecret { get; set; }
 
     public string ClientAccessToken { get; set; }
