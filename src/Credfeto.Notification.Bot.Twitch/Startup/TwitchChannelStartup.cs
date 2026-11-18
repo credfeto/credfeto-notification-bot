@@ -23,13 +23,14 @@ public sealed class TwitchChannelStartup : IRunOnStartup
     public static readonly TimeSpan DefaultStartupDelay = TimeSpan.FromSeconds(3);
 
     private const int MaxAttempts = 3;
-    private const string StreamerContextKey = "streamer";
+
+    private static readonly ResiliencePropertyKey<Streamer> StreamerContextKey = new("streamer");
 
     private readonly IReadOnlyList<Streamer> _channels;
     private readonly ILogger<TwitchChannelStartup> _logger;
     private readonly IMediator _mediator;
     private readonly TwitchBotOptions _options;
-    private readonly AsyncRetryPolicy<TwitchUser?> _retryPolicy;
+    private readonly ResiliencePipeline<TwitchUser?> _retryPipeline;
     private readonly TimeSpan _startupDelay;
     private readonly ITwitchChat _twitchChat;
     private readonly IUserInfoService _userInfoService;
@@ -39,7 +40,7 @@ public sealed class TwitchChannelStartup : IRunOnStartup
         IUserInfoService userInfoService,
         ITwitchChat twitchChat,
         IMediator mediator,
-        TimeSpan retryDelay,
+        in TimeSpan retryDelay,
         in TimeSpan startupDelay,
         ILogger<TwitchChannelStartup> logger
     )
@@ -59,23 +60,36 @@ public sealed class TwitchChannelStartup : IRunOnStartup
                 .Distinct(),
         ];
 
-        this._retryPolicy = Policy<TwitchUser?>
-            .Handle<Exception>(exception => exception is not OperationCanceledException)
-            .WaitAndRetryAsync(
-                retryCount: MaxAttempts - 1,
-                sleepDurationProvider: _ => retryDelay,
-                onRetry: (outcome, _, retryAttempt, context) =>
+        this._retryPipeline = new ResiliencePipelineBuilder<TwitchUser?>()
+            .AddRetry(
+                new RetryStrategyOptions<TwitchUser?>
                 {
-                    Streamer streamer = (Streamer)context[StreamerContextKey];
-
-                    this._logger.RetryingChannelLookup(
-                        streamer: streamer,
-                        attempt: retryAttempt,
-                        message: outcome.Exception.Message,
-                        exception: outcome.Exception
-                    );
+                    MaxRetryAttempts = MaxAttempts - 1,
+                    Delay = retryDelay,
+                    BackoffType = DelayBackoffType.Constant,
+                    ShouldHandle = new PredicateBuilder<TwitchUser?>().Handle<Exception>(exception =>
+                        exception is not OperationCanceledException
+                    ),
+                    OnRetry = this.OnRetryAsync,
                 }
+            )
+            .Build();
+    }
+
+    private ValueTask OnRetryAsync(OnRetryArguments<TwitchUser?> arguments)
+    {
+        if (arguments.Outcome.Exception is { } exception)
+        {
+            // Polly v8 attempt numbers are zero-based; the log reports the one-based retry number.
+            this._logger.RetryingChannelLookup(
+                streamer: arguments.Context.Properties.GetValue(key: StreamerContextKey, defaultValue: default),
+                attempt: arguments.AttemptNumber + 1,
+                message: exception.Message,
+                exception: exception
             );
+        }
+
+        return ValueTask.CompletedTask;
     }
 
     public async ValueTask StartAsync(CancellationToken cancellationToken)
@@ -109,14 +123,21 @@ public sealed class TwitchChannelStartup : IRunOnStartup
 
     private async ValueTask<TwitchUser?> GetUserWithRetryAsync(Streamer streamer, CancellationToken cancellationToken)
     {
-        Context context = new() { [StreamerContextKey] = streamer };
+        ResilienceContext context = ResilienceContextPool.Shared.Get(cancellationToken);
+        context.Properties.Set(key: StreamerContextKey, value: streamer);
 
         try
         {
-            return await this._retryPolicy.ExecuteAsync(
-                action: (_, ct) => this._userInfoService.GetUserAsync(userName: streamer, cancellationToken: ct),
+            return await this._retryPipeline.ExecuteAsync(
+                callback: static (resilienceContext, state) =>
+                    new ValueTask<TwitchUser?>(
+                        state.UserInfoService.GetUserAsync(
+                            userName: state.Streamer,
+                            cancellationToken: resilienceContext.CancellationToken
+                        )
+                    ),
                 context: context,
-                cancellationToken: cancellationToken
+                state: (UserInfoService: this._userInfoService, Streamer: streamer)
             );
         }
         catch (Exception exception)
@@ -130,6 +151,10 @@ public sealed class TwitchChannelStartup : IRunOnStartup
             );
 
             return null;
+        }
+        finally
+        {
+            ResilienceContextPool.Shared.Return(context);
         }
     }
 }
