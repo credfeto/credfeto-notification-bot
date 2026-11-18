@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Notification.Bot.Mocks;
@@ -107,6 +108,59 @@ public sealed class TwitchCustomMessageHandlerTests : LoggingTestBase
 
         this.ReceivedCanSend();
         await this.ReceivedSendCustomMessageAsync();
+    }
+
+    [Fact]
+    public async Task MessageForStreamerWithNoTriggersShouldNotBeHandledAsync()
+    {
+        TwitchIncomingMessage otherStreamerMessage = new(
+            Streamer: MockReferenceData.Streamer.Next(),
+            Chatter: IncomingMessage.Chatter,
+            Message: IncomingMessage.Message
+        );
+
+        bool handled = await this._twitchCustomMessageHandler.HandleMessageAsync(
+            message: otherStreamerMessage,
+            this.CancellationToken()
+        );
+
+        Assert.False(condition: handled, userMessage: "Should not have been handled");
+
+        this.DidNotReceiveCanSend();
+        await this.DidNotReceiveSendCustomMessageAsync();
+    }
+
+    [Fact]
+    public void UnknownMatchTypeShouldBeRejected()
+    {
+        IOptions<TwitchBotOptions> options = GetSubstitute<IOptions<TwitchBotOptions>>();
+        options.Value.Returns(
+            new TwitchBotOptions
+            {
+                Authentication = MockReferenceData.TwitchAuthentication,
+                ChatCommands =
+                [
+                    new(
+                        streamer: IncomingMessage.Streamer.Value,
+                        bot: IncomingMessage.Chatter.Value,
+                        match: "!play",
+                        issue: "!play",
+                        matchType: "UNKNOWN"
+                    ),
+                ],
+            }
+        );
+
+        ArgumentOutOfRangeException exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
+            new TwitchCustomMessageHandler(
+                options: options,
+                mediator: this._mediator,
+                twitchMessageTriggerDebounceFilter: this._twitchMessageTriggerDebounceFilter,
+                this.GetTypedLogger<TwitchCustomMessageHandler>()
+            )
+        );
+
+        Assert.Equal(expected: "UNKNOWN", actual: exception.ActualValue);
     }
 
     private void ReceivedCanSend()
