@@ -16,8 +16,8 @@ public sealed class RestoreTwitchChatConnectionWorker : BackgroundService
 
     public RestoreTwitchChatConnectionWorker(ITwitchChat twitchChat, ILogger<RestoreTwitchChatConnectionWorker> logger)
     {
-        this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._twitchChat = twitchChat;
+        this._logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

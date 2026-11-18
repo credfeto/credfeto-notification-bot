@@ -19,9 +19,8 @@ public sealed class CustomTriggeredMessageNotificationHandler : INotificationHan
         ILogger<CustomTriggeredMessageNotificationHandler> logger
     )
     {
-        this._customTriggeredMessageSender =
-            customTriggeredMessageSender ?? throw new ArgumentNullException(nameof(customTriggeredMessageSender));
-        this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        this._customTriggeredMessageSender = customTriggeredMessageSender;
+        this._logger = logger;
     }
 
     public async ValueTask Handle(CustomTriggeredMessage notification, CancellationToken cancellationToken)

@@ -16,7 +16,7 @@ public sealed class TwitchStreamOfflineLeaveChatNotificationHandler : INotificat
         ITwitchStreamStateManager twitchStreamStateManager
     )
     {
-        this._twitchChat = twitchChat ?? throw new ArgumentNullException(nameof(twitchChat));
+        this._twitchChat = twitchChat;
         this._twitchStreamStateManager = twitchStreamStateManager;
     }
 
