@@ -7,7 +7,6 @@ using Credfeto.Date;
 using Credfeto.Notification.Bot.Shared;
 using Credfeto.Notification.Bot.Twitch;
 using Credfeto.Notification.Bot.Twitch.Configuration;
-using Credfeto.Random;
 using Credfeto.Services.Startup;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -122,7 +121,6 @@ public static class ServerStartup
             .Services.AddValidatedTwitchOptions(twitchSection)
             .AddMediator()
             .AddDate()
-            .AddRandomNumbers()
             .AddResources()
             .AddRunOnStartupServices()
             .AddTwitch();
