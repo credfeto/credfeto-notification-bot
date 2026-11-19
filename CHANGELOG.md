@@ -16,6 +16,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.30.2708
 ### Deprecated
 ### Removed
+- Removed unused Credfeto.Random package and AddRandomNumbers registration
 ### Deployment Changes
 
 <!--
