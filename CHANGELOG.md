@@ -16,6 +16,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Database to 1.2.238.2992
 ### Deprecated
 ### Removed
+- Removed unused Credfeto.Random package and AddRandomNumbers registration
 ### Deployment Changes
 
 <!--
