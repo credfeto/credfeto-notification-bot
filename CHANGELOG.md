@@ -15,6 +15,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 ### Deprecated
 ### Removed
+- Removed unused Credfeto.Random package and AddRandomNumbers registration
 ### Deployment Changes
 
 <!--
