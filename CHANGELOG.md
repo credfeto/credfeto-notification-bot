@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Fixed
 ### Changed
 - Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.148.1882
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.171.2338
 ### Deprecated
 ### Removed
 ### Deployment Changes
