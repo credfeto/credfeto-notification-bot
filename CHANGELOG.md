@@ -18,6 +18,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Services.Startup to 1.1.172.2347
 ### Deprecated
 ### Removed
+- Removed unused Credfeto.Random package and AddRandomNumbers registration
 ### Deployment Changes
 
 <!--
