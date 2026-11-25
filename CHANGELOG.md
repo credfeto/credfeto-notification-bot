@@ -13,17 +13,21 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Database to 1.2.238.2992
-- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.149.1891
-- Dependencies - Updated Credfeto.Services.Startup to 1.1.172.2347
 ### Deprecated
 ### Removed
-- Removed unused Credfeto.Random package and AddRandomNumbers registration
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
+## [0.0.265] - 2026-11-25
+### Changed
+- Dependencies - Updated Credfeto.Database to 1.2.238.2992
+- Dependencies - Updated Credfeto.Version.Information.Generator to 1.0.149.1891
+- Dependencies - Updated Credfeto.Services.Startup to 1.1.172.2347
+### Removed
+- Removed unused Credfeto.Random package and AddRandomNumbers registration
 
 ## [0.0.264] - 2026-11-24
 ### Changed
