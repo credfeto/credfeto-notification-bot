@@ -13,9 +13,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Removed the hand-written cache and the ICurrentTimeSource dependency from Twitch UserInfoService (#302)
-- Dependencies - Updated Credfeto.Database to 1.2.239.2999
-- Dependencies - Updated Credfeto.Enumeration to 1.2.166.2629
 ### Deprecated
 ### Removed
 ### Deployment Changes
@@ -23,6 +20,12 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
+## [0.0.266] - 2026-11-26
+### Changed
+- Removed the hand-written cache and the ICurrentTimeSource dependency from Twitch UserInfoService (#302)
+- Dependencies - Updated Credfeto.Database to 1.2.239.2999
+- Dependencies - Updated Credfeto.Enumeration to 1.2.166.2629
 
 ## [0.0.265] - 2026-11-25
 ### Changed
