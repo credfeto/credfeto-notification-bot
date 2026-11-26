@@ -13,6 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- Removed the hand-written cache and the ICurrentTimeSource dependency from Twitch UserInfoService (#302)
 ### Deprecated
 ### Removed
 ### Deployment Changes
