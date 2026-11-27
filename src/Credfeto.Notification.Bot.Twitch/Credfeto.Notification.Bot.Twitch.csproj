@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Credfeto.Date.Interfaces" Version="1.1.151.1695" IncludeAssets="compile;runtime" />
-    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.172.2347" IncludeAssets="compile;runtime" />
+    <PackageReference Include="Credfeto.Services.Startup.Interfaces" Version="1.1.173.2362" IncludeAssets="compile;runtime" />
     <PackageReference Include="Polly.Core" Version="8.9.1" IncludeAssets="compile;runtime" />
     <PackageReference Include="System.Interactive.Async" Version="7.0.1" IncludeAssets="compile;runtime" />
     <PackageReference Include="System.Reactive" Version="7.0.0" IncludeAssets="compile;runtime;analyzers" />
